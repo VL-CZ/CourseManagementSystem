@@ -24,5 +24,10 @@ namespace CourseManagementSystem.Data.Entities
         public string Email { get; set; }
 
         public ICollection<Grade> Grades { get; set; }
+
+        public void AssignGrade(Grade g)
+        {
+            Grades.Add(g);
+        }
     }
 }

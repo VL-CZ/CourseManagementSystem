@@ -50,15 +50,21 @@ namespace CourseManagementSystem.API.Controllers
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] Person p)
         {
-            
         }
 
         // DELETE api/<StudentsController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            var p = personService.GetPersonByID(id);
-            dbContext.People.Remove(p);
+            personService.RemovePersonById(id);
+        }
+
+        // POST api/<StudentsController>/5
+        [HttpPost("{id}/assignGrade")]
+        public void AssignGrade(int id, [FromBody] Grade g)
+        {
+            Person p = personService.GetPersonByID(id);
+            p.AssignGrade(g);
             dbContext.SaveChanges();
         }
     }

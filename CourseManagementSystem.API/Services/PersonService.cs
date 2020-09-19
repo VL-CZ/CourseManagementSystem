@@ -20,5 +20,12 @@ namespace CourseManagementSystem.API.Services
         {
             return dbContext.People.Find(id);
         }
+
+        public void RemovePersonById(int personId)
+        {
+            Person p = GetPersonByID(personId);
+            dbContext.People.Remove(p);
+            dbContext.SaveChanges();
+        }
     }
 }
