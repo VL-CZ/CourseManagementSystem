@@ -12,7 +12,9 @@ namespace CourseManagementSystem.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(connectionString);
+            optionsBuilder
+                .UseLazyLoadingProxies()
+                .UseSqlServer(connectionString);
         }
 
         public DbSet<Person> People { get; set; }
