@@ -8,5 +8,9 @@
     <ProjectReference Include="..\CourseManagementSystem.Data\CourseManagementSystem.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
+
 
 </Project>
