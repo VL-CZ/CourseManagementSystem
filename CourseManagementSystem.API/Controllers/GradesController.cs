@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CourseManagementSystem.Data;
+using CourseManagementSystem.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,11 +14,18 @@ namespace CourseManagementSystem.API.Controllers
     [ApiController]
     public class GradesController : ControllerBase
     {
+        private CMSDbContext dbContext;
+
+        public GradesController(CMSDbContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
+
         // GET: api/<GradesController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Grade> Get()
         {
-            return new string[] { "value1", "value2" };
+            return dbContext.Grades;
         }
 
         // GET api/<GradesController>/5
@@ -28,8 +37,10 @@ namespace CourseManagementSystem.API.Controllers
 
         // POST api/<GradesController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] Grade g)
         {
+            dbContext.Grades.Add(g);
+            dbContext.SaveChanges();
         }
 
         // PUT api/<GradesController>/5

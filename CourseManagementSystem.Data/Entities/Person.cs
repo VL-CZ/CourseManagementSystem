@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DAL.Entities
+namespace CourseManagementSystem.Data.Entities
 {
     public class Person
     {

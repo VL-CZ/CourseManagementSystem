@@ -1,4 +1,4 @@
-﻿using DAL.Entities;
+﻿using CourseManagementSystem.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Text;
 
 namespace CourseManagementSystem.Data
 {
-    class CMSDbContext : DbContext
+    public class CMSDbContext : DbContext
     {
         private const string connectionString = "Server=.;Database=CMS;Trusted_Connection=True;";
 
