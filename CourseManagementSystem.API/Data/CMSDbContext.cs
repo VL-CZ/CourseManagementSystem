@@ -1,5 +1,4 @@
 ﻿using CourseManagementSystem.API.Models;
-using CourseManagementSystem.Data.Entities;
 using IdentityServer4.EntityFramework.Options;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CourseManagementSystem.API.Data
 {
-    public class CMSDbContext : ApiAuthorizationDbContext<ApplicationUser>
+    public class CMSDbContext : ApiAuthorizationDbContext<Person>
     {
         public CMSDbContext(
             DbContextOptions options,
@@ -19,7 +18,6 @@ namespace CourseManagementSystem.API.Data
         {
         }
 
-        public virtual DbSet<Person> People { get; set; }
-        public virtual DbSet<Grade> Grades { get; set; }
+        public DbSet<Grade> Grades { get; set; }
     }
 }

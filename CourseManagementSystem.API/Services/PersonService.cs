@@ -1,6 +1,6 @@
 ﻿using CourseManagementSystem.API.Data;
-using CourseManagementSystem.Data;
-using CourseManagementSystem.Data.Entities;
+using CourseManagementSystem.API;
+using CourseManagementSystem.API.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,13 +19,13 @@ namespace CourseManagementSystem.API.Services
 
         public Person GetPersonByID(int id)
         {
-            return dbContext.People.Find(id);
+            return dbContext.Users.Find(id);
         }
 
         public void RemovePersonById(int personId)
         {
             Person p = GetPersonByID(personId);
-            dbContext.People.Remove(p);
+            dbContext.Users.Remove(p);
             dbContext.SaveChanges();
         }
     }

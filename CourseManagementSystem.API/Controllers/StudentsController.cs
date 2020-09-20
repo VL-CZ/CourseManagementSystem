@@ -4,9 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using CourseManagementSystem.API.Data;
 using CourseManagementSystem.API.Services;
-using CourseManagementSystem.Data;
-using CourseManagementSystem.Data.Entities;
+using CourseManagementSystem.API;
+using CourseManagementSystem.API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -29,7 +30,7 @@ namespace CourseManagementSystem.API.Controllers
         [HttpGet]
         public IEnumerable<Person> GetAll()
         {
-            return dbContext.People;
+            return dbContext.Users.Include(u => u.Grades).ToList();
         }
 
         // GET api/<StudentsController>/5
@@ -37,27 +38,6 @@ namespace CourseManagementSystem.API.Controllers
         public Person Get(int id)
         {
             return personService.GetPersonByID(id);
-        }
-
-        // POST api/<StudentsController>
-        [HttpPost]
-        public void Add([FromBody] Person p)
-        {
-            dbContext.People.Add(p);
-            dbContext.SaveChanges();
-        }
-
-        // PUT api/<StudentsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Person p)
-        {
-        }
-
-        // DELETE api/<StudentsController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-            personService.RemovePersonById(id);
         }
 
         // POST api/<StudentsController>/5

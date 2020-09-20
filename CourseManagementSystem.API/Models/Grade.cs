@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace CourseManagementSystem.Data.Entities
+namespace CourseManagementSystem.API.Models
 {
     public class Grade
     {

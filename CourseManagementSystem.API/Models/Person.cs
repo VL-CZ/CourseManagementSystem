@@ -1,29 +1,14 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace CourseManagementSystem.Data.Entities
+namespace CourseManagementSystem.API.Models
 {
-    public class Person
+    public class Person : IdentityUser
     {
-        public Person(string name, string email)
-        {
-            Name = name;
-            Email = email;
-            Grades = new List<Grade>();
-        }
-
-        [Key]
-        public int ID { get; set; }
-
-        [Required]
-        public string Name { get; set; }
-
-        [Required]
-        public string Email { get; set; }
-
-        public ICollection<Grade> Grades { get; set; }
+        public virtual ICollection<Grade> Grades { get; set; }
 
         public void AssignGrade(Grade g)
         {

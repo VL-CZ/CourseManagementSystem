@@ -1,4 +1,4 @@
-﻿using CourseManagementSystem.Data.Entities;
+﻿using CourseManagementSystem.API.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

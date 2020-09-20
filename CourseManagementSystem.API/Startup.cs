@@ -11,6 +11,7 @@ using CourseManagementSystem.API.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using CourseManagementSystem.API.Services;
 
 namespace CourseManagementSystem.API
 {
@@ -30,11 +31,11 @@ namespace CourseManagementSystem.API
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<Person>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<CMSDbContext>();
 
             services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, CMSDbContext>();
+                .AddApiAuthorization<Person, CMSDbContext>();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
@@ -45,6 +46,8 @@ namespace CourseManagementSystem.API
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            services.AddTransient<IPersonService, PersonService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
