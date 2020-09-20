@@ -20,7 +20,10 @@ namespace CourseManagementSystem.API.Models
 
         [Required]
         public int Value { get; set; }
-        
+
+        [Required]
+        public string Topic { get; set; }
+
         public string Comment { get; set; }
     }
 }

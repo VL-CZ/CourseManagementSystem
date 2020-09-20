@@ -8,6 +8,8 @@ using CourseManagementSystem.API;
 using CourseManagementSystem.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using IdentityServer4.Extensions;
+using CourseManagementSystem.API.ViewModels;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -28,9 +30,9 @@ namespace CourseManagementSystem.API.Controllers
 
         // GET: api/<StudentsController>
         [HttpGet]
-        public IEnumerable<Person> GetAll()
+        public IEnumerable<PersonVM> GetAll()
         {
-            return dbContext.Users.Include(u => u.Grades).ToList();
+            return dbContext.Users.Select(p => new PersonVM() { Id = p.Id, Name = p.UserName, Email = p.Email});
         }
 
         // GET api/<StudentsController>/5

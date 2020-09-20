@@ -8,7 +8,7 @@ namespace CourseManagementSystem.API.Models
 {
     public class Person : IdentityUser
     {
-        public virtual ICollection<Grade> Grades { get; set; }
+        public ICollection<Grade> Grades { get; set; }
 
         public void AssignGrade(Grade g)
         {
