@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CourseManagementSystem.API.Data;
 using CourseManagementSystem.API.Services;
 using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Entities;

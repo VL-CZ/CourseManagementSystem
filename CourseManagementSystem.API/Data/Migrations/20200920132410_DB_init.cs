@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace CourseManagementSystem.Data.Migrations
+namespace CourseManagementSystem.API.Data.Migrations
 {
-    public partial class DBcreated : Migration
+    public partial class DB_init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,8 +12,8 @@ namespace CourseManagementSystem.Data.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: false),
+                    Email = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -28,23 +28,23 @@ namespace CourseManagementSystem.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Value = table.Column<int>(nullable: false),
                     Comment = table.Column<string>(nullable: true),
-                    StudentID = table.Column<int>(nullable: true)
+                    PersonID = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Grades", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Grades_People_StudentID",
-                        column: x => x.StudentID,
+                        name: "FK_Grades_People_PersonID",
+                        column: x => x.PersonID,
                         principalTable: "People",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Grades_StudentID",
+                name: "IX_Grades_PersonID",
                 table: "Grades",
-                column: "StudentID");
+                column: "PersonID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

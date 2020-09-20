@@ -1,4 +1,5 @@
-﻿using CourseManagementSystem.Data;
+﻿using CourseManagementSystem.API.Data;
+using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Entities;
 using System;
 using System.Collections.Generic;
