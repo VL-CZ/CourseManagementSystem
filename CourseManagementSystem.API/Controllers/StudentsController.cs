@@ -37,14 +37,21 @@ namespace CourseManagementSystem.API.Controllers
 
         // GET api/<StudentsController>/5
         [HttpGet("{id}")]
-        public Person Get(int id)
+        public StudentVM Get(string id)
         {
-            return personService.GetPersonByID(id);
+            Person p = personService.GetPersonByID(id);
+            return new StudentVM
+            {
+                Email = p.Email,
+                Id = p.Id,
+                Name = p.UserName,
+                Grades = p.Grades.Select(g => new GradeVM() { Id = g.ID, Comment = g.Comment, Topic = g.Topic, Value = g.Value })
+            };
         }
 
         // POST api/<StudentsController>/5
         [HttpPost("{id}/assignGrade")]
-        public void AssignGrade(int id, [FromBody] Grade g)
+        public void AssignGrade(string id, [FromBody] Grade g)
         {
             Person p = personService.GetPersonByID(id);
             p.AssignGrade(g);

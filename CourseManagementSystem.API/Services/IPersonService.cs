@@ -8,7 +8,7 @@ namespace CourseManagementSystem.API.Services
 {
     public interface IPersonService
     {
-        Person GetPersonByID(int id);
-        void RemovePersonById(int personId);
+        Person GetPersonByID(string id);
+        void RemovePersonById(string id);
     }
 }

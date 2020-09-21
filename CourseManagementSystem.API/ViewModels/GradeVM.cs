@@ -7,6 +7,7 @@ namespace CourseManagementSystem.API.ViewModels
 {
     public class GradeVM
     {
+        public int Id { get; set; }
         public int Value { get; set; }
         public string Topic { get; set; }
         public string Comment { get; set; }
