@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
+import {Grade} from '../viewmodels/grade';
 
 @Component({
   selector: 'app-grade-list',
@@ -19,11 +20,4 @@ export class GradeListComponent implements OnInit {
   ngOnInit() {
   }
 
-}
-
-interface Grade {
-  id: number;
-  value: number;
-  topic: string;
-  comment: string;
 }

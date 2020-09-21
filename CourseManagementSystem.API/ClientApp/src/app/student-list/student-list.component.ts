@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
+import {Person} from '../viewmodels/student';
 
 @Component({
   templateUrl: './student-list.component.html',
@@ -18,10 +19,4 @@ export class StudentListComponent implements OnInit {
   ngOnInit() {
   }
 
-}
-
-interface Person {
-  id: string;
-  name: string;
-  email: string;
 }

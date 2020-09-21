@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
+import {Person, Student} from '../viewmodels/student';
+import {HttpClient} from '@angular/common/http';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-student-detail',
@@ -7,7 +10,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StudentDetailComponent implements OnInit {
 
-  constructor() { }
+  private student: Student;
+
+  constructor(route: ActivatedRoute, http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
+    const id = route.snapshot.paramMap.get('id');
+
+    http.get<Student>(baseUrl + 'api/students/' + id).subscribe(result => {
+      this.student = result;
+    }, error => console.error(error));
+  }
 
   ngOnInit() {
   }

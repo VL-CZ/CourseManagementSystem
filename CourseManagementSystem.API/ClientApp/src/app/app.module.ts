@@ -14,6 +14,7 @@ import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { GradeListComponent } from './grade-list/grade-list.component';
 import { StudentListComponent } from './student-list/student-list.component';
+import { StudentDetailComponent } from './student-detail/student-detail.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { StudentListComponent } from './student-list/student-list.component';
     CounterComponent,
     FetchDataComponent,
     GradeListComponent,
-    StudentListComponent
+    StudentListComponent,
+    StudentDetailComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -35,7 +37,8 @@ import { StudentListComponent } from './student-list/student-list.component';
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
       { path: 'grades', component: GradeListComponent },
-      { path: 'students', component: StudentListComponent }
+      { path: 'students', component: StudentListComponent },
+      { path: 'students/:id', component: StudentDetailComponent }
     ])
   ],
   providers: [
