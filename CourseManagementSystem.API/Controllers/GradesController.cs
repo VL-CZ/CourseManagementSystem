@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CourseManagementSystem.API.Data;
+using CourseManagementSystem.API.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,11 +15,20 @@ namespace CourseManagementSystem.API.Controllers
     [ApiController]
     public class GradesController : ControllerBase
     {
+        private CMSDbContext dbContext;
+
+        public GradesController(CMSDbContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
+
         // DELETE api/<GradeController>/5
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         public void Delete(int id)
         {
-
+            var grade = dbContext.Grades.Find(id);
+            dbContext.Grades.Remove(grade);
+            dbContext.SaveChanges();
         }
     }
 }

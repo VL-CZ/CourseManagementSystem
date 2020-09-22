@@ -1,8 +1,15 @@
-<table>
-    <tr><th>Topic</th><th>Value</th><th>Comment</th></tr>
-    <tr *ngFor="let grade of grades">
-        <td>{{grade.topic}}</td>
-        <td>{{grade.value}}</td>
-        <td>{{grade.comment}}</td>
-    </tr>
+<table class="table table-striped">
+  <tr>
+    <th>Topic</th>
+    <th>Value</th>
+    <th>Comment</th>
+    <th></th>
+    <th></th>
+  </tr>
+  <tr *ngFor="let grade of grades">
+    <td>{{grade.topic}}</td>
+    <td>{{grade.value}}</td>
+    <td>{{grade.comment}}</td>
+    <td><button class="btn btn-danger" (click)="removeGrade(grade.id)">Remove</button></td>
+  </tr>
 </table>

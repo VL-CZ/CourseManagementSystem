@@ -32,7 +32,7 @@ namespace CourseManagementSystem.API.Controllers
         [HttpGet]
         public IEnumerable<PersonVM> GetAll()
         {
-            return dbContext.Users.Select(p => new PersonVM() { Id = p.Id, Name = p.UserName, Email = p.Email});
+            return dbContext.Users.Select(p => new PersonVM() { Id = p.Id, Name = p.UserName, Email = p.Email });
         }
 
         // GET api/<StudentsController>/5
@@ -45,16 +45,16 @@ namespace CourseManagementSystem.API.Controllers
                 Email = p.Email,
                 Id = p.Id,
                 Name = p.UserName,
-                Grades = p.Grades.Select(g => new GradeVM() { Id = g.ID, Comment = g.Comment, Topic = g.Topic, Value = g.Value })
+                Grades = p.Grades.Select(g => new GradeDetailsVM() { Id = g.ID, Comment = g.Comment, Topic = g.Topic, Value = g.Value })
             };
         }
 
         // POST api/<StudentsController>/5
         [HttpPost("{id}/assignGrade")]
-        public void AssignGrade(string id, [FromBody] Grade g)
+        public void AssignGrade(string id, [FromBody] AddGradeVM g)
         {
             Person p = personService.GetPersonByID(id);
-            p.AssignGrade(g);
+            p.AssignGrade(new Grade { Value = g.Value, Comment = g.Comment, Topic = g.Topic });
             dbContext.SaveChanges();
         }
     }

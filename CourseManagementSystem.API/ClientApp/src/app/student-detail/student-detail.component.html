@@ -1,14 +1,4 @@
 <h2>Student: {{student.name}}</h2>
 <h3>Grades</h3>
-<table class="table table-striped">
-  <tr>
-    <th>Topic</th>
-    <th>Grade</th>
-    <th>Comment</th>
-  </tr>
-  <tr *ngFor="let grade of student.grades">
-    <td>{{grade.topic}}</td>
-    <td>{{grade.value}}</td>
-    <td>{{grade.comment}}</td>
-  </tr>
-</table>
+<app-grade-list [grades]="student.grades"></app-grade-list>
+<button class="btn btn-info">Add</button>
