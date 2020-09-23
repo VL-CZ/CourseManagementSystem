@@ -73,8 +73,21 @@ namespace CourseManagementSystem.API.Controllers
         [HttpGet("getId")]
         public PersonIdVM GetId()
         {
-            string userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            string userId = GetCurrentUserId();
             return new PersonIdVM() { Id = userId };
+        }
+
+        [Authorize]
+        [HttpGet("isAdmin")]
+        public IsAdminVM IsAdmin()
+        {
+            // TO-DO: add roles
+            return new IsAdminVM() { IsAdmin = GetCurrentUserId() == "f1c377dc-5299-46c0-98c1-038580492e75" };
+        }
+
+        private string GetCurrentUserId()
+        {
+            return httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
         }
     }
 }

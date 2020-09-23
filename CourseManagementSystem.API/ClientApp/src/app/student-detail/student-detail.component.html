@@ -5,17 +5,16 @@
     <th>Topic</th>
     <th>Value</th>
     <th>Comment</th>
-    <th></th>
-    <th></th>
+    <th *ngIf="isAdmin"></th>
   </tr>
   <tr *ngFor="let grade of student.grades">
     <td>{{grade.topic}}</td>
     <td>{{grade.value}}</td>
     <td>{{grade.comment}}</td>
-    <td><button class="btn btn-danger" (click)="removeGrade(grade.id)">Remove</button></td>
+    <td *ngIf="isAdmin"><button class="btn btn-danger" (click)="removeGrade(grade.id)">Remove</button></td>
   </tr>
 </table>
-<div class="jumbotron">
+<div class="jumbotron" *ngIf="isAdmin">
   <h3>Add new grade</h3>
   <form>
     <div class="form-row">

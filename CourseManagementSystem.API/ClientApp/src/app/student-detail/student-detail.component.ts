@@ -4,6 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';
 import {AddGradeVM} from '../viewmodels/addGradeVM';
 import {Grade} from '../viewmodels/grade';
+import { IsAdminVM } from '../viewmodels/isAdminVM';
 
 @Component({
   selector: 'app-student-detail',
@@ -17,6 +18,7 @@ export class StudentDetailComponent implements OnInit {
   private baseUrl: string;
   private newGrade: AddGradeVM;
   private userId: string;
+  private isAdmin: boolean;
 
   constructor(route: ActivatedRoute, http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.http = http;
@@ -26,6 +28,11 @@ export class StudentDetailComponent implements OnInit {
 
     http.get<Student>(baseUrl + 'api/students/' + this.userId).subscribe(result => {
       this.student = result;
+    }, error => console.error(error));
+
+    http.get<IsAdminVM>(baseUrl + 'api/students/isAdmin').subscribe(result =>
+    {
+      this.isAdmin = result.isAdmin;
     }, error => console.error(error));
   }
 

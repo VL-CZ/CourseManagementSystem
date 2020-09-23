@@ -21,4 +21,9 @@ namespace CourseManagementSystem.API.ViewModels
     {
         public string Id { get; set; }
     }
+
+    public class IsAdminVM
+    {
+        public bool IsAdmin { get; set; }
+    }
 }
