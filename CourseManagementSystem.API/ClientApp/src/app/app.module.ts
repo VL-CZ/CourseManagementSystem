@@ -34,8 +34,6 @@ import { StudentDetailComponent } from './student-detail/student-detail.componen
     ApiAuthorizationModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
       { path: 'grades', component: GradeListComponent },
       { path: 'students', component: StudentListComponent },
       { path: 'students/:id', component: StudentDetailComponent }
