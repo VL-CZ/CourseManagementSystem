@@ -1,6 +1,40 @@
 <h2>Student: {{student.name}}</h2>
 <h3>Grades</h3>
-<app-grade-list [grades]="student.grades"></app-grade-list>
-<div>
-    <button type="submit" class="btn btn-primary" (click)="addGrade()">Add</button>
+<table class="table table-striped table-responsive">
+  <tr>
+    <th>Topic</th>
+    <th>Value</th>
+    <th>Comment</th>
+    <th></th>
+    <th></th>
+  </tr>
+  <tr *ngFor="let grade of student.grades">
+    <td>{{grade.topic}}</td>
+    <td>{{grade.value}}</td>
+    <td>{{grade.comment}}</td>
+    <td><button class="btn btn-danger" (click)="removeGrade(grade.id)">Remove</button></td>
+  </tr>
+</table>
+<div class="jumbotron">
+  <h3>Add new grade</h3>
+  <form>
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label for="addGradeForm_Topic">Topic</label>
+        <input type="text" class="form-control" name="topic" id="addGradeForm_Topic" placeholder="Topic" required
+               [(ngModel)]="newGrade.topic">
+      </div>
+      <div class="form-group col-md-2">
+        <label for="addGradeForm_Value">Value</label>
+        <input type="number" class="form-control" name="value" id="addGradeForm_Value" required
+               [(ngModel)]="newGrade.value">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="addGradeForm_Comment">Comment</label>
+        <input type="text" class="form-control" name="comment" id="addGradeForm_Comment" placeholder="Comment"
+               [(ngModel)]="newGrade.comment">
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary"  (click)="addGrade()">Add</button>
+  </form>
 </div>

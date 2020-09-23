@@ -51,11 +51,14 @@ namespace CourseManagementSystem.API.Controllers
 
         // POST api/<StudentsController>/5
         [HttpPost("{id}/assignGrade")]
-        public void AssignGrade(string id, [FromBody] AddGradeVM g)
+        public GradeDetailsVM AssignGrade(string id, [FromBody] AddGradeVM g)
         {
             Person p = personService.GetPersonByID(id);
-            p.AssignGrade(new Grade { Value = g.Value, Comment = g.Comment, Topic = g.Topic });
+            Grade grade = new Grade { Value = g.Value, Comment = g.Comment, Topic = g.Topic };
+            p.AssignGrade(grade);
             dbContext.SaveChanges();
+
+            return new GradeDetailsVM() { Id = grade.ID, Comment = grade.Comment, Value = grade.Value, Topic = grade.Topic };
         }
     }
 }
