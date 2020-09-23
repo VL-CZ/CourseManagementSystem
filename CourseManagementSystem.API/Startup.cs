@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using CourseManagementSystem.API.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace CourseManagementSystem.API
 {
@@ -48,6 +49,7 @@ namespace CourseManagementSystem.API
             });
 
             services.AddTransient<IPersonService, PersonService>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

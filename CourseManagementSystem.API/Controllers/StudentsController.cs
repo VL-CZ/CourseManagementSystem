@@ -10,6 +10,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using IdentityServer4.Extensions;
 using CourseManagementSystem.API.ViewModels;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,11 +25,15 @@ namespace CourseManagementSystem.API.Controllers
     {
         private CMSDbContext dbContext;
         private IPersonService personService;
+        private readonly UserManager<Person> userManager;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public StudentsController(CMSDbContext dbContext, IPersonService personService)
+        public StudentsController(CMSDbContext dbContext, IPersonService personService, UserManager<Person> userManager, IHttpContextAccessor httpContextAccessor)
         {
             this.dbContext = dbContext;
             this.personService = personService;
+            this.userManager = userManager;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         // GET: api/<StudentsController>
@@ -59,6 +67,14 @@ namespace CourseManagementSystem.API.Controllers
             dbContext.SaveChanges();
 
             return new GradeDetailsVM() { Id = grade.ID, Comment = grade.Comment, Value = grade.Value, Topic = grade.Topic };
+        }
+
+        [Authorize]
+        [HttpGet("getId")]
+        public PersonIdVM GetId()
+        {
+            string userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return new PersonIdVM() { Id = userId };
         }
     }
 }

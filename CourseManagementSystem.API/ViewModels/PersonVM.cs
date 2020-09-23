@@ -16,4 +16,9 @@ namespace CourseManagementSystem.API.ViewModels
     {
         public IEnumerable<GradeDetailsVM> Grades { get; set; }
     }
+
+    public class PersonIdVM
+    {
+        public string Id { get; set; }
+    }
 }
