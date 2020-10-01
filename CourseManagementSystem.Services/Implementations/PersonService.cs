@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace CourseManagementSystem.API.Services
 {
-    internal class PersonService : IPersonService
+    public class PersonService : IPersonService
     {
         private CMSDbContext dbContext;
 
@@ -15,11 +15,13 @@ namespace CourseManagementSystem.API.Services
             this.dbContext = dbContext;
         }
 
+        /// <inheritdoc/>
         public Person GetPersonByID(string id)
         {
             return dbContext.Users.Include(x => x.Grades).Single(x => x.Id == id);
         }
 
+        /// <inheritdoc/>
         public void RemovePersonById(string id)
         {
             Person p = GetPersonByID(id);
