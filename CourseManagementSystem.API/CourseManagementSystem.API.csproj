@@ -31,11 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Data\Migrations\20200921194614_Entities_changed.cs" />
-    <Compile Remove="Data\Migrations\20200921194614_Entities_changed.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\CourseManagementSystem.Data\CourseManagementSystem.Data.csproj" />
   </ItemGroup>
 
