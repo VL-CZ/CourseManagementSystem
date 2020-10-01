@@ -77,7 +77,7 @@ namespace CourseManagementSystem.API.Controllers
         public IsAdminVM IsAdmin()
         {
             // TO-DO: add roles
-            return new IsAdminVM() { IsAdmin = GetCurrentUserId() == "f1c377dc-5299-46c0-98c1-038580492e75" };
+            return new IsAdminVM() { IsAdmin = GetCurrentUserId() == "b7a6f405-c226-4f5a-a0cb-2ba4c47582a3" };
         }
 
         private string GetCurrentUserId()
