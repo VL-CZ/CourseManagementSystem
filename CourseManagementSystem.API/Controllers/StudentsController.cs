@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CourseManagementSystem.API.Data;
-using CourseManagementSystem.API.Services;
-using CourseManagementSystem.API;
-using CourseManagementSystem.API.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using IdentityServer4.Extensions;
+﻿using CourseManagementSystem.API.Services;
 using CourseManagementSystem.API.ViewModels;
-using Microsoft.AspNetCore.Identity;
+using CourseManagementSystem.Data;
+using CourseManagementSystem.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860

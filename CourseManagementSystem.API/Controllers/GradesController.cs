@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CourseManagementSystem.API.Data;
 using CourseManagementSystem.API.ViewModels;
+using CourseManagementSystem.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

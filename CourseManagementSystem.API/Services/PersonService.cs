@@ -1,16 +1,12 @@
-﻿using CourseManagementSystem.API.Data;
-using CourseManagementSystem.API;
-using CourseManagementSystem.API.Models;
-using System;
+﻿using CourseManagementSystem.Data;
+using CourseManagementSystem.Data.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography.X509Certificates;
 
 namespace CourseManagementSystem.API.Services
 {
-    class PersonService : IPersonService
+    internal class PersonService : IPersonService
     {
         private CMSDbContext dbContext;
 
