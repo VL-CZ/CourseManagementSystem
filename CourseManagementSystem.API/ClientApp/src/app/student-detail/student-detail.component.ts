@@ -4,7 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';
 import {AddGradeVM} from '../viewmodels/addGradeVM';
 import {Grade} from '../viewmodels/grade';
-import { IsAdminVM } from '../viewmodels/isAdminVM';
+import {IsAdminVM} from '../viewmodels/isAdminVM';
 
 @Component({
   selector: 'app-student-detail',
@@ -30,8 +30,7 @@ export class StudentDetailComponent implements OnInit {
       this.student = result;
     }, error => console.error(error));
 
-    http.get<IsAdminVM>(baseUrl + 'api/students/isAdmin').subscribe(result =>
-    {
+    http.get<IsAdminVM>(baseUrl + 'api/students/isAdmin').subscribe(result => {
       this.isAdmin = result.isAdmin;
     }, error => console.error(error));
   }
@@ -43,8 +42,9 @@ export class StudentDetailComponent implements OnInit {
     let g;
     this.http.post(this.baseUrl + 'api/students/' + this.student.id + '/assignGrade', this.newGrade).subscribe(
       result => {
-          g = result;
-          this.student.grades.push(g); }
+        g = result;
+        this.student.grades.push(g);
+      }
       , error => console.error(error)
     );
 

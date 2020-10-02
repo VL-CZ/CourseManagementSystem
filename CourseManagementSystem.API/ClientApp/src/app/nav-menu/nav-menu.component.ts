@@ -1,6 +1,6 @@
-import { Component, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { IdVM } from '../viewmodels/idVM';
+import {Component, Inject} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {IdVM} from '../viewmodels/idVM';
 
 @Component({
   selector: 'app-nav-menu',
