@@ -1,11 +1,10 @@
-import {Component, Inject, OnInit, Output} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Student} from '../viewmodels/student';
-import {HttpClient} from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';
 import {AddGradeVM} from '../viewmodels/addGradeVM';
-import {IsAdminVM} from '../viewmodels/isAdminVM';
 import {PersonService} from '../person.service';
 import {GradeService} from '../grade.service';
+import {RoleAuthService} from '../role-auth.service';
 
 @Component({
   selector: 'app-student-detail',
@@ -14,8 +13,6 @@ import {GradeService} from '../grade.service';
 })
 export class StudentDetailComponent implements OnInit {
 
-  private http: HttpClient;
-  private baseUrl: string;
   private userId: string;
   private personService: PersonService;
   private gradeService: GradeService;
@@ -24,22 +21,20 @@ export class StudentDetailComponent implements OnInit {
   public student: Student;
   public newGrade: AddGradeVM;
 
-  constructor(route: ActivatedRoute, http: HttpClient, @Inject('BASE_URL') baseUrl: string, personService: PersonService, gradeService: GradeService) {
-    this.http = http;
-    this.baseUrl = baseUrl;
+  constructor(route: ActivatedRoute, personService: PersonService, gradeService: GradeService, roleAuthService: RoleAuthService) {
     this.personService = personService;
     this.gradeService = gradeService;
 
     this.userId = route.snapshot.paramMap.get('id');
     this.newGrade = new AddGradeVM();
 
-    personService.getById(this.userId).subscribe(result => {
+    this.personService.getById(this.userId).subscribe(result => {
       this.student = result;
     });
 
-    http.get<IsAdminVM>(baseUrl + 'api/students/isAdmin').subscribe(result => {
+    roleAuthService.isAdmin().subscribe(result => {
       this.isAdmin = result.isAdmin;
-    }, error => console.error(error));
+    });
   }
 
   ngOnInit() {
