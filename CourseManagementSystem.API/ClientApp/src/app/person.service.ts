@@ -1,24 +1,41 @@
 import {Inject, Injectable} from '@angular/core';
 import {Person, Student} from './viewmodels/student';
 import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {AddGradeVM} from './viewmodels/addGradeVM';
+import {Grade} from './viewmodels/grade';
+import {ApiService} from './api.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PersonService {
-
-  private http: HttpClient;
-  private baseUrl: string;
+export class PersonService extends ApiService {
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    this.baseUrl = baseUrl;
-    this.http = http;
+    super(http, baseUrl);
   }
 
-  public getAll(): Person[] {
+  /**
+   * get all people
+   */
+  public getAll(): Observable<Student[]> {
+    return this.http.get<Student[]>(this.baseUrl + 'api/students');
+  }
 
-    this.http.get<Person[]>(this.baseUrl + 'api/students').subscribe(result => {
-      return result;
-    }, error => console.error(error));
+  /**
+   * get person by its id
+   * @param personId
+   */
+  public getById(personId: string): Observable<Student> {
+    return this.http.get<Student>(this.baseUrl + 'api/students/' + personId);
+  }
+
+  /**
+   * assign the `grade` to the person whose id equals `personId`
+   * @param personId
+   * @param grade created grade (contains id)
+   */
+  public assignGrade(personId: string, grade: AddGradeVM): Observable<Grade> {
+    return this.http.post<Grade>(this.baseUrl + 'api/students/' + personId + '/assignGrade', grade);
   }
 }
