@@ -1,10 +1,10 @@
-import {Component, Inject, OnInit, Output} from '@angular/core';
-import {Person, Student} from '../viewmodels/student';
-import {HttpClient} from '@angular/common/http';
+import {Component, OnInit} from '@angular/core';
+import {Student} from '../viewmodels/student';
 import {ActivatedRoute} from '@angular/router';
 import {AddGradeVM} from '../viewmodels/addGradeVM';
-import {Grade} from '../viewmodels/grade';
-import { IsAdminVM } from '../viewmodels/isAdminVM';
+import {PersonService} from '../person.service';
+import {GradeService} from '../grade.service';
+import {RoleAuthService} from '../role-auth.service';
 
 @Component({
   selector: 'app-student-detail',
@@ -13,46 +13,44 @@ import { IsAdminVM } from '../viewmodels/isAdminVM';
 })
 export class StudentDetailComponent implements OnInit {
 
-  private student: Student;
-  private http: HttpClient;
-  private baseUrl: string;
-  private newGrade: AddGradeVM;
   private userId: string;
-  private isAdmin: boolean;
+  private personService: PersonService;
+  private gradeService: GradeService;
 
-  constructor(route: ActivatedRoute, http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    this.http = http;
-    this.baseUrl = baseUrl;
+  public isAdmin: boolean;
+  public student: Student;
+  public newGrade: AddGradeVM;
+
+  constructor(route: ActivatedRoute, personService: PersonService, gradeService: GradeService, roleAuthService: RoleAuthService) {
+    this.personService = personService;
+    this.gradeService = gradeService;
+
     this.userId = route.snapshot.paramMap.get('id');
     this.newGrade = new AddGradeVM();
 
-    http.get<Student>(baseUrl + 'api/students/' + this.userId).subscribe(result => {
+    this.personService.getById(this.userId).subscribe(result => {
       this.student = result;
-    }, error => console.error(error));
+    });
 
-    http.get<IsAdminVM>(baseUrl + 'api/students/isAdmin').subscribe(result =>
-    {
+    roleAuthService.isAdmin().subscribe(result => {
       this.isAdmin = result.isAdmin;
-    }, error => console.error(error));
+    });
   }
 
   ngOnInit() {
   }
 
   public addGrade(): void {
-    let g;
-    this.http.post(this.baseUrl + 'api/students/' + this.student.id + '/assignGrade', this.newGrade).subscribe(
+    this.personService.assignGrade(this.student.id, this.newGrade).subscribe(
       result => {
-          g = result;
-          this.student.grades.push(g); }
-      , error => console.error(error)
-    );
+        this.student.grades.push(result);
+      });
 
     this.newGrade = new AddGradeVM();
   }
 
   public removeGrade(gradeID: number): void {
-    this.http.delete(this.baseUrl + 'api/grades/delete/' + gradeID).subscribe();
+    this.gradeService.delete(gradeID).subscribe();
     this.student.grades = this.student.grades.filter(g => g.id !== gradeID);
   }
 }

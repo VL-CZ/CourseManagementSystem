@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, Inject, OnInit } from '@angular/core';
-import {Person} from '../viewmodels/student';
-import {IsAdminVM} from '../viewmodels/isAdminVM';
+import { Component, OnInit } from '@angular/core';
+import {Student} from '../viewmodels/student';
+import { PersonService } from '../person.service';
+import {RoleAuthService} from '../role-auth.service';
 
 @Component({
   templateUrl: './student-list.component.html',
@@ -9,21 +9,19 @@ import {IsAdminVM} from '../viewmodels/isAdminVM';
 })
 export class StudentListComponent implements OnInit {
 
-  public people: Person[];
-  private isAdmin: boolean;
+  public people: Student[];
+  public isAdmin: boolean;
 
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    http.get<Person[]>(baseUrl + 'api/students').subscribe(result => {
+  constructor(personService: PersonService, roleAuthService: RoleAuthService) {
+    personService.getAll().subscribe(result => {
       this.people = result;
-    }, error => console.error(error));
+    });
 
-    http.get<IsAdminVM>(baseUrl + 'api/students/isAdmin').subscribe(result =>
-    {
+    roleAuthService.isAdmin().subscribe(result => {
       this.isAdmin = result.isAdmin;
-    }, error => console.error(error));
+    });
   }
 
   ngOnInit() {
   }
-
 }

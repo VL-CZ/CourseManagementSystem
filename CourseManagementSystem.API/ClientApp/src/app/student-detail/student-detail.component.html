@@ -11,7 +11,9 @@
     <td>{{grade.topic}}</td>
     <td>{{grade.value}}</td>
     <td>{{grade.comment}}</td>
-    <td *ngIf="isAdmin"><button class="btn btn-danger" (click)="removeGrade(grade.id)">Remove</button></td>
+    <td *ngIf="isAdmin">
+      <button class="btn btn-danger" (click)="removeGrade(grade.id)">Remove</button>
+    </td>
   </tr>
 </table>
 <div class="jumbotron" *ngIf="isAdmin">
@@ -34,6 +36,6 @@
                [(ngModel)]="newGrade.comment">
       </div>
     </div>
-    <button type="submit" class="btn btn-primary"  (click)="addGrade()">Add</button>
+    <button type="submit" class="btn btn-primary" (click)="addGrade()">Add</button>
   </form>
 </div>
