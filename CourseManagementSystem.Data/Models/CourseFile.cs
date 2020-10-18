@@ -15,5 +15,15 @@ namespace CourseManagementSystem.Data.Models
         /// content of the file
         /// </summary>
         public byte[] Data { get; set; }
+
+        /// <summary>
+        /// name of the file
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// content type of the data
+        /// </summary>
+        public string ContentType { get; set; }
     }
 }
