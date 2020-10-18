@@ -11,6 +11,9 @@ namespace CourseManagementSystem.Data.Models
         [Key]
         public int ID { get; set; }
 
-        public FormFile File { get; set; }
+        /// <summary>
+        /// content of the file
+        /// </summary>
+        public byte[] Data { get; set; }
     }
 }

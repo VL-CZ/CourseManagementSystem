@@ -1,12 +1,18 @@
+<div class="jumbotron">
+  <h3>Shared files</h3>
+  <ul>
+    <li *ngFor="let fileID of fileIDs">{{fileID}}</li>
+  </ul>
+</div>
 <div class="jumbotron" *ngIf="isAdmin">
   <h3>Add new file</h3>
   <form>
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="addFileForm_File">File</label>
-        <input type="file" class="form-control" name="file" id="addFileForm_File" required/>
+        <input type="file" #inputFile class="form-control" name="file" id="addFileForm_File" formenctype="multipart/form-data" (change)="onChange($event)" required/>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary">Add</button>
+    <button type="submit" class="btn btn-primary" (click)="uploadFile()">Add this file</button>
   </form>
 </div>

@@ -1,6 +1,8 @@
 ﻿using CourseManagementSystem.Data;
+using CourseManagementSystem.Data.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
 
 namespace CourseManagementSystem.API.Controllers
 {
@@ -17,8 +19,21 @@ namespace CourseManagementSystem.API.Controllers
 
         // POST api/<FileController>/upload
         [HttpPost("upload")]
-        public void Upload([FromBody] FormFile file)
+        public int Upload(IFormFile file)
         {
+            var courseFile = new CourseFile();
+            using (var target = new MemoryStream())
+            {
+                file.CopyTo(target);
+                courseFile.Data = target.ToArray();
+            }
+
+            dbContext.Files.Add(courseFile);
+            dbContext.SaveChanges();
+
+            return courseFile.ID;
         }
+
+
     }
 }

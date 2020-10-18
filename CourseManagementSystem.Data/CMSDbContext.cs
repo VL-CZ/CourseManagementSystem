@@ -19,5 +19,8 @@ namespace CourseManagementSystem.Data
         }
 
         public DbSet<Grade> Grades { get; set; }
+
+        public DbSet<CourseFile> Files { get; set; }
+
     }
 }

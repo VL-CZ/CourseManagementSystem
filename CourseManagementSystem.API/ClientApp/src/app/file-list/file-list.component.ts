@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {RoleAuthService} from '../role-auth.service';
 import {FileService} from '../file.service';
 
@@ -9,10 +9,14 @@ import {FileService} from '../file.service';
 })
 export class FileListComponent implements OnInit {
 
+  @ViewChild('inputFile', null)
+  private inputFile: ElementRef;
+
   private fileService: FileService;
 
   public isAdmin: boolean;
   public fileToUpload: File;
+  public fileIDs: number[] = [];
 
   constructor(roleAuthService: RoleAuthService, fileService: FileService) {
     this.fileService = fileService;
@@ -25,7 +29,16 @@ export class FileListComponent implements OnInit {
   ngOnInit() {
   }
 
+  // On file Select
+  onChange(event) {
+    this.fileToUpload = event.target.files[0];
+  }
+
   public uploadFile(): void {
-    this.fileService.uploadFile(this.fileToUpload).subscribe();
+    this.fileService.uploadFile(this.fileToUpload).subscribe(result => {
+      this.fileIDs.push(result);
+    });
+    this.fileToUpload = null;
+    this.inputFile.nativeElement.value = '';
   }
 }

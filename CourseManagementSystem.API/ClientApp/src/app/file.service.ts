@@ -12,7 +12,10 @@ export class FileService extends ApiService {
     super(http, baseUrl);
   }
 
-  public uploadFile(file: File): Observable<File> {
-    return this.http.post<File>(this.baseUrl + 'api/file/upload', file);
+  public uploadFile(file: File): Observable<number> {
+    const formData: FormData = new FormData();
+    formData.append('file', file);
+
+    return this.http.post<number>(this.baseUrl + 'api/file/upload', formData);
   }
 }
