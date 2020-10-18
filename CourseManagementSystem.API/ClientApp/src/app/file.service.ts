@@ -1,6 +1,6 @@
 import {Inject, Injectable} from '@angular/core';
 import {ApiService} from './api.service';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpRequest} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {FileVM} from './viewmodels/fileVM';
 
@@ -11,6 +11,10 @@ export class FileService extends ApiService {
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     super(http, baseUrl);
+  }
+
+  public download(fileId: number): Observable<Blob> {
+    return this.http.get(this.baseUrl + 'api/file/' + fileId, {responseType: 'blob'});
   }
 
   public upload(file: File): Observable<FileVM> {

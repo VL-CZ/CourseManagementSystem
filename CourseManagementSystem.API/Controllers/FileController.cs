@@ -47,7 +47,7 @@ namespace CourseManagementSystem.API.Controllers
         public FileContentResult Download(int id)
         {
             var file = dbContext.Files.Find(id);
-            return File(file.Data, file.ContentType);
+            return File(file.Data, file.ContentType, file.Name);
         }
 
         [HttpDelete("delete/{id}")]
