@@ -9,7 +9,7 @@ namespace CourseManagementSystem.API.Controllers
     [ApiController]
     public class GradesController : ControllerBase
     {
-        private CMSDbContext dbContext;
+        private readonly CMSDbContext dbContext;
 
         public GradesController(CMSDbContext dbContext)
         {

@@ -18,8 +18,8 @@ namespace CourseManagementSystem.API.Controllers
     [ApiController]
     public class StudentsController : ControllerBase
     {
-        private CMSDbContext dbContext;
-        private IPersonService personService;
+        private readonly CMSDbContext dbContext;
+        private readonly IPersonService personService;
         private readonly UserManager<Person> userManager;
         private readonly IHttpContextAccessor httpContextAccessor;
 

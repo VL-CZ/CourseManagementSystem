@@ -19,12 +19,21 @@ namespace CourseManagementSystem.Data.Models
         [Key]
         public int ID { get; set; }
 
+        /// <summary>
+        /// numeric value of the grade
+        /// </summary>
         [Required]
         public int Value { get; set; }
 
+        /// <summary>
+        /// topic of the grade
+        /// </summary>
         [Required]
         public string Topic { get; set; }
 
+        /// <summary>
+        /// additional comment to the grade
+        /// </summary>
         public string Comment { get; set; }
     }
 }
