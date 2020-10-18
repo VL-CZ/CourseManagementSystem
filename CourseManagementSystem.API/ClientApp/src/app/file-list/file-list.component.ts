@@ -1,6 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {RoleAuthService} from '../role-auth.service';
 import {FileService} from '../file.service';
+import {FileVM} from '../viewmodels/fileVM';
 
 @Component({
   selector: 'app-file-list',
@@ -16,13 +17,17 @@ export class FileListComponent implements OnInit {
 
   public isAdmin: boolean;
   public fileToUpload: File;
-  public fileIDs: number[] = [];
+  public uploadedFiles: FileVM[] = [];
 
   constructor(roleAuthService: RoleAuthService, fileService: FileService) {
     this.fileService = fileService;
 
     roleAuthService.isAdmin().subscribe(result => {
       this.isAdmin = result.isAdmin;
+    });
+
+    fileService.getAll().subscribe(result => {
+      this.uploadedFiles = result;
     });
   }
 
@@ -35,10 +40,18 @@ export class FileListComponent implements OnInit {
   }
 
   public uploadFile(): void {
-    this.fileService.uploadFile(this.fileToUpload).subscribe(result => {
-      this.fileIDs.push(result);
+    this.fileService.upload(this.fileToUpload).subscribe(result => {
+      this.uploadedFiles.push(result);
     });
     this.fileToUpload = null;
-    this.inputFile.nativeElement.value = '';
+    this.inputFile.nativeElement.value = ''; // clear file input
+  }
+
+  public removeFile(fileId: number): void {
+    this.fileService.delete(fileId).subscribe();
+    this.uploadedFiles = this.uploadedFiles.filter(f => f.id !== fileId);
+  }
+
+  public downloadFile(fileId: number): void {
   }
 }

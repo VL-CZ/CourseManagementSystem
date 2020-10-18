@@ -1,8 +1,13 @@
 <div class="jumbotron">
   <h3>Shared files</h3>
-  <ul>
-    <li *ngFor="let fileID of fileIDs">{{fileID}}</li>
-  </ul>
+  <table class="table table-striped table-responsive">
+    <tr *ngFor="let file of this.uploadedFiles">
+      <td><span class="btn btn-link" (click)="downloadFile(file.id)">{{file.name}}</span></td>
+      <td *ngIf="isAdmin">
+        <button class="btn btn-danger" (click)="removeFile(file.id)">Remove</button>
+      </td>
+    </tr>
+  </table>
 </div>
 <div class="jumbotron" *ngIf="isAdmin">
   <h3>Add new file</h3>
