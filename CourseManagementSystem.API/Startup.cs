@@ -1,6 +1,8 @@
 using CourseManagementSystem.API.Services;
 using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
+using CourseManagementSystem.Services.Implementations;
+using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -46,6 +48,8 @@ namespace CourseManagementSystem.API
             });
 
             services.AddTransient<IPersonService, PersonService>();
+            services.AddTransient<IFileService, FileService>();
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
