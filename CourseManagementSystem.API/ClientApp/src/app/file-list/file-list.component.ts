@@ -53,9 +53,6 @@ export class FileListComponent implements OnInit {
   }
 
   public downloadFile(fileId: number): void {
-    this.fileService.download(fileId).subscribe(blob => {
-      const url = window.URL.createObjectURL(blob);
-      window.open(url);
-    });
+    this.fileService.download(fileId);
   }
 }
