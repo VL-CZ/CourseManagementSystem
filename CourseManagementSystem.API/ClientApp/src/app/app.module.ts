@@ -13,6 +13,7 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
 import { GradeListComponent } from './grade-list/grade-list.component';
 import { StudentListComponent } from './student-list/student-list.component';
 import { StudentDetailComponent } from './student-detail/student-detail.component';
+import { FileListComponent } from './file-list/file-list.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { StudentDetailComponent } from './student-detail/student-detail.componen
     HomeComponent,
     GradeListComponent,
     StudentListComponent,
-    StudentDetailComponent
+    StudentDetailComponent,
+    FileListComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

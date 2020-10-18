@@ -9,10 +9,11 @@ namespace CourseManagementSystem.Data.Models
     {
         public Grade() { }
 
-        public Grade(int value, string comment)
+        public Grade(int value, string comment, string topic)
         {
             Value = value;
             Comment = comment;
+            Topic = topic;
         }
 
         [Key]
