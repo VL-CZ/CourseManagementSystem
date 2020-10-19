@@ -9,14 +9,17 @@ namespace CourseManagementSystem.API.Controllers
     [ApiController]
     public class GradesController : ControllerBase
     {
-        private CMSDbContext dbContext;
+        private readonly CMSDbContext dbContext;
 
         public GradesController(CMSDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
 
-        // DELETE api/<GradeController>/5
+        /// <summary>
+        /// remove grade with selected id
+        /// </summary>
+        /// <param name="id"></param>
         [HttpDelete("delete/{id}")]
         public void Delete(int id)
         {
