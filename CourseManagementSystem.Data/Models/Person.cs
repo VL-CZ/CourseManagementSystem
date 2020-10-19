@@ -19,7 +19,7 @@ namespace CourseManagementSystem.Data.Models
         /// <summary>
         /// courses, where the user is enrolled
         /// </summary>
-        public ICollection<Course> Courses { get; set; }
+        //public ICollection<Course> Courses { get; set; }
 
         /// <summary>
         /// add new grade to this person
