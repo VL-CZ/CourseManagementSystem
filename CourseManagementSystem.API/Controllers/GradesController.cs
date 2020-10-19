@@ -16,7 +16,10 @@ namespace CourseManagementSystem.API.Controllers
             this.dbContext = dbContext;
         }
 
-        // DELETE api/<GradeController>/5
+        /// <summary>
+        /// remove grade with selected id
+        /// </summary>
+        /// <param name="id"></param>
         [HttpDelete("delete/{id}")]
         public void Delete(int id)
         {
