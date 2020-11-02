@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Threading.Tasks;
 
 namespace CourseManagementSystem.Data
@@ -22,7 +23,7 @@ namespace CourseManagementSystem.Data
 
         public DbSet<Course> Courses { get; set; }
 
-        public DbSet<CourseMembership> CourseMemberships { get; set; }
+        public DbSet<CourseMember> CourseMemberships { get; set; }
 
         public DbSet<CourseFile> Files { get; set; }
 

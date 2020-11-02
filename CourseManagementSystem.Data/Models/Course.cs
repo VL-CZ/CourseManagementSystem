@@ -13,7 +13,7 @@ namespace CourseManagementSystem.Data.Models
         {
             Name = name;
             Admin = admin;
-            Members = new List<CourseMembership>();
+            Members = new List<CourseMember>();
         }
 
         [Key]
@@ -34,7 +34,7 @@ namespace CourseManagementSystem.Data.Models
         /// <summary>
         /// members of the course (except admin)
         /// </summary>
-        public ICollection<CourseMembership> Members { get; set; }
+        public ICollection<CourseMember> Members { get; set; }
 
         /// <summary>
         /// shared files in this course

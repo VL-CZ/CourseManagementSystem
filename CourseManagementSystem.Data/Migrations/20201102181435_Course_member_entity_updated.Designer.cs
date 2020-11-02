@@ -4,14 +4,16 @@ using CourseManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CourseManagementSystem.Data.Migrations
 {
     [DbContext(typeof(CMSDbContext))]
-    partial class CMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201102181435_Course_member_entity_updated")]
+    partial class Course_member_entity_updated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

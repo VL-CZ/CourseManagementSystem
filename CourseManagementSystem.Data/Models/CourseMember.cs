@@ -5,15 +5,15 @@ using System.Text;
 
 namespace CourseManagementSystem.Data.Models
 {
-    public class CourseMembership
+    public class CourseMember
     {
         [Key]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// reference to person
         /// </summary>
-        public Person Student { get; set; }
+        public Person User { get; set; }
 
         /// <summary>
         /// reference to course
