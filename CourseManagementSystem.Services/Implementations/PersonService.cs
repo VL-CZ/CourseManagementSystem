@@ -18,7 +18,7 @@ namespace CourseManagementSystem.API.Services
         /// <inheritdoc/>
         public Person GetPersonByID(string id)
         {
-            return dbContext.Users.Include(x => x.Grades).Single(x => x.Id == id);
+            return dbContext.Users.Include(x => x.CourseMemberships).Single(x => x.Id == id);
         }
 
         /// <inheritdoc/>

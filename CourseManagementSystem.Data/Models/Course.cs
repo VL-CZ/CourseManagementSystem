@@ -7,11 +7,13 @@ namespace CourseManagementSystem.Data.Models
 {
     public class Course
     {
+        public Course() { }
+
         public Course(string name, Person admin)
         {
             Name = name;
             Admin = admin;
-            Members = new List<Person>();
+            Members = new List<CourseMembership>();
         }
 
         [Key]
@@ -32,6 +34,6 @@ namespace CourseManagementSystem.Data.Models
         /// <summary>
         /// members of the course (except admin)
         /// </summary>
-        public ICollection<Person> Members { get; set; }
+        public ICollection<CourseMembership> Members { get; set; }
     }
 }

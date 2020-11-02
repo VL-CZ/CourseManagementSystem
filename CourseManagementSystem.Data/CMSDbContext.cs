@@ -20,6 +20,10 @@ namespace CourseManagementSystem.Data
 
         public DbSet<Grade> Grades { get; set; }
 
+        public DbSet<Course> Courses { get; set; }
+
+        public DbSet<CourseMembership> CourseMemberships { get; set; }
+
         public DbSet<CourseFile> Files { get; set; }
 
     }

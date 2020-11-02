@@ -55,7 +55,7 @@ namespace CourseManagementSystem.API.Controllers
                 Email = p.Email,
                 Id = p.Id,
                 Name = p.UserName,
-                Grades = p.Grades.Select(g => new GradeDetailsVM() { Id = g.ID, Comment = g.Comment, Topic = g.Topic, Value = g.Value })
+                //Grades = p.Grades.Select(g => new GradeDetailsVM() { Id = g.ID, Comment = g.Comment, Topic = g.Topic, Value = g.Value })
             };
         }
 
@@ -70,7 +70,7 @@ namespace CourseManagementSystem.API.Controllers
         {
             Person p = personService.GetPersonByID(id);
             Grade grade = new Grade { Value = g.Value, Comment = g.Comment, Topic = g.Topic };
-            p.AssignGrade(grade);
+            //p.AssignGrade(grade);
             dbContext.SaveChanges();
 
             return new GradeDetailsVM() { Id = grade.ID, Comment = grade.Comment, Value = grade.Value, Topic = grade.Topic };
