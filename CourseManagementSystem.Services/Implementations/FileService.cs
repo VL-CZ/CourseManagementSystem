@@ -11,7 +11,7 @@ namespace CourseManagementSystem.Services.Implementations
 {
     public class FileService : IFileService
     {
-        private CMSDbContext dbContext;
+        private readonly CMSDbContext dbContext;
 
         public FileService(CMSDbContext dbContext)
         {
@@ -33,7 +33,7 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public CourseFile Save(IFormFile file)
+        public CourseFile SaveTo(int courseId, IFormFile file)
         {
             var courseFile = new CourseFile() { Name = file.FileName, ContentType = file.ContentType };
             using (var target = new MemoryStream())
@@ -42,7 +42,7 @@ namespace CourseManagementSystem.Services.Implementations
                 courseFile.Data = target.ToArray();
             }
 
-            dbContext.Files.Add(courseFile);
+            dbContext.Courses.Find(courseId).Files.Add(courseFile);
             dbContext.SaveChanges();
 
             return courseFile;

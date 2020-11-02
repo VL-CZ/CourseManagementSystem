@@ -47,7 +47,7 @@ namespace CourseManagementSystem.API
                 configuration.RootPath = "ClientApp/dist";
             });
 
-            services.AddTransient<IPersonService, PersonService>();
+            services.AddTransient<ICourseMemberService, CourseMemberService>();
             services.AddTransient<IFileService, FileService>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

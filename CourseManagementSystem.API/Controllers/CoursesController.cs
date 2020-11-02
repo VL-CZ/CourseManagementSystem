@@ -1,6 +1,9 @@
-﻿using CourseManagementSystem.API.ViewModels;
+﻿using CourseManagementSystem.API.Services;
+using CourseManagementSystem.API.ViewModels;
+using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -11,17 +14,11 @@ namespace CourseManagementSystem.API.Controllers
     [ApiController]
     public class CoursesController : ControllerBase
     {
-        private static int nextId = 1;
-        private static List<Course> courses = new List<Course>();
+        private readonly CMSDbContext dbContext;
 
-        /// <summary>
-        /// get all courses
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("")]
-        public IEnumerable<CourseInfoVM> GetAll()
+        public CoursesController(CMSDbContext dbContext)
         {
-            return courses.Select(c => new CourseInfoVM(c.Id, c.Name));
+            this.dbContext = dbContext;
         }
 
         /// <summary>
@@ -31,11 +28,13 @@ namespace CourseManagementSystem.API.Controllers
         [HttpPost("create")]
         public CourseInfoVM Create([FromBody] AddCourseVM courseVM)
         {
-            courses.Add(new Course(courseVM.Name, null) { Id = nextId });
-            var c = Get(nextId);
+            Person admin = dbContext.Users.Single(x => x.Id == courseVM.AdminId);
+            Course createdCourse = new Course(courseVM.Name, admin);
 
-            nextId++;
-            return new CourseInfoVM(c.Id, c.Name);
+            dbContext.Courses.Add(createdCourse);
+            dbContext.SaveChanges();
+
+            return new CourseInfoVM(createdCourse.Id, createdCourse.Name);
         }
 
         /// <summary>
@@ -46,7 +45,7 @@ namespace CourseManagementSystem.API.Controllers
         [HttpGet("{id}")]
         public Course Get(int id)
         {
-            return courses.Single(x => x.Id == id);
+            return dbContext.Courses.Find(id);
         }
 
         /// <summary>
@@ -56,8 +55,29 @@ namespace CourseManagementSystem.API.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            Course c = courses.Single(x => x.Id == id);
-            courses.Remove(c);
+            Course c = dbContext.Courses.Find(id);
+            dbContext.Courses.Remove(c);
+        }
+
+        /// <summary>
+        /// get all course members
+        /// </summary>
+        [HttpGet("{id}/members")]
+        public IEnumerable<PersonVM> GetAllMembers(int id)
+        {
+            var course = dbContext.Courses.Include(x => x.Members).Include(x => x.Members.Select(m => m.User)).Single(x => x.Id == id);
+
+            return course.Members.Select(cm => new PersonVM() { Id = cm.Id.ToString(), Name = cm.User.UserName, Email = cm.User.Email });
+        }
+
+        /// <summary>
+        /// get all course files
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("{id}/files")]
+        public IEnumerable<CourseFileVM> GetAll(int id)
+        {
+            return dbContext.Courses.Single(x => x.Id == id).Files.Select(f => new CourseFileVM { Id = f.ID, Name = f.Name });
         }
     }
 }

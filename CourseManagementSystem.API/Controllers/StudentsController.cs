@@ -19,26 +19,16 @@ namespace CourseManagementSystem.API.Controllers
     public class StudentsController : ControllerBase
     {
         private readonly CMSDbContext dbContext;
-        private readonly IPersonService personService;
+        private readonly ICourseMemberService courseMemberService;
         private readonly UserManager<Person> userManager;
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public StudentsController(CMSDbContext dbContext, IPersonService personService, UserManager<Person> userManager, IHttpContextAccessor httpContextAccessor)
+        public StudentsController(CMSDbContext dbContext, ICourseMemberService personService, UserManager<Person> userManager, IHttpContextAccessor httpContextAccessor)
         {
             this.dbContext = dbContext;
-            this.personService = personService;
+            this.courseMemberService = personService;
             this.userManager = userManager;
             this.httpContextAccessor = httpContextAccessor;
-        }
-
-        /// <summary>
-        /// get all students
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public IEnumerable<PersonVM> GetAll()
-        {
-            return dbContext.Users.Select(p => new PersonVM() { Id = p.Id, Name = p.UserName, Email = p.Email });
         }
 
         /// <summary>
@@ -47,14 +37,15 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public StudentVM Get(string id)
+        public StudentVM Get(int id)
         {
-            Person p = personService.GetPersonByID(id);
+            CourseMember cm = courseMemberService.GetMemberByID(id);
+
             return new StudentVM
             {
-                Email = p.Email,
-                Id = p.Id,
-                Name = p.UserName,
+                Email = cm.User.Email,
+                Id = cm.User.ToString(),
+                Name = cm.User.UserName,
                 //Grades = p.Grades.Select(g => new GradeDetailsVM() { Id = g.ID, Comment = g.Comment, Topic = g.Topic, Value = g.Value })
             };
         }
@@ -66,11 +57,11 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="g"></param>
         /// <returns>assigned grade</returns>
         [HttpPost("{id}/assignGrade")]
-        public GradeDetailsVM AssignGrade(string id, [FromBody] AddGradeVM g)
+        public GradeDetailsVM AssignGrade(int id, [FromBody] AddGradeVM g)
         {
-            Person p = personService.GetPersonByID(id);
+            CourseMember cm = courseMemberService.GetMemberByID(id);
             Grade grade = new Grade { Value = g.Value, Comment = g.Comment, Topic = g.Topic };
-            //p.AssignGrade(grade);
+            cm.AssignGrade(grade);
             dbContext.SaveChanges();
 
             return new GradeDetailsVM() { Id = grade.ID, Comment = grade.Comment, Value = grade.Value, Topic = grade.Topic };
