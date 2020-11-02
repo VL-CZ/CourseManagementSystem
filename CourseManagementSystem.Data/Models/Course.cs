@@ -35,5 +35,10 @@ namespace CourseManagementSystem.Data.Models
         /// members of the course (except admin)
         /// </summary>
         public ICollection<CourseMembership> Members { get; set; }
+
+        /// <summary>
+        /// shared files in this course
+        /// </summary>
+        public ICollection<CourseFile> Files { get; set; }
     }
 }
