@@ -14,7 +14,7 @@ namespace CourseManagementSystem.Data.Models
         /// <summary>
         /// grades of this student
         /// </summary>
-        public ICollection<CourseMember> CourseMemberships { get; set; }
+        public ICollection<CourseMember> CourseMemberships { get; set; } = new List<CourseMember>();
 
     }
 }

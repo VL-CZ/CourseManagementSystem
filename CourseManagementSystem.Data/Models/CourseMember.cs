@@ -7,6 +7,11 @@ namespace CourseManagementSystem.Data.Models
 {
     public class CourseMember
     {
+        public CourseMember()
+        {
+            Grades = new List<Grade>();
+        }
+
         [Key]
         public int Id { get; set; }
 

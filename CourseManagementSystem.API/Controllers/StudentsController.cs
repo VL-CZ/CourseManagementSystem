@@ -67,6 +67,17 @@ namespace CourseManagementSystem.API.Controllers
             return new GradeDetailsVM() { Id = grade.ID, Comment = grade.Comment, Value = grade.Value, Topic = grade.Topic };
         }
 
+        [HttpPost("enroll/{courseId}")]
+        public void EnrollTo(int courseId)
+        {
+            var course = dbContext.Courses.Find(courseId);
+            var user = dbContext.Users.Find(GetCurrentUserId());
+
+            var cm = new CourseMember() { Course = course, User = user };
+            dbContext.CourseMembers.Add(cm);
+            dbContext.SaveChanges();
+        }
+
         /// <summary>
         /// get current user id
         /// </summary>

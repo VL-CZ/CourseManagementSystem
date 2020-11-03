@@ -45,7 +45,8 @@ namespace CourseManagementSystem.API.Controllers
         [HttpGet("{id}")]
         public Course Get(int id)
         {
-            return dbContext.Courses.Find(id);
+            var course = dbContext.Courses.Include(x => x.Admin).Include(x => x.Members).Single(x => x.Id == id);
+            return course;
         }
 
         /// <summary>

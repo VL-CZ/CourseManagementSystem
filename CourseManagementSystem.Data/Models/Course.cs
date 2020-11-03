@@ -14,6 +14,7 @@ namespace CourseManagementSystem.Data.Models
             Name = name;
             Admin = admin;
             Members = new List<CourseMember>();
+            Files = new List<CourseFile>();
         }
 
         [Key]

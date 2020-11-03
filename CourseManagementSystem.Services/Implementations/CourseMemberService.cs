@@ -18,14 +18,14 @@ namespace CourseManagementSystem.API.Services
         /// <inheritdoc/>
         public CourseMember GetMemberByID(int id)
         {
-            return dbContext.CourseMemberships.Include(x => x.User).Single(x => x.Id == id);
+            return dbContext.CourseMembers.Include(x => x.User).Single(x => x.Id == id);
         }
 
         /// <inheritdoc/>
         public void RemoveMemberById(int id)
         {
             CourseMember cm = GetMemberByID(id);
-            dbContext.CourseMemberships.Remove(cm);
+            dbContext.CourseMembers.Remove(cm);
             dbContext.SaveChanges();
         }
     }
