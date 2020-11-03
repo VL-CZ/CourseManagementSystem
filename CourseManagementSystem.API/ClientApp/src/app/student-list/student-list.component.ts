@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Student} from '../viewmodels/student';
-import { PersonService } from '../person.service';
+import { CourseMemberService } from '../course-member.service';
 import {RoleAuthService} from '../role-auth.service';
 
 @Component({
@@ -12,7 +12,7 @@ export class StudentListComponent implements OnInit {
   public people: Student[];
   public isAdmin: boolean;
 
-  constructor(personService: PersonService, roleAuthService: RoleAuthService) {
+  constructor(personService: CourseMemberService, roleAuthService: RoleAuthService) {
     personService.getAll().subscribe(result => {
       this.people = result;
     });

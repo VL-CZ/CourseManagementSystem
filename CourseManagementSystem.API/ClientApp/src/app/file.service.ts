@@ -34,13 +34,6 @@ export class FileService extends ApiService {
   }
 
   /**
-   * get all files
-   */
-  public getAll(): Observable<FileVM[]> {
-    return this.http.get<FileVM[]>(this.baseUrl + 'api/file');
-  }
-
-  /**
    * delete file by its Id
    * @param fileId
    */

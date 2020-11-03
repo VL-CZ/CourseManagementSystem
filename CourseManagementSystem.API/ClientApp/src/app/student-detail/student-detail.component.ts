@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Student} from '../viewmodels/student';
 import {ActivatedRoute} from '@angular/router';
 import {AddGradeVM} from '../viewmodels/addGradeVM';
-import {PersonService} from '../person.service';
+import {CourseMemberService} from '../course-member.service';
 import {GradeService} from '../grade.service';
 import {RoleAuthService} from '../role-auth.service';
 
@@ -14,14 +14,14 @@ import {RoleAuthService} from '../role-auth.service';
 export class StudentDetailComponent implements OnInit {
 
   private userId: string;
-  private personService: PersonService;
+  private personService: CourseMemberService;
   private gradeService: GradeService;
 
   public isAdmin: boolean;
   public student: Student;
   public newGrade: AddGradeVM;
 
-  constructor(route: ActivatedRoute, personService: PersonService, gradeService: GradeService, roleAuthService: RoleAuthService) {
+  constructor(route: ActivatedRoute, personService: CourseMemberService, gradeService: GradeService, roleAuthService: RoleAuthService) {
     this.personService = personService;
     this.gradeService = gradeService;
 

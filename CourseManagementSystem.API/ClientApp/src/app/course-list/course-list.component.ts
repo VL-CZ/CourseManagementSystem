@@ -3,6 +3,7 @@ import {CourseInfoVM} from '../viewmodels/courseInfoVM';
 import {CourseService} from '../course.service';
 import {RoleAuthService} from '../role-auth.service';
 import {AddCourseVM} from '../viewmodels/addCourseVM';
+import {PeopleService} from '../people.service';
 
 @Component({
   selector: 'app-course-list',
@@ -18,12 +19,12 @@ export class CourseListComponent implements OnInit {
   public courses: CourseInfoVM[];
   public isAdmin: boolean;
 
-  constructor(courseService: CourseService, roleAuthService: RoleAuthService) {
+  constructor(courseService: CourseService, peopleService: PeopleService, roleAuthService: RoleAuthService) {
     this.newCourse = new AddCourseVM();
     this.newCourse.adminId = '';
     this.courseService = courseService;
 
-    this.courseService.getAll().subscribe(result => {
+    peopleService.getCourses().subscribe(result => {
       this.courses = result;
     });
 
