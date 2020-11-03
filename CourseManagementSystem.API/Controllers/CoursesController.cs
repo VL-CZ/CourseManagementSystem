@@ -38,18 +38,6 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
-        /// get course by id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpGet("{id}")]
-        public Course Get(int id)
-        {
-            var course = dbContext.Courses.Include(x => x.Admin).Include(x => x.Members).Single(x => x.Id == id);
-            return course;
-        }
-
-        /// <summary>
         /// delete course by id
         /// </summary>
         /// <param name="id"></param>
@@ -58,6 +46,7 @@ namespace CourseManagementSystem.API.Controllers
         {
             Course c = dbContext.Courses.Find(id);
             dbContext.Courses.Remove(c);
+            dbContext.SaveChanges();
         }
 
         /// <summary>
@@ -66,9 +55,11 @@ namespace CourseManagementSystem.API.Controllers
         [HttpGet("{id}/members")]
         public IEnumerable<PersonVM> GetAllMembers(int id)
         {
-            var course = dbContext.Courses.Include(x => x.Members).Include(x => x.Members.Select(m => m.User)).Single(x => x.Id == id);
+            var course = dbContext.Courses.Include(x => x.Members).Single(x => x.Id == id);
+            var courseMemberIDs = course.Members.Select(x => x.Id);
+            var people = dbContext.CourseMembers.Include(x => x.User).Where(cm => courseMemberIDs.Contains(cm.Id));
 
-            return course.Members.Select(cm => new PersonVM() { Id = cm.Id.ToString(), Name = cm.User.UserName, Email = cm.User.Email });
+            return people.Select(cm => new PersonVM() { Id = cm.Id.ToString(), Name = cm.User.UserName, Email = cm.User.Email });
         }
 
         /// <summary>
@@ -76,7 +67,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("{id}/files")]
-        public IEnumerable<CourseFileVM> GetAll(int id)
+        public IEnumerable<CourseFileVM> GetAllFiles(int id)
         {
             return dbContext.Courses.Single(x => x.Id == id).Files.Select(f => new CourseFileVM { Id = f.ID, Name = f.Name });
         }

@@ -21,7 +21,6 @@ namespace CourseManagementSystem.API.Controllers
             this.fileService = fileService;
         }
 
-
         /// <summary>
         /// upload the file
         /// </summary>
@@ -33,7 +32,6 @@ namespace CourseManagementSystem.API.Controllers
             CourseFile courseFile = fileService.SaveTo(courseId, file);
             return new CourseFileVM() { Id = courseFile.ID, Name = courseFile.Name };
         }
-
 
         /// <summary>
         /// download the file by its Id
