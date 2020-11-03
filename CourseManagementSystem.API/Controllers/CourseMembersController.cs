@@ -3,6 +3,7 @@ using CourseManagementSystem.API.ViewModels;
 using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace CourseManagementSystem.API.Controllers
 {
@@ -19,7 +20,6 @@ namespace CourseManagementSystem.API.Controllers
             this.courseMemberService = courseMemberService;
         }
 
-
         /// <summary>
         /// get person by id
         /// </summary>
@@ -35,7 +35,7 @@ namespace CourseManagementSystem.API.Controllers
                 Email = cm.User.Email,
                 Id = cm.User.ToString(),
                 Name = cm.User.UserName,
-                //Grades = p.Grades.Select(g => new GradeDetailsVM() { Id = g.ID, Comment = g.Comment, Topic = g.Topic, Value = g.Value })
+                Grades = cm.Grades.Select(g => new GradeDetailsVM() { Id = g.ID, Comment = g.Comment, Topic = g.Topic, Value = g.Value })
             };
         }
 

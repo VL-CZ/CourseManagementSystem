@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -27,6 +28,10 @@ namespace CourseManagementSystem.API.Controllers
             this.httpContextAccessor = httpContextAccessor;
         }
 
+        /// <summary>
+        /// enroll to course with selected Id
+        /// </summary>
+        /// <param name="courseId"></param>
         [HttpPost("enroll/{courseId}")]
         public void EnrollTo(int courseId)
         {
@@ -37,6 +42,23 @@ namespace CourseManagementSystem.API.Controllers
             dbContext.CourseMembers.Add(cm);
             dbContext.SaveChanges();
         }
+
+        /// <summary>
+        /// get all courses, whose member the current user is
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("courses")]
+        public IEnumerable<CourseInfoVM> GetMemberCourses()
+        {
+            var courseMembershipIds = dbContext.Users.Include(u => u.CourseMemberships).Single(u => u.Id == GetCurrentUserId()).CourseMemberships.Select(cm => cm.Id);
+            var courseVMs = dbContext.CourseMembers.Include(cm => cm.Course)
+                .Where(cm => courseMembershipIds.Contains(cm.Id))
+                .Select(cm => new CourseInfoVM(cm.Course.Id, cm.Course.Name));
+
+            return courseVMs;
+        }
+
+        // public IEnumerable<CourseInfoVM> GetManagedCourses()
 
         /// <summary>
         /// get current user id
