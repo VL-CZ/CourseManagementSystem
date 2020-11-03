@@ -18,13 +18,13 @@ export class RoleAuthService extends ApiService {
    * is the currently logged-in user admin?
    */
   public isAdmin(): Observable<IsAdminVM> {
-    return this.http.get<IsAdminVM>(this.baseUrl + 'api/students/isAdmin');
+    return this.http.get<IsAdminVM>(this.baseUrl + 'api/people/isAdmin');
   }
 
   /**
    * get id of currently logged-in user
    */
   public getCurrentUserId(): Observable<PersonIdVM> {
-    return this.http.get<PersonIdVM>(this.baseUrl + 'api/students/getId');
+    return this.http.get<PersonIdVM>(this.baseUrl + 'api/people/getId');
   }
 }

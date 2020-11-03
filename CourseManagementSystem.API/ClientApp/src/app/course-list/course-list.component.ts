@@ -46,6 +46,7 @@ export class CourseListComponent implements OnInit {
   }
 
   addCourse(): void {
+    this.newCourse.adminId = this.currentUserId;
     this.courseService.create(this.newCourse).subscribe(result => {
       this.courses.push(result);
     });

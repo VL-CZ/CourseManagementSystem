@@ -13,9 +13,9 @@ export class StudentListComponent implements OnInit {
   public isAdmin: boolean;
 
   constructor(personService: CourseMemberService, roleAuthService: RoleAuthService) {
-    personService.getAll().subscribe(result => {
-      this.people = result;
-    });
+    // personService.getAll().subscribe(result => {
+    //   this.people = result;
+    // });
 
     roleAuthService.isAdmin().subscribe(result => {
       this.isAdmin = result.isAdmin;

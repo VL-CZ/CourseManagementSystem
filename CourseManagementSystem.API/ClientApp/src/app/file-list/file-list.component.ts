@@ -26,9 +26,9 @@ export class FileListComponent implements OnInit {
       this.isAdmin = result.isAdmin;
     });
 
-    fileService.getAll().subscribe(result => {
-      this.uploadedFiles = result;
-    });
+    // fileService.getAll().subscribe(result => {
+    //   this.uploadedFiles = result;
+    // });
   }
 
   ngOnInit() {
