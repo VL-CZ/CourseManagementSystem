@@ -47,7 +47,7 @@ namespace CourseManagementSystem.API.Controllers
         /// get all courses, whose member the current user is
         /// </summary>
         /// <returns></returns>
-        [HttpGet("courses")]
+        [HttpGet("memberCourses")]
         public IEnumerable<CourseInfoVM> GetMemberCourses()
         {
             var courseMembershipIds = dbContext.Users.Include(u => u.CourseMemberships).Single(u => u.Id == GetCurrentUserId()).CourseMemberships.Select(cm => cm.Id);
@@ -58,7 +58,16 @@ namespace CourseManagementSystem.API.Controllers
             return courseVMs;
         }
 
-        // public IEnumerable<CourseInfoVM> GetManagedCourses()
+        /// <summary>
+        /// get all courses, whose admin the current user is
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("managedCourses")]
+        public IEnumerable<CourseInfoVM> GetManagedCourses()
+        {
+            var managedCourses = dbContext.Courses.Include(c => c.Admin).Where(c => c.Admin.Id == GetCurrentUserId());
+            return managedCourses.Select(c => new CourseInfoVM(c.Id, c.Name));
+        }
 
         /// <summary>
         /// get current user id
