@@ -48,6 +48,7 @@ export class CourseListComponent implements OnInit {
   removeCourse(courseId: number): void {
     this.courseService.delete(courseId).subscribe();
     this.memberCourses = this.memberCourses.filter(c => c.id !== courseId);
+    this.managedCourses = this.managedCourses.filter(c => c.id !== courseId);
   }
 
   addCourse(): void {

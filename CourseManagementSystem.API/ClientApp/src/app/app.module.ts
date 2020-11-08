@@ -37,7 +37,6 @@ import { CourseDetailComponent } from './course-detail/course-detail.component';
     RouterModule.forRoot([
       {path: '', component: HomeComponent, pathMatch: 'full'},
       {path: 'grades', component: GradeListComponent},
-      {path: 'students', component: StudentListComponent},
       {path: 'students/:id', component: StudentDetailComponent},
       {path: 'courses', component: CourseListComponent},
       {path: 'courses/:id', component: CourseDetailComponent}

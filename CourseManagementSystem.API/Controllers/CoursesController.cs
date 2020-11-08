@@ -63,13 +63,13 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
-        /// get all course files
+        /// get all shared files in this course
         /// </summary>
         /// <returns></returns>
         [HttpGet("{id}/files")]
         public IEnumerable<CourseFileVM> GetAllFiles(int id)
         {
-            return dbContext.Courses.Single(x => x.Id == id).Files.Select(f => new CourseFileVM { Id = f.ID, Name = f.Name });
+            return dbContext.Courses.Include(c=>c.Files).Single(x => x.Id == id).Files.Select(f => new CourseFileVM { Id = f.ID, Name = f.Name });
         }
     }
 }

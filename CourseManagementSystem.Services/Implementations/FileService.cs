@@ -2,9 +2,11 @@
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace CourseManagementSystem.Services.Implementations
@@ -42,7 +44,9 @@ namespace CourseManagementSystem.Services.Implementations
                 courseFile.Data = target.ToArray();
             }
 
-            dbContext.Courses.Find(courseId).Files.Add(courseFile);
+            Course c = dbContext.Courses.Include(c => c.Files).Single(c => c.Id == courseId);
+                
+            c.Files.Add(courseFile);
             dbContext.SaveChanges();
 
             return courseFile;

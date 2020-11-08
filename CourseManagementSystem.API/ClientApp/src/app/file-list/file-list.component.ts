@@ -18,6 +18,7 @@ export class FileListComponent implements OnInit {
   private courseId: string;
 
   private fileService: FileService;
+  private courseService: CourseService;
 
   public isAdmin: boolean;
   public fileToUpload: File;
@@ -25,17 +26,17 @@ export class FileListComponent implements OnInit {
 
   constructor(roleAuthService: RoleAuthService, fileService: FileService, courseService: CourseService) {
     this.fileService = fileService;
+    this.courseService = courseService;
 
     roleAuthService.isAdmin().subscribe(result => {
       this.isAdmin = result.isAdmin;
     });
-
-    courseService.getAllFiles(this.courseId).subscribe(result => {
-      this.uploadedFiles = result;
-    });
   }
 
   ngOnInit() {
+    this.courseService.getAllFiles(this.courseId).subscribe(result => {
+      this.uploadedFiles = result;
+    });
   }
 
   // On file Select
