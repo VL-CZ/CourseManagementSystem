@@ -36,15 +36,15 @@ export class CourseService extends ApiService {
    * get all members of this course
    * @param courseId
    */
-  public getAllMembers(courseId: number): Observable<Person[]> {
-    return this.http.get<Person[]>(this.baseUrl + `api/courses/${courseId.toString()}/members`);
+  public getAllMembers(courseId: string): Observable<Person[]> {
+    return this.http.get<Person[]>(this.baseUrl + `api/courses/${courseId}/members`);
   }
 
   /**
    * get all shared files in this this course
    * @param courseId
    */
-  public getAllFiles(courseId: number): Observable<FileVM[]> {
-    return this.http.get<FileVM[]>(this.baseUrl + `api/courses/${courseId.toString()}/files`);
+  public getAllFiles(courseId: string): Observable<FileVM[]> {
+    return this.http.get<FileVM[]>(this.baseUrl + `api/courses/${courseId}/files`);
   }
 }

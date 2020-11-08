@@ -16,7 +16,8 @@ export class CourseListComponent implements OnInit {
   private currentUserId: string;
 
   public newCourse: AddCourseVM;
-  public courses: CourseInfoVM[];
+  public memberCourses: CourseInfoVM[];
+  public managedCourses: CourseInfoVM[];
   public isAdmin: boolean;
 
   constructor(courseService: CourseService, peopleService: PeopleService, roleAuthService: RoleAuthService) {
@@ -24,8 +25,12 @@ export class CourseListComponent implements OnInit {
     this.newCourse.adminId = '';
     this.courseService = courseService;
 
-    peopleService.getCourses().subscribe(result => {
-      this.courses = result;
+    peopleService.getMemberCourses().subscribe(result => {
+      this.memberCourses = result;
+    });
+
+    peopleService.getManagedCourses().subscribe(result => {
+      this.managedCourses = result;
     });
 
     roleAuthService.isAdmin().subscribe(result => {
@@ -42,13 +47,13 @@ export class CourseListComponent implements OnInit {
 
   removeCourse(courseId: number): void {
     this.courseService.delete(courseId).subscribe();
-    this.courses = this.courses.filter(c => c.id !== courseId);
+    this.memberCourses = this.memberCourses.filter(c => c.id !== courseId);
   }
 
   addCourse(): void {
     this.newCourse.adminId = this.currentUserId;
     this.courseService.create(this.newCourse).subscribe(result => {
-      this.courses.push(result);
+      this.memberCourses.push(result);
     });
   }
 }

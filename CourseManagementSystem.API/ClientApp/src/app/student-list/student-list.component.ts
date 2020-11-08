@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import {Student} from '../viewmodels/student';
+import {Component, Input, OnInit} from '@angular/core';
+import {Person, Student} from '../viewmodels/student';
 import { CourseMemberService } from '../course-member.service';
 import {RoleAuthService} from '../role-auth.service';
+import {CourseService} from '../course.service';
 
 @Component({
   templateUrl: './student-list.component.html',
@@ -9,13 +10,16 @@ import {RoleAuthService} from '../role-auth.service';
 })
 export class StudentListComponent implements OnInit {
 
-  public people: Student[];
+  @Input()
+  private courseId: string;
+
+  public people: Person[];
   public isAdmin: boolean;
 
-  constructor(personService: CourseMemberService, roleAuthService: RoleAuthService) {
-    // personService.getAll().subscribe(result => {
-    //   this.people = result;
-    // });
+  constructor(roleAuthService: RoleAuthService, courseService: CourseService) {
+    courseService.getAllMembers(this.courseId).subscribe(result => {
+      this.people = result;
+    });
 
     roleAuthService.isAdmin().subscribe(result => {
       this.isAdmin = result.isAdmin;

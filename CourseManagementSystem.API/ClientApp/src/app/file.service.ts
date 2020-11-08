@@ -22,15 +22,16 @@ export class FileService extends ApiService {
   }
 
   /**
-   * upload file
-   * @param file
+   * upload file into selected course
+   * @param file file to upload
+   * @param courseId id of the course where to upload it
    * @returns Id and name of the file
    */
-  public upload(file: File): Observable<FileVM> {
+  public uploadTo(file: File, courseId: string): Observable<FileVM> {
     const formData: FormData = new FormData();
     formData.append('file', file);
 
-    return this.http.post<FileVM>(this.baseUrl + 'api/file/upload', formData);
+    return this.http.post<FileVM>(this.baseUrl + 'api/file/upload/' + courseId, formData);
   }
 
   /**

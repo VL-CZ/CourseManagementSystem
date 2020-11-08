@@ -15,6 +15,7 @@ import {StudentListComponent} from './student-list/student-list.component';
 import {StudentDetailComponent} from './student-detail/student-detail.component';
 import {FileListComponent} from './file-list/file-list.component';
 import {CourseListComponent} from './course-list/course-list.component';
+import { CourseDetailComponent } from './course-detail/course-detail.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import {CourseListComponent} from './course-list/course-list.component';
     StudentListComponent,
     StudentDetailComponent,
     FileListComponent,
-    CourseListComponent
+    CourseListComponent,
+    CourseDetailComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -37,7 +39,8 @@ import {CourseListComponent} from './course-list/course-list.component';
       {path: 'grades', component: GradeListComponent},
       {path: 'students', component: StudentListComponent},
       {path: 'students/:id', component: StudentDetailComponent},
-      {path: 'courses', component: CourseListComponent}
+      {path: 'courses', component: CourseListComponent},
+      {path: 'courses/:id', component: CourseDetailComponent}
     ])
   ],
   providers: [
