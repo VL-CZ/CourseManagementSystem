@@ -33,7 +33,7 @@ namespace CourseManagementSystem.API.Controllers
             return new StudentVM
             {
                 Email = cm.User.Email,
-                Id = cm.User.ToString(),
+                Id = cm.User.Id,
                 Name = cm.User.UserName,
                 Grades = cm.Grades.Select(g => new GradeDetailsVM() { Id = g.ID, Comment = g.Comment, Topic = g.Topic, Value = g.Value })
             };

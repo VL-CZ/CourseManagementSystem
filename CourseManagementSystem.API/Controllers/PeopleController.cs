@@ -70,6 +70,22 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
+        /// get course member object of current user in the selected course
+        /// </summary>
+        /// <param name="courseId">Id of the course</param>
+        /// <returns></returns>
+        [HttpGet("getCourseMember/{courseId}")]
+        public int GetMemberByCourseId(int courseId)
+        {
+            var currentUserId = GetCurrentUserId();
+            return dbContext.CourseMembers.Include(cm => cm.Course).Include(cm => cm.User)
+                .Where(cm => cm.User.Id == GetCurrentUserId())
+                .Where(cm => cm.Course.Id == courseId)
+                .Select(cm => cm.Id)
+                .Single();
+        }
+
+        /// <summary>
         /// get current user id
         /// </summary>
         /// <returns></returns>
