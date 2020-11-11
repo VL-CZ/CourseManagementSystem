@@ -1,7 +1,10 @@
 import {Grade} from './grade';
 
-export interface Person {
+export interface PersonIdVM {
   id: string;
+}
+
+export interface Person extends PersonIdVM {
   name: string;
   email: string;
 }

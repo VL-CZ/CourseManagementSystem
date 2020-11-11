@@ -1,18 +1,17 @@
+using CourseManagementSystem.API.Services;
+using CourseManagementSystem.Data;
+using CourseManagementSystem.Data.Models;
+using CourseManagementSystem.Services.Implementations;
+using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
-using CourseManagementSystem.API.Data;
-using CourseManagementSystem.API.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using CourseManagementSystem.API.Services;
-using Microsoft.AspNetCore.Http;
 
 namespace CourseManagementSystem.API
 {
@@ -48,7 +47,9 @@ namespace CourseManagementSystem.API
                 configuration.RootPath = "ClientApp/dist";
             });
 
-            services.AddTransient<IPersonService, PersonService>();
+            services.AddTransient<ICourseMemberService, CourseMemberService>();
+            services.AddTransient<IFileService, FileService>();
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 

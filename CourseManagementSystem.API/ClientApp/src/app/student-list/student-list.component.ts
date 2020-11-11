@@ -1,29 +1,35 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, Inject, OnInit } from '@angular/core';
-import {Person} from '../viewmodels/student';
-import {IsAdminVM} from '../viewmodels/isAdminVM';
+import {Component, Input, OnInit} from '@angular/core';
+import {Person, Student} from '../viewmodels/student';
+import {CourseMemberService} from '../course-member.service';
+import {RoleAuthService} from '../role-auth.service';
+import {CourseService} from '../course.service';
 
 @Component({
+  selector: 'app-student-list',
   templateUrl: './student-list.component.html',
   styleUrls: ['./student-list.component.css']
 })
 export class StudentListComponent implements OnInit {
 
+  @Input()
+  private courseId: string;
+
+  private readonly courseService: CourseService;
+
   public people: Person[];
-  private isAdmin: boolean;
+  public isAdmin: boolean;
 
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    http.get<Person[]>(baseUrl + 'api/students').subscribe(result => {
-      this.people = result;
-    }, error => console.error(error));
+  constructor(roleAuthService: RoleAuthService, courseService: CourseService) {
+    this.courseService = courseService;
 
-    http.get<IsAdminVM>(baseUrl + 'api/students/isAdmin').subscribe(result =>
-    {
+    roleAuthService.isAdmin().subscribe(result => {
       this.isAdmin = result.isAdmin;
-    }, error => console.error(error));
+    });
   }
 
   ngOnInit() {
+    this.courseService.getAllMembers(this.courseId).subscribe(result => {
+      this.people = result;
+    });
   }
-
 }

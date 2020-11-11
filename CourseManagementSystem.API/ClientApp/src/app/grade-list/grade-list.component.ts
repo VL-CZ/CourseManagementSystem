@@ -1,7 +1,6 @@
-import { HttpClient } from '@angular/common/http';
-import {Component, Inject, Input, OnInit} from '@angular/core';
-import { IdVM } from '../viewmodels/idVM';
-import { Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {RoleAuthService} from '../role-auth.service';
 
 @Component({
   selector: 'app-grade-list',
@@ -10,17 +9,10 @@ import { Router } from '@angular/router';
 })
 export class GradeListComponent implements OnInit {
 
-  private http: HttpClient;
-  private baseUrl: string;
-  private userId: Object;
-
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, router: Router) {
-    this.http = http;
-    this.baseUrl = baseUrl;
-    http.get<IdVM>(this.baseUrl + 'api/students/getId').subscribe(result =>
-    {
+  constructor(router: Router, roleAuthService: RoleAuthService) {
+    roleAuthService.getCurrentUserId().subscribe(result => {
       router.navigate(['students', result.id]);
-    }, error => console.error(error));
+    });
   }
 
   ngOnInit() {

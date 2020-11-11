@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CourseManagementSystem.API.Data;
-using CourseManagementSystem.API.ViewModels;
-using Microsoft.AspNetCore.Authorization;
+﻿using CourseManagementSystem.Data;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -15,14 +9,17 @@ namespace CourseManagementSystem.API.Controllers
     [ApiController]
     public class GradesController : ControllerBase
     {
-        private CMSDbContext dbContext;
+        private readonly CMSDbContext dbContext;
 
         public GradesController(CMSDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
 
-        // DELETE api/<GradeController>/5
+        /// <summary>
+        /// remove grade with selected id
+        /// </summary>
+        /// <param name="id"></param>
         [HttpDelete("delete/{id}")]
         public void Delete(int id)
         {
