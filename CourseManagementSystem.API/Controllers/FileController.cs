@@ -14,38 +14,24 @@ namespace CourseManagementSystem.API.Controllers
     [ApiController]
     public class FileController : ControllerBase
     {
-        private readonly CMSDbContext dbContext;
         private readonly IFileService fileService;
 
-        public FileController(CMSDbContext dbContext, IFileService fileService)
+        public FileController(IFileService fileService)
         {
-            this.dbContext = dbContext;
             this.fileService = fileService;
         }
-
-        /// <summary>
-        /// get all file information
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("")]
-        public IEnumerable<CourseFileVM> GetAll()
-        {
-            return dbContext.Files.Select(f => new CourseFileVM { Id = f.ID, Name = f.Name });
-        }
-
 
         /// <summary>
         /// upload the file
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        [HttpPost("upload")]
-        public CourseFileVM Upload(IFormFile file)
+        [HttpPost("upload/{courseId}")]
+        public CourseFileVM Upload(IFormFile file, int courseId)
         {
-            CourseFile courseFile = fileService.Save(file);
+            CourseFile courseFile = fileService.SaveTo(courseId, file);
             return new CourseFileVM() { Id = courseFile.ID, Name = courseFile.Name };
         }
-
 
         /// <summary>
         /// download the file by its Id

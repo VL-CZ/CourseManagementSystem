@@ -6,26 +6,26 @@ using System.Linq;
 
 namespace CourseManagementSystem.API.Services
 {
-    public class PersonService : IPersonService
+    public class CourseMemberService : ICourseMemberService
     {
         private CMSDbContext dbContext;
 
-        public PersonService(CMSDbContext dbContext)
+        public CourseMemberService(CMSDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
 
         /// <inheritdoc/>
-        public Person GetPersonByID(string id)
+        public CourseMember GetMemberByID(int id)
         {
-            return dbContext.Users.Include(x => x.Grades).Single(x => x.Id == id);
+            return dbContext.CourseMembers.Include(cm => cm.User).Include(cm => cm.Grades).Single(x => x.Id == id);
         }
 
         /// <inheritdoc/>
-        public void RemovePersonById(string id)
+        public void RemoveMemberById(int id)
         {
-            Person p = GetPersonByID(id);
-            dbContext.Users.Remove(p);
+            CourseMember cm = GetMemberByID(id);
+            dbContext.CourseMembers.Remove(cm);
             dbContext.SaveChanges();
         }
     }

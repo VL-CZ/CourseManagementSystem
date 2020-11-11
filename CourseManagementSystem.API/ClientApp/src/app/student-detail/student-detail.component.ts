@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Student} from '../viewmodels/student';
 import {ActivatedRoute} from '@angular/router';
 import {AddGradeVM} from '../viewmodels/addGradeVM';
-import {PersonService} from '../person.service';
+import {CourseMemberService} from '../course-member.service';
 import {GradeService} from '../grade.service';
 import {RoleAuthService} from '../role-auth.service';
 
@@ -14,21 +14,22 @@ import {RoleAuthService} from '../role-auth.service';
 export class StudentDetailComponent implements OnInit {
 
   private userId: string;
-  private personService: PersonService;
+  private courseMemberService: CourseMemberService;
   private gradeService: GradeService;
 
   public isAdmin: boolean;
   public student: Student;
   public newGrade: AddGradeVM;
 
-  constructor(route: ActivatedRoute, personService: PersonService, gradeService: GradeService, roleAuthService: RoleAuthService) {
-    this.personService = personService;
+  constructor(route: ActivatedRoute, courseMemberService: CourseMemberService,
+              gradeService: GradeService, roleAuthService: RoleAuthService) {
+    this.courseMemberService = courseMemberService;
     this.gradeService = gradeService;
 
     this.userId = route.snapshot.paramMap.get('id');
     this.newGrade = new AddGradeVM();
 
-    this.personService.getById(this.userId).subscribe(result => {
+    this.courseMemberService.getById(this.userId).subscribe(result => {
       this.student = result;
     });
 
@@ -41,7 +42,7 @@ export class StudentDetailComponent implements OnInit {
   }
 
   public addGrade(): void {
-    this.personService.assignGrade(this.student.id, this.newGrade).subscribe(
+    this.courseMemberService.assignGrade(this.userId, this.newGrade).subscribe(
       result => {
         this.student.grades.push(result);
       });

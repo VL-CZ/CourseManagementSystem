@@ -9,11 +9,11 @@ namespace CourseManagementSystem.Services.Interfaces
     public interface IFileService
     {
         /// <summary>
-        /// save the file
+        /// save the file into the course
         /// </summary>
         /// <param name="file"></param>
         /// <returns>saved file</returns>
-        CourseFile Save(IFormFile file);
+        CourseFile SaveTo(int courseId, IFormFile file);
 
         /// <summary>
         /// delete file with selected Id

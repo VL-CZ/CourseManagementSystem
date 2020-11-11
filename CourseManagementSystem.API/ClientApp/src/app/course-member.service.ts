@@ -9,17 +9,10 @@ import {ApiService} from './api.service';
 @Injectable({
   providedIn: 'root'
 })
-export class PersonService extends ApiService {
+export class CourseMemberService extends ApiService {
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     super(http, baseUrl);
-  }
-
-  /**
-   * get all people
-   */
-  public getAll(): Observable<Student[]> {
-    return this.http.get<Student[]>(this.baseUrl + 'api/students');
   }
 
   /**
@@ -27,7 +20,7 @@ export class PersonService extends ApiService {
    * @param personId
    */
   public getById(personId: string): Observable<Student> {
-    return this.http.get<Student>(this.baseUrl + 'api/students/' + personId);
+    return this.http.get<Student>(this.baseUrl + 'api/courseMembers/' + personId);
   }
 
   /**
@@ -36,6 +29,6 @@ export class PersonService extends ApiService {
    * @param grade created grade (contains id)
    */
   public assignGrade(personId: string, grade: AddGradeVM): Observable<Grade> {
-    return this.http.post<Grade>(this.baseUrl + 'api/students/' + personId + '/assignGrade', grade);
+    return this.http.post<Grade>(this.baseUrl + 'api/courseMembers/' + personId + '/assignGrade', grade);
   }
 }

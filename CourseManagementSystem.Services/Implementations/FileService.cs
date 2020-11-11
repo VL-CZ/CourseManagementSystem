@@ -2,16 +2,18 @@
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace CourseManagementSystem.Services.Implementations
 {
     public class FileService : IFileService
     {
-        private CMSDbContext dbContext;
+        private readonly CMSDbContext dbContext;
 
         public FileService(CMSDbContext dbContext)
         {
@@ -33,7 +35,7 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public CourseFile Save(IFormFile file)
+        public CourseFile SaveTo(int courseId, IFormFile file)
         {
             var courseFile = new CourseFile() { Name = file.FileName, ContentType = file.ContentType };
             using (var target = new MemoryStream())
@@ -42,7 +44,9 @@ namespace CourseManagementSystem.Services.Implementations
                 courseFile.Data = target.ToArray();
             }
 
-            dbContext.Files.Add(courseFile);
+            Course c = dbContext.Courses.Include(c => c.Files).Single(c => c.Id == courseId);
+                
+            c.Files.Add(courseFile);
             dbContext.SaveChanges();
 
             return courseFile;

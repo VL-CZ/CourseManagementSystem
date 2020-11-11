@@ -2,19 +2,19 @@
 
 namespace CourseManagementSystem.API.Services
 {
-    public interface IPersonService
+    public interface ICourseMemberService
     {
         /// <summary>
         /// get person with selected person ID
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Person GetPersonByID(string id);
+        CourseMember GetMemberByID(int id);
 
         /// <summary>
         /// remove person with selected ID
         /// </summary>
         /// <param name="id"></param>
-        void RemovePersonById(string id);
+        void RemoveMemberById(int id);
     }
 }

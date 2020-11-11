@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Threading.Tasks;
 
 namespace CourseManagementSystem.Data
@@ -19,6 +20,10 @@ namespace CourseManagementSystem.Data
         }
 
         public DbSet<Grade> Grades { get; set; }
+
+        public DbSet<Course> Courses { get; set; }
+
+        public DbSet<CourseMember> CourseMembers { get; set; }
 
         public DbSet<CourseFile> Files { get; set; }
 

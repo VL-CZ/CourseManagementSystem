@@ -1,7 +1,8 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {RoleAuthService} from '../role-auth.service';
 import {FileService} from '../file.service';
 import {FileVM} from '../viewmodels/fileVM';
+import {CourseService} from '../course.service';
 
 @Component({
   selector: 'app-file-list',
@@ -13,25 +14,29 @@ export class FileListComponent implements OnInit {
   @ViewChild('inputFile', null)
   private inputFile: ElementRef;
 
+  @Input()
+  private courseId: string;
+
   private fileService: FileService;
+  private courseService: CourseService;
 
   public isAdmin: boolean;
   public fileToUpload: File;
   public uploadedFiles: FileVM[] = [];
 
-  constructor(roleAuthService: RoleAuthService, fileService: FileService) {
+  constructor(roleAuthService: RoleAuthService, fileService: FileService, courseService: CourseService) {
     this.fileService = fileService;
+    this.courseService = courseService;
 
     roleAuthService.isAdmin().subscribe(result => {
       this.isAdmin = result.isAdmin;
     });
-
-    fileService.getAll().subscribe(result => {
-      this.uploadedFiles = result;
-    });
   }
 
   ngOnInit() {
+    this.courseService.getAllFiles(this.courseId).subscribe(result => {
+      this.uploadedFiles = result;
+    });
   }
 
   // On file Select
@@ -40,7 +45,7 @@ export class FileListComponent implements OnInit {
   }
 
   public uploadFile(): void {
-    this.fileService.upload(this.fileToUpload).subscribe(result => {
+    this.fileService.uploadTo(this.fileToUpload, this.courseId).subscribe(result => {
       this.uploadedFiles.push(result);
     });
     this.fileToUpload = null;

@@ -11,15 +11,10 @@ namespace CourseManagementSystem.Data.Models
     /// </summary>
     public class Person : IdentityUser
     {
-        public ICollection<Grade> Grades { get; set; }
-
         /// <summary>
-        /// add new grade to this person
+        /// grades of this student
         /// </summary>
-        /// <param name="g"></param>
-        public void AssignGrade(Grade g)
-        {
-            Grades.Add(g);
-        }
+        public ICollection<CourseMember> CourseMemberships { get; set; } = new List<CourseMember>();
+
     }
 }

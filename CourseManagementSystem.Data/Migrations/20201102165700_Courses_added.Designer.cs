@@ -4,14 +4,16 @@ using CourseManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CourseManagementSystem.Data.Migrations
 {
     [DbContext(typeof(CMSDbContext))]
-    partial class CMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201102165700_Courses_added")]
+    partial class Courses_added
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,9 +53,6 @@ namespace CourseManagementSystem.Data.Migrations
                     b.Property<string>("ContentType")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CourseId")
-                        .HasColumnType("int");
-
                     b.Property<byte[]>("Data")
                         .HasColumnType("varbinary(max)");
 
@@ -62,14 +61,12 @@ namespace CourseManagementSystem.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("CourseId");
-
                     b.ToTable("Files");
                 });
 
-            modelBuilder.Entity("CourseManagementSystem.Data.Models.CourseMember", b =>
+            modelBuilder.Entity("CourseManagementSystem.Data.Models.CourseMembership", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -77,16 +74,16 @@ namespace CourseManagementSystem.Data.Migrations
                     b.Property<int?>("CourseId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("StudentId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                    b.HasKey("ID");
 
                     b.HasIndex("CourseId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("StudentId");
 
-                    b.ToTable("CourseMembers");
+                    b.ToTable("CourseMemberships");
                 });
 
             modelBuilder.Entity("CourseManagementSystem.Data.Models.Grade", b =>
@@ -99,7 +96,7 @@ namespace CourseManagementSystem.Data.Migrations
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CourseMemberId")
+                    b.Property<int?>("CourseMembershipID")
                         .HasColumnType("int");
 
                     b.Property<string>("Topic")
@@ -111,7 +108,7 @@ namespace CourseManagementSystem.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("CourseMemberId");
+                    b.HasIndex("CourseMembershipID");
 
                     b.ToTable("Grades");
                 });
@@ -407,29 +404,22 @@ namespace CourseManagementSystem.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CourseManagementSystem.Data.Models.CourseFile", b =>
-                {
-                    b.HasOne("CourseManagementSystem.Data.Models.Course", null)
-                        .WithMany("Files")
-                        .HasForeignKey("CourseId");
-                });
-
-            modelBuilder.Entity("CourseManagementSystem.Data.Models.CourseMember", b =>
+            modelBuilder.Entity("CourseManagementSystem.Data.Models.CourseMembership", b =>
                 {
                     b.HasOne("CourseManagementSystem.Data.Models.Course", "Course")
                         .WithMany("Members")
                         .HasForeignKey("CourseId");
 
-                    b.HasOne("CourseManagementSystem.Data.Models.Person", "User")
+                    b.HasOne("CourseManagementSystem.Data.Models.Person", "Student")
                         .WithMany("CourseMemberships")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("StudentId");
                 });
 
             modelBuilder.Entity("CourseManagementSystem.Data.Models.Grade", b =>
                 {
-                    b.HasOne("CourseManagementSystem.Data.Models.CourseMember", null)
+                    b.HasOne("CourseManagementSystem.Data.Models.CourseMembership", null)
                         .WithMany("Grades")
-                        .HasForeignKey("CourseMemberId");
+                        .HasForeignKey("CourseMembershipID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
