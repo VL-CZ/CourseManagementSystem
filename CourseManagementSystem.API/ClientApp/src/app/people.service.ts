@@ -35,4 +35,12 @@ export class PeopleService extends ApiService {
   getManagedCourses(): Observable<CourseInfoVM[]> {
     return this.http.get<CourseInfoVM[]>(this.baseUrl + 'api/people/managedCourses');
   }
+
+  /**
+   * get course member Id of current user in selected course
+   * @param courseId Id of the selected course
+   */
+  getCourseMemberByCourse(courseId: number): Observable<string> {
+    return this.http.get<string>(this.baseUrl + 'api/people/getCourseMember/' + courseId);
+  }
 }

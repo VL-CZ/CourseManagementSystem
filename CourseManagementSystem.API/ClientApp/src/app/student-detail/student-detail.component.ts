@@ -42,7 +42,7 @@ export class StudentDetailComponent implements OnInit {
   }
 
   public addGrade(): void {
-    this.courseMemberService.assignGrade(this.student.id, this.newGrade).subscribe(
+    this.courseMemberService.assignGrade(this.userId, this.newGrade).subscribe(
       result => {
         this.student.grades.push(result);
       });

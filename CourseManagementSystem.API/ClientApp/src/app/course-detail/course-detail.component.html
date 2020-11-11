@@ -1,3 +1,7 @@
+<div *ngIf="!isAdmin">
+  <button class="btn btn-success" routerLink="/students/{{currentCourseMemberId}}">My Grades</button>
+</div>
+
 <app-file-list [courseId]="courseId"></app-file-list>
 <app-student-list [courseId]="courseId"></app-student-list>
 
