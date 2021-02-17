@@ -1,6 +1,8 @@
 ﻿using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace CourseManagementSystem.Services.Implementations
 {
@@ -32,7 +34,7 @@ namespace CourseManagementSystem.Services.Implementations
         /// <inheritdoc/>
         public CourseTest GetById(int testId)
         {
-            return dbContext.CourseTests.Find(testId);
+            return dbContext.CourseTests.Include(ct => ct.Questions).Single(ct => ct.Id == testId);
         }
     }
 }

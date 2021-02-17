@@ -13,7 +13,7 @@ namespace CourseManagementSystem.Data.Models
         /// <summary>
         /// questions in this test
         /// </summary>
-        public ICollection<TestQuestion> Questions { get; }
+        public ICollection<TestQuestion> Questions { get; set; }
 
         public CourseTest() { }
 

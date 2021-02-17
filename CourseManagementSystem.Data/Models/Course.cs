@@ -7,15 +7,17 @@ namespace CourseManagementSystem.Data.Models
 {
     public class Course
     {
-        public Course() { }
-
-        public Course(string name, Person admin)
+        public Course()
         {
-            Name = name;
-            Admin = admin;
             Members = new List<CourseMember>();
             Files = new List<CourseFile>();
             Tests = new List<CourseTest>();
+        }
+
+        public Course(string name, Person admin) : this()
+        {
+            Name = name;
+            Admin = admin;
         }
 
         [Key]
