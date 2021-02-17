@@ -27,5 +27,8 @@ namespace CourseManagementSystem.Data
 
         public DbSet<CourseFile> Files { get; set; }
 
+        public DbSet<CourseTest> CourseTests { get; set; }
+        
+        public DbSet<TestQuestion> TestQuestions { get; set; }
     }
 }

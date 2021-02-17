@@ -16,7 +16,7 @@ namespace CourseManagementSystem.UnitTests
                 new TestQuestion(3,"Q3","A3"),
                 new TestQuestion(2,"Q1","A2")
             };
-            var test = new Test(questions);
+            var test = new CourseTest(questions);
 
             var answers = new List<Answer>()
             {

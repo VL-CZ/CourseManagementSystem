@@ -15,6 +15,7 @@ namespace CourseManagementSystem.Data.Models
             Admin = admin;
             Members = new List<CourseMember>();
             Files = new List<CourseFile>();
+            Tests = new List<CourseTest>();
         }
 
         [Key]
@@ -41,5 +42,10 @@ namespace CourseManagementSystem.Data.Models
         /// shared files in this course
         /// </summary>
         public ICollection<CourseFile> Files { get; set; }
+
+        /// <summary>
+        /// tests in this course
+        /// </summary>
+        public ICollection<CourseTest> Tests { get; set; }
     }
 }
