@@ -17,6 +17,7 @@ import {FileListComponent} from './file-list/file-list.component';
 import {CourseListComponent} from './course-list/course-list.component';
 import { CourseDetailComponent } from './course-detail/course-detail.component';
 import { TestDetailComponent } from './test-detail/test-detail.component';
+import { TestListComponent } from './test-list/test-list.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { TestDetailComponent } from './test-detail/test-detail.component';
     FileListComponent,
     CourseListComponent,
     CourseDetailComponent,
-    TestDetailComponent
+    TestDetailComponent,
+    TestListComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),

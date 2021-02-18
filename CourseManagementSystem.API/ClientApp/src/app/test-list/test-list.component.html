@@ -1,0 +1,10 @@
+<div class="jumbotron">
+  <h3>Tests</h3>
+  <table class="table table-striped table-responsive">
+    <tr *ngFor="let test of this.tests">
+      <td>
+        <a routerLink="/tests/{{test.id}}">{{test.topic}}</a>
+      </td>
+    </tr>
+  </table>
+</div>

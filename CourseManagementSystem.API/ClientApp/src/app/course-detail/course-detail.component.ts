@@ -10,7 +10,7 @@ import {PeopleService} from '../people.service';
   styleUrls: ['./course-detail.component.css']
 })
 export class CourseDetailComponent implements OnInit {
-  private currentCourseMemberId: string;
+  public currentCourseMemberId: string;
 
   private readonly courseService: CourseService;
 
