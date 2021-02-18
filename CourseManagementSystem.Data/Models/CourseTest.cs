@@ -11,6 +11,11 @@ namespace CourseManagementSystem.Data.Models
         public int Id { get; set; }
 
         /// <summary>
+        /// topic of the test
+        /// </summary>
+        public string Topic { get; set; }
+
+        /// <summary>
         /// questions in this test
         /// </summary>
         public ICollection<TestQuestion> Questions { get; set; }
