@@ -5,6 +5,9 @@
       <td>
         <a routerLink="/tests/{{test.id}}">{{test.topic}}</a>
       </td>
+      <td *ngIf="isAdmin">
+        <button class="btn btn-danger" (click)="deleteTest(test.id)">Remove</button>
+      </td>
     </tr>
   </table>
 </div>

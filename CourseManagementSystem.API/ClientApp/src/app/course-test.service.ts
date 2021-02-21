@@ -13,7 +13,19 @@ export class CourseTestService extends ApiService {
     super(http, baseUrl);
   }
 
+  /**
+   * get test by Id
+   * @param testId
+   */
   public getById(testId: string): Observable<CourseTest> {
     return this.http.get<CourseTest>(this.baseUrl + `api/courseTests/${testId}`);
+  }
+
+  /**
+   * delete test by Id
+   * @param testId
+   */
+  public delete(testId: string): Observable<{}> {
+    return this.http.delete(this.baseUrl + `api/courseTests/${testId}`);
   }
 }

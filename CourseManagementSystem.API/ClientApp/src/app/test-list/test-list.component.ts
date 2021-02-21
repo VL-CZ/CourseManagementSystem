@@ -1,6 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CourseTest} from '../viewmodels/courseTest';
 import {CourseService} from '../course.service';
+import {RoleAuthService} from '../role-auth.service';
+import {CourseTestService} from '../course-test.service';
 
 @Component({
   selector: 'app-test-list',
@@ -12,15 +14,29 @@ export class TestListComponent implements OnInit {
   private courseId: string;
 
   private courseService: CourseService;
-  public tests: CourseTest[];
+  private courseTestService: CourseTestService;
 
-  constructor(courseService: CourseService) {
+  public tests: CourseTest[];
+  public isAdmin: boolean;
+
+  constructor(courseService: CourseService, roleAuthService: RoleAuthService, courseTestService: CourseTestService) {
     this.courseService = courseService;
+    this.courseTestService = courseTestService;
+
+    roleAuthService.isAdmin().subscribe(result => {
+      this.isAdmin = result.isAdmin;
+    });
+
   }
 
   ngOnInit() {
     this.courseService.getAllTests(this.courseId).subscribe(tests => {
       this.tests = tests;
     });
+  }
+
+  public deleteTest(testId: number) {
+    this.courseTestService.delete(testId.toString()).subscribe();
+    this.tests = this.tests.filter(test => test.id !== testId);
   }
 }
