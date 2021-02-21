@@ -18,6 +18,7 @@ import {CourseListComponent} from './course-list/course-list.component';
 import { CourseDetailComponent } from './course-detail/course-detail.component';
 import { TestDetailComponent } from './test-detail/test-detail.component';
 import { TestListComponent } from './test-list/test-list.component';
+import { TestCreateComponent } from './test-create/test-create.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { TestListComponent } from './test-list/test-list.component';
     CourseListComponent,
     CourseDetailComponent,
     TestDetailComponent,
-    TestListComponent
+    TestListComponent,
+    TestCreateComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -44,7 +46,8 @@ import { TestListComponent } from './test-list/test-list.component';
       {path: 'students/:id', component: StudentDetailComponent},
       {path: 'courses', component: CourseListComponent},
       {path: 'courses/:id', component: CourseDetailComponent},
-      {path: 'tests/:id', component: TestDetailComponent}
+      {path: 'tests/:id', component: TestDetailComponent},
+      {path: 'tests/create/:id', component: TestCreateComponent},
     ])
   ],
   providers: [

@@ -1,4 +1,4 @@
-export interface TestQuestion {
+export class TestQuestion {
   id: number;
   number: number;
   questionText: string;

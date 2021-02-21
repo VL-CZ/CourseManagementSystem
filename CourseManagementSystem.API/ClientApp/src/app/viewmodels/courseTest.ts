@@ -1,6 +1,6 @@
 import {TestQuestion} from './testQuestion';
 
-export interface CourseTest {
+export class CourseTest {
   id: number;
   topic: string;
   questions: TestQuestion[];

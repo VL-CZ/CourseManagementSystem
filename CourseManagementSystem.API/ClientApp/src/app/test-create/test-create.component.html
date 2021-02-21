@@ -1,0 +1,21 @@
+<div>
+  <h2>Create new test</h2>
+  <form>
+    <div class="form-group">
+      <label for="questionCountInput">Question count</label>
+      <input type="number" class="form-control" id="questionCountInput" [(ngModel)]="this.questionCount"
+             [ngModelOptions]="{standalone: true}">
+    </div>
+    <button type="button" class="btn btn-primary" (click)="updateQuestionCount()">Apply</button>
+  </form>
+  <form>
+    <div *ngFor="let question of testToCreate.questions">
+      <h3>Question {{question.number}}</h3>
+      <div class="form-group">
+        <label for="questionText{{question.number}}">Question text</label>
+        <input type="text" class="form-control" id="questionText{{question.number}}"
+               [(ngModel)]="question.questionText">
+      </div>
+    </div>
+  </form>
+</div>

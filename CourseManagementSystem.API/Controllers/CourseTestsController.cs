@@ -20,7 +20,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="test"></param>
         /// <param name="courseId"></param>
-        [HttpPost("add/{courseId}")]
+        [HttpPost("{courseId}")]
         public void Add(CourseTest test, int courseId)
         {
             courseTestService.AddToCourse(test, courseId);

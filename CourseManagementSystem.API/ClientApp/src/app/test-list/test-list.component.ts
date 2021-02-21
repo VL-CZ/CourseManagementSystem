@@ -11,7 +11,7 @@ import {CourseTestService} from '../course-test.service';
 })
 export class TestListComponent implements OnInit {
   @Input()
-  private courseId: string;
+  public courseId: string;
 
   private courseService: CourseService;
   private courseTestService: CourseTestService;
@@ -26,7 +26,6 @@ export class TestListComponent implements OnInit {
     roleAuthService.isAdmin().subscribe(result => {
       this.isAdmin = result.isAdmin;
     });
-
   }
 
   ngOnInit() {

@@ -28,4 +28,13 @@ export class CourseTestService extends ApiService {
   public delete(testId: string): Observable<{}> {
     return this.http.delete(this.baseUrl + `api/courseTests/${testId}`);
   }
+
+  /**
+   * add new test to the given course
+   * @param test test to add
+   * @param courseId Id of the course
+   */
+  public addToCourse(test: CourseTest, courseId: string): Observable<CourseTest> {
+    return this.http.post<CourseTest>(this.baseUrl + `api/courseTests/${courseId}`, test);
+  }
 }
