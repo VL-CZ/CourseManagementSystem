@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Person, Student} from '../viewmodels/student';
-import {CourseMemberService} from '../course-member.service';
 import {RoleAuthService} from '../role-auth.service';
 import {CourseService} from '../course.service';
 

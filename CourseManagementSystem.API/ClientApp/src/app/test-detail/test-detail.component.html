@@ -1,0 +1,7 @@
+<div>
+  <div *ngFor="let question of courseTest.questions">
+    <h2>Question {{question.number}}</h2>
+    <div>{{question.questionText}}</div>
+    <div>Correct answer: {{question.correctAnswer}}</div>
+  </div>
+</div>

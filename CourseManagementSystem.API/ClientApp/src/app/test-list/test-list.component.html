@@ -1,0 +1,14 @@
+<div class="jumbotron">
+  <h3>Tests</h3>
+  <table class="table table-striped table-responsive">
+    <tr *ngFor="let test of this.tests">
+      <td>
+        <a routerLink="/tests/{{test.id}}">{{test.topic}}</a>
+      </td>
+      <td *ngIf="isAdmin">
+        <button class="btn btn-danger" (click)="deleteTest(test.id)">Remove</button>
+      </td>
+    </tr>
+  </table>
+  <button class="btn btn-success" routerLink="/tests/create/{{this.courseId}}">Create new test</button>
+</div>

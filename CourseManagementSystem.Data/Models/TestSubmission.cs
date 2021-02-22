@@ -7,13 +7,13 @@ namespace CourseManagementSystem.Data.Models
 {
     public class TestSubmission
     {
-        public Test Test { get; }
+        public CourseTest Test { get; }
 
         public CourseMember Student { get; }
 
         public ICollection<Answer> Answers { get; }
 
-        public TestSubmission(Test test, ICollection<Answer> answers)
+        public TestSubmission(CourseTest test, ICollection<Answer> answers)
         {
             Test = test;
             Answers = answers;

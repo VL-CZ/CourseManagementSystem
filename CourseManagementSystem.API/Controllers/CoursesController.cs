@@ -52,6 +52,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <summary>
         /// get all course members
         /// </summary>
+        /// <param name="id">Id of the course</param>
         [HttpGet("{id}/members")]
         public IEnumerable<PersonVM> GetAllMembers(int id)
         {
@@ -63,13 +64,25 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
-        /// get all shared files in this course
+        /// get all shared files in the course with given id
         /// </summary>
+        /// <param name="id">Id of the course</param>
         /// <returns></returns>
         [HttpGet("{id}/files")]
         public IEnumerable<CourseFileVM> GetAllFiles(int id)
         {
-            return dbContext.Courses.Include(c=>c.Files).Single(x => x.Id == id).Files.Select(f => new CourseFileVM { Id = f.ID, Name = f.Name });
+            return dbContext.Courses.Include(c => c.Files).Single(x => x.Id == id).Files.Select(f => new CourseFileVM { Id = f.ID, Name = f.Name });
+        }
+
+        /// <summary>
+        /// get all tests in the course with given id
+        /// </summary>
+        /// <param name="id">Id of the course</param>
+        /// <returns></returns>
+        [HttpGet("{id}/tests")]
+        public IEnumerable<CourseTest> GetAllTests(int id)
+        {
+            return dbContext.Courses.Include(course => course.Tests).Single(x => x.Id == id).Tests;
         }
     }
 }

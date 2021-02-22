@@ -7,14 +7,17 @@ namespace CourseManagementSystem.Data.Models
 {
     public class Course
     {
-        public Course() { }
+        public Course()
+        {
+            Members = new List<CourseMember>();
+            Files = new List<CourseFile>();
+            Tests = new List<CourseTest>();
+        }
 
-        public Course(string name, Person admin)
+        public Course(string name, Person admin) : this()
         {
             Name = name;
             Admin = admin;
-            Members = new List<CourseMember>();
-            Files = new List<CourseFile>();
         }
 
         [Key]
@@ -41,5 +44,10 @@ namespace CourseManagementSystem.Data.Models
         /// shared files in this course
         /// </summary>
         public ICollection<CourseFile> Files { get; set; }
+
+        /// <summary>
+        /// tests in this course
+        /// </summary>
+        public ICollection<CourseTest> Tests { get; set; }
     }
 }
