@@ -3,7 +3,7 @@ export class ArrayHelpers {
   /**
    * resize array to the given size (modifies the array!)
    * - if the given size is smaller or equal to the current size, resize array to the first n items
-   * - otherwise extend it to the given size - add {@instanceToAdd} items at the end
+   * - otherwise extend it to the given size - add copies of {@instanceToAdd} at the end
    * @param array
    * @param newSize
    * @param instanceToAdd
@@ -17,7 +17,8 @@ export class ArrayHelpers {
       }
     } else {
       for (let size = oldSize; size < newSize; size++) {
-        array.push(instanceToAdd);
+        const instanceToAddCopy = Object.assign({}, instanceToAdd);
+        array.push(instanceToAddCopy);
       }
     }
   }
