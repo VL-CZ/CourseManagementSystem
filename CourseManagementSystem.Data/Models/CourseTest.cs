@@ -20,7 +20,16 @@ namespace CourseManagementSystem.Data.Models
         /// </summary>
         public ICollection<TestQuestion> Questions { get; set; }
 
-        public CourseTest() { }
+        /// <summary>
+        /// students' submissions of this test
+        /// </summary>
+        public ICollection<TestSubmission> Submissions { get; set; }
+
+        public CourseTest()
+        {
+            Questions = new List<TestQuestion>();
+            Submissions = new List<TestSubmission>();
+        }
 
         public CourseTest(ICollection<TestQuestion> questions) : this()
         {

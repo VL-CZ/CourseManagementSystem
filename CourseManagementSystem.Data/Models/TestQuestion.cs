@@ -7,6 +7,15 @@ namespace CourseManagementSystem.Data.Models
 {
     public class TestQuestion
     {
+        public TestQuestion() { }
+
+        public TestQuestion(int number, string text, string correctAnswer) : this()
+        {
+            Number = number;
+            QuestionText = text;
+            CorrectAnswer = correctAnswer;
+        }
+
         [Key]
         public int Id { get; set; }
 
@@ -24,14 +33,5 @@ namespace CourseManagementSystem.Data.Models
         /// correct answer to the question
         /// </summary>
         public string CorrectAnswer { get; set; }
-
-        public TestQuestion() { }
-
-        public TestQuestion(int number, string text, string correctAnswer) : this()
-        {
-            Number = number;
-            QuestionText = text;
-            CorrectAnswer = correctAnswer;
-        }
     }
 }
