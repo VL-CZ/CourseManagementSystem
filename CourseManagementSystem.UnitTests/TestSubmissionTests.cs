@@ -20,9 +20,9 @@ namespace CourseManagementSystem.UnitTests
 
             var answers = new List<TestSubmissionAnswer>()
             {
-                new Answer(1,"A1"),
-                new Answer(2,"I have no idea"),
-                new Answer(3,"")
+                new TestSubmissionAnswer(questions[0],"A1"),
+                new TestSubmissionAnswer(questions[1],"I have no idea"),
+                new TestSubmissionAnswer(questions[2],"")
             };
 
             var testSubmission = new TestSubmission(test, answers);

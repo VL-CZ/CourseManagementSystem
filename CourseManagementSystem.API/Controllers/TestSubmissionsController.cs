@@ -26,7 +26,7 @@ namespace CourseManagementSystem.API.Controllers
         [HttpGet("{testSubmissionId}")]
         public TestSubmission Get(int testSubmissionId)
         {
-
+            return null;
         }
     }
 }

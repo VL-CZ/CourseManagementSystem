@@ -13,6 +13,7 @@ namespace CourseManagementSystem.Data
 {
     public class CMSDbContext : ApiAuthorizationDbContext<Person>
     {
+
         public CMSDbContext(
             DbContextOptions options,
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
