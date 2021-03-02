@@ -13,7 +13,7 @@ namespace CourseManagementSystem.Data.Models
     {
         public TestSubmission()
         {
-            Answers = new List<Answer>();
+            Answers = new List<TestSubmissionAnswer>();
         }
 
         [Key]
@@ -32,7 +32,7 @@ namespace CourseManagementSystem.Data.Models
         /// <summary>
         /// submitted answers
         /// </summary>
-        public ICollection<Answer> Answers { get; set; }
+        public ICollection<TestSubmissionAnswer> Answers { get; set; }
 
         public int GetPoints()
         {
@@ -40,8 +40,7 @@ namespace CourseManagementSystem.Data.Models
 
             foreach (var answer in Answers)
             {
-                var question = Test.Questions.Where(q => q.Number == answer.QuestionNumber).Single();
-                if (question.CorrectAnswer == answer.Text)
+                if (answer.Text == answer.Question.CorrectAnswer)
                 {
                     points++;
                 }

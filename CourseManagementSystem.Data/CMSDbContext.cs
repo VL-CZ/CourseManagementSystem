@@ -33,6 +33,6 @@ namespace CourseManagementSystem.Data
 
         public DbSet<TestSubmission> TestSubmissions { get; set; }
 
-        public DbSet<Answer> TestSubmissionAnswers { get; set; }
+        public DbSet<TestSubmissionAnswer> TestSubmissionAnswers { get; set; }
     }
 }

@@ -6,14 +6,14 @@ using System.Text;
 namespace CourseManagementSystem.Data.Models
 {
     /// <summary>
-    /// class representing one answer of the test
+    /// class representing one submitted answer of the test
     /// </summary>
-    public class Answer
+    public class TestSubmissionAnswer
     {
-        public Answer()
+        public TestSubmissionAnswer()
         { }
 
-        public Answer(TestQuestion question, string answerText) : this()
+        public TestSubmissionAnswer(TestQuestion question, string answerText) : this()
         {
             Question = question;
             Text = answerText;
