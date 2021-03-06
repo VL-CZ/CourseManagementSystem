@@ -17,6 +17,12 @@ namespace CourseManagementSystem.Data.Models
         public string Topic { get; set; }
 
         /// <summary>
+        /// course that contains this test
+        /// </summary>
+        [Required]
+        public Course Course { get; set; }
+
+        /// <summary>
         /// questions in this test
         /// </summary>
         public ICollection<TestQuestion> Questions { get; set; }

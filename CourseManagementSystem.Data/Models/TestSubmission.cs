@@ -29,11 +29,13 @@ namespace CourseManagementSystem.Data.Models
         /// <summary>
         /// test that is submitted
         /// </summary>
+        [Required]
         public CourseTest Test { get; set; }
 
         /// <summary>
         /// person who submitted this <see cref="TestSubmission"/>
         /// </summary>
+        [Required]
         public CourseMember Student { get; set; }
 
         /// <summary>

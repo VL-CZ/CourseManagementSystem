@@ -25,7 +25,7 @@ namespace CourseManagementSystem.UnitTests
                 new TestSubmissionAnswer(questions[2],"")
             };
 
-            var testSubmission = new TestSubmission(test, answers);
+            var testSubmission = new TestSubmission(test, new CourseMember(), answers);
 
             int points = testSubmission.GetPoints();
 
