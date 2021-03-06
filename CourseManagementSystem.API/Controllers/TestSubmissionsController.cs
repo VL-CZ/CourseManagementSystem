@@ -1,5 +1,12 @@
-﻿using CourseManagementSystem.Data.Models;
+﻿using CourseManagementSystem.API.Extensions;
+using CourseManagementSystem.API.Services;
+using CourseManagementSystem.API.ViewModels;
+using CourseManagementSystem.Data;
+using CourseManagementSystem.Data.Models;
+using CourseManagementSystem.Services.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace CourseManagementSystem.API.Controllers
 {
@@ -7,15 +14,37 @@ namespace CourseManagementSystem.API.Controllers
     [ApiController]
     public class TestSubmissionsController : ControllerBase
     {
-        /// <summary>
-        /// submit a test into selected course
-        /// </summary>
-        /// <param name="test"></param>
-        /// <param name="courseId"></param>
-        [HttpPost("{courseId}")]
-        public void Submit(TestSubmission submission, int courseId)
-        {
+        private readonly ICourseTestService courseTestService;
+        private readonly ICourseMemberService courseMemberService;
+        private IHttpContextAccessor httpContextAccessor;
+        private readonly CMSDbContext dbContext;
 
+        public TestSubmissionsController(ICourseTestService courseTestService, ICourseMemberService courseMemberService, CMSDbContext dbContext, IHttpContextAccessor httpContextAccessor)
+        {
+            this.courseTestService = courseTestService;
+            this.courseMemberService = courseMemberService;
+            this.dbContext = dbContext;
+            this.httpContextAccessor = httpContextAccessor;
+        }
+
+        /// <summary>
+        /// submit a solution to the given test
+        /// </summary>
+        /// <param name="submission">solution to submit</param>
+        /// <param name="testId"></param>
+        [HttpPost("{testId}")]
+        public void Submit(TestSubmissionVM submissionVM, int testId)
+        {
+            var test = courseTestService.GetById(testId);
+            var answers = submissionVM.Answers.Select(answer => new TestSubmissionAnswer(test.GetQuestionByNumber(answer.QuestionNumber), answer.Text));
+            string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId(); // TO-DO get courseMember by its ID from httpcontext
+
+
+            var submission = new TestSubmission(test, null, answers.ToList());
+
+            test.Submissions.Add(submission);
+
+            dbContext.SaveChanges();
         }
 
         /// <summary>
