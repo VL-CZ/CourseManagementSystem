@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
 
 namespace CourseManagementSystem.Data.Models
@@ -34,6 +35,17 @@ namespace CourseManagementSystem.Data.Models
         public CourseTest(ICollection<TestQuestion> questions) : this()
         {
             Questions = questions;
+        }
+
+        /// <summary>
+        /// get question by its number
+        /// </summary>
+        /// <param name="test">given test</param>
+        /// <param name="questionNumber">number of the question</param>
+        /// <returns></returns>
+        public TestQuestion GetQuestionByNumber(int questionNumber)
+        {
+            return Questions.Single(q => q.Number == questionNumber);
         }
     }
 }

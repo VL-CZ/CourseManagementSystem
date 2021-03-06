@@ -16,9 +16,10 @@ namespace CourseManagementSystem.Data.Models
             Answers = new List<TestSubmissionAnswer>();
         }
 
-        public TestSubmission(CourseTest test, ICollection<TestSubmissionAnswer> submittedAnswers)
+        public TestSubmission(CourseTest test, CourseMember student, ICollection<TestSubmissionAnswer> submittedAnswers)
         {
             Test = test;
+            Student = student;
             Answers = submittedAnswers;
         }
 

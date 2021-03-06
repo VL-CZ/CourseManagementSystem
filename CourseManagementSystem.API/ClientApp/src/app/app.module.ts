@@ -8,7 +8,6 @@ import {AppComponent} from './app.component';
 import {NavMenuComponent} from './nav-menu/nav-menu.component';
 import {HomeComponent} from './home/home.component';
 import {ApiAuthorizationModule} from 'src/api-authorization/api-authorization.module';
-import {AuthorizeGuard} from 'src/api-authorization/authorize.guard';
 import {AuthorizeInterceptor} from 'src/api-authorization/authorize.interceptor';
 import {GradeListComponent} from './grade-list/grade-list.component';
 import {StudentListComponent} from './student-list/student-list.component';
@@ -19,6 +18,7 @@ import { CourseDetailComponent } from './course-detail/course-detail.component';
 import { TestDetailComponent } from './test-detail/test-detail.component';
 import { TestListComponent } from './test-list/test-list.component';
 import { TestCreateComponent } from './test-create/test-create.component';
+import { TestSubmitComponent } from './test-submit/test-submit.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +33,8 @@ import { TestCreateComponent } from './test-create/test-create.component';
     CourseDetailComponent,
     TestDetailComponent,
     TestListComponent,
-    TestCreateComponent
+    TestCreateComponent,
+    TestSubmitComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -48,6 +49,7 @@ import { TestCreateComponent } from './test-create/test-create.component';
       {path: 'courses/:id', component: CourseDetailComponent},
       {path: 'tests/:id', component: TestDetailComponent},
       {path: 'tests/create/:id', component: TestCreateComponent},
+      {path: 'tests/submit/:id', component: TestSubmitComponent},
     ])
   ],
   providers: [

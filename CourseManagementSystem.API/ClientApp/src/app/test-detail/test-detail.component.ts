@@ -20,5 +20,4 @@ export class TestDetailComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }

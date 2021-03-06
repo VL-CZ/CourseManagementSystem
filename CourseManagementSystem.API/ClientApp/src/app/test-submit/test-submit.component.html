@@ -1,0 +1,11 @@
+<h3>{{this.test.topic}}</h3>
+<div *ngFor="let answer of this.testSubmission.answers">
+  <h2>Question {{answer.questionNumber}}</h2>
+  <div class="form-group">
+    <div>{{getQuestionByItsNumber(answer.questionNumber).questionText}}</div>
+    <label for="answerText{{answer.questionNumber}}">Answer text</label>
+    <input type="text" class="form-control" id="answerText{{answer.questionNumber}}"
+           [(ngModel)]="answer.text" name="answerText{{answer.questionNumber}}">
+  </div>
+</div>
+<button type="button" class="btn btn-success" (click)="submit()">Submit</button>
