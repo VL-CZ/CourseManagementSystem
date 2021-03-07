@@ -7,6 +7,10 @@ namespace CourseManagementSystem.API.ViewModels
 {
     public class TestSubmissionVM
     {
+        public TestSubmissionVM()
+        {
+        }
+
         public TestSubmissionVM(int testId, string testTopic, IEnumerable<SubmissionAnswerVM> answers)
         {
             TestId = testId;
@@ -24,6 +28,10 @@ namespace CourseManagementSystem.API.ViewModels
 
     public class SubmissionAnswerVM
     {
+        public SubmissionAnswerVM()
+        {
+        }
+
         public SubmissionAnswerVM(int questionNumber, string questionText, string answerText)
         {
             QuestionNumber = questionNumber;

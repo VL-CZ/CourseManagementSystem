@@ -31,11 +31,10 @@ namespace CourseManagementSystem.API.Controllers
         /// submit a solution to the given test
         /// </summary>
         /// <param name="testSubmissionVM">solution to submit</param>
-        /// <param name="testId">test where to submit the solution</param>
-        [HttpPost("{testId}")]
-        public void Submit(TestSubmissionVM testSubmissionVM, int testId)
+        [HttpPost("")]
+        public void Submit(TestSubmissionVM testSubmissionVM)
         {
-            var test = courseTestService.GetById(testId);
+            var test = courseTestService.GetById(testSubmissionVM.TestId);
 
             string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
             var courseMember = courseMemberService.GetMemberByUserAndCourse(currentUserId, test.Course.Id);
@@ -51,7 +50,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="testId"></param>
         /// <returns></returns>
-        [HttpGet("{testSubmissionId}")]
+        [HttpGet("{testId}")]
         public TestSubmissionVM GetEmptySubmission(int testId)
         {
             var test = courseTestService.GetById(testId);
