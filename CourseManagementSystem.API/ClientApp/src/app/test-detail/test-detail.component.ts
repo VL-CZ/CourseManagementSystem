@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {CourseTest} from '../viewmodels/courseTest';
+import {CourseTestVM} from '../viewmodels/courseTestVM';
 import {CourseTestService} from '../course-test.service';
 
 @Component({
@@ -9,7 +9,7 @@ import {CourseTestService} from '../course-test.service';
   styleUrls: ['./test-detail.component.css']
 })
 export class TestDetailComponent implements OnInit {
-  public courseTest: CourseTest;
+  public courseTest: CourseTestVM;
 
   constructor(route: ActivatedRoute, courseTestService: CourseTestService) {
     const testId = route.snapshot.paramMap.get('id');

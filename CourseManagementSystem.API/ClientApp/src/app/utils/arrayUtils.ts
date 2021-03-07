@@ -1,4 +1,4 @@
-export class ArrayHelpers {
+export class ArrayUtils {
 
   /**
    * resize array to the given size (modifies the array!)

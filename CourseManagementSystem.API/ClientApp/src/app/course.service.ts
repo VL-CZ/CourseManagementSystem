@@ -6,7 +6,7 @@ import {CourseInfoVM} from './viewmodels/courseInfoVM';
 import {AddCourseVM} from './viewmodels/addCourseVM';
 import {Person} from './viewmodels/student';
 import {FileVM} from './viewmodels/fileVM';
-import {CourseTest} from './viewmodels/courseTest';
+import {CourseTestVM} from './viewmodels/courseTestVM';
 
 @Injectable({
   providedIn: 'root'
@@ -53,7 +53,7 @@ export class CourseService extends ApiService {
    * get all tests in this course
    * @param courseId
    */
-  public getAllTests(courseId: string): Observable<CourseTest[]> {
-    return this.http.get<CourseTest[]>(this.baseUrl + `api/courses/${courseId}/tests`);
+  public getAllTests(courseId: string): Observable<CourseTestVM[]> {
+    return this.http.get<CourseTestVM[]>(this.baseUrl + `api/courses/${courseId}/tests`);
   }
 }

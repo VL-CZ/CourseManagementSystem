@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CourseTestService} from '../course-test.service';
-import {CourseTest} from '../viewmodels/courseTest';
-import {TestQuestion} from '../viewmodels/testQuestion';
-import {ArrayHelpers} from '../helpers/arrayHelpers';
+import {CourseTestVM} from '../viewmodels/courseTestVM';
+import { TestQuestion } from '../viewmodels/testQuestion';
+import { ArrayUtils } from '../utils/arrayUtils';
 
 @Component({
   selector: 'app-test-create',
@@ -15,14 +15,14 @@ export class TestCreateComponent implements OnInit {
   private courseTestService: CourseTestService;
   private router: Router;
 
-  public testToCreate: CourseTest;
+  public testToCreate: CourseTestVM;
   public questionCount = 0;
 
   constructor(route: ActivatedRoute, courseTestService: CourseTestService, router: Router) {
     this.courseId = route.snapshot.paramMap.get('id');
     this.courseTestService = courseTestService;
     this.router = router;
-    this.testToCreate = new CourseTest();
+    this.testToCreate = new CourseTestVM();
     this.testToCreate.questions = [];
   }
 
@@ -38,7 +38,7 @@ export class TestCreateComponent implements OnInit {
   public updateQuestionCount(): void {
     const questions = this.testToCreate.questions;
     const instance = new TestQuestion();
-    ArrayHelpers.resize<TestQuestion>(questions, this.questionCount, instance);
+    ArrayUtils.resize<TestQuestion>(questions, this.questionCount, instance);
 
     this.setQuestionNumbers(questions);
   }
