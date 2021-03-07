@@ -1,4 +1,5 @@
-﻿using CourseManagementSystem.Data.Models;
+﻿using CourseManagementSystem.API.ViewModels;
+using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,11 +19,12 @@ namespace CourseManagementSystem.API.Controllers
         /// <summary>
         /// add new test to the given course
         /// </summary>
-        /// <param name="test"></param>
+        /// <param name="testToAdd"></param>
         /// <param name="courseId"></param>
         [HttpPost("{courseId}")]
-        public void Add(CourseTest test, int courseId)
+        public void Add(CourseTestVM testToAdd, int courseId)
         {
+            var test = new CourseTest() { Topic = testToAdd.Topic, Questions = testToAdd.Questions };
             courseTestService.AddToCourse(test, courseId);
         }
 
@@ -42,9 +44,10 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public CourseTest Get(int id)
+        public CourseTestVM Get(int id)
         {
-            return courseTestService.GetById(id);
+            var test = courseTestService.GetById(id);
+            return new CourseTestVM(id, test.Topic, test.Questions);
         }
     }
 }

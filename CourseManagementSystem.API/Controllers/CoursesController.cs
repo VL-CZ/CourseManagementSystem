@@ -80,9 +80,10 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id">Id of the course</param>
         /// <returns></returns>
         [HttpGet("{id}/tests")]
-        public IEnumerable<CourseTest> GetAllTests(int id)
+        public IEnumerable<CourseTestVM> GetAllTests(int id)
         {
-            return dbContext.Courses.Include(course => course.Tests).Single(x => x.Id == id).Tests;
+            var courseTests = dbContext.Courses.Include(course => course.Tests).Single(x => x.Id == id).Tests;
+            return courseTests.Select(ct => new CourseTestVM(ct.Id, ct.Topic, ct.Questions));
         }
     }
 }
