@@ -30,32 +30,34 @@ namespace CourseManagementSystem.API.Controllers
         /// <summary>
         /// submit a solution to the given test
         /// </summary>
-        /// <param name="submission">solution to submit</param>
-        /// <param name="testId"></param>
+        /// <param name="testSubmissionVM">solution to submit</param>
+        /// <param name="testId">test where to submit the solution</param>
         [HttpPost("{testId}")]
-        public void Submit(TestSubmissionVM submissionVM, int testId)
+        public void Submit(TestSubmissionVM testSubmissionVM, int testId)
         {
             var test = courseTestService.GetById(testId);
-            var answers = submissionVM.Answers.Select(answer => new TestSubmissionAnswer(test.GetQuestionByNumber(answer.QuestionNumber), answer.Text));
-            string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId(); // TO-DO get courseMember by its ID from httpcontext
 
+            string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
+            var courseMember = courseMemberService.GetMemberByUserAndCourse(currentUserId, test.Course.Id);
 
-            var submission = new TestSubmission(test, null, answers.ToList());
-
-            test.Submissions.Add(submission);
+            var testSubmission = new TestSubmission(test, courseMember,
+                testSubmissionVM.Answers.Select(answer => new TestSubmissionAnswer(test.GetQuestionByNumber(answer.QuestionNumber), answer.AnswerText)).ToList());
 
             dbContext.SaveChanges();
         }
 
         /// <summary>
-        /// get given test submission
+        /// get new empty test submission
         /// </summary>
-        /// <param name="testSubmissionId"></param>
+        /// <param name="testId"></param>
         /// <returns></returns>
         [HttpGet("{testSubmissionId}")]
-        public TestSubmission Get(int testSubmissionId)
+        public TestSubmissionVM GetEmptySubmission(int testId)
         {
-            return null;
+            var test = courseTestService.GetById(testId);
+            var submissionAnswers = test.Questions.Select(question => new SubmissionAnswerVM(question.Number, question.QuestionText, string.Empty));
+
+            return new TestSubmissionVM(test.Id, test.Topic, submissionAnswers);
         }
     }
 }
