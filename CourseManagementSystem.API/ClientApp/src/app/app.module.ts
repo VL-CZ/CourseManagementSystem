@@ -52,7 +52,7 @@ import {TestSubmissionReviewComponent} from './test-submission-review/test-submi
       {path: 'tests/:id', component: TestDetailComponent},
       {path: 'tests/create/:id', component: TestCreateComponent},
       {path: 'tests/submit/:id', component: TestSubmitComponent},
-      {path: 'submission/:id', component: TestSubmissionReviewComponent}
+      {path: 'submissions/:id', component: TestSubmissionReviewComponent}
     ])
   ],
   providers: [

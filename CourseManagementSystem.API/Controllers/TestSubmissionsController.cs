@@ -6,7 +6,6 @@ using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace CourseManagementSystem.API.Controllers
@@ -32,8 +31,9 @@ namespace CourseManagementSystem.API.Controllers
         /// submit a solution to the given test
         /// </summary>
         /// <param name="testSubmissionVM">solution to submit</param>
+        /// <returns>Id of the test submission</returns>
         [HttpPost("")]
-        public void Submit(TestSubmissionVM testSubmissionVM)
+        public int Submit(TestSubmissionVM testSubmissionVM)
         {
             var test = courseTestService.GetById(testSubmissionVM.TestId);
 
@@ -43,7 +43,10 @@ namespace CourseManagementSystem.API.Controllers
             var testSubmission = new TestSubmission(test, courseMember,
                 testSubmissionVM.Answers.Select(answer => new TestSubmissionAnswer(test.GetQuestionByNumber(answer.QuestionNumber), answer.AnswerText)).ToList());
 
+            dbContext.TestSubmissions.Add(testSubmission);
             dbContext.SaveChanges();
+
+            return testSubmission.Id;
         }
 
         /// <summary>
@@ -61,10 +64,10 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// get test submission by id
         /// </summary>
-        /// <param name="testSubmissionId"></param>
-        /// <returns></returns>
+        /// <param name="testSubmissionId">id of the submission</param>
+        /// <returns>test submission with the given id</returns>
         [HttpGet("{testSubmissionId}")]
         public TestSubmissionVM GetTestSubmission(int testSubmissionId)
         {

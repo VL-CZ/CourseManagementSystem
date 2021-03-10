@@ -17,8 +17,8 @@ export class TestSubmitService extends ApiService {
    * submit student's solution
    * @param submission test to submit
    */
-  public submit(submission: TestSubmissionVM): Observable<{}> {
-    return this.http.post(this.baseUrl + 'api/testSubmissions/', submission);
+  public submit(submission: TestSubmissionVM): Observable<string> {
+    return this.http.post<string>(this.baseUrl + 'api/testSubmissions/', submission);
   }
 
   /**
