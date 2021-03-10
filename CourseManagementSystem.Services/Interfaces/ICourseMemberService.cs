@@ -7,8 +7,8 @@ namespace CourseManagementSystem.API.Services
         /// <summary>
         /// get CourseMember by ID
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">id of the course member</param>
+        /// <returns>course member with the given id</returns>
         CourseMember GetMemberByID(int id);
 
         /// <summary>

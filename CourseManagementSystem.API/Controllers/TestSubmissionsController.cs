@@ -6,6 +6,7 @@ using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace CourseManagementSystem.API.Controllers
@@ -54,6 +55,20 @@ namespace CourseManagementSystem.API.Controllers
         public TestSubmissionVM GetEmptySubmission(int testId)
         {
             var test = courseTestService.GetById(testId);
+            var submissionAnswers = test.Questions.Select(question => new SubmissionAnswerVM(question.Number, question.QuestionText, string.Empty));
+
+            return new TestSubmissionVM(test.Id, test.Topic, submissionAnswers);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="testSubmissionId"></param>
+        /// <returns></returns>
+        [HttpGet("{testSubmissionId}")]
+        public TestSubmissionVM GetTestSubmission(int testSubmissionId)
+        {
+            TestSubmission testSubmission= dbContext.TestSubmissions.Include(submission => submission.Answers).SingleOrDefault(x => x.Id == testSubmissionId);
             var submissionAnswers = test.Questions.Select(question => new SubmissionAnswerVM(question.Number, question.QuestionText, string.Empty));
 
             return new TestSubmissionVM(test.Id, test.Topic, submissionAnswers);
