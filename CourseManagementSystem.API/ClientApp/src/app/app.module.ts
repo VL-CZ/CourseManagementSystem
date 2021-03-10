@@ -14,11 +14,12 @@ import {StudentListComponent} from './student-list/student-list.component';
 import {StudentDetailComponent} from './student-detail/student-detail.component';
 import {FileListComponent} from './file-list/file-list.component';
 import {CourseListComponent} from './course-list/course-list.component';
-import { CourseDetailComponent } from './course-detail/course-detail.component';
-import { TestDetailComponent } from './test-detail/test-detail.component';
-import { TestListComponent } from './test-list/test-list.component';
-import { TestCreateComponent } from './test-create/test-create.component';
-import { TestSubmitComponent } from './test-submit/test-submit.component';
+import {CourseDetailComponent} from './course-detail/course-detail.component';
+import {TestDetailComponent} from './test-detail/test-detail.component';
+import {TestListComponent} from './test-list/test-list.component';
+import {TestCreateComponent} from './test-create/test-create.component';
+import {TestSubmitComponent} from './test-submit/test-submit.component';
+import {TestSubmissionReviewComponent} from './test-submission-review/test-submission-review.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { TestSubmitComponent } from './test-submit/test-submit.component';
     TestDetailComponent,
     TestListComponent,
     TestCreateComponent,
-    TestSubmitComponent
+    TestSubmitComponent,
+    TestSubmissionReviewComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -50,6 +52,7 @@ import { TestSubmitComponent } from './test-submit/test-submit.component';
       {path: 'tests/:id', component: TestDetailComponent},
       {path: 'tests/create/:id', component: TestCreateComponent},
       {path: 'tests/submit/:id', component: TestSubmitComponent},
+      {path: 'submission/:id', component: TestSubmissionReviewComponent}
     ])
   ],
   providers: [

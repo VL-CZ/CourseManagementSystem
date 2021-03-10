@@ -1,10 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {CourseTestService} from '../course-test.service';
-import {CourseTestVM} from '../viewmodels/courseTestVM';
 import {TestSubmitService} from '../test-submit.service';
-import {SubmissionAnswerVM, TestSubmissionVM} from '../viewmodels/testSubmissionVM';
-import {TestQuestion} from '../viewmodels/testQuestion';
+import {TestSubmissionVM} from '../viewmodels/testSubmissionVM';
 
 @Component({
   selector: 'app-test-submit',

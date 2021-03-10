@@ -15,6 +15,9 @@
       <button class="btn btn-danger" (click)="removeGrade(grade.id)">Remove</button>
     </td>
   </tr>
+  <tr *ngFor="let submission of testSubmissions">
+    <td><a routerLink="submission/{{submission.testSubmissionId}}">{{submission.testTopic}}</a></td>
+  </tr>
 </table>
 <div class="jumbotron" *ngIf="isAdmin">
   <h3>Add new grade</h3>
