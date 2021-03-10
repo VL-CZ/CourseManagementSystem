@@ -26,6 +26,6 @@ export class TestSubmitService extends ApiService {
    * @param testId id of the test we submit
    */
   public getEmptySubmission(testId: string): Observable<TestSubmissionVM> {
-    return this.http.get<TestSubmissionVM>(this.baseUrl + 'api/testSubmissions/' + testId);
+    return this.http.get<TestSubmissionVM>(this.baseUrl + 'api/testSubmissions/emptyTest/' + testId);
   }
 }

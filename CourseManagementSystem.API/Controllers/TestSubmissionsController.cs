@@ -50,7 +50,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="testId"></param>
         /// <returns></returns>
-        [HttpGet("{testId}")]
+        [HttpGet("emptyTest/{testId}")]
         public TestSubmissionVM GetEmptySubmission(int testId)
         {
             var test = courseTestService.GetById(testId);
