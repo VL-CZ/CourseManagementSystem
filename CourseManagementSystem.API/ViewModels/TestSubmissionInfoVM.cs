@@ -12,14 +12,14 @@ namespace CourseManagementSystem.API.ViewModels
     {
         public TestSubmissionInfoVM(int testSubmissoinId, string testTopic)
         {
-            TestSubmissoinId = testSubmissoinId;
+            TestSubmissionId = testSubmissoinId;
             TestTopic = testTopic;
         }
 
         /// <summary>
         /// id of the test submission
         /// </summary>
-        public int TestSubmissoinId { get; set; }
+        public int TestSubmissionId { get; set; }
 
         /// <summary>
         /// topic of the test

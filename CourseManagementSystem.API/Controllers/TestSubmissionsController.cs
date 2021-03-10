@@ -68,10 +68,7 @@ namespace CourseManagementSystem.API.Controllers
         [HttpGet("{testSubmissionId}")]
         public TestSubmissionVM GetTestSubmission(int testSubmissionId)
         {
-            TestSubmission testSubmission= dbContext.TestSubmissions.Include(submission => submission.Answers).SingleOrDefault(x => x.Id == testSubmissionId);
-            var submissionAnswers = test.Questions.Select(question => new SubmissionAnswerVM(question.Number, question.QuestionText, string.Empty));
-
-            return new TestSubmissionVM(test.Id, test.Topic, submissionAnswers);
+            return null;
         }
     }
 }
