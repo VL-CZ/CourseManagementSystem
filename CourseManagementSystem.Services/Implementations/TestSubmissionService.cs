@@ -23,5 +23,11 @@ namespace CourseManagementSystem.Services.Implementations
         {
             return dbContext.TestSubmissions.Include(ts => ts.Test).Include(ts => ts.Student).Where(ts => ts.Student.Id == courseMemberId);
         }
+
+        /// <inheritdoc/>
+        public TestSubmission GetSubmissionById(int testSubmissionId)
+        {
+            return dbContext.TestSubmissions.Include(ts => ts.Answers).ThenInclude(a => a.Question).Include(ts => ts.Test).SingleOrDefault(ts => ts.Id == testSubmissionId);
+        }
     }
 }

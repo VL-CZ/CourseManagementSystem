@@ -16,15 +16,18 @@ namespace CourseManagementSystem.API.Controllers
     {
         private readonly ICourseTestService courseTestService;
         private readonly ICourseMemberService courseMemberService;
-        private IHttpContextAccessor httpContextAccessor;
+        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly ITestSubmissionService testSubmissionService;
         private readonly CMSDbContext dbContext;
 
-        public TestSubmissionsController(ICourseTestService courseTestService, ICourseMemberService courseMemberService, CMSDbContext dbContext, IHttpContextAccessor httpContextAccessor)
+        public TestSubmissionsController(ICourseTestService courseTestService, ICourseMemberService courseMemberService, IHttpContextAccessor httpContextAccessor,
+            CMSDbContext dbContext, ITestSubmissionService testSubmissionService)
         {
             this.courseTestService = courseTestService;
             this.courseMemberService = courseMemberService;
             this.dbContext = dbContext;
             this.httpContextAccessor = httpContextAccessor;
+            this.testSubmissionService = testSubmissionService;
         }
 
         /// <summary>
@@ -71,7 +74,10 @@ namespace CourseManagementSystem.API.Controllers
         [HttpGet("{testSubmissionId}")]
         public TestSubmissionVM GetTestSubmission(int testSubmissionId)
         {
-            return null;
+            TestSubmission submission = testSubmissionService.GetSubmissionById(testSubmissionId);
+            var answersVM = submission.Answers.Select(a => new SubmissionAnswerVM(a.Question.Number, a.Question.QuestionText, a.Text));
+
+            return new TestSubmissionVM(submission.Test.Id, submission.Test.Topic, answersVM);
         }
     }
 }
