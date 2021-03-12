@@ -7,7 +7,7 @@ import {TestSubmissionVM} from './viewmodels/testSubmissionVM';
 @Injectable({
   providedIn: 'root'
 })
-export class TestSubmitService extends ApiService {
+export class TestSubmissionService extends ApiService {
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     super(http, baseUrl);
@@ -27,5 +27,13 @@ export class TestSubmitService extends ApiService {
    */
   public getEmptySubmission(testId: string): Observable<TestSubmissionVM> {
     return this.http.get<TestSubmissionVM>(this.baseUrl + 'api/testSubmissions/emptyTest/' + testId);
+  }
+
+  /**
+   * get test submission by its id
+   * @param submissionId id of the test submission
+   */
+  public getSubmissionById(submissionId: string): Observable<TestSubmissionVM> {
+    return this.http.get<TestSubmissionVM>(this.baseUrl + 'api/testSubmissions/' + submissionId);
   }
 }
