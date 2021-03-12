@@ -9,7 +9,7 @@ import {PersonIdVM} from './viewmodels/student';
   providedIn: 'root'
 })
 export class RoleAuthService extends ApiService {
-  private static controllerName = 'people';
+  private static controllerName = 'auth';
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     super(http, baseUrl, RoleAuthService.controllerName);

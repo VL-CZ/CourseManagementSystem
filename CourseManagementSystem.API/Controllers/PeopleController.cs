@@ -87,30 +87,6 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
-        /// get current user id
-        /// </summary>
-        /// <returns></returns>
-        [Authorize]
-        [HttpGet("getId")]
-        public PersonIdVM GetId()
-        {
-            string userId = GetCurrentUserId();
-            return new PersonIdVM() { Id = userId };
-        }
-
-        /// <summary>
-        /// determine if current user is admin
-        /// </summary>
-        /// <returns></returns>
-        [Authorize]
-        [HttpGet("isAdmin")]
-        public IsAdminVM IsAdmin()
-        {
-            // TO-DO: add roles
-            return new IsAdminVM() { IsAdmin = GetCurrentUserId() == "b7a6f405-c226-4f5a-a0cb-2ba4c47582a3" };
-        }
-
-        /// <summary>
         /// get Id of the currently logged-in user
         /// </summary>
         /// <returns></returns>
