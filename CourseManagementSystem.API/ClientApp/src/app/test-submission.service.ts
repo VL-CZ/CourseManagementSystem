@@ -8,9 +8,10 @@ import {TestSubmissionVM} from './viewmodels/testSubmissionVM';
   providedIn: 'root'
 })
 export class TestSubmissionService extends ApiService {
+  private static controllerUrl = 'testSubmissions';
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    super(http, baseUrl);
+    super(http, baseUrl, TestSubmissionService.controllerUrl);
   }
 
   /**
@@ -18,7 +19,7 @@ export class TestSubmissionService extends ApiService {
    * @param submission test to submit
    */
   public submit(submission: TestSubmissionVM): Observable<string> {
-    return this.http.post<string>(this.baseUrl + 'api/testSubmissions/', submission);
+    return this.http.post<string>(this.controllerUrl, submission);
   }
 
   /**
@@ -26,7 +27,7 @@ export class TestSubmissionService extends ApiService {
    * @param testId id of the test we submit
    */
   public getEmptySubmission(testId: string): Observable<TestSubmissionVM> {
-    return this.http.get<TestSubmissionVM>(this.baseUrl + 'api/testSubmissions/emptyTest/' + testId);
+    return this.http.get<TestSubmissionVM>(this.controllerUrl + `emptyTest/${testId}`);
   }
 
   /**
@@ -34,6 +35,6 @@ export class TestSubmissionService extends ApiService {
    * @param submissionId id of the test submission
    */
   public getSubmissionById(submissionId: string): Observable<TestSubmissionVM> {
-    return this.http.get<TestSubmissionVM>(this.baseUrl + 'api/testSubmissions/' + submissionId);
+    return this.http.get<TestSubmissionVM>(this.controllerUrl + submissionId);
   }
 }

@@ -11,9 +11,10 @@ import {TestSubmissionInfoVM} from './viewmodels/testSubmisionInfoVM';
   providedIn: 'root'
 })
 export class CourseMemberService extends ApiService {
+  private static controllerName = 'courseMembers';
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    super(http, baseUrl);
+    super(http, baseUrl, CourseMemberService.controllerName);
   }
 
   /**
@@ -21,7 +22,7 @@ export class CourseMemberService extends ApiService {
    * @param courseMemberId id of the course member
    */
   public getById(courseMemberId: string): Observable<Student> {
-    return this.http.get<Student>(this.baseUrl + 'api/courseMembers/' + courseMemberId);
+    return this.http.get<Student>(this.controllerUrl + courseMemberId);
   }
 
   /**
@@ -30,7 +31,7 @@ export class CourseMemberService extends ApiService {
    * @param grade created grade (contains id)
    */
   public assignGrade(courseMemberId: string, grade: AddGradeVM): Observable<Grade> {
-    return this.http.post<Grade>(this.baseUrl + 'api/courseMembers/' + courseMemberId + '/assignGrade', grade);
+    return this.http.post<Grade>(this.controllerUrl + `${courseMemberId}/assignGrade`, grade);
   }
 
   /**
@@ -38,6 +39,6 @@ export class CourseMemberService extends ApiService {
    * @param courseMemberId id of the course member
    */
   public getTestSubmissions(courseMemberId: string): Observable<TestSubmissionInfoVM[]> {
-    return this.http.get<TestSubmissionInfoVM[]>(this.baseUrl + 'api/courseMembers/' + courseMemberId + '/submissions');
+    return this.http.get<TestSubmissionInfoVM[]>(this.controllerUrl + `${courseMemberId}/submissions`);
   }
 }

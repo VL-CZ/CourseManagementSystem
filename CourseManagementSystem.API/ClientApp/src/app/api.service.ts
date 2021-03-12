@@ -1,5 +1,4 @@
 import {HttpClient} from '@angular/common/http';
-import {Inject} from '@angular/core';
 
 /**
  * base class for all API services
@@ -13,13 +12,20 @@ export abstract class ApiService {
   protected readonly http: HttpClient;
 
   /**
-   * base URL of the app
+   * url of the controller to fetch data (ends with /)
    * @protected
    */
-  protected readonly baseUrl: string;
+  protected readonly controllerUrl: string;
 
-  protected constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    this.baseUrl = baseUrl;
+  /**
+   * create new ApiService
+   * @param http http client
+   * @param baseUrl base url of the app
+   * @param controllerName name of controller that the service fetches data from
+   * @protected
+   */
+  protected constructor(http: HttpClient, baseUrl: string, controllerName: string) {
+    this.controllerUrl = baseUrl + `api/${controllerName}/`;
     this.http = http;
   }
 }

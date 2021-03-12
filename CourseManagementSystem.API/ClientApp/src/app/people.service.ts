@@ -3,15 +3,15 @@ import {ApiService} from './api.service';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {CourseInfoVM} from './viewmodels/courseInfoVM';
-import {AddCourseVM} from './viewmodels/addCourseVM';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PeopleService extends ApiService {
+  private static controllerName = 'people';
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    super(http, baseUrl);
+    super(http, baseUrl, PeopleService.controllerName);
   }
 
   /**
@@ -19,21 +19,21 @@ export class PeopleService extends ApiService {
    * @param courseId id of the course to enroll
    */
   public enrollToCourse(courseId: number): Observable<{}> {
-    return this.http.post<{}>(this.baseUrl + 'api/people/' + courseId, {});
+    return this.http.post<{}>(this.controllerUrl + courseId, {});
   }
 
   /**
    * get all courses, whose member the current user is
    */
   getMemberCourses(): Observable<CourseInfoVM[]> {
-    return this.http.get<CourseInfoVM[]>(this.baseUrl + 'api/people/memberCourses');
+    return this.http.get<CourseInfoVM[]>(this.controllerUrl + 'memberCourses');
   }
 
   /**
    * get all courses, whose admin the current user is
    */
   getManagedCourses(): Observable<CourseInfoVM[]> {
-    return this.http.get<CourseInfoVM[]>(this.baseUrl + 'api/people/managedCourses');
+    return this.http.get<CourseInfoVM[]>(this.controllerUrl + 'managedCourses');
   }
 
   /**
@@ -41,6 +41,6 @@ export class PeopleService extends ApiService {
    * @param courseId Id of the selected course
    */
   getCourseMemberByCourse(courseId: number): Observable<string> {
-    return this.http.get<string>(this.baseUrl + 'api/people/getCourseMember/' + courseId);
+    return this.http.get<string>(this.controllerUrl + `getCourseMember/${courseId}`);
   }
 }
