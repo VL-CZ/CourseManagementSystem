@@ -1,1 +1,6 @@
-<p>test-submission-review works!</p>
+<h2>{{submission.testTopic}}</h2>
+<div *ngFor="let answer of submission.answers">
+  <h3>Question {{answer.questionNumber}}</h3>
+  <div>{{answer.questionText}}</div>
+  <div>Your answer: {{answer.answerText}}</div>
+</div>
