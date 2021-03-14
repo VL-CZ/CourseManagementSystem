@@ -4,6 +4,7 @@ import {CourseTestService} from '../course-test.service';
 import {CourseTestVM} from '../viewmodels/courseTestVM';
 import { TestQuestion } from '../viewmodels/testQuestion';
 import { ArrayUtils } from '../utils/arrayUtils';
+import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
 
 @Component({
   selector: 'app-test-create',
@@ -19,7 +20,7 @@ export class TestCreateComponent implements OnInit {
   public questionCount = 0;
 
   constructor(route: ActivatedRoute, courseTestService: CourseTestService, router: Router) {
-    this.courseId = route.snapshot.paramMap.get('id');
+    this.courseId = ActivatedRouteUtils.getIdParam(route);
     this.courseTestService = courseTestService;
     this.router = router;
     this.testToCreate = new CourseTestVM();

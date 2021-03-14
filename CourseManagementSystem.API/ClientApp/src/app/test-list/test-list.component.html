@@ -11,5 +11,5 @@
       </td>
     </tr>
   </table>
-  <button class="btn btn-success" routerLink="/tests/create/{{this.courseId}}">Create new test</button>
+  <button *ngIf="isAdmin" class="btn btn-success" routerLink="/tests/create/{{this.courseId}}">Create new test</button>
 </div>

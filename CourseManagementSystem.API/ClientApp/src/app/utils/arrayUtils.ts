@@ -1,3 +1,6 @@
+/**
+ * class containing additional array methods
+ */
 export class ArrayUtils {
 
   /**

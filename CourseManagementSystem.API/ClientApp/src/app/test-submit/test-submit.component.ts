@@ -3,6 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {CourseTestService} from '../course-test.service';
 import {TestSubmissionVM} from '../viewmodels/testSubmissionVM';
 import {TestSubmissionService} from '../test-submission.service';
+import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
 
 @Component({
   selector: 'app-test-submit',
@@ -16,7 +17,7 @@ export class TestSubmitComponent implements OnInit {
   public testSubmission: TestSubmissionVM;
 
   constructor(route: ActivatedRoute, courseTestService: CourseTestService, testSubmitService: TestSubmissionService, router: Router) {
-    const testId = route.snapshot.paramMap.get('id');
+    const testId = ActivatedRouteUtils.getIdParam(route);
     this.testSubmitService = testSubmitService;
     this.router = router;
 

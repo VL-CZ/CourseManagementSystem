@@ -6,6 +6,7 @@ import {CourseMemberService} from '../course-member.service';
 import {GradeService} from '../grade.service';
 import {RoleAuthService} from '../role-auth.service';
 import {TestSubmissionInfoVM} from '../viewmodels/testSubmisionInfoVM';
+import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
 
 @Component({
   selector: 'app-student-detail',
@@ -28,7 +29,7 @@ export class StudentDetailComponent implements OnInit {
     this.courseMemberService = courseMemberService;
     this.gradeService = gradeService;
 
-    this.userId = route.snapshot.paramMap.get('id');
+    this.userId = ActivatedRouteUtils.getIdParam(route);
     this.newGrade = new AddGradeVM();
 
     this.courseMemberService.getById(this.userId).subscribe(result => {
