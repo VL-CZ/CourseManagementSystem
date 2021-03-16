@@ -72,12 +72,12 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testSubmissionId">id of the submission</param>
         /// <returns>test submission with the given id</returns>
         [HttpGet("{testSubmissionId}")]
-        public TestSubmissionVM GetTestSubmission(int testSubmissionId)
+        public TestWithSubmissionVM GetTestSubmission(int testSubmissionId)
         {
             TestSubmission submission = testSubmissionService.GetSubmissionById(testSubmissionId);
-            var answersVM = submission.Answers.Select(a => new SubmissionAnswerVM(a.Question.Number, a.Question.QuestionText, a.Text));
+            var answersVM = submission.Answers.Select(a => new SubmissionAnswerWithCorrectAnswerVM(a.Question.Number, a.Question.QuestionText, a.Text, a.Question.CorrectAnswer));
 
-            return new TestSubmissionVM(submission.Test.Id, submission.Test.Topic, answersVM);
+            return new TestWithSubmissionVM(submission.Test.Id, submission.Test.Topic, submission.Id, answersVM);
         }
     }
 }
