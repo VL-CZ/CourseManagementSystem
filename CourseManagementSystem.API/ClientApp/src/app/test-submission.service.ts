@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {ApiService} from './api.service';
 import {TestSubmissionVM} from './viewmodels/testSubmissionVM';
+import {TestWithSubmissionVM} from './viewmodels/testWithSubmissionVM';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +35,7 @@ export class TestSubmissionService extends ApiService {
    * get test submission by its id
    * @param submissionId id of the test submission
    */
-  public getSubmissionById(submissionId: string): Observable<TestSubmissionVM> {
-    return this.http.get<TestSubmissionVM>(this.controllerUrl + submissionId);
+  public getSubmissionById(submissionId: string): Observable<TestWithSubmissionVM> {
+    return this.http.get<TestWithSubmissionVM>(this.controllerUrl + submissionId);
   }
 }

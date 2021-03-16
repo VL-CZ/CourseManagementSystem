@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {TestSubmissionService} from '../test-submission.service';
-import {TestSubmissionVM} from '../viewmodels/testSubmissionVM';
 import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
+import {SubmissionAnswerWithCorrectAnswerVM, TestWithSubmissionVM} from '../viewmodels/testWithSubmissionVM';
 
 @Component({
   selector: 'app-test-submission-review',
@@ -10,7 +10,7 @@ import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
   styleUrls: ['./test-submission-review.component.css']
 })
 export class TestSubmissionReviewComponent implements OnInit {
-  public submission: TestSubmissionVM;
+  public submission: TestWithSubmissionVM;
 
   constructor(route: ActivatedRoute, testSubmissionService: TestSubmissionService) {
     const submissionId = ActivatedRouteUtils.getIdParam(route);
@@ -20,5 +20,9 @@ export class TestSubmissionReviewComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  isCorrect(answer: SubmissionAnswerWithCorrectAnswerVM): boolean {
+    return answer.answerText === answer.correctAnswer;
   }
 }

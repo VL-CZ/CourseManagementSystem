@@ -1,6 +1,7 @@
 <h2>{{submission.testTopic}}</h2>
-<div *ngFor="let answer of submission.answers">
+<div *ngFor="let answer of submission.answers" class="jumbotron" [ngClass]="isCorrect(answer)?'correctAnswer':'wrongAnswer'">
   <h3>Question {{answer.questionNumber}}</h3>
   <div>{{answer.questionText}}</div>
   <div>Your answer: {{answer.answerText}}</div>
+  <div>Correct answer: {{answer.correctAnswer}}</div>
 </div>
