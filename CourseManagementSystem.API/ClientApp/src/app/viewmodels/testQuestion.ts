@@ -3,4 +3,5 @@ export class TestQuestion {
   number: number;
   questionText: string;
   correctAnswer: string;
+  points: number;
 }
