@@ -38,8 +38,9 @@ namespace CourseManagementSystem.Data.Models
             Submissions = new List<TestSubmission>();
         }
 
-        public CourseTest(ICollection<TestQuestion> questions) : this()
+        public CourseTest(string topic, ICollection<TestQuestion> questions) : this()
         {
+            Topic = topic;
             Questions = questions;
         }
 

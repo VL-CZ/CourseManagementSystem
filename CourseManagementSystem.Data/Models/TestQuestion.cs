@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CourseManagementSystem.Data.Models
 {
@@ -9,11 +6,12 @@ namespace CourseManagementSystem.Data.Models
     {
         public TestQuestion() { }
 
-        public TestQuestion(int number, string text, string correctAnswer) : this()
+        public TestQuestion(int number, string text, string correctAnswer, int points) : this()
         {
             Number = number;
             QuestionText = text;
             CorrectAnswer = correctAnswer;
+            Points = points;
         }
 
         [Key]
@@ -33,5 +31,10 @@ namespace CourseManagementSystem.Data.Models
         /// correct answer to the question
         /// </summary>
         public string CorrectAnswer { get; set; }
+
+        /// <summary>
+        /// number of points for this question
+        /// </summary>
+        public int Points { get; set; }
     }
 }
