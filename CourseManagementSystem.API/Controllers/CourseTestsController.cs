@@ -24,7 +24,7 @@ namespace CourseManagementSystem.API.Controllers
         [HttpPost("{courseId}")]
         public void Add(CourseTestVM testToAdd, int courseId)
         {
-            var test = new CourseTest() { Topic = testToAdd.Topic, Questions = testToAdd.Questions };
+            var test = new CourseTest(testToAdd.Topic, testToAdd.Questions);
             courseTestService.AddToCourse(test, courseId);
         }
 
