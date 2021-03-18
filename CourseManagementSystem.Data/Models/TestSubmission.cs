@@ -43,18 +43,5 @@ namespace CourseManagementSystem.Data.Models
         /// </summary>
         public ICollection<TestSubmissionAnswer> Answers { get; set; }
 
-        public int GetPoints()
-        {
-            int points = 0;
-
-            foreach (var answer in Answers)
-            {
-                if (answer.Text == answer.Question.CorrectAnswer)
-                {
-                    points++;
-                }
-            }
-            return points;
-        }
     }
 }
