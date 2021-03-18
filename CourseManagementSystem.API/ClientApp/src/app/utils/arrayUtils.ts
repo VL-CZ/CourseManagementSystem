@@ -25,5 +25,17 @@ export class ArrayUtils {
       }
     }
   }
+
+  /**
+   * sum values of the `array`
+   * @param array given array
+   */
+  public static sum(array: number[]): number {
+    let sum = 0;
+    for (const item of array) {
+      sum += item;
+    }
+    return sum;
+  }
 }
 

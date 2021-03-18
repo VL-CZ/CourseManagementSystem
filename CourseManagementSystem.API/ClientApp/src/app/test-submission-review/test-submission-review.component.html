@@ -1,8 +1,17 @@
-<h2>{{submission.testTopic}}</h2>
+<div class="jumbotron">
+  <h2>{{submission.testTopic}}</h2>
+</div>
+
 <div *ngFor="let answer of submission.answers" class="jumbotron"
      [ngClass]="isCorrect(answer)?'correctAnswer':'wrongAnswer'">
   <h3>Question {{answer.questionNumber}}</h3>
   <div>{{answer.questionText}}</div>
   <div>Your answer: {{answer.answerText}}</div>
   <div>Correct answer: {{answer.correctAnswer}}</div>
+  <div>Points: {{answer.receivedPoints}}/{{answer.maximalPoints}}</div>
+</div>
+
+<div class="jumbotron">
+  <h2>Total score: {{getPercentualScore(submission)}}%</h2>
+  <h3>Points: {{getReceivedPoints(submission)}}/{{getMaximalPoints(submission)}}</h3>
 </div>
