@@ -18,16 +18,18 @@ namespace CourseManagementSystem.API.Controllers
         private readonly ICourseMemberService courseMemberService;
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly ITestSubmissionService testSubmissionService;
+        private readonly ITestSubmissionEvaluator testSubmissionEvaluator;
         private readonly CMSDbContext dbContext;
 
         public TestSubmissionsController(ICourseTestService courseTestService, ICourseMemberService courseMemberService, IHttpContextAccessor httpContextAccessor,
-            CMSDbContext dbContext, ITestSubmissionService testSubmissionService)
+            CMSDbContext dbContext, ITestSubmissionService testSubmissionService, ITestSubmissionEvaluator testSubmissionEvaluator)
         {
             this.courseTestService = courseTestService;
             this.courseMemberService = courseMemberService;
             this.dbContext = dbContext;
             this.httpContextAccessor = httpContextAccessor;
             this.testSubmissionService = testSubmissionService;
+            this.testSubmissionEvaluator = testSubmissionEvaluator;
         }
 
         /// <summary>
@@ -45,6 +47,8 @@ namespace CourseManagementSystem.API.Controllers
 
             var testSubmission = new TestSubmission(test, courseMember,
                 testSubmissionVM.Answers.Select(answer => new TestSubmissionAnswer(test.GetQuestionByNumber(answer.QuestionNumber), answer.AnswerText)).ToList());
+
+            testSubmissionEvaluator.Evaluate(testSubmission);
 
             dbContext.TestSubmissions.Add(testSubmission);
             dbContext.SaveChanges();
@@ -75,7 +79,7 @@ namespace CourseManagementSystem.API.Controllers
         public TestWithSubmissionVM GetTestSubmission(int testSubmissionId)
         {
             TestSubmission submission = testSubmissionService.GetSubmissionById(testSubmissionId);
-            var answersVM = submission.Answers.Select(a => 
+            var answersVM = submission.Answers.Select(a =>
             new SubmissionAnswerWithCorrectAnswerVM(a.Question.Number, a.Question.QuestionText, a.Text, a.Question.CorrectAnswer, a.Points, a.Question.Points));
 
             return new TestWithSubmissionVM(submission.Test.Id, submission.Test.Topic, submission.Id, answersVM);
