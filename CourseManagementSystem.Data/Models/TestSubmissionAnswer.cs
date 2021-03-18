@@ -31,5 +31,10 @@ namespace CourseManagementSystem.Data.Models
         /// submitted text of the answer
         /// </summary>
         public string Text { get; set; }
+
+        /// <summary>
+        /// points obtained for the answer
+        /// </summary>
+        public int Points { get; set; }
     }
 }

@@ -12,11 +12,11 @@ namespace CourseManagementSystem.UnitTests
         {
             var questions = new List<TestQuestion>()
             {
-                new TestQuestion(1,"Q1","A1"),
-                new TestQuestion(3,"Q3","A3"),
-                new TestQuestion(2,"Q1","A2")
+                new TestQuestion(1,"Q1","A1",10),
+                new TestQuestion(3,"Q3","A3",5),
+                new TestQuestion(2,"Q1","A2",10)
             };
-            var test = new CourseTest(questions);
+            var test = new CourseTest("Topic 01", questions);
 
             var answers = new List<TestSubmissionAnswer>()
             {
@@ -25,11 +25,11 @@ namespace CourseManagementSystem.UnitTests
                 new TestSubmissionAnswer(questions[2],"")
             };
 
-            var testSubmission = new TestSubmission(test, answers);
+            var testSubmission = new TestSubmission(test, new CourseMember(), answers);
 
             int points = testSubmission.GetPoints();
 
-            Assert.True(1 == points, "Total points incorrect");
+            Assert.True(points == 10, "Total points incorrect");
         }
     }
 }

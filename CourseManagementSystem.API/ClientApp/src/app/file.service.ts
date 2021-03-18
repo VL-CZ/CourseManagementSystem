@@ -8,9 +8,10 @@ import {FileVM} from './viewmodels/fileVM';
   providedIn: 'root'
 })
 export class FileService extends ApiService {
+  private static controllerName = 'files';
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    super(http, baseUrl);
+    super(http, baseUrl, FileService.controllerName);
   }
 
   /**
@@ -18,7 +19,7 @@ export class FileService extends ApiService {
    * @param fileId
    */
   public download(fileId: number): void {
-    window.open(this.baseUrl + 'api/file/' + fileId);
+    window.open(this.controllerUrl + fileId);
   }
 
   /**
@@ -31,7 +32,7 @@ export class FileService extends ApiService {
     const formData: FormData = new FormData();
     formData.append('file', file);
 
-    return this.http.post<FileVM>(this.baseUrl + 'api/file/upload/' + courseId, formData);
+    return this.http.post<FileVM>(this.controllerUrl + `upload/${courseId}`, formData);
   }
 
   /**
@@ -39,6 +40,6 @@ export class FileService extends ApiService {
    * @param fileId
    */
   public delete(fileId: number): Observable<{}> {
-    return this.http.delete(this.baseUrl + 'api/file/delete/' + fileId);
+    return this.http.delete(this.controllerUrl + `delete/${fileId}`);
   }
 }

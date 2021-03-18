@@ -25,6 +25,11 @@
         <input type="text" class="form-control" id="questionAnswer{{question.number}}"
                [(ngModel)]="question.correctAnswer" name="questionAnswer{{question.number}}">
       </div>
+      <div class="form-group">
+        <label for="questionPoints{{question.number}}">Points</label>
+        <input type="number" class="form-control" id="questionPoints{{question.number}}"
+               [(ngModel)]="question.points" name="questionPoints{{question.number}}">
+      </div>
     </div>
   </form>
   <button *ngIf="testToCreate.questions.length > 0" type="button" class="btn btn-success" (click)="createTest()">Create</button>

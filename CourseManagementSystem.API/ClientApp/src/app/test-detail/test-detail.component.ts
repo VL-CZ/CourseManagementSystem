@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {CourseTest} from '../viewmodels/courseTest';
+import {CourseTestVM} from '../viewmodels/courseTestVM';
 import {CourseTestService} from '../course-test.service';
+import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
 
 @Component({
   selector: 'app-test-detail',
@@ -9,10 +10,10 @@ import {CourseTestService} from '../course-test.service';
   styleUrls: ['./test-detail.component.css']
 })
 export class TestDetailComponent implements OnInit {
-  public courseTest: CourseTest;
+  public courseTest: CourseTestVM;
 
   constructor(route: ActivatedRoute, courseTestService: CourseTestService) {
-    const testId = route.snapshot.paramMap.get('id');
+    const testId = ActivatedRouteUtils.getIdParam(route);
     courseTestService.getById(testId).subscribe(result => {
       this.courseTest = result;
     });
@@ -20,5 +21,4 @@ export class TestDetailComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }

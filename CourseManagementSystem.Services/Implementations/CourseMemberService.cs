@@ -22,6 +22,13 @@ namespace CourseManagementSystem.API.Services
         }
 
         /// <inheritdoc/>
+        public CourseMember GetMemberByUserAndCourse(string personId, int courseId)
+        {
+            Person user = dbContext.Users.Include(u => u.CourseMemberships).ThenInclude(cm => cm.Course).SingleOrDefault(user => user.Id == personId);
+            return user.CourseMemberships.SingleOrDefault(cm => cm.Course.Id == courseId);
+        }
+
+        /// <inheritdoc/>
         public void RemoveMemberById(int id)
         {
             CourseMember cm = GetMemberByID(id);

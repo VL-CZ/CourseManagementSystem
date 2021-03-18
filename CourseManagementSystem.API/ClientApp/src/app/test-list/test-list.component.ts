@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {CourseTest} from '../viewmodels/courseTest';
+import {CourseTestVM} from '../viewmodels/courseTestVM';
 import {CourseService} from '../course.service';
 import {RoleAuthService} from '../role-auth.service';
 import {CourseTestService} from '../course-test.service';
@@ -16,7 +16,7 @@ export class TestListComponent implements OnInit {
   private courseService: CourseService;
   private courseTestService: CourseTestService;
 
-  public tests: CourseTest[];
+  public tests: CourseTestVM[];
   public isAdmin: boolean;
 
   constructor(courseService: CourseService, roleAuthService: RoleAuthService, courseTestService: CourseTestService) {

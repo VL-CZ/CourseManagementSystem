@@ -6,15 +6,16 @@ import {CourseInfoVM} from './viewmodels/courseInfoVM';
 import {AddCourseVM} from './viewmodels/addCourseVM';
 import {Person} from './viewmodels/student';
 import {FileVM} from './viewmodels/fileVM';
-import {CourseTest} from './viewmodels/courseTest';
+import {CourseTestVM} from './viewmodels/courseTestVM';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CourseService extends ApiService {
+  private static controllerName = 'courses';
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    super(http, baseUrl);
+    super(http, baseUrl, CourseService.controllerName);
   }
 
   /**
@@ -22,7 +23,7 @@ export class CourseService extends ApiService {
    * @returns created course info
    */
   public create(courseVM: AddCourseVM): Observable<CourseInfoVM> {
-    return this.http.post<CourseInfoVM>(this.baseUrl + 'api/courses/create/', courseVM);
+    return this.http.post<CourseInfoVM>(this.controllerUrl + 'create', courseVM);
   }
 
   /**
@@ -30,7 +31,7 @@ export class CourseService extends ApiService {
    * @param id
    */
   public delete(id: number): Observable<{}> {
-    return this.http.delete(this.baseUrl + 'api/courses/' + id);
+    return this.http.delete(this.controllerUrl + id);
   }
 
   /**
@@ -38,7 +39,7 @@ export class CourseService extends ApiService {
    * @param courseId
    */
   public getAllMembers(courseId: string): Observable<Person[]> {
-    return this.http.get<Person[]>(this.baseUrl + `api/courses/${courseId}/members`);
+    return this.http.get<Person[]>(this.controllerUrl + `${courseId}/members`);
   }
 
   /**
@@ -46,14 +47,14 @@ export class CourseService extends ApiService {
    * @param courseId
    */
   public getAllFiles(courseId: string): Observable<FileVM[]> {
-    return this.http.get<FileVM[]>(this.baseUrl + `api/courses/${courseId}/files`);
+    return this.http.get<FileVM[]>(this.controllerUrl + `${courseId}/files`);
   }
 
   /**
    * get all tests in this course
    * @param courseId
    */
-  public getAllTests(courseId: string): Observable<CourseTest[]> {
-    return this.http.get<CourseTest[]>(this.baseUrl + `api/courses/${courseId}/tests`);
+  public getAllTests(courseId: string): Observable<CourseTestVM[]> {
+    return this.http.get<CourseTestVM[]>(this.controllerUrl + `${courseId}/tests`);
   }
 }

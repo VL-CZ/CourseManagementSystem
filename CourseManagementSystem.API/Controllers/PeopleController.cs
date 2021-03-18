@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using CourseManagementSystem.API.Extensions;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -86,32 +87,12 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
-        /// get current user id
+        /// get Id of the currently logged-in user
         /// </summary>
         /// <returns></returns>
-        [Authorize]
-        [HttpGet("getId")]
-        public PersonIdVM GetId()
-        {
-            string userId = GetCurrentUserId();
-            return new PersonIdVM() { Id = userId };
-        }
-
-        /// <summary>
-        /// determine if current user is admin
-        /// </summary>
-        /// <returns></returns>
-        [Authorize]
-        [HttpGet("isAdmin")]
-        public IsAdminVM IsAdmin()
-        {
-            // TO-DO: add roles
-            return new IsAdminVM() { IsAdmin = GetCurrentUserId() == "b7a6f405-c226-4f5a-a0cb-2ba4c47582a3" };
-        }
-
         private string GetCurrentUserId()
         {
-            return httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return httpContextAccessor.HttpContext.GetCurrentUserId();
         }
     }
 }

@@ -2,7 +2,11 @@
 using CourseManagementSystem.API.ViewModels;
 using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
+using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CourseManagementSystem.API.Controllers
@@ -13,11 +17,13 @@ namespace CourseManagementSystem.API.Controllers
     {
         private readonly CMSDbContext dbContext;
         private readonly ICourseMemberService courseMemberService;
+        private readonly ITestSubmissionService testSubmissionService;
 
-        public CourseMembersController(CMSDbContext dbContext, ICourseMemberService courseMemberService)
+        public CourseMembersController(CMSDbContext dbContext, ICourseMemberService courseMemberService, ITestSubmissionService testSubmissionService)
         {
             this.dbContext = dbContext;
             this.courseMemberService = courseMemberService;
+            this.testSubmissionService = testSubmissionService;
         }
 
         /// <summary>
@@ -54,6 +60,18 @@ namespace CourseManagementSystem.API.Controllers
             dbContext.SaveChanges();
 
             return new GradeDetailsVM() { Id = grade.ID, Comment = grade.Comment, Value = grade.Value, Topic = grade.Topic };
+        }
+
+        /// <summary>
+        /// get all test submissions of this <see cref="CourseMember"/>
+        /// </summary>
+        /// <param name="id">ID of the <see cref="CourseMember"/></param>
+        /// <returns>all test submissions of the course member</returns>
+        [HttpGet("{id}/submissions")]
+        public IEnumerable<TestSubmissionInfoVM> GetTestSubmissions(int id)
+        {
+            var userSubmissions = testSubmissionService.GetAllSubmissionsOfCourseMember(id);
+            return userSubmissions.Select(ts => new TestSubmissionInfoVM(ts.Id, ts.Test.Topic));
         }
     }
 }

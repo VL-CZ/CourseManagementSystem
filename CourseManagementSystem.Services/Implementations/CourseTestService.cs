@@ -34,7 +34,7 @@ namespace CourseManagementSystem.Services.Implementations
         /// <inheritdoc/>
         public CourseTest GetById(int testId)
         {
-            return dbContext.CourseTests.Include(ct => ct.Questions).Single(ct => ct.Id == testId);
+            return dbContext.CourseTests.Include(x => x.Course).Include(ct => ct.Questions).SingleOrDefault(ct => ct.Id == testId);
         }
     }
 }

@@ -96,7 +96,7 @@ namespace CourseManagementSystem.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CourseId")
+                    b.Property<int>("CourseId")
                         .HasColumnType("int");
 
                     b.Property<string>("Topic")
@@ -217,6 +217,9 @@ namespace CourseManagementSystem.Data.Migrations
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
+
                     b.Property<string>("QuestionText")
                         .HasColumnType("nvarchar(max)");
 
@@ -234,10 +237,10 @@ namespace CourseManagementSystem.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("StudentId")
+                    b.Property<int>("StudentId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TestId")
+                    b.Property<int>("TestId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -255,6 +258,9 @@ namespace CourseManagementSystem.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
 
                     b.Property<int?>("QuestionId")
                         .HasColumnType("int");
@@ -520,9 +526,11 @@ namespace CourseManagementSystem.Data.Migrations
 
             modelBuilder.Entity("CourseManagementSystem.Data.Models.CourseTest", b =>
                 {
-                    b.HasOne("CourseManagementSystem.Data.Models.Course", null)
+                    b.HasOne("CourseManagementSystem.Data.Models.Course", "Course")
                         .WithMany("Tests")
-                        .HasForeignKey("CourseId");
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CourseManagementSystem.Data.Models.Grade", b =>
@@ -543,11 +551,15 @@ namespace CourseManagementSystem.Data.Migrations
                 {
                     b.HasOne("CourseManagementSystem.Data.Models.CourseMember", "Student")
                         .WithMany("TestSubmissions")
-                        .HasForeignKey("StudentId");
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("CourseManagementSystem.Data.Models.CourseTest", "Test")
                         .WithMany("Submissions")
-                        .HasForeignKey("TestId");
+                        .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CourseManagementSystem.Data.Models.TestSubmissionAnswer", b =>
