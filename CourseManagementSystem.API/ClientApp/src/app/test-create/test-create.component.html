@@ -1,9 +1,14 @@
 <div>
   <h2>Create new test</h2>
-  <form>
+  <form class="jumbotron">
     <div class="form-group">
       <label for="testTopic">Topic</label>
       <input type="text" class="form-control" id="testTopic" [(ngModel)]="testToCreate.topic" name="testTopic">
+    </div>
+    <div class="form-group">
+      <label for="testWeight">Weight</label>
+      <input type="number" class="form-control" id="testWeight" [(ngModel)]="testToCreate.weight"
+             name="weight">
     </div>
     <div class="form-group">
       <label for="questionCountInput">Question count</label>
@@ -13,7 +18,7 @@
     <button type="button" class="btn btn-primary" (click)="updateQuestionCount()">Apply</button>
   </form>
   <form>
-    <div *ngFor="let question of testToCreate.questions">
+    <div class="jumbotron" *ngFor="let question of testToCreate.questions">
       <h3>Question {{question.number}}</h3>
       <div class="form-group">
         <label for="questionText{{question.number}}">Question text</label>
