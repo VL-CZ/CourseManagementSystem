@@ -12,14 +12,23 @@ namespace CourseManagementSystem.API.ViewModels
         {
         }
 
-        public CourseTestVM(int id, string topic, ICollection<TestQuestion> questions)
+        public CourseTestVM(int id, string topic, int scoreWeight, ICollection<TestQuestion> questions)
         {
             Id = id;
             Topic = topic;
             Questions = questions;
+            Weight = scoreWeight;
         }
 
+        /// <summary>
+        /// id of the test
+        /// </summary>
         public int Id { get; set; }
+
+        /// <summary>
+        /// weight of the score from the test (e.g. test of weight 2 has twice bigger impact on overall score than test of weight 1)
+        /// </summary>
+        public int Weight { get; set; }
 
         /// <summary>
         /// topic of the test

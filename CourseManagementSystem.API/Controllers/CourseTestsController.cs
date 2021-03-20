@@ -47,7 +47,7 @@ namespace CourseManagementSystem.API.Controllers
         public CourseTestVM Get(int id)
         {
             var test = courseTestService.GetById(id);
-            return new CourseTestVM(id, test.Topic, test.Questions);
+            return new CourseTestVM(id, test.Topic, test.Weight, test.Questions);
         }
     }
 }
