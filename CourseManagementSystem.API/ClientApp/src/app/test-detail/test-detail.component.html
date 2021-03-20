@@ -1,6 +1,6 @@
 <div class="jumbotron">
   <h2>{{courseTest.topic}}</h2>
-  <h3>Weight: {{courseTest.weight}}</h3>
+  <div>Weight: {{courseTest.weight}}</div>
 </div>
 <div class="jumbotron" *ngFor="let question of courseTest.questions">
   <h3>Question {{question.number}}</h3>
