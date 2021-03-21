@@ -4,6 +4,7 @@ import {TestSubmissionService} from '../test-submission.service';
 import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
 import {SubmissionAnswerWithCorrectAnswerVM, TestWithSubmissionVM} from '../viewmodels/testWithSubmissionVM';
 import {ArrayUtils} from '../utils/arrayUtils';
+import {PercentCalculator} from '../utils/percentCalculator';
 
 @Component({
   selector: 'app-test-submission-review',
@@ -36,7 +37,7 @@ export class TestSubmissionReviewComponent implements OnInit {
   }
 
   public getPercentualScore(testSubmission: TestWithSubmissionVM): number {
-    const percentualScore = this.getReceivedPoints(testSubmission) / this.getMaximalPoints(testSubmission) * 100;
-    return Math.round(percentualScore * 100) / 100; // round to 2 decimal places
+    const percentualScore = this.getReceivedPoints(testSubmission) / this.getMaximalPoints(testSubmission);
+    return PercentCalculator.doubleToPercent(percentualScore, 2);
   }
 }

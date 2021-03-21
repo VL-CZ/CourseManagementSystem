@@ -7,6 +7,7 @@ import {GradeService} from '../grade.service';
 import {RoleAuthService} from '../role-auth.service';
 import {TestSubmissionInfoVM} from '../viewmodels/testSubmisionInfoVM';
 import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
+import {PercentCalculator} from '../utils/percentCalculator';
 
 @Component({
   selector: 'app-student-detail',
@@ -60,5 +61,9 @@ export class StudentDetailComponent implements OnInit {
   public removeGrade(gradeID: number): void {
     this.gradeService.delete(gradeID).subscribe();
     this.student.grades = this.student.grades.filter(g => g.id !== gradeID);
+  }
+
+  public getPercentualScore(doubleValue: number) {
+    return PercentCalculator.doubleToPercent(doubleValue, 2);
   }
 }
