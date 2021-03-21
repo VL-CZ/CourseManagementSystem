@@ -2,6 +2,7 @@
 using CourseManagementSystem.API.ViewModels;
 using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
+using CourseManagementSystem.Services;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -71,7 +72,7 @@ namespace CourseManagementSystem.API.Controllers
         public IEnumerable<TestSubmissionInfoVM> GetTestSubmissions(int id)
         {
             var userSubmissions = testSubmissionService.GetAllSubmissionsOfCourseMember(id);
-            return userSubmissions.Select(ts => new TestSubmissionInfoVM(ts.Id, ts.Test.Topic));
+            return userSubmissions.Select(ts => new TestSubmissionInfoVM(ts.Id, ts.Test.Topic, ts.Test.Weight, TestScoreCalculator.GetScore(ts)));
         }
     }
 }

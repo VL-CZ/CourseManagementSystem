@@ -11,7 +11,7 @@ namespace CourseManagementSystem.Services.Implementations
 {
     public class TestSubmissionService : ITestSubmissionService
     {
-        private CMSDbContext dbContext;
+        private readonly CMSDbContext dbContext;
 
         public TestSubmissionService(CMSDbContext dbContext)
         {
@@ -21,7 +21,8 @@ namespace CourseManagementSystem.Services.Implementations
         /// <inheritdoc/>
         public IEnumerable<TestSubmission> GetAllSubmissionsOfCourseMember(int courseMemberId)
         {
-            return dbContext.TestSubmissions.Include(ts => ts.Test).Include(ts => ts.Student).Where(ts => ts.Student.Id == courseMemberId);
+            return dbContext.TestSubmissions.Include(ts => ts.Test).Include(ts => ts.Student).Include(ts => ts.Answers).ThenInclude(ans => ans.Question)
+                .Where(ts => ts.Student.Id == courseMemberId);
         }
 
         /// <inheritdoc/>
