@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {TestSubmissionService} from '../test-submission.service';
 import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
 import {SubmissionAnswerWithCorrectAnswerVM, TestWithSubmissionVM} from '../viewmodels/testWithSubmissionVM';
@@ -7,6 +7,7 @@ import {ArrayUtils} from '../utils/arrayUtils';
 import {PercentCalculator} from '../utils/percentCalculator';
 import {RoleAuthService} from '../role-auth.service';
 import {EvaluatedAnswerVM, EvaluatedTestSubmissionVM} from '../viewmodels/evaluatedTestSubmissionVM';
+import {RouterUtils} from '../utils/routerUtils';
 
 @Component({
   selector: 'app-test-submission-review',
@@ -19,9 +20,14 @@ export class TestSubmissionReviewComponent implements OnInit {
   public isAdmin: boolean;
 
   private testSubmissionService: TestSubmissionService;
+  private router: Router;
+  private route: ActivatedRoute;
 
-  constructor(route: ActivatedRoute, testSubmissionService: TestSubmissionService, roleAuthService: RoleAuthService) {
+  constructor(route: ActivatedRoute, testSubmissionService: TestSubmissionService, roleAuthService: RoleAuthService, router: Router) {
     this.testSubmissionService = testSubmissionService;
+    this.router = router;
+    this.route = route;
+
     const submissionId = ActivatedRouteUtils.getIdParam(route);
 
     roleAuthService.isAdmin().subscribe(result => {
@@ -38,7 +44,7 @@ export class TestSubmissionReviewComponent implements OnInit {
   }
 
   public isCorrect(answer: SubmissionAnswerWithCorrectAnswerVM): boolean {
-    return answer.answerText === answer.correctAnswer;
+    return answer.receivedPoints >= answer.maximalPoints;
   }
 
   public getReceivedPoints(testSubmission: TestWithSubmissionVM): number {
@@ -63,9 +69,9 @@ export class TestSubmissionReviewComponent implements OnInit {
   }
 
   public saveUpdates(): void {
-    this.testSubmissionService.evaluateSubmission(this.submission.submissionId.toString(), this.evaluatedTestSubmission)
-      .subscribe(result => {
-        location.reload();
+    this.testSubmissionService.updateSubmission(this.submission.submissionId.toString(), this.evaluatedTestSubmission)
+      .subscribe(() => {
+        RouterUtils.reloadPage(this.router, this.route);
       });
   }
 

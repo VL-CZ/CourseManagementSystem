@@ -41,11 +41,11 @@ export class TestSubmissionService extends ApiService {
   }
 
   /**
-   * evaluate the given submission - update points and comments of the submission
+   * update the given submission - update points and comments of the submission
    * @param submissionId id of the given submission
    * @param evaluatedTestSubmission evaluated and commented test submission
    */
-  public evaluateSubmission(submissionId: string, evaluatedTestSubmission: EvaluatedTestSubmissionVM): Observable<{}> {
+  public updateSubmission(submissionId: string, evaluatedTestSubmission: EvaluatedTestSubmissionVM): Observable<{}> {
     return this.http.put<{}>(this.controllerUrl + submissionId, evaluatedTestSubmission);
   }
 }
