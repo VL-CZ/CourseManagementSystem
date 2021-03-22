@@ -36,5 +36,10 @@ namespace CourseManagementSystem.Data.Models
         /// points obtained for the answer
         /// </summary>
         public int Points { get; set; }
+
+        /// <summary>
+        /// comment to the answer provided by a teacher
+        /// </summary>
+        public string Comment { get; set; }
     }
 }
