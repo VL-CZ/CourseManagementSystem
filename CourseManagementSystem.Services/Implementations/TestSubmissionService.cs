@@ -26,6 +26,12 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
+        public TestSubmissionAnswer GetAnswerByQuestionNumber(TestSubmission testSubmission, int questionNumber)
+        {
+            return testSubmission.Answers.SingleOrDefault(answer => answer.Question.Number == questionNumber);
+        }
+
+        /// <inheritdoc/>
         public TestSubmission GetSubmissionById(int testSubmissionId)
         {
             return dbContext.TestSubmissions.Include(ts => ts.Answers).ThenInclude(a => a.Question).Include(ts => ts.Test).SingleOrDefault(ts => ts.Id == testSubmissionId);

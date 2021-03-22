@@ -20,5 +20,13 @@ namespace CourseManagementSystem.Services.Interfaces
         /// <param name="testSubmissionId">id of the submission to select</param>
         /// <returns><see cref="TestSubmission"/> with answers and test included</returns>
         TestSubmission GetSubmissionById(int testSubmissionId);
+
+        /// <summary>
+        /// get answer to the question with given question number
+        /// </summary>
+        /// <param name="testSubmission">test submission with answers</param>
+        /// <param name="questionNumber">number of the question we search for</param>
+        /// <returns>answer to question with given question number</returns>
+        TestSubmissionAnswer GetAnswerByQuestionNumber(TestSubmission testSubmission, int questionNumber);
     }
 }

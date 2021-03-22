@@ -97,9 +97,9 @@ namespace CourseManagementSystem.API.Controllers
             TestSubmission submission = testSubmissionService.GetSubmissionById(testSubmissionId);
             foreach (var evaluatedAnswer in evaluatedTestSubmission.EvaluatedAnswers)
             {
-                var answer = submission.Answers.Single(answer => answer.Question.Number == evaluatedAnswer.QuestionNumber);
+                var answer = testSubmissionService.GetAnswerByQuestionNumber(submission, evaluatedAnswer.QuestionNumber);
                 answer.Points = evaluatedAnswer.UpdatedPoints;
-                //answer.Comment = evaluatedAnswer.UpdatedComment;
+                answer.Comment = evaluatedAnswer.UpdatedComment;
             }
             dbContext.SaveChanges();
         }
