@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {ApiService} from './api.service';
 import {TestSubmissionVM} from './viewmodels/testSubmissionVM';
 import {TestWithSubmissionVM} from './viewmodels/testWithSubmissionVM';
+import {EvaluatedTestSubmissionVM} from './viewmodels/evaluatedTestSubmissionVM';
 
 @Injectable({
   providedIn: 'root'
@@ -37,5 +38,14 @@ export class TestSubmissionService extends ApiService {
    */
   public getSubmissionById(submissionId: string): Observable<TestWithSubmissionVM> {
     return this.http.get<TestWithSubmissionVM>(this.controllerUrl + submissionId);
+  }
+
+  /**
+   * evaluate the given submission - update points and comments of the submission
+   * @param submissionId id of the given submission
+   * @param evaluatedTestSubmission evaluated and commented test submission
+   */
+  public evaluateSubmission(submissionId: string, evaluatedTestSubmission: EvaluatedTestSubmissionVM): Observable<{}> {
+    return this.http.put<{}>(this.controllerUrl + submissionId, evaluatedTestSubmission);
   }
 }

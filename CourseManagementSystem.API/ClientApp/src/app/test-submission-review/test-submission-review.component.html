@@ -9,7 +9,29 @@
   <div>Your answer: {{answer.answerText}}</div>
   <div>Correct answer: {{answer.correctAnswer}}</div>
   <div><b>Points: {{answer.receivedPoints}}/{{answer.maximalPoints}}</b></div>
+
+  <br>
+
+  <div *ngIf="isAdmin">
+    <h4>Update</h4>
+    <div class="form-group">
+      <label for="updatedPoints{{answer.questionNumber}}">Points:</label>
+      <input type="number" class="form-control" id="updatedPoints{{answer.questionNumber}}"
+             [(ngModel)]="getCorrespondingEvaluatedAnswer(answer).updatedPoints" name="updatedPoints{{answer.questionNumber}}" min="0">
+    </div>
+    <div class="form-group">
+      <label for="comment{{answer.questionNumber}}">Comment:</label>
+      <textarea class="form-control" id="comment{{answer.questionNumber}}"
+                [(ngModel)]="getCorrespondingEvaluatedAnswer(answer).updatedComment" name="comment{{answer.questionNumber}}"></textarea>
+    </div>
+  </div>
 </div>
+
+<div>
+  <button type="button" class="btn btn-success" (click)="saveUpdates()">Apply updates</button>
+  <button type="button" class="btn btn-danger" (click)="discardUpdates()">Discard updates</button>
+</div>
+<br>
 
 <div class="jumbotron">
   <h2>Total score: {{getPercentualScore(submission)}}%</h2>
