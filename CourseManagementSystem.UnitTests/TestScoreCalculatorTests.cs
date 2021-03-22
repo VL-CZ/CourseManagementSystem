@@ -35,7 +35,7 @@ namespace CourseManagementSystem.UnitTests
         /// test classical score calculation
         /// </summary>
         [Fact]
-        public void GetScore_Normal()
+        public void CalculateScore_Normal()
         {
             testSubmission.Answers = new List<TestSubmissionAnswer>
             {
@@ -49,15 +49,30 @@ namespace CourseManagementSystem.UnitTests
             int gainedPoints = 1 + 1 + 4;
             double expectedScore = (double)gainedPoints / totalPoints;
 
-            double score = TestScoreCalculator.GetScore(testSubmission);
+            double score = TestScoreCalculator.CalculateScore(testSubmission);
             Assert.Equal(expectedScore, score, decimalDigitPrecision);
+        }
+
+        /// <summary>
+        /// test score calculation on the test with single question
+        /// </summary>
+        [Fact]
+        public void CalculateScore_SingleQuestion()
+        {
+            testSubmission.Answers = new List<TestSubmissionAnswer>
+            {
+                new TestSubmissionAnswer(){Question=availableQuestions[1],Points=1}
+            };
+
+            double score = TestScoreCalculator.CalculateScore(testSubmission);
+            Assert.Equal(1, score, decimalDigitPrecision);
         }
 
         /// <summary>
         /// test score calculation where the score is over 100%
         /// </summary>
         [Fact]
-        public void GetScore_Over100()
+        public void CalculateScore_Over100Percent()
         {
             testSubmission.Answers = new List<TestSubmissionAnswer>
             {
@@ -70,7 +85,7 @@ namespace CourseManagementSystem.UnitTests
             int gainedPoints = 6 + 4 + 1;
             double expectedScore = (double)gainedPoints / totalPoints;
 
-            double score = TestScoreCalculator.GetScore(testSubmission);
+            double score = TestScoreCalculator.CalculateScore(testSubmission);
             Assert.Equal(expectedScore, score, decimalDigitPrecision);
         }
 
@@ -78,7 +93,7 @@ namespace CourseManagementSystem.UnitTests
         /// test score calculation where the score is 0%
         /// </summary>
         [Fact]
-        public void GetScore_Zero()
+        public void CalculateScore_ZeroPoints()
         {
             testSubmission.Answers = new List<TestSubmissionAnswer>
             {
@@ -88,7 +103,7 @@ namespace CourseManagementSystem.UnitTests
                 new TestSubmissionAnswer(){Question=availableQuestions[6],Points=0}
             };
 
-            double score = TestScoreCalculator.GetScore(testSubmission);
+            double score = TestScoreCalculator.CalculateScore(testSubmission);
             Assert.Equal(0, score, decimalDigitPrecision);
         }
     }

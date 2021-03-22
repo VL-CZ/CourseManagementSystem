@@ -1,21 +1,22 @@
 ﻿using CourseManagementSystem.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace CourseManagementSystem.Services
 {
+    /// <summary>
+    /// class responsible for calculating test score
+    /// </summary>
     public static class TestScoreCalculator
     {
-        public static double GetScore(TestSubmission testSubmission)
+        /// <summary>
+        /// calculate percentual score of the given test submission (0 = 0%, 1 = 100%, can be greater than 1 in case of bonus points)
+        /// </summary>
+        /// <param name="testSubmission">the given submission</param>
+        /// <returns>score of the test (0 = 0%, 1 = 100%, can be greater than 1 in case of bonus points)</returns>
+        public static double CalculateScore(TestSubmission testSubmission)
         {
-            int maximalScore = 0;
-            int studentScore = 0;
-            foreach (var answer in testSubmission.Answers)
-            {
-                maximalScore += answer.Question.Points;
-                studentScore += answer.Points;
-            }
+            int maximalScore = testSubmission.Answers.Sum(answer => answer.Question.Points);
+            int studentScore = testSubmission.Answers.Sum(answer => answer.Points);
 
             return (double)studentScore / maximalScore;
         }
