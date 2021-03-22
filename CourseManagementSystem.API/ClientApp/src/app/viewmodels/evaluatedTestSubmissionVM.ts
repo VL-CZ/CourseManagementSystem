@@ -16,7 +16,7 @@ export class EvaluatedTestSubmissionVM {
   public static createFrom(testWithSubmission: TestWithSubmissionVM): EvaluatedTestSubmissionVM {
     const evaluatedAnswers: EvaluatedAnswerVM[] = [];
     for (const answer of testWithSubmission.answers) {
-      const evaluatedAnswer = new EvaluatedAnswerVM(answer.questionNumber, answer.receivedPoints, '');
+      const evaluatedAnswer = new EvaluatedAnswerVM(answer.questionNumber, answer.receivedPoints, answer.comment);
       evaluatedAnswers.push(evaluatedAnswer);
     }
 

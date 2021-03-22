@@ -20,8 +20,8 @@ export class TestSubmissionReviewComponent implements OnInit {
   public isAdmin: boolean;
 
   private testSubmissionService: TestSubmissionService;
-  private router: Router;
-  private route: ActivatedRoute;
+  private readonly router: Router;
+  private readonly route: ActivatedRoute;
 
   constructor(route: ActivatedRoute, testSubmissionService: TestSubmissionService, roleAuthService: RoleAuthService, router: Router) {
     this.testSubmissionService = testSubmissionService;
