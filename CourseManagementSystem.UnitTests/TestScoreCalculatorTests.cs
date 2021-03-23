@@ -45,12 +45,9 @@ namespace CourseManagementSystem.UnitTests
                 new TestSubmissionAnswer(){Question=availableQuestions[6],Points=4},
             };
 
-            int totalPoints = 1 + 2 + 1 + 4;
-            int gainedPoints = 1 + 1 + 4;
-            double expectedScore = (double)gainedPoints / totalPoints;
-
             double score = TestScoreCalculator.CalculateScore(testSubmission);
-            Assert.Equal(expectedScore, score, decimalDigitPrecision);
+
+            Assert.Equal(0.75, score, decimalDigitPrecision);
         }
 
         /// <summary>
@@ -65,6 +62,7 @@ namespace CourseManagementSystem.UnitTests
             };
 
             double score = TestScoreCalculator.CalculateScore(testSubmission);
+
             Assert.Equal(1, score, decimalDigitPrecision);
         }
 
@@ -81,12 +79,8 @@ namespace CourseManagementSystem.UnitTests
                 new TestSubmissionAnswer(){Question=availableQuestions[7],Points=1}
             };
 
-            int totalPoints = 5 + 4 + 1;
-            int gainedPoints = 6 + 4 + 1;
-            double expectedScore = (double)gainedPoints / totalPoints;
-
             double score = TestScoreCalculator.CalculateScore(testSubmission);
-            Assert.Equal(expectedScore, score, decimalDigitPrecision);
+            Assert.Equal(1.1, score, decimalDigitPrecision);
         }
 
         /// <summary>
