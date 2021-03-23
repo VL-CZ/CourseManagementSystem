@@ -50,6 +50,9 @@ export class StudentDetailComponent implements OnInit {
   }
 
   public addGrade(): void {
+    // divide percents by 100 -> get double
+    this.newGrade.percentualValue = PercentCalculator.percentToDouble(this.newGrade.percentualValue);
+
     this.courseMemberService.assignGrade(this.userId, this.newGrade).subscribe(
       result => {
         this.student.grades.push(result);

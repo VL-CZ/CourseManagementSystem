@@ -13,4 +13,13 @@ export class PercentCalculator {
     const power = Math.pow(10, decimalDigits);
     return Math.round(value * power) / power;
   }
+
+  /**
+   * convert percents to double (0% -> 0, 100% -> 1)
+   * @param percents percents to convert
+   */
+  public static percentToDouble(percents: number): number {
+    return percents / 100;
+  }
+
 }
