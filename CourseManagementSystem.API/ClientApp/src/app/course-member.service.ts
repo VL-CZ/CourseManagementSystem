@@ -3,7 +3,7 @@ import {Student} from './viewmodels/student';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {AddGradeVM} from './viewmodels/addGradeVM';
-import {Grade} from './viewmodels/grade';
+import {GradeDetailsVM} from './viewmodels/gradeDetailsVM';
 import {ApiService} from './api.service';
 import {TestSubmissionInfoVM} from './viewmodels/testSubmisionInfoVM';
 
@@ -30,8 +30,8 @@ export class CourseMemberService extends ApiService {
    * @param courseMemberId
    * @param grade created grade (contains id)
    */
-  public assignGrade(courseMemberId: string, grade: AddGradeVM): Observable<Grade> {
-    return this.http.post<Grade>(this.controllerUrl + `${courseMemberId}/assignGrade`, grade);
+  public assignGrade(courseMemberId: string, grade: AddGradeVM): Observable<GradeDetailsVM> {
+    return this.http.post<GradeDetailsVM>(this.controllerUrl + `${courseMemberId}/assignGrade`, grade);
   }
 
   /**
