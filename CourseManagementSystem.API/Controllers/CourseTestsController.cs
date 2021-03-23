@@ -1,7 +1,10 @@
 ﻿using CourseManagementSystem.API.ViewModels;
 using CourseManagementSystem.Data.Models;
+using CourseManagementSystem.Services;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CourseManagementSystem.API.Controllers
 {
@@ -10,10 +13,12 @@ namespace CourseManagementSystem.API.Controllers
     public class CourseTestsController : ControllerBase
     {
         private readonly ICourseTestService courseTestService;
+        private readonly ITestSubmissionService testSubmissionService;
 
-        public CourseTestsController(ICourseTestService courseTestService)
+        public CourseTestsController(ICourseTestService courseTestService, ITestSubmissionService testSubmissionService)
         {
             this.courseTestService = courseTestService;
+            this.testSubmissionService = testSubmissionService;
         }
 
         /// <summary>
@@ -48,6 +53,18 @@ namespace CourseManagementSystem.API.Controllers
         {
             var test = courseTestService.GetById(id);
             return new CourseTestVM(id, test.Topic, test.Weight, test.Questions);
+        }
+
+        /// <summary>
+        /// get info about all test submissions submitted to the given test
+        /// </summary>
+        /// <param name="testId">id of the test</param>
+        /// <returns>collection of submissions</returns>
+        [HttpGet("{testId}/submissions")]
+        public IEnumerable<TestSubmissionWithUserInfoVM> GetAllSubmissions(int testId)
+        {
+            var testSubmissions = testSubmissionService.GetAllSubmissionsOfTest(testId);
+            return testSubmissions.Select(ts => new TestSubmissionWithUserInfoVM(ts.Student.User.Email, ts.Id, TestScoreCalculator.CalculateScore(ts)));
         }
     }
 }

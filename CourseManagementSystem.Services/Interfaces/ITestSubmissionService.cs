@@ -15,6 +15,13 @@ namespace CourseManagementSystem.Services.Interfaces
         IEnumerable<TestSubmission> GetAllSubmissionsOfCourseMember(int courseMemberId);
 
         /// <summary>
+        /// get all test submissions that belong to given test
+        /// </summary>
+        /// <param name="testId">ID of the test</param>
+        /// <returns></returns>
+        IEnumerable<TestSubmission> GetAllSubmissionsOfTest(int testId);
+
+        /// <summary>
         /// get test submission (with answers and test included) by its id
         /// </summary>
         /// <param name="testSubmissionId">id of the submission to select</param>

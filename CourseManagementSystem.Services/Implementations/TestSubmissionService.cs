@@ -21,8 +21,13 @@ namespace CourseManagementSystem.Services.Implementations
         /// <inheritdoc/>
         public IEnumerable<TestSubmission> GetAllSubmissionsOfCourseMember(int courseMemberId)
         {
-            return dbContext.TestSubmissions.Include(ts => ts.Test).Include(ts => ts.Student).Include(ts => ts.Answers).ThenInclude(ans => ans.Question)
-                .Where(ts => ts.Student.Id == courseMemberId);
+            return GetTestSubmissionsWithTestAndStudent().Where(ts => ts.Student.Id == courseMemberId);
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<TestSubmission> GetAllSubmissionsOfTest(int testId)
+        {
+            return GetTestSubmissionsWithTestAndStudent().Where(ts => ts.Test.Id == testId);
         }
 
         /// <inheritdoc/>
@@ -35,6 +40,17 @@ namespace CourseManagementSystem.Services.Implementations
         public TestSubmission GetSubmissionById(int testSubmissionId)
         {
             return dbContext.TestSubmissions.Include(ts => ts.Answers).ThenInclude(a => a.Question).Include(ts => ts.Test).SingleOrDefault(ts => ts.Id == testSubmissionId);
+        }
+
+        /// <summary>
+        /// get all test submissions with test, student, user, answer and question loaded
+        /// </summary>
+        /// <returns>test submissions with test, student, user, answer and question included</returns>
+        private IEnumerable<TestSubmission> GetTestSubmissionsWithTestAndStudent()
+        {
+            return dbContext.TestSubmissions.Include(ts => ts.Test)
+                .Include(ts => ts.Student).ThenInclude(stud => stud.User)
+                .Include(ts => ts.Answers).ThenInclude(ans => ans.Question);
         }
     }
 }

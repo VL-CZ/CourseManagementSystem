@@ -5,8 +5,6 @@ using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
