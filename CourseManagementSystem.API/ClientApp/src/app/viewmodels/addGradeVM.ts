@@ -1,7 +1,8 @@
 export class AddGradeVM {
-  value: number;
+  percentualValue: number;
   topic: string;
   comment: string;
+  weight: number;
 
   constructor() {
   }

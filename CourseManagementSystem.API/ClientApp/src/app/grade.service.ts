@@ -7,9 +7,10 @@ import {Observable} from 'rxjs';
   providedIn: 'root'
 })
 export class GradeService extends ApiService {
+  private static controllerName = 'grades';
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    super(http, baseUrl);
+    super(http, baseUrl, GradeService.controllerName);
   }
 
   /**
@@ -17,6 +18,6 @@ export class GradeService extends ApiService {
    * @param gradeId
    */
   public delete(gradeId: number): Observable<{}> {
-    return this.http.delete(this.baseUrl + 'api/grades/delete/' + gradeId);
+    return this.http.delete(this.controllerUrl + `delete/${gradeId}`);
   }
 }

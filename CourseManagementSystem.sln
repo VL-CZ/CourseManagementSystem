@@ -7,13 +7,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseManagementSystem.API", "CourseManagementSystem.API\CourseManagementSystem.API.csproj", "{DB4E1629-71BF-4898-8BDB-03D9B80FA197}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseManagementSystem.Data", "CourseManagementSystem.Data\CourseManagementSystem.Data.csproj", "{58B6C6D5-1E9B-49FC-8D08-4F7A0741318F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseManagementSystem.Services", "CourseManagementSystem.Services\CourseManagementSystem.Services.csproj", "{B943AA5D-41C9-4148-8347-E538BD069C2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseManagementSystem.Services", "CourseManagementSystem.Services\CourseManagementSystem.Services.csproj", "{B943AA5D-41C9-4148-8347-E538BD069C2E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseManagementSystem.UnitTests", "CourseManagementSystem.UnitTests\CourseManagementSystem.UnitTests.csproj", "{A3075B73-A8BD-4380-A677-8BBCE2CA96B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +36,10 @@ Global
 		{B943AA5D-41C9-4148-8347-E538BD069C2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B943AA5D-41C9-4148-8347-E538BD069C2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B943AA5D-41C9-4148-8347-E538BD069C2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3075B73-A8BD-4380-A677-8BBCE2CA96B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3075B73-A8BD-4380-A677-8BBCE2CA96B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3075B73-A8BD-4380-A677-8BBCE2CA96B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3075B73-A8BD-4380-A677-8BBCE2CA96B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

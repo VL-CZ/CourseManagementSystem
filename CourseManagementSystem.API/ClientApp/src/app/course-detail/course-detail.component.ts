@@ -3,6 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {CourseService} from '../course.service';
 import {RoleAuthService} from '../role-auth.service';
 import {PeopleService} from '../people.service';
+import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
 
 @Component({
   selector: 'app-course-detail',
@@ -10,7 +11,7 @@ import {PeopleService} from '../people.service';
   styleUrls: ['./course-detail.component.css']
 })
 export class CourseDetailComponent implements OnInit {
-  private currentCourseMemberId: string;
+  public currentCourseMemberId: string;
 
   private readonly courseService: CourseService;
 
@@ -18,7 +19,7 @@ export class CourseDetailComponent implements OnInit {
   public courseId: string;
 
   constructor(route: ActivatedRoute, courseService: CourseService, roleAuthService: RoleAuthService, peopleService: PeopleService) {
-    this.courseId = route.snapshot.paramMap.get('id');
+    this.courseId = ActivatedRouteUtils.getIdParam(route);
     this.courseService = courseService;
 
     roleAuthService.isAdmin().subscribe(result => {

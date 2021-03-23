@@ -1,0 +1,13 @@
+<div class="jumbotron">
+  <h2>{{this.testSubmission.testTopic}}</h2>
+</div>
+<div class="jumbotron" *ngFor="let answer of this.testSubmission.answers">
+  <h3>Question {{answer.questionNumber}}</h3>
+  <div class="form-group">
+    <div>{{answer.questionText}}</div>
+    <label for="answerText{{answer.questionNumber}}">Answer text</label>
+    <input type="text" class="form-control" id="answerText{{answer.questionNumber}}"
+           [(ngModel)]="answer.answerText" name="answerText{{answer.questionNumber}}">
+  </div>
+</div>
+<button type="button" class="btn btn-success" (click)="submit()">Submit</button>

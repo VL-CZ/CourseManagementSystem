@@ -49,6 +49,10 @@ namespace CourseManagementSystem.API
 
             services.AddTransient<ICourseMemberService, CourseMemberService>();
             services.AddTransient<IFileService, FileService>();
+            services.AddTransient<ICourseTestService, CourseTestService>();
+            services.AddTransient<ITestSubmissionService, TestSubmissionService>();
+
+            services.AddTransient<ITestSubmissionEvaluator, TestSubmissionEvaluator>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }

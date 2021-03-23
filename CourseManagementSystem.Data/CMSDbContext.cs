@@ -13,6 +13,7 @@ namespace CourseManagementSystem.Data
 {
     public class CMSDbContext : ApiAuthorizationDbContext<Person>
     {
+
         public CMSDbContext(
             DbContextOptions options,
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
@@ -27,5 +28,12 @@ namespace CourseManagementSystem.Data
 
         public DbSet<CourseFile> Files { get; set; }
 
+        public DbSet<CourseTest> CourseTests { get; set; }
+
+        public DbSet<TestQuestion> TestQuestions { get; set; }
+
+        public DbSet<TestSubmission> TestSubmissions { get; set; }
+
+        public DbSet<TestSubmissionAnswer> TestSubmissionAnswers { get; set; }
     }
 }

@@ -10,6 +10,7 @@ namespace CourseManagementSystem.Data.Models
         public CourseMember()
         {
             Grades = new List<Grade>();
+            TestSubmissions = new List<TestSubmission>();
         }
 
         [Key]
@@ -29,6 +30,11 @@ namespace CourseManagementSystem.Data.Models
         /// list of grades
         /// </summary>
         public ICollection<Grade> Grades { get; set; }
+
+        /// <summary>
+        /// tests submitted by this user
+        /// </summary>
+        public ICollection<TestSubmission> TestSubmissions { get; set; }
 
         /// <summary>
         /// add new grade to this course membership

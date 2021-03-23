@@ -9,22 +9,23 @@ import {PersonIdVM} from './viewmodels/student';
   providedIn: 'root'
 })
 export class RoleAuthService extends ApiService {
+  private static controllerName = 'auth';
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    super(http, baseUrl);
+    super(http, baseUrl, RoleAuthService.controllerName);
   }
 
   /**
    * is the currently logged-in user admin?
    */
   public isAdmin(): Observable<IsAdminVM> {
-    return this.http.get<IsAdminVM>(this.baseUrl + 'api/people/isAdmin');
+    return this.http.get<IsAdminVM>(this.controllerUrl + 'isAdmin');
   }
 
   /**
    * get id of currently logged-in user
    */
   public getCurrentUserId(): Observable<PersonIdVM> {
-    return this.http.get<PersonIdVM>(this.baseUrl + 'api/people/getId');
+    return this.http.get<PersonIdVM>(this.controllerUrl + 'getId');
   }
 }

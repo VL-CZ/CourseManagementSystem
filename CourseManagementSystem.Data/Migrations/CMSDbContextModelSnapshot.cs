@@ -89,9 +89,32 @@ namespace CourseManagementSystem.Data.Migrations
                     b.ToTable("CourseMembers");
                 });
 
+            modelBuilder.Entity("CourseManagementSystem.Data.Models.CourseTest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Topic")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Weight")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("CourseTests");
+                });
+
             modelBuilder.Entity("CourseManagementSystem.Data.Models.Grade", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -102,14 +125,17 @@ namespace CourseManagementSystem.Data.Migrations
                     b.Property<int?>("CourseMemberId")
                         .HasColumnType("int");
 
+                    b.Property<double>("PercentualValue")
+                        .HasColumnType("float");
+
                     b.Property<string>("Topic")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Value")
+                    b.Property<int>("Weight")
                         .HasColumnType("int");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.HasIndex("CourseMemberId");
 
@@ -179,6 +205,88 @@ namespace CourseManagementSystem.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("CourseManagementSystem.Data.Models.TestQuestion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CorrectAnswer")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CourseTestId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
+
+                    b.Property<string>("QuestionText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseTestId");
+
+                    b.ToTable("TestQuestions");
+                });
+
+            modelBuilder.Entity("CourseManagementSystem.Data.Models.TestSubmission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TestId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("TestId");
+
+                    b.ToTable("TestSubmissions");
+                });
+
+            modelBuilder.Entity("CourseManagementSystem.Data.Models.TestSubmissionAnswer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TestSubmissionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("TestSubmissionId");
+
+                    b.ToTable("TestSubmissionAnswers");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.DeviceFlowCodes", b =>
@@ -425,11 +533,53 @@ namespace CourseManagementSystem.Data.Migrations
                         .HasForeignKey("UserId");
                 });
 
+            modelBuilder.Entity("CourseManagementSystem.Data.Models.CourseTest", b =>
+                {
+                    b.HasOne("CourseManagementSystem.Data.Models.Course", "Course")
+                        .WithMany("Tests")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("CourseManagementSystem.Data.Models.Grade", b =>
                 {
                     b.HasOne("CourseManagementSystem.Data.Models.CourseMember", null)
                         .WithMany("Grades")
                         .HasForeignKey("CourseMemberId");
+                });
+
+            modelBuilder.Entity("CourseManagementSystem.Data.Models.TestQuestion", b =>
+                {
+                    b.HasOne("CourseManagementSystem.Data.Models.CourseTest", null)
+                        .WithMany("Questions")
+                        .HasForeignKey("CourseTestId");
+                });
+
+            modelBuilder.Entity("CourseManagementSystem.Data.Models.TestSubmission", b =>
+                {
+                    b.HasOne("CourseManagementSystem.Data.Models.CourseMember", "Student")
+                        .WithMany("TestSubmissions")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CourseManagementSystem.Data.Models.CourseTest", "Test")
+                        .WithMany("Submissions")
+                        .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CourseManagementSystem.Data.Models.TestSubmissionAnswer", b =>
+                {
+                    b.HasOne("CourseManagementSystem.Data.Models.TestQuestion", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId");
+
+                    b.HasOne("CourseManagementSystem.Data.Models.TestSubmission", null)
+                        .WithMany("Answers")
+                        .HasForeignKey("TestSubmissionId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -8,14 +8,19 @@ import {AppComponent} from './app.component';
 import {NavMenuComponent} from './nav-menu/nav-menu.component';
 import {HomeComponent} from './home/home.component';
 import {ApiAuthorizationModule} from 'src/api-authorization/api-authorization.module';
-import {AuthorizeGuard} from 'src/api-authorization/authorize.guard';
 import {AuthorizeInterceptor} from 'src/api-authorization/authorize.interceptor';
 import {GradeListComponent} from './grade-list/grade-list.component';
 import {StudentListComponent} from './student-list/student-list.component';
 import {StudentDetailComponent} from './student-detail/student-detail.component';
 import {FileListComponent} from './file-list/file-list.component';
 import {CourseListComponent} from './course-list/course-list.component';
-import { CourseDetailComponent } from './course-detail/course-detail.component';
+import {CourseDetailComponent} from './course-detail/course-detail.component';
+import {TestDetailComponent} from './test-detail/test-detail.component';
+import {TestListComponent} from './test-list/test-list.component';
+import {TestCreateComponent} from './test-create/test-create.component';
+import {TestSubmitComponent} from './test-submit/test-submit.component';
+import {TestSubmissionReviewComponent} from './test-submission-review/test-submission-review.component';
+import { TestSubmissionListComponent } from './test-submission-list/test-submission-list.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +32,13 @@ import { CourseDetailComponent } from './course-detail/course-detail.component';
     StudentDetailComponent,
     FileListComponent,
     CourseListComponent,
-    CourseDetailComponent
+    CourseDetailComponent,
+    TestDetailComponent,
+    TestListComponent,
+    TestCreateComponent,
+    TestSubmitComponent,
+    TestSubmissionReviewComponent,
+    TestSubmissionListComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -39,7 +50,11 @@ import { CourseDetailComponent } from './course-detail/course-detail.component';
       {path: 'grades', component: GradeListComponent},
       {path: 'students/:id', component: StudentDetailComponent},
       {path: 'courses', component: CourseListComponent},
-      {path: 'courses/:id', component: CourseDetailComponent}
+      {path: 'courses/:id', component: CourseDetailComponent},
+      {path: 'tests/:id', component: TestDetailComponent},
+      {path: 'tests/create/:id', component: TestCreateComponent},
+      {path: 'tests/submit/:id', component: TestSubmitComponent},
+      {path: 'submissions/:id', component: TestSubmissionReviewComponent}
     ])
   ],
   providers: [
