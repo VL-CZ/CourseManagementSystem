@@ -1,25 +1,10 @@
 ﻿namespace CourseManagementSystem.API.ViewModels
 {
     /// <summary>
-    /// class representing grade with its details
+    /// viewmodel for adding new grade
     /// </summary>
-    public class GradeDetailsVM
+    public class AddGradeVM
     {
-
-        public GradeDetailsVM(int id, double percentualValue, string topic, string comment, int weight)
-        {
-            Id = id;
-            PercentualValue = percentualValue;
-            Topic = topic;
-            Comment = comment;
-            Weight = weight;
-        }
-
-        /// <summary>
-        /// identifier of the grade
-        /// </summary>
-        public int Id { get; set; }
-
         /// <summary>
         /// percentual value of the grade (0=0%, 1=100%, may be greater than 1 in case of bonus points)
         /// </summary>
