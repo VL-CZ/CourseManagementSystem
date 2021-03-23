@@ -20,6 +20,7 @@ import {TestListComponent} from './test-list/test-list.component';
 import {TestCreateComponent} from './test-create/test-create.component';
 import {TestSubmitComponent} from './test-submit/test-submit.component';
 import {TestSubmissionReviewComponent} from './test-submission-review/test-submission-review.component';
+import { TestSubmissionListComponent } from './test-submission-list/test-submission-list.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import {TestSubmissionReviewComponent} from './test-submission-review/test-submi
     TestListComponent,
     TestCreateComponent,
     TestSubmitComponent,
-    TestSubmissionReviewComponent
+    TestSubmissionReviewComponent,
+    TestSubmissionListComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),

@@ -18,12 +18,14 @@ export class SubmissionAnswerWithCorrectAnswerVM extends SubmissionAnswerVM {
   public correctAnswer: string;
   public receivedPoints: number;
   public maximalPoints: number;
+  public comment: string;
 
   constructor(questionNumber: number, questionText: string, answerText: string, correctAnswer: string,
-              receivedPoints: number, maximalPoints: number) {
+              receivedPoints: number, maximalPoints: number, comment: string) {
     super(questionNumber, questionText, answerText);
     this.correctAnswer = correctAnswer;
     this.receivedPoints = receivedPoints;
     this.maximalPoints = maximalPoints;
+    this.comment = comment;
   }
 }

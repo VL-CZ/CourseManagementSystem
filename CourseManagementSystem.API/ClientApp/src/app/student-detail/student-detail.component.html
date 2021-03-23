@@ -2,8 +2,19 @@
 
 <h3>Tests</h3>
 <table class="table table-striped table-responsive">
+  <tr>
+    <th>Topic</th>
+    <th>Score</th>
+    <th>Weight</th>
+  </tr>
   <tr *ngFor="let submission of testSubmissions">
-    <td><a routerLink="/submissions/{{submission.testSubmissionId}}">{{submission.testTopic}}</a></td>
+    <td>
+      <a routerLink="/submissions/{{submission.testSubmissionId}}">{{submission.testTopic}}</a>
+    </td>
+    <td>
+      <b>{{getPercentualScore(submission.percentualScore)}}%</b>
+    </td>
+    <td>{{submission.testWeight}}</td>
   </tr>
 </table>
 
@@ -11,13 +22,15 @@
 <table class="table table-striped table-responsive">
   <tr>
     <th>Topic</th>
-    <th>Value</th>
+    <th>Score</th>
+    <th>Weight</th>
     <th>Comment</th>
     <th *ngIf="isAdmin"></th>
   </tr>
   <tr *ngFor="let grade of student.grades">
     <td>{{grade.topic}}</td>
-    <td>{{grade.value}}</td>
+    <td><b>{{getPercentualScore(grade.percentualValue)}}%</b></td>
+    <td>{{grade.weight}}</td>
     <td>{{grade.comment}}</td>
     <td *ngIf="isAdmin">
       <button class="btn btn-danger" (click)="removeGrade(grade.id)">Remove</button>
@@ -34,9 +47,14 @@
                [(ngModel)]="newGrade.topic">
       </div>
       <div class="form-group col-md-2">
-        <label for="addGradeForm_Value">Value</label>
-        <input type="number" class="form-control" name="value" id="addGradeForm_Value" required
-               [(ngModel)]="newGrade.value">
+        <label for="addGradeForm_Value">Score in %</label>
+        <input type="number" min="0" class="form-control" name="value" id="addGradeForm_Value" required
+               [(ngModel)]="newGrade.percentualValue">
+      </div>
+      <div class="form-group col-md-2">
+        <label for="addGradeForm_Weight">Weight</label>
+        <input type="number" min="0" class="form-control" name="weight" id="addGradeForm_Weight" required
+               [(ngModel)]="newGrade.weight">
       </div>
       <div class="form-group col-md-6">
         <label for="addGradeForm_Comment">Comment</label>

@@ -1,4 +1,4 @@
-import {Grade} from './grade';
+import {GradeDetailsVM} from './gradeDetailsVM';
 
 export interface PersonIdVM {
   id: string;
@@ -10,5 +10,5 @@ export interface Person extends PersonIdVM {
 }
 
 export interface Student extends Person {
-  grades: Grade[];
+  grades: GradeDetailsVM[];
 }

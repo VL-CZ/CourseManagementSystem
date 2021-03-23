@@ -17,6 +17,11 @@ namespace CourseManagementSystem.Data.Models
         public string Topic { get; set; }
 
         /// <summary>
+        /// weight of the score from the test (e.g. test of weight 2 has twice bigger impact on overall score than test of weight 1)
+        /// </summary>
+        public int Weight { get; set; }
+
+        /// <summary>
         /// course that contains this test
         /// </summary>
         [Required]
@@ -38,10 +43,11 @@ namespace CourseManagementSystem.Data.Models
             Submissions = new List<TestSubmission>();
         }
 
-        public CourseTest(string topic, ICollection<TestQuestion> questions) : this()
+        public CourseTest(string topic, ICollection<TestQuestion> questions, int weight) : this()
         {
             Topic = topic;
             Questions = questions;
+            Weight = weight;
         }
 
         /// <summary>

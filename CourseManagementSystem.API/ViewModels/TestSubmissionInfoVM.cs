@@ -10,10 +10,12 @@ namespace CourseManagementSystem.API.ViewModels
     /// </summary>
     public class TestSubmissionInfoVM
     {
-        public TestSubmissionInfoVM(int testSubmissoinId, string testTopic)
+        public TestSubmissionInfoVM(int testSubmissoinId, string testTopic, int testWeight, double percentualScore)
         {
             TestSubmissionId = testSubmissoinId;
             TestTopic = testTopic;
+            TestWeight = testWeight;
+            PercentualScore = percentualScore;
         }
 
         /// <summary>
@@ -25,5 +27,15 @@ namespace CourseManagementSystem.API.ViewModels
         /// topic of the test
         /// </summary>
         public string TestTopic { get; set; }
+
+        /// <summary>
+        /// weight of the test
+        /// </summary>
+        public int TestWeight { get; set; }
+
+        /// <summary>
+        /// score from the test (in percents)
+        /// </summary>
+        public double PercentualScore { get; set; }
     }
 }

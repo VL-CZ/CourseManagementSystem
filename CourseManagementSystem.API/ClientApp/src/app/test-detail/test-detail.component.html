@@ -1,8 +1,12 @@
-<div>
-  <div class="jumbotron" *ngFor="let question of courseTest.questions">
-    <h2>Question {{question.number}}</h2>
-    <div>{{question.questionText}}</div>
-    <div>Correct answer: {{question.correctAnswer}}</div>
-    <div>Points: {{question.points}}</div>
-  </div>
+<div class="jumbotron">
+  <h2>{{courseTest.topic}}</h2>
+  <div>Weight: {{courseTest.weight}}</div>
 </div>
+<div class="jumbotron" *ngFor="let question of courseTest.questions">
+  <h3>Question {{question.number}}</h3>
+  <div>{{question.questionText}}</div>
+  <div>Correct answer: {{question.correctAnswer}}</div>
+  <div>Points: {{question.points}}</div>
+</div>
+
+<app-test-submission-list [testId]="courseTest.id"></app-test-submission-list>

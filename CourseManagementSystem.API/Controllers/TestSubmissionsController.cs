@@ -6,6 +6,7 @@ using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CourseManagementSystem.API.Controllers
@@ -80,9 +81,27 @@ namespace CourseManagementSystem.API.Controllers
         {
             TestSubmission submission = testSubmissionService.GetSubmissionById(testSubmissionId);
             var answersVM = submission.Answers.Select(a =>
-            new SubmissionAnswerWithCorrectAnswerVM(a.Question.Number, a.Question.QuestionText, a.Text, a.Question.CorrectAnswer, a.Points, a.Question.Points));
+            new SubmissionAnswerWithCorrectAnswerVM(a.Question.Number, a.Question.QuestionText, a.Text, a.Question.CorrectAnswer, a.Points, a.Question.Points, a.Comment));
 
             return new TestWithSubmissionVM(submission.Test.Id, submission.Test.Topic, submission.Id, answersVM);
+        }
+
+        /// <summary>
+        /// update test submission properties - points and comments
+        /// </summary>
+        /// <param name="testSubmissionId">id of the submission that is evaluated</param>
+        /// <param name="evaluatedTestSubmission">the evaluated test submission</param>
+        [HttpPut("{testSubmissionId}")]
+        public void UpdateTestSubmission(int testSubmissionId, EvaluatedTestSubmissionVM evaluatedTestSubmission)
+        {
+            TestSubmission submission = testSubmissionService.GetSubmissionById(testSubmissionId);
+            foreach (var evaluatedAnswer in evaluatedTestSubmission.EvaluatedAnswers)
+            {
+                var answer = testSubmissionService.GetAnswerByQuestionNumber(submission, evaluatedAnswer.QuestionNumber);
+                answer.Points = evaluatedAnswer.UpdatedPoints;
+                answer.Comment = evaluatedAnswer.UpdatedComment;
+            }
+            dbContext.SaveChanges();
         }
     }
 }

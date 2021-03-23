@@ -41,12 +41,13 @@ namespace CourseManagementSystem.API.ViewModels
     /// </summary>
     public class SubmissionAnswerWithCorrectAnswerVM : SubmissionAnswerVM
     {
-        public SubmissionAnswerWithCorrectAnswerVM(int questionNumber, string questionText, string answerText, string correctAnswer, int receivedPoints, int maximalPoints)
+        public SubmissionAnswerWithCorrectAnswerVM(int questionNumber, string questionText, string answerText, string correctAnswer, int receivedPoints, int maximalPoints, string comment)
             : base(questionNumber, questionText, answerText)
         {
             CorrectAnswer = correctAnswer;
             ReceivedPoints = receivedPoints;
             MaximalPoints = maximalPoints;
+            Comment = comment;
         }
 
         /// <summary>
@@ -63,5 +64,10 @@ namespace CourseManagementSystem.API.ViewModels
         /// maximal obtained points for the question
         /// </summary>
         public int MaximalPoints { get; }
+
+        /// <summary>
+        /// comment to the answer provided by teacher
+        /// </summary>
+        public string Comment { get; }
     }
 }

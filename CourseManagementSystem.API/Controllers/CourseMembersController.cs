@@ -2,10 +2,9 @@
 using CourseManagementSystem.API.ViewModels;
 using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
+using CourseManagementSystem.Services;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -41,7 +40,7 @@ namespace CourseManagementSystem.API.Controllers
                 Email = cm.User.Email,
                 Id = cm.User.Id,
                 Name = cm.User.UserName,
-                Grades = cm.Grades.Select(g => new GradeDetailsVM() { Id = g.ID, Comment = g.Comment, Topic = g.Topic, Value = g.Value })
+                Grades = cm.Grades.Select(g => new GradeDetailsVM(g.Id, g.PercentualValue, g.Topic, g.Comment, g.Weight))
             };
         }
 
@@ -55,11 +54,11 @@ namespace CourseManagementSystem.API.Controllers
         public GradeDetailsVM AssignGrade(int id, [FromBody] AddGradeVM g)
         {
             CourseMember cm = courseMemberService.GetMemberByID(id);
-            Grade grade = new Grade { Value = g.Value, Comment = g.Comment, Topic = g.Topic };
+            Grade grade = new Grade { PercentualValue = g.PercentualValue, Comment = g.Comment, Topic = g.Topic };
             cm.AssignGrade(grade);
             dbContext.SaveChanges();
 
-            return new GradeDetailsVM() { Id = grade.ID, Comment = grade.Comment, Value = grade.Value, Topic = grade.Topic };
+            return new GradeDetailsVM(grade.Id, grade.PercentualValue, grade.Topic, grade.Comment, grade.Weight);
         }
 
         /// <summary>
@@ -71,7 +70,7 @@ namespace CourseManagementSystem.API.Controllers
         public IEnumerable<TestSubmissionInfoVM> GetTestSubmissions(int id)
         {
             var userSubmissions = testSubmissionService.GetAllSubmissionsOfCourseMember(id);
-            return userSubmissions.Select(ts => new TestSubmissionInfoVM(ts.Id, ts.Test.Topic));
+            return userSubmissions.Select(ts => new TestSubmissionInfoVM(ts.Id, ts.Test.Topic, ts.Test.Weight, TestScoreCalculator.CalculateScore(ts)));
         }
     }
 }

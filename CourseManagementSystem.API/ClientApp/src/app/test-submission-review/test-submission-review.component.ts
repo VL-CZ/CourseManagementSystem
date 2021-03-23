@@ -1,9 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {TestSubmissionService} from '../test-submission.service';
 import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
 import {SubmissionAnswerWithCorrectAnswerVM, TestWithSubmissionVM} from '../viewmodels/testWithSubmissionVM';
 import {ArrayUtils} from '../utils/arrayUtils';
+import {PercentCalculator} from '../utils/percentCalculator';
+import {RoleAuthService} from '../role-auth.service';
+import {EvaluatedAnswerVM, EvaluatedTestSubmissionVM} from '../viewmodels/evaluatedTestSubmissionVM';
+import {RouterUtils} from '../utils/routerUtils';
 
 @Component({
   selector: 'app-test-submission-review',
@@ -12,11 +16,27 @@ import {ArrayUtils} from '../utils/arrayUtils';
 })
 export class TestSubmissionReviewComponent implements OnInit {
   public submission: TestWithSubmissionVM;
+  public evaluatedTestSubmission: EvaluatedTestSubmissionVM;
+  public isAdmin: boolean;
 
-  constructor(route: ActivatedRoute, testSubmissionService: TestSubmissionService) {
+  private testSubmissionService: TestSubmissionService;
+  private readonly router: Router;
+  private readonly route: ActivatedRoute;
+
+  constructor(route: ActivatedRoute, testSubmissionService: TestSubmissionService, roleAuthService: RoleAuthService, router: Router) {
+    this.testSubmissionService = testSubmissionService;
+    this.router = router;
+    this.route = route;
+
     const submissionId = ActivatedRouteUtils.getIdParam(route);
+
+    roleAuthService.isAdmin().subscribe(result => {
+      this.isAdmin = result.isAdmin;
+    });
+
     testSubmissionService.getSubmissionById(submissionId).subscribe(submission => {
       this.submission = submission;
+      this.evaluatedTestSubmission = EvaluatedTestSubmissionVM.createFrom(submission);
     });
   }
 
@@ -24,7 +44,7 @@ export class TestSubmissionReviewComponent implements OnInit {
   }
 
   public isCorrect(answer: SubmissionAnswerWithCorrectAnswerVM): boolean {
-    return answer.answerText === answer.correctAnswer;
+    return answer.receivedPoints >= answer.maximalPoints;
   }
 
   public getReceivedPoints(testSubmission: TestWithSubmissionVM): number {
@@ -36,7 +56,23 @@ export class TestSubmissionReviewComponent implements OnInit {
   }
 
   public getPercentualScore(testSubmission: TestWithSubmissionVM): number {
-    const percentualScore = this.getReceivedPoints(testSubmission) / this.getMaximalPoints(testSubmission) * 100;
-    return Math.round(percentualScore * 100) / 100; // round to 2 decimal places
+    const percentualScore = this.getReceivedPoints(testSubmission) / this.getMaximalPoints(testSubmission);
+    return PercentCalculator.doubleToPercent(percentualScore, 2);
   }
+
+  public getCorrespondingEvaluatedAnswer(answer: SubmissionAnswerWithCorrectAnswerVM): EvaluatedAnswerVM {
+    return this.evaluatedTestSubmission.evaluatedAnswers.find(ans => ans.questionNumber === answer.questionNumber);
+  }
+
+  public discardUpdates(): void {
+    this.evaluatedTestSubmission = EvaluatedTestSubmissionVM.createFrom(this.submission);
+  }
+
+  public saveUpdates(): void {
+    this.testSubmissionService.updateSubmission(this.submission.submissionId.toString(), this.evaluatedTestSubmission)
+      .subscribe(() => {
+        RouterUtils.reloadPage(this.router, this.route);
+      });
+  }
+
 }
