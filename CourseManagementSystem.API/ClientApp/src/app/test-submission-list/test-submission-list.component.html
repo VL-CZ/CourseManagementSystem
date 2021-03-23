@@ -1,0 +1,15 @@
+<div class="jumbotron">
+  <h3>Submitted solutions</h3>
+  <table class="table table-responsive">
+    <tr>
+      <th>User</th>
+      <th>Score</th>
+      <th></th>
+    </tr>
+    <tr *ngFor="let testInfo of this.submissionsInfo">
+      <td>{{testInfo.studentEmail}}</td>
+      <td><b>{{getPercentualScore(testInfo.percentualScore)}}%</b></td>
+      <td><a routerLink="/submissions/{{testInfo.testSubmissionId}}">Detail</a></td>
+    </tr>
+  </table>
+</div>
