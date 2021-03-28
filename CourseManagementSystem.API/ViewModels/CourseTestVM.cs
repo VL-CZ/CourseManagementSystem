@@ -12,7 +12,7 @@ namespace CourseManagementSystem.API.ViewModels
         {
         }
 
-        public CourseTestVM(int id, string topic, int scoreWeight, ICollection<TestQuestion> questions)
+        public CourseTestVM(int id, string topic, int scoreWeight, IEnumerable<TestQuestionVM> questions)
         {
             Id = id;
             Topic = topic;
@@ -38,6 +38,6 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// questions in this test
         /// </summary>
-        public ICollection<TestQuestion> Questions { get; set; }
+        public IEnumerable<TestQuestionVM> Questions { get; set; }
     }
 }

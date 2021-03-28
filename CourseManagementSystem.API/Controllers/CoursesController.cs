@@ -1,4 +1,4 @@
-﻿using CourseManagementSystem.API.Services;
+﻿using CourseManagementSystem.API.Extensions;
 using CourseManagementSystem.API.ViewModels;
 using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 
 namespace CourseManagementSystem.API.Controllers
 {
@@ -83,7 +82,7 @@ namespace CourseManagementSystem.API.Controllers
         public IEnumerable<CourseTestVM> GetAllTests(int id)
         {
             var courseTests = dbContext.Courses.Include(course => course.Tests).Single(x => x.Id == id).Tests;
-            return courseTests.Select(ct => new CourseTestVM(ct.Id, ct.Topic, ct.Weight, ct.Questions));
+            return courseTests.Select(ct => new CourseTestVM(ct.Id, ct.Topic, ct.Weight, ct.Questions.ToViewModels()));
         }
     }
 }

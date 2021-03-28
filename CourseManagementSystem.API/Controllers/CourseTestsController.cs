@@ -1,4 +1,5 @@
-﻿using CourseManagementSystem.API.ViewModels;
+﻿using CourseManagementSystem.API.Extensions;
+using CourseManagementSystem.API.ViewModels;
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services;
 using CourseManagementSystem.Services.Interfaces;
@@ -29,7 +30,8 @@ namespace CourseManagementSystem.API.Controllers
         [HttpPost("{courseId}")]
         public void Add(CourseTestVM testToAdd, int courseId)
         {
-            var test = new CourseTest(testToAdd.Topic, testToAdd.Questions, testToAdd.Weight);
+            var mappedQuestions = testToAdd.Questions.Select(q => new TestQuestion(q.Number, q.QuestionText, q.CorrectAnswer, q.Points));
+            var test = new CourseTest(testToAdd.Topic, mappedQuestions.ToList(), testToAdd.Weight);
             courseTestService.AddToCourse(test, courseId);
         }
 
@@ -52,7 +54,7 @@ namespace CourseManagementSystem.API.Controllers
         public CourseTestVM Get(int id)
         {
             var test = courseTestService.GetById(id);
-            return new CourseTestVM(id, test.Topic, test.Weight, test.Questions);
+            return new CourseTestVM(id, test.Topic, test.Weight, test.Questions.ToViewModels());
         }
 
         /// <summary>

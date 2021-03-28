@@ -1,4 +1,4 @@
-export class TestQuestion {
+export class TestQuestionVM {
   id: number;
   number: number;
   questionText: string;

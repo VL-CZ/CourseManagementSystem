@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CourseTestService} from '../course-test.service';
 import {CourseTestVM} from '../viewmodels/courseTestVM';
-import { TestQuestion } from '../viewmodels/testQuestion';
+import { TestQuestionVM } from '../viewmodels/testQuestionVM';
 import { ArrayUtils } from '../utils/arrayUtils';
 import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
 
@@ -38,13 +38,13 @@ export class TestCreateComponent implements OnInit {
 
   public updateQuestionCount(): void {
     const questions = this.testToCreate.questions;
-    const instance = new TestQuestion();
-    ArrayUtils.resize<TestQuestion>(questions, this.questionCount, instance);
+    const instance = new TestQuestionVM();
+    ArrayUtils.resize<TestQuestionVM>(questions, this.questionCount, instance);
 
     this.setQuestionNumbers(questions);
   }
 
-  private setQuestionNumbers(questions: TestQuestion[]): void {
+  private setQuestionNumbers(questions: TestQuestionVM[]): void {
     for (let i = 0; i < questions.length; i++) {
       const questionNumber = i + 1;
       questions[i].number = questionNumber;
