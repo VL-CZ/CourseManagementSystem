@@ -1,5 +1,8 @@
 ﻿namespace CourseManagementSystem.API.ViewModels
 {
+    /// <summary>
+    /// viewmodel representing a question in a test
+    /// </summary>
     public class TestQuestionVM
     {
         public TestQuestionVM()

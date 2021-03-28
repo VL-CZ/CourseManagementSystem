@@ -1,14 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace CourseManagementSystem.API.ViewModels
 {
+    /// <summary>
+    /// viewmodel representing user of the app
+    /// </summary>
     public class PersonVM
     {
+        /// <summary>
+        /// identifier of the person
+        /// </summary>
         public string Id { get; set; }
+
+        /// <summary>
+        /// name of the person
+        /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// email of the person
+        /// </summary>
         public string Email { get; set; }
     }
 

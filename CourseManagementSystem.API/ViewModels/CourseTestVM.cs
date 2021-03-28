@@ -1,17 +1,12 @@
-﻿using CourseManagementSystem.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace CourseManagementSystem.API.ViewModels
 {
+    /// <summary>
+    /// viewmodel representing a test in a course
+    /// </summary>
     public class CourseTestVM
     {
-        public CourseTestVM()
-        {
-        }
-
         public CourseTestVM(int id, string topic, int scoreWeight, IEnumerable<TestQuestionVM> questions)
         {
             Id = id;
