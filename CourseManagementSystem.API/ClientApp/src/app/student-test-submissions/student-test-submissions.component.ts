@@ -14,13 +14,16 @@ export class StudentTestSubmissionsComponent implements OnInit {
   private userId: string;
   public testSubmissions: TestSubmissionInfoVM[] = [];
 
+  private courseMemberService: CourseMemberService;
+
   constructor(courseMemberService: CourseMemberService) {
-    courseMemberService.getTestSubmissions(this.userId).subscribe(submissions => {
-      this.testSubmissions = submissions;
-    });
+    this.courseMemberService = courseMemberService;
   }
 
   ngOnInit() {
+    this.courseMemberService.getTestSubmissions(this.userId).subscribe(submissions => {
+      this.testSubmissions = submissions;
+    });
   }
 
   public getPercentualScore(doubleValue: number) {

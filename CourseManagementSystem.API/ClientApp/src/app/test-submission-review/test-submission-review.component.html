@@ -30,7 +30,7 @@
   </div>
 </div>
 
-<div>
+<div *ngIf="isAdmin">
   <button type="button" class="btn btn-success" (click)="saveUpdates()">Apply updates</button>
   <button type="button" class="btn btn-danger" (click)="discardUpdates()">Discard updates</button>
 </div>

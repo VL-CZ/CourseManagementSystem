@@ -14,13 +14,11 @@ namespace CourseManagementSystem.API.Controllers
     [ApiController]
     public class CourseMembersController : ControllerBase
     {
-        private readonly CMSDbContext dbContext;
         private readonly ICourseMemberService courseMemberService;
         private readonly ITestSubmissionService testSubmissionService;
 
-        public CourseMembersController(CMSDbContext dbContext, ICourseMemberService courseMemberService, ITestSubmissionService testSubmissionService)
+        public CourseMembersController(ICourseMemberService courseMemberService, ITestSubmissionService testSubmissionService)
         {
-            this.dbContext = dbContext;
             this.courseMemberService = courseMemberService;
             this.testSubmissionService = testSubmissionService;
         }

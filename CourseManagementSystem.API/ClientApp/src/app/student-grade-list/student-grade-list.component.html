@@ -1,19 +1,21 @@
-<h3>Grades</h3>
-<table class="table table-striped table-responsive">
-  <tr>
-    <th>Topic</th>
-    <th>Score</th>
-    <th>Weight</th>
-    <th>Comment</th>
-    <th *ngIf="isAdmin"></th>
-  </tr>
-  <tr *ngFor="let grade of grades">
-    <td>{{grade.topic}}</td>
-    <td><b>{{getPercentualScore(grade.percentualValue)}}%</b></td>
-    <td>{{grade.weight}}</td>
-    <td>{{grade.comment}}</td>
-    <td *ngIf="isAdmin">
-      <button class="btn btn-danger" (click)="removeGrade(grade.id)">Remove</button>
-    </td>
-  </tr>
-</table>
+<div class="jumbotron">
+  <h3>Grades</h3>
+  <table class="table table-striped table-responsive">
+    <tr>
+      <th>Topic</th>
+      <th>Score</th>
+      <th>Weight</th>
+      <th>Comment</th>
+      <th *ngIf="isAdmin"></th>
+    </tr>
+    <tr *ngFor="let grade of grades">
+      <td>{{grade.topic}}</td>
+      <td><b>{{getPercentualScore(grade.percentualValue)}}%</b></td>
+      <td>{{grade.weight}}</td>
+      <td>{{grade.comment}}</td>
+      <td *ngIf="isAdmin">
+        <button class="btn btn-danger" (click)="removeGrade(grade.id)">Remove</button>
+      </td>
+    </tr>
+  </table>
+</div>

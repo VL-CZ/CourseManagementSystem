@@ -21,26 +21,22 @@ export class StudentGradeListComponent implements OnInit {
 
   public grades: GradeDetailsVM[] = [];
   private gradeService: GradeService;
-  private readonly router: Router;
-  private readonly activatedRoute: ActivatedRoute;
+  private courseMemberService: CourseMemberService;
 
-  constructor(gradeService: GradeService, router: Router, activatedRoute: ActivatedRoute, courseMemberService: CourseMemberService) {
+  constructor(gradeService: GradeService, courseMemberService: CourseMemberService) {
     this.gradeService = gradeService;
-    this.activatedRoute = activatedRoute;
-    this.router = router;
+    this.courseMemberService = courseMemberService;
+  }
 
-    courseMemberService.getGrades(this.userId).subscribe(grades => {
+  ngOnInit() {
+    this.courseMemberService.getGrades(this.userId).subscribe(grades => {
       this.grades = grades;
     });
   }
 
-  ngOnInit() {
-  }
-
   public removeGrade(gradeId: number): void {
-    this.gradeService.delete(gradeId).subscribe(() => {
-      RouterUtils.reloadPage(this.router, this.activatedRoute);
-    });
+    this.gradeService.delete(gradeId).subscribe();
+    this.grades = this.grades.filter(grade => grade.id !== gradeId);
   }
 
   public getPercentualScore(doubleValue: number) {

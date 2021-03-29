@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {CourseMemberVM, Student} from '../viewmodels/courseMemberVM';
+import {CourseMemberVM} from '../viewmodels/courseMemberVM';
 import {RoleAuthService} from '../role-auth.service';
 import {CourseService} from '../course.service';
 
