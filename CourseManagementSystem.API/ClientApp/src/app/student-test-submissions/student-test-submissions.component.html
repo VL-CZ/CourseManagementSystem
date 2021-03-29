@@ -1,0 +1,19 @@
+<div class="jumbotron">
+  <h3>Tests</h3>
+  <table class="table table-striped table-responsive">
+    <tr>
+      <th>Topic</th>
+      <th>Score</th>
+      <th>Weight</th>
+    </tr>
+    <tr *ngFor="let submission of testSubmissions">
+      <td>
+        <a routerLink="/submissions/{{submission.testSubmissionId}}">{{submission.testTopic}}</a>
+      </td>
+      <td>
+        <b>{{getPercentualScore(submission.percentualScore)}}%</b>
+      </td>
+      <td>{{submission.testWeight}}</td>
+    </tr>
+  </table>
+</div>

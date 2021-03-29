@@ -22,6 +22,7 @@ import {TestSubmitComponent} from './test-submit/test-submit.component';
 import {TestSubmissionReviewComponent} from './test-submission-review/test-submission-review.component';
 import { TestSubmissionListComponent } from './test-submission-list/test-submission-list.component';
 import { AddGradeComponent } from './add-grade/add-grade.component';
+import { StudentTestSubmissionsComponent } from './student-test-submissions/student-test-submissions.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { AddGradeComponent } from './add-grade/add-grade.component';
     TestSubmitComponent,
     TestSubmissionReviewComponent,
     TestSubmissionListComponent,
-    AddGradeComponent
+    AddGradeComponent,
+    StudentTestSubmissionsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),

@@ -1,11 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Student} from '../viewmodels/student';
 import {ActivatedRoute} from '@angular/router';
-import {AddGradeVM} from '../viewmodels/addGradeVM';
 import {CourseMemberService} from '../course-member.service';
 import {GradeService} from '../grade.service';
 import {RoleAuthService} from '../role-auth.service';
-import {TestSubmissionInfoVM} from '../viewmodels/testSubmisionInfoVM';
 import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
 import {PercentCalculator} from '../utils/percentCalculator';
 
@@ -15,28 +13,20 @@ import {PercentCalculator} from '../utils/percentCalculator';
   styleUrls: ['./student-detail.component.css']
 })
 export class StudentDetailComponent implements OnInit {
-
-  private courseMemberService: CourseMemberService;
   private gradeService: GradeService;
 
   public readonly userId: string;
   public isAdmin: boolean;
   public student: Student;
-  public testSubmissions: TestSubmissionInfoVM[];
 
   constructor(route: ActivatedRoute, courseMemberService: CourseMemberService,
               gradeService: GradeService, roleAuthService: RoleAuthService) {
-    this.courseMemberService = courseMemberService;
     this.gradeService = gradeService;
 
     this.userId = ActivatedRouteUtils.getIdParam(route);
 
-    this.courseMemberService.getById(this.userId).subscribe(result => {
+    courseMemberService.getById(this.userId).subscribe(result => {
       this.student = result;
-    });
-
-    this.courseMemberService.getTestSubmissions(this.userId).subscribe(submissions => {
-      this.testSubmissions = submissions;
     });
 
     roleAuthService.isAdmin().subscribe(result => {
