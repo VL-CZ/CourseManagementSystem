@@ -54,7 +54,7 @@ namespace CourseManagementSystem.API.Controllers
         public GradeDetailsVM AssignGrade(int id, [FromBody] AddGradeVM g)
         {
             CourseMember cm = courseMemberService.GetMemberByID(id);
-            Grade grade = new Grade { PercentualValue = g.PercentualValue, Comment = g.Comment, Topic = g.Topic };
+            Grade grade = new Grade(g.PercentualValue, g.Comment, g.Topic, g.Weight);
             cm.AssignGrade(grade);
             dbContext.SaveChanges();
 

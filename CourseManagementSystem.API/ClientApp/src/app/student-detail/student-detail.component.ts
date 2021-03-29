@@ -16,14 +16,13 @@ import {PercentCalculator} from '../utils/percentCalculator';
 })
 export class StudentDetailComponent implements OnInit {
 
-  private userId: string;
   private courseMemberService: CourseMemberService;
   private gradeService: GradeService;
 
+  public readonly userId: string;
   public isAdmin: boolean;
   public student: Student;
   public testSubmissions: TestSubmissionInfoVM[];
-  public newGrade: AddGradeVM;
 
   constructor(route: ActivatedRoute, courseMemberService: CourseMemberService,
               gradeService: GradeService, roleAuthService: RoleAuthService) {
@@ -31,7 +30,6 @@ export class StudentDetailComponent implements OnInit {
     this.gradeService = gradeService;
 
     this.userId = ActivatedRouteUtils.getIdParam(route);
-    this.newGrade = new AddGradeVM();
 
     this.courseMemberService.getById(this.userId).subscribe(result => {
       this.student = result;
@@ -47,18 +45,6 @@ export class StudentDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-  }
-
-  public addGrade(): void {
-    // divide percents by 100 -> get double
-    this.newGrade.percentualValue = PercentCalculator.percentToDouble(this.newGrade.percentualValue);
-
-    this.courseMemberService.assignGrade(this.userId, this.newGrade).subscribe(
-      result => {
-        this.student.grades.push(result);
-      });
-
-    this.newGrade = new AddGradeVM();
   }
 
   public removeGrade(gradeID: number): void {
