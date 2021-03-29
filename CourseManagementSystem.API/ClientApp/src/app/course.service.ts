@@ -4,7 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {CourseInfoVM} from './viewmodels/courseInfoVM';
 import {AddCourseVM} from './viewmodels/addCourseVM';
-import {Person} from './viewmodels/student';
+import {CourseMemberVM} from './viewmodels/courseMemberVM';
 import {FileVM} from './viewmodels/fileVM';
 import {CourseTestVM} from './viewmodels/courseTestVM';
 
@@ -38,8 +38,8 @@ export class CourseService extends ApiService {
    * get all members of this course
    * @param courseId
    */
-  public getAllMembers(courseId: string): Observable<Person[]> {
-    return this.http.get<Person[]>(this.controllerUrl + `${courseId}/members`);
+  public getAllMembers(courseId: string): Observable<CourseMemberVM[]> {
+    return this.http.get<CourseMemberVM[]>(this.controllerUrl + `${courseId}/members`);
   }
 
   /**

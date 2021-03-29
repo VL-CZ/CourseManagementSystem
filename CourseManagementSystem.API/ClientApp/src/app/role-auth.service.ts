@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {ApiService} from './api.service';
 import {Observable} from 'rxjs';
 import {IsAdminVM} from './viewmodels/isAdminVM';
-import {PersonIdVM} from './viewmodels/student';
+import {PersonIdVM} from './viewmodels/courseMemberVM';
 
 @Injectable({
   providedIn: 'root'

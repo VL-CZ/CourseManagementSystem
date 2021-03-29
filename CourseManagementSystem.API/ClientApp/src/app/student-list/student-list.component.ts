@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Person, Student} from '../viewmodels/student';
+import {CourseMemberVM, Student} from '../viewmodels/courseMemberVM';
 import {RoleAuthService} from '../role-auth.service';
 import {CourseService} from '../course.service';
 
@@ -15,7 +15,7 @@ export class StudentListComponent implements OnInit {
 
   private readonly courseService: CourseService;
 
-  public people: Person[];
+  public people: CourseMemberVM[];
   public isAdmin: boolean;
 
   constructor(roleAuthService: RoleAuthService, courseService: CourseService) {

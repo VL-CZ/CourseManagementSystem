@@ -9,7 +9,7 @@ import {NavMenuComponent} from './nav-menu/nav-menu.component';
 import {HomeComponent} from './home/home.component';
 import {ApiAuthorizationModule} from 'src/api-authorization/api-authorization.module';
 import {AuthorizeInterceptor} from 'src/api-authorization/authorize.interceptor';
-import {GradeListComponent} from './grade-list/grade-list.component';
+import {StudentGradeListComponent} from './student-grade-list/student-grade-list.component';
 import {StudentListComponent} from './student-list/student-list.component';
 import {StudentDetailComponent} from './student-detail/student-detail.component';
 import {FileListComponent} from './file-list/file-list.component';
@@ -29,7 +29,7 @@ import { StudentTestSubmissionsComponent } from './student-test-submissions/stud
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    GradeListComponent,
+    StudentGradeListComponent,
     StudentListComponent,
     StudentDetailComponent,
     FileListComponent,
@@ -51,7 +51,6 @@ import { StudentTestSubmissionsComponent } from './student-test-submissions/stud
     ApiAuthorizationModule,
     RouterModule.forRoot([
       {path: '', component: HomeComponent, pathMatch: 'full'},
-      {path: 'grades', component: GradeListComponent},
       {path: 'students/:id', component: StudentDetailComponent},
       {path: 'courses', component: CourseListComponent},
       {path: 'courses/:id', component: CourseDetailComponent},

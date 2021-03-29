@@ -53,13 +53,13 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="id">Id of the course</param>
         [HttpGet("{id}/members")]
-        public IEnumerable<PersonVM> GetAllMembers(int id)
+        public IEnumerable<CourseMemberVM> GetAllMembers(int id)
         {
             var course = dbContext.Courses.Include(x => x.Members).Single(x => x.Id == id);
             var courseMemberIDs = course.Members.Select(x => x.Id);
             var people = dbContext.CourseMembers.Include(x => x.User).Where(cm => courseMemberIDs.Contains(cm.Id));
 
-            return people.Select(cm => new PersonVM() { Id = cm.Id.ToString(), Name = cm.User.UserName, Email = cm.User.Email });
+            return people.Select(cm => new CourseMemberVM(cm.Id.ToString(), cm.User.UserName, cm.User.Email));
         }
 
         /// <summary>

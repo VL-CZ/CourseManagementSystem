@@ -1,12 +1,17 @@
-﻿using System.Collections.Generic;
-
-namespace CourseManagementSystem.API.ViewModels
+﻿namespace CourseManagementSystem.API.ViewModels
 {
     /// <summary>
-    /// viewmodel representing user of the app
+    /// viewmodel representing member of a course
     /// </summary>
-    public class PersonVM
+    public class CourseMemberVM
     {
+        public CourseMemberVM(string id, string name, string email)
+        {
+            Id = id;
+            Name = name;
+            Email = email;
+        }
+
         /// <summary>
         /// identifier of the person
         /// </summary>
@@ -21,11 +26,6 @@ namespace CourseManagementSystem.API.ViewModels
         /// email of the person
         /// </summary>
         public string Email { get; set; }
-    }
-
-    public class StudentVM : PersonVM
-    {
-        public IEnumerable<GradeDetailsVM> Grades { get; set; }
     }
 
     public class PersonIdVM
