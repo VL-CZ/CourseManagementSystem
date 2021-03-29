@@ -35,14 +35,5 @@ namespace CourseManagementSystem.Data.Models
         /// tests submitted by this user
         /// </summary>
         public ICollection<TestSubmission> TestSubmissions { get; set; }
-
-        /// <summary>
-        /// add new grade to this course membership
-        /// </summary>
-        /// <param name="g"></param>
-        public void AssignGrade(Grade g)
-        {
-            Grades.Add(g);
-        }
     }
 }

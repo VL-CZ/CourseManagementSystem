@@ -16,6 +16,13 @@ namespace CourseManagementSystem.API.Services
         }
 
         /// <inheritdoc/>
+        public void AssignGrade(CourseMember courseMember, Grade grade)
+        {
+            courseMember.Grades.Add(grade);
+            dbContext.SaveChanges();
+        }
+
+        /// <inheritdoc/>
         public CourseMember GetMemberByID(int id)
         {
             return dbContext.CourseMembers.Include(cm => cm.User).Include(cm => cm.Grades).Single(x => x.Id == id);
