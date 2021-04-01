@@ -5,6 +5,8 @@
     /// </summary>
     public class CourseInfoVM
     {
+        public CourseInfoVM() { }
+
         public CourseInfoVM(int id, string name)
         {
             Id = id;

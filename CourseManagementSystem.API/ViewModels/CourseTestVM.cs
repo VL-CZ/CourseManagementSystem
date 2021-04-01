@@ -7,6 +7,8 @@ namespace CourseManagementSystem.API.ViewModels
     /// </summary>
     public class CourseTestVM
     {
+        public CourseTestVM() { }
+
         public CourseTestVM(int id, string topic, int scoreWeight, IEnumerable<TestQuestionVM> questions)
         {
             Id = id;

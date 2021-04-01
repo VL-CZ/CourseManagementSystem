@@ -5,6 +5,8 @@
     /// </summary>
     public class CourseMemberVM
     {
+        public CourseMemberVM() { }
+
         public CourseMemberVM(string id, string name, string email)
         {
             Id = id;

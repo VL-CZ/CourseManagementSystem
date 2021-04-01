@@ -7,6 +7,8 @@ namespace CourseManagementSystem.API.ViewModels
     /// </summary>
     public class TestWithSubmissionVM
     {
+        public TestWithSubmissionVM() { }
+
         public TestWithSubmissionVM(int testId, string testTopic, int submissionId, IEnumerable<SubmissionAnswerWithCorrectAnswerVM> answers)
         {
             TestId = testId;

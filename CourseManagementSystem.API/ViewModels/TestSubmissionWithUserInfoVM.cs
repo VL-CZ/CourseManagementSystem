@@ -5,6 +5,8 @@
     /// </summary>
     public class TestSubmissionWithUserInfoVM
     {
+        public TestSubmissionWithUserInfoVM() { }
+
         public TestSubmissionWithUserInfoVM(string studentEmail, int testSubmissionId, double percentualScore)
         {
             StudentEmail = studentEmail;

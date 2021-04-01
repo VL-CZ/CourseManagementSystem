@@ -5,6 +5,9 @@
     /// </summary>
     public class TestSubmissionInfoVM
     {
+        public TestSubmissionInfoVM()
+        { }
+
         public TestSubmissionInfoVM(int testSubmissionId, string testTopic, int testWeight, double percentualScore)
         {
             TestSubmissionId = testSubmissionId;
