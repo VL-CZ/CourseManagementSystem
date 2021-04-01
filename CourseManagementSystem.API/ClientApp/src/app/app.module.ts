@@ -3,6 +3,7 @@ import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
+import {ModalModule} from 'ngx-bootstrap/modal';
 
 import {AppComponent} from './app.component';
 import {NavMenuComponent} from './nav-menu/nav-menu.component';
@@ -20,9 +21,10 @@ import {TestListComponent} from './test-list/test-list.component';
 import {TestCreateComponent} from './test-create/test-create.component';
 import {TestSubmitComponent} from './test-submit/test-submit.component';
 import {TestSubmissionReviewComponent} from './test-submission-review/test-submission-review.component';
-import { TestSubmissionListComponent } from './test-submission-list/test-submission-list.component';
-import { AddGradeComponent } from './add-grade/add-grade.component';
-import { StudentTestSubmissionsComponent } from './student-test-submissions/student-test-submissions.component';
+import {TestSubmissionListComponent} from './test-submission-list/test-submission-list.component';
+import {AddGradeComponent} from './add-grade/add-grade.component';
+import {StudentTestSubmissionsComponent} from './student-test-submissions/student-test-submissions.component';
+import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,8 @@ import { StudentTestSubmissionsComponent } from './student-test-submissions/stud
     TestSubmissionReviewComponent,
     TestSubmissionListComponent,
     AddGradeComponent,
-    StudentTestSubmissionsComponent
+    StudentTestSubmissionsComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -58,7 +61,8 @@ import { StudentTestSubmissionsComponent } from './student-test-submissions/stud
       {path: 'tests/create/:id', component: TestCreateComponent},
       {path: 'tests/submit/:id', component: TestSubmitComponent},
       {path: 'submissions/:id', component: TestSubmissionReviewComponent}
-    ])
+    ]),
+    ModalModule.forRoot()
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true}

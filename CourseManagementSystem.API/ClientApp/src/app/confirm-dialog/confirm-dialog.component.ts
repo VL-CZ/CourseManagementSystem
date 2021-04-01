@@ -1,4 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, TemplateRef} from '@angular/core';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-confirm-dialog',
@@ -13,7 +14,15 @@ export class ConfirmDialogComponent implements OnInit {
   @Input()
   public text: string;
 
-  constructor() {
+  public modalRef: BsModalRef;
+  public modalService: BsModalService;
+
+  constructor(modalService: BsModalService) {
+    this.modalService = modalService;
+  }
+
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template);
   }
 
   ngOnInit() {
