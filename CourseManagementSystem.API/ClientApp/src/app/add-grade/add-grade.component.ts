@@ -5,6 +5,9 @@ import {CourseMemberService} from '../course-member.service';
 import {RouterUtils} from '../utils/routerUtils';
 import {ActivatedRoute, Router} from '@angular/router';
 
+/**
+ * component representing form for adding a new grade
+ */
 @Component({
   selector: 'app-add-grade',
   templateUrl: './add-grade.component.html',
@@ -12,17 +15,24 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class AddGradeComponent implements OnInit {
 
+  /**
+   * identifier of the course member
+   */
   @Input()
-  public userId: string;
+  public courseMemberId: string;
+
+  /**
+   * grade that we will add to the student
+   */
   public gradeToAdd: AddGradeVM;
 
   private readonly courseMemberService: CourseMemberService;
-  private readonly route: ActivatedRoute;
+  private readonly activatedRoute: ActivatedRoute;
   private readonly router: Router;
 
-  constructor(courseMemberService: CourseMemberService, route: ActivatedRoute, router: Router) {
+  constructor(courseMemberService: CourseMemberService, activatedRoute: ActivatedRoute, router: Router) {
     this.courseMemberService = courseMemberService;
-    this.route = route;
+    this.activatedRoute = activatedRoute;
     this.router = router;
     this.gradeToAdd = new AddGradeVM();
   }
@@ -30,15 +40,16 @@ export class AddGradeComponent implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * add the grade to the course member
+   */
   public addGrade(): void {
     // divide percents by 100 -> get double
     this.gradeToAdd.percentualValue = PercentCalculator.percentToDouble(this.gradeToAdd.percentualValue);
 
-    this.courseMemberService.assignGrade(this.userId, this.gradeToAdd).subscribe(
+    this.courseMemberService.assignGrade(this.courseMemberId, this.gradeToAdd).subscribe(
       result => {
-        RouterUtils.reloadPage(this.router, this.route);
+        RouterUtils.reloadPage(this.router, this.activatedRoute);
       });
-
-    this.gradeToAdd = new AddGradeVM();
   }
 }

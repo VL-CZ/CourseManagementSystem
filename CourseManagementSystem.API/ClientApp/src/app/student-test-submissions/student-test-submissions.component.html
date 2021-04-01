@@ -11,7 +11,7 @@
         <a routerLink="/submissions/{{submission.testSubmissionId}}">{{submission.testTopic}}</a>
       </td>
       <td>
-        <b>{{getPercentualScore(submission.percentualScore)}}%</b>
+        <b>{{getPercentString(submission.percentualScore)}}</b>
       </td>
       <td>{{submission.testWeight}}</td>
     </tr>

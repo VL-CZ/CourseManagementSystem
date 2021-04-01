@@ -5,10 +5,10 @@ export class CourseInfoVM {
   /**
    * id of the course
    */
-  id: number;
+  public id: number;
 
   /**
    * name of the course
    */
-  name: string;
+  public name: string;
 }

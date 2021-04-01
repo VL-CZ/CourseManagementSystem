@@ -5,22 +5,29 @@ export class TestSubmissionVM {
   /**
    * id of the test
    */
-  testId: number;
+  public testId: number;
 
   /**
    * topic of the test
    */
-  testTopic: string;
+  public testTopic: string;
 
   /**
    * answers to the test
    */
-  answers: SubmissionAnswerVM[];
+  public answers: SubmissionAnswerVM[];
 
   constructor(testId: number, testTopic: string) {
     this.testId = testId;
     this.testTopic = testTopic;
     this.answers = [];
+  }
+
+  /**
+   * get default instance of this class
+   */
+  public static getDefault(): TestSubmissionVM {
+    return new TestSubmissionVM(0, '');
   }
 }
 
@@ -31,17 +38,17 @@ export class SubmissionAnswerVM {
   /**
    * number of question that this answer belongs to
    */
-  questionNumber: number;
+  public questionNumber: number;
 
   /**
    * text provided to the question
    */
-  questionText: string;
+  public questionText: string;
 
   /**
    * answer to the question
    */
-  answerText: string;
+  public answerText: string;
 
   constructor(questionNumber: number, questionText: string, answerText: string) {
     this.questionNumber = questionNumber;

@@ -5,12 +5,12 @@ export class AddCourseVM {
   /**
    * name of the course
    */
-  name: string;
+  public name: string;
 
   /**
    * id of the course admin
    */
-  adminId: string;
+  public adminId: string;
 
   constructor() {
   }

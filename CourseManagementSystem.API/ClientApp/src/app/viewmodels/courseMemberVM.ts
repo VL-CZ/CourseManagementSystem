@@ -2,7 +2,7 @@ export class PersonIdVM {
   /**
    * identifier of the person
    */
-  id: string;
+  public id: string;
 }
 
 /**
@@ -12,10 +12,10 @@ export class CourseMemberVM extends PersonIdVM {
   /**
    * name of the person
    */
-  name: string;
+  public name: string;
 
   /**
    * user's email
    */
-  email: string;
+  public email: string;
 }

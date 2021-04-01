@@ -5,25 +5,25 @@ export class GradeDetailsVM {
   /**
    * id of the grade
    */
-  id: number;
+  public id: number;
 
   /**
    * percentual value of the grade (0=0%, 1=100%)
    */
-  percentualValue: number;
+  public percentualValue: number;
 
   /**
    * topic of the grade
    */
-  topic: string;
+  public topic: string;
 
   /**
    * comment to the grade provided by teacher
    */
-  comment: string;
+  public comment: string;
 
   /**
    * weight of the grade
    */
-  weight: number;
+  public weight: number;
 }

@@ -6,6 +6,9 @@ import { TestQuestionVM } from '../viewmodels/testQuestionVM';
 import { ArrayUtils } from '../utils/arrayUtils';
 import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
 
+/**
+ * component for creating a test
+ */
 @Component({
   selector: 'app-test-create',
   templateUrl: './test-create.component.html',
@@ -16,7 +19,14 @@ export class TestCreateComponent implements OnInit {
   private courseTestService: CourseTestService;
   private router: Router;
 
+  /**
+   * test that will be created
+   */
   public testToCreate: CourseTestVM;
+
+  /**
+   * number of questions in the test
+   */
   public questionCount = 0;
 
   constructor(route: ActivatedRoute, courseTestService: CourseTestService, router: Router) {
@@ -24,18 +34,24 @@ export class TestCreateComponent implements OnInit {
     this.courseTestService = courseTestService;
     this.router = router;
     this.testToCreate = new CourseTestVM();
-    this.testToCreate.questions = [];
   }
 
   ngOnInit() {
   }
 
+  /**
+   * create the test
+   */
   public createTest(): void {
     this.courseTestService.addToCourse(this.testToCreate, this.courseId).subscribe(() => {
       this.router.navigate(['/courses', this.courseId]);
     });
   }
 
+  /**
+   * update number of questions in the test
+   * @see questionCount
+   */
   public updateQuestionCount(): void {
     const questions = this.testToCreate.questions;
     const instance = new TestQuestionVM();
@@ -44,6 +60,11 @@ export class TestCreateComponent implements OnInit {
     this.setQuestionNumbers(questions);
   }
 
+  /**
+   * add numbers to questions
+   * @param questions
+   * @private
+   */
   private setQuestionNumbers(questions: TestQuestionVM[]): void {
     for (let i = 0; i < questions.length; i++) {
       const questionNumber = i + 1;

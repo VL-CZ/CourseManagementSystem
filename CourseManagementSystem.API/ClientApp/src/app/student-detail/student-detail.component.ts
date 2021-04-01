@@ -11,14 +11,25 @@ import {CourseMemberVM} from '../viewmodels/courseMemberVM';
   styleUrls: ['./student-detail.component.css']
 })
 export class StudentDetailComponent implements OnInit {
-  public readonly userId: string;
+  /**
+   * id of the current course member
+   */
+  public readonly courseMemberId: string;
+
+  /**
+   * is the current course member admin?
+   */
   public isAdmin: boolean;
-  public courseMemberVM: CourseMemberVM = new CourseMemberVM();
+
+  /**
+   * current course member
+   */
+  public courseMember: CourseMemberVM = new CourseMemberVM();
 
   constructor(route: ActivatedRoute, courseMemberService: CourseMemberService, roleAuthService: RoleAuthService) {
-    this.userId = ActivatedRouteUtils.getIdParam(route);
-    courseMemberService.getById(this.userId).subscribe(cm => {
-      this.courseMemberVM = cm;
+    this.courseMemberId = ActivatedRouteUtils.getIdParam(route);
+    courseMemberService.getById(this.courseMemberId).subscribe(cm => {
+      this.courseMember = cm;
     });
 
     roleAuthService.isAdmin().subscribe(result => {

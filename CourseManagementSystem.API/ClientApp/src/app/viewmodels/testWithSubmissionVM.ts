@@ -24,11 +24,18 @@ export class TestWithSubmissionVM {
    */
   public answers: SubmissionAnswerWithCorrectAnswerVM[];
 
-  constructor(testId: number, testTopic: string, submissionId: number, answers: SubmissionAnswerWithCorrectAnswerVM[]) {
+  constructor(testId: number, testTopic: string, submissionId: number, answers: SubmissionAnswerWithCorrectAnswerVM[] = []) {
     this.testId = testId;
     this.testTopic = testTopic;
     this.answers = answers;
     this.submissionId = submissionId;
+  }
+
+  /**
+   * get default instance of this class
+   */
+  public static getDefault(): TestWithSubmissionVM {
+    return new TestWithSubmissionVM(0, '', 0);
   }
 }
 

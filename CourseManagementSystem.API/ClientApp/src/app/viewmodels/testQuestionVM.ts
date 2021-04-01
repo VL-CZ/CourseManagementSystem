@@ -5,25 +5,25 @@ export class TestQuestionVM {
   /**
    * id of the question
    */
-  id: number;
+  public id: number;
 
   /**
    * question number
    */
-  number: number;
+  public number: number;
 
   /**
    * text to the question
    */
-  questionText: string;
+  public questionText: string;
 
   /**
    * correct answer to this question
    */
-  correctAnswer: string;
+  public correctAnswer: string;
 
   /**
    * maximal points for this question
    */
-  points: number;
+  public points: number;
 }

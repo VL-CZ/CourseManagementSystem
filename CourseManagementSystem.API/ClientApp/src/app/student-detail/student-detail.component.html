@@ -1,7 +1,7 @@
-<h2>Student: {{courseMemberVM.name}}</h2>
+<h2>Student: {{courseMember.name}}</h2>
 
-<app-student-test-submissions [userId]="userId"></app-student-test-submissions>
+<app-student-test-submissions [courseMemberId]="courseMemberId"></app-student-test-submissions>
 
-<app-student-grade-list [userId]="userId" [isAdmin]="isAdmin"></app-student-grade-list>
+<app-student-grade-list [courseMemberId]="courseMemberId" [isAdmin]="isAdmin"></app-student-grade-list>
 
-<app-add-grade *ngIf="isAdmin" [userId]="userId"></app-add-grade>
+<app-add-grade *ngIf="isAdmin" [courseMemberId]="courseMemberId"></app-add-grade>

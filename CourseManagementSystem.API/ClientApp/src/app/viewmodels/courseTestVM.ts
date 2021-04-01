@@ -7,20 +7,20 @@ export class CourseTestVM {
   /**
    * id of the test
    */
-  id: number;
+  public id: number;
 
   /**
    * topic of the test
    */
-  topic: string;
+  public topic: string;
 
   /**
    * weight of the test (the greater, the more important)
    */
-  weight: number;
+  public weight: number;
 
   /**
    * questions contained in this test
    */
-  questions: TestQuestionVM[];
+  public questions: TestQuestionVM[] = [];
 }

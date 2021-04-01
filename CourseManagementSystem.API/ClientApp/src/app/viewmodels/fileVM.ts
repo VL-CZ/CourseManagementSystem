@@ -5,10 +5,10 @@ export class FileVM {
   /**
    * id of the file
    */
-  id: number;
+  public id: number;
 
   /**
    * name of the file
    */
-  name: string;
+  public name: string;
 }
