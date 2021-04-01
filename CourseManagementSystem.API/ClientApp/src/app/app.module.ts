@@ -67,7 +67,8 @@ import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component'
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true}
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ConfirmDialogComponent]
 })
 export class AppModule {
 }

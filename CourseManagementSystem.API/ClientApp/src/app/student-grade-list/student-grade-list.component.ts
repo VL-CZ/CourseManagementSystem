@@ -3,6 +3,8 @@ import {PercentCalculator} from '../utils/percentCalculator';
 import {GradeService} from '../grade.service';
 import {GradeDetailsVM} from '../viewmodels/gradeDetailsVM';
 import {CourseMemberService} from '../course-member.service';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
 
 /**
  * component with list of student's grades
@@ -34,10 +36,13 @@ export class StudentGradeListComponent implements OnInit {
 
   private gradeService: GradeService;
   private courseMemberService: CourseMemberService;
+  private bsModalRef: BsModalRef;
+  private modalService: BsModalService;
 
-  constructor(gradeService: GradeService, courseMemberService: CourseMemberService) {
+  constructor(gradeService: GradeService, courseMemberService: CourseMemberService, modalService: BsModalService) {
     this.gradeService = gradeService;
     this.courseMemberService = courseMemberService;
+    this.modalService = modalService;
   }
 
   ngOnInit() {
@@ -51,8 +56,14 @@ export class StudentGradeListComponent implements OnInit {
    * @param gradeId identifier of the grade
    */
   public removeGrade(gradeId: number): void {
-    this.gradeService.delete(gradeId).subscribe();
-    this.grades = this.grades.filter(grade => grade.id !== gradeId);
+    // this.gradeService.delete(gradeId).subscribe();
+    // this.grades = this.grades.filter(grade => grade.id !== gradeId);
+
+    const initialState = {
+      title: 'Delete a grade',
+      text: 'Are you sure you want to delete this grade?'
+    };
+    this.bsModalRef = this.modalService.show(ConfirmDialogComponent, {initialState});
   }
 
   /**
