@@ -61,7 +61,11 @@ export class StudentGradeListComponent implements OnInit {
 
     const initialState = {
       title: 'Delete a grade',
-      text: 'Are you sure you want to delete this grade?'
+      text: 'Are you sure you want to delete this grade?',
+      onConfirm: () => {
+        this.gradeService.delete(gradeId).subscribe();
+        this.grades = this.grades.filter(grade => grade.id !== gradeId);
+      }
     };
     this.bsModalRef = this.modalService.show(ConfirmDialogComponent, {initialState});
   }

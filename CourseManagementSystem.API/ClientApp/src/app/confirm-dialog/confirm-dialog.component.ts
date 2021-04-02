@@ -10,6 +10,7 @@ export class ConfirmDialogComponent implements OnInit {
 
   public title: string;
   public text: string;
+  public onConfirm: () => void;
 
   public modalRef: BsModalRef;
 
@@ -20,4 +21,8 @@ export class ConfirmDialogComponent implements OnInit {
   ngOnInit() {
   }
 
+  public confirm(): void {
+    this.modalRef.hide();
+    this.onConfirm();
+  }
 }
