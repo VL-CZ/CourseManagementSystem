@@ -35,5 +35,7 @@ namespace CourseManagementSystem.Data
         public DbSet<TestSubmission> TestSubmissions { get; set; }
 
         public DbSet<TestSubmissionAnswer> TestSubmissionAnswers { get; set; }
+
+        public DbSet<ForumPost> Posts { get; set; }
     }
 }
