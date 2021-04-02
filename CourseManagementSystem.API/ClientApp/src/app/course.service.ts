@@ -7,6 +7,7 @@ import {AddCourseVM} from './viewmodels/addCourseVM';
 import {CourseMemberVM} from './viewmodels/courseMemberVM';
 import {FileVM} from './viewmodels/fileVM';
 import {CourseTestVM} from './viewmodels/courseTestVM';
+import {ForumPostVM} from './viewmodels/forumPostVM';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +29,7 @@ export class CourseService extends ApiService {
 
   /**
    * delete course by id
-   * @param id
+   * @param id identifier of the course
    */
   public delete(id: number): Observable<{}> {
     return this.http.delete(this.controllerUrl + id);
@@ -36,7 +37,7 @@ export class CourseService extends ApiService {
 
   /**
    * get all members of this course
-   * @param courseId
+   * @param courseId identifier of the course
    */
   public getAllMembers(courseId: string): Observable<CourseMemberVM[]> {
     return this.http.get<CourseMemberVM[]>(this.controllerUrl + `${courseId}/members`);
@@ -44,7 +45,7 @@ export class CourseService extends ApiService {
 
   /**
    * get all shared files in this this course
-   * @param courseId
+   * @param courseId identifier of the course
    */
   public getAllFiles(courseId: string): Observable<FileVM[]> {
     return this.http.get<FileVM[]>(this.controllerUrl + `${courseId}/files`);
@@ -52,9 +53,17 @@ export class CourseService extends ApiService {
 
   /**
    * get all tests in this course
-   * @param courseId
+   * @param courseId identifier of the course
    */
   public getAllTests(courseId: string): Observable<CourseTestVM[]> {
     return this.http.get<CourseTestVM[]>(this.controllerUrl + `${courseId}/tests`);
+  }
+
+  /**
+   * get all posts in this course
+   * @param courseId identifier of the course
+   */
+  public getAllPosts(courseId: string): Observable<ForumPostVM[]> {
+    return this.http.get<ForumPostVM[]>(this.controllerUrl + `${courseId}/posts`);
   }
 }

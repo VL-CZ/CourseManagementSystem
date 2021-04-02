@@ -84,5 +84,20 @@ namespace CourseManagementSystem.API.Controllers
             var courseTests = dbContext.Courses.Include(course => course.Tests).Single(x => x.Id == id).Tests;
             return courseTests.Select(ct => new CourseTestVM(ct.Id, ct.Topic, ct.Weight, ct.Questions.ToViewModels()));
         }
+
+        /// <summary>
+        /// get all posts in the course with give id
+        /// </summary>
+        /// <param name="id">identifier of the course</param>
+        /// <returns></returns>
+        [HttpGet("{id}/posts")]
+        public IEnumerable<ForumPostVM> GetAllPosts(int id)
+        {
+            return new List<ForumPostVM>
+            {
+                new ForumPostVM(1,"nikdo","This is a ranodm text..."),
+                new ForumPostVM(2,"Student 001","NO WAY!!!!")
+            };
+        }
     }
 }

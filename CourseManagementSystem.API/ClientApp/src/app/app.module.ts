@@ -25,6 +25,7 @@ import {TestSubmissionListComponent} from './test-submission-list/test-submissio
 import {AddGradeComponent} from './add-grade/add-grade.component';
 import {StudentTestSubmissionsComponent} from './student-test-submissions/student-test-submissions.component';
 import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component';
+import { CourseForumComponent } from './course-forum/course-forum.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component'
     TestSubmissionListComponent,
     AddGradeComponent,
     StudentTestSubmissionsComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    CourseForumComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
