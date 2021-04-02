@@ -4,9 +4,7 @@
     <div>
       <b>Author: {{post.author}}</b>
     </div>
-    <div>
-      {{post.text}}
-    </div>
+    <div class="formatted">{{post.text}}</div>
     <div *ngIf="isAdmin">
       <button type="button" class="btn btn-danger" (click)="delete(post)">Delete</button>
     </div>

@@ -60,7 +60,7 @@ export class CourseForumComponent implements OnInit {
    */
   public delete(post: ForumPostVM): void {
     this.forumPostService.delete(post.id).subscribe(() => {
-      this.posts = this.posts.filter(p => p.id !== post.id);
+      this.reloadPosts();
     });
   }
 
