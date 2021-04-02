@@ -93,11 +93,8 @@ namespace CourseManagementSystem.API.Controllers
         [HttpGet("{id}/posts")]
         public IEnumerable<ForumPostVM> GetAllPosts(int id)
         {
-            return new List<ForumPostVM>
-            {
-                new ForumPostVM(1,"nikdo","This is a ranodm text..."),
-                new ForumPostVM(2,"Student 001","NO WAY!!!!")
-            };
+            var posts = dbContext.Courses.Include(c => c.ForumPosts).ThenInclude(p => p.Author).SingleOrDefault(course => course.Id == id).ForumPosts;
+            return posts.Select(post => new ForumPostVM(post.Id, post.Author.Email, post.Text));
         }
     }
 }
