@@ -22,6 +22,11 @@ namespace CourseManagementSystem.Data.Models
         public int Weight { get; set; }
 
         /// <summary>
+        /// status of the test
+        /// </summary>
+        public TestStatus Status { get; set; }
+
+        /// <summary>
         /// course that contains this test
         /// </summary>
         [Required]
@@ -41,6 +46,7 @@ namespace CourseManagementSystem.Data.Models
         {
             Questions = new List<TestQuestion>();
             Submissions = new List<TestSubmission>();
+            Status = TestStatus.New;
         }
 
         public CourseTest(string topic, ICollection<TestQuestion> questions, int weight) : this()
@@ -60,5 +66,20 @@ namespace CourseManagementSystem.Data.Models
         {
             return Questions.Single(q => q.Number == questionNumber);
         }
+    }
+
+    /// <summary>
+    /// enum representing status of the <see cref="CourseTest"/>
+    /// </summary>
+    public enum TestStatus
+    {
+        /// <summary>
+        /// test hasn't been published yet
+        /// </summary>
+        New,
+        /// <summary>
+        /// test has been published
+        /// </summary>
+        Published
     }
 }
