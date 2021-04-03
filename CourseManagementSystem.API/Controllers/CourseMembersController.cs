@@ -14,13 +14,11 @@ namespace CourseManagementSystem.API.Controllers
     [ApiController]
     public class CourseMembersController : ControllerBase
     {
-        private readonly CMSDbContext dbContext;
         private readonly ICourseMemberService courseMemberService;
         private readonly ITestSubmissionService testSubmissionService;
 
-        public CourseMembersController(CMSDbContext dbContext, ICourseMemberService courseMemberService, ITestSubmissionService testSubmissionService)
+        public CourseMembersController(ICourseMemberService courseMemberService, ITestSubmissionService testSubmissionService)
         {
-            this.dbContext = dbContext;
             this.courseMemberService = courseMemberService;
             this.testSubmissionService = testSubmissionService;
         }
@@ -31,17 +29,10 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public StudentVM Get(int id)
+        public CourseMemberVM Get(int id)
         {
             CourseMember cm = courseMemberService.GetMemberByID(id);
-
-            return new StudentVM
-            {
-                Email = cm.User.Email,
-                Id = cm.User.Id,
-                Name = cm.User.UserName,
-                Grades = cm.Grades.Select(g => new GradeDetailsVM(g.Id, g.PercentualValue, g.Topic, g.Comment, g.Weight))
-            };
+            return new CourseMemberVM(cm.User.Id, cm.User.UserName, cm.User.Email);
         }
 
         /// <summary>
@@ -54,9 +45,8 @@ namespace CourseManagementSystem.API.Controllers
         public GradeDetailsVM AssignGrade(int id, [FromBody] AddGradeVM g)
         {
             CourseMember cm = courseMemberService.GetMemberByID(id);
-            Grade grade = new Grade { PercentualValue = g.PercentualValue, Comment = g.Comment, Topic = g.Topic };
-            cm.AssignGrade(grade);
-            dbContext.SaveChanges();
+            Grade grade = new Grade(g.PercentualValue, g.Comment, g.Topic, g.Weight);
+            courseMemberService.AssignGrade(cm, grade);
 
             return new GradeDetailsVM(grade.Id, grade.PercentualValue, grade.Topic, grade.Comment, grade.Weight);
         }
@@ -71,6 +61,18 @@ namespace CourseManagementSystem.API.Controllers
         {
             var userSubmissions = testSubmissionService.GetAllSubmissionsOfCourseMember(id);
             return userSubmissions.Select(ts => new TestSubmissionInfoVM(ts.Id, ts.Test.Topic, ts.Test.Weight, TestScoreCalculator.CalculateScore(ts)));
+        }
+
+        /// <summary>
+        /// get all grades of this <see cref="CourseMember"/>
+        /// </summary>
+        /// <param name="id">ID of the <see cref="CourseMember"/></param>
+        /// <returns>all grades (excluding test submissions) of the course member</returns>
+        [HttpGet("{id}/grades")]
+        public IEnumerable<GradeDetailsVM> GetGrades(int id)
+        {
+            var courseMember = courseMemberService.GetMemberByID(id);
+            return courseMember.Grades.Select(g => new GradeDetailsVM(g.Id, g.PercentualValue, g.Topic, g.Comment, g.Weight));
         }
     }
 }

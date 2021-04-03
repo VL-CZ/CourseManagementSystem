@@ -12,6 +12,7 @@ namespace CourseManagementSystem.Data.Models
             Members = new List<CourseMember>();
             Files = new List<CourseFile>();
             Tests = new List<CourseTest>();
+            ForumPosts = new List<ForumPost>();
         }
 
         public Course(string name, Person admin) : this()
@@ -49,5 +50,10 @@ namespace CourseManagementSystem.Data.Models
         /// tests in this course
         /// </summary>
         public ICollection<CourseTest> Tests { get; set; }
+
+        /// <summary>
+        /// posts in the forum of this course
+        /// </summary>
+        public ICollection<ForumPost> ForumPosts { get; set; }
     }
 }

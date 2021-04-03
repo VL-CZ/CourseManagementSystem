@@ -7,7 +7,7 @@ namespace CourseManagementSystem.API.Services
         /// <summary>
         /// get CourseMember by ID
         /// </summary>
-        /// <param name="id">id of the course member</param>
+        /// <param name="id">identifier of the <see cref="CourseMember"/> instance</param>
         /// <returns>course member with the given id</returns>
         CourseMember GetMemberByID(int id);
 
@@ -22,7 +22,14 @@ namespace CourseManagementSystem.API.Services
         /// <summary>
         /// remove person with selected ID
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">identifier of the <see cref="CourseMember"/> instance</param>
         void RemoveMemberById(int id);
+
+        /// <summary>
+        /// assign new <see cref="Grade"/> to the given <see cref="CourseMember"/> instance
+        /// </summary>
+        /// <param name="courseMember">course member, which we add the <paramref name="grade"/> to</param>
+        /// <param name="grade">grade to add to <paramref name="courseMember"/></param>
+        void AssignGrade(CourseMember courseMember, Grade grade);
     }
 }

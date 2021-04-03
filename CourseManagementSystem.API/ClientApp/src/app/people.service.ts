@@ -25,14 +25,14 @@ export class PeopleService extends ApiService {
   /**
    * get all courses, whose member the current user is
    */
-  getMemberCourses(): Observable<CourseInfoVM[]> {
+  public getMemberCourses(): Observable<CourseInfoVM[]> {
     return this.http.get<CourseInfoVM[]>(this.controllerUrl + 'memberCourses');
   }
 
   /**
    * get all courses, whose admin the current user is
    */
-  getManagedCourses(): Observable<CourseInfoVM[]> {
+  public getManagedCourses(): Observable<CourseInfoVM[]> {
     return this.http.get<CourseInfoVM[]>(this.controllerUrl + 'managedCourses');
   }
 
@@ -40,7 +40,7 @@ export class PeopleService extends ApiService {
    * get course member Id of current user in selected course
    * @param courseId Id of the selected course
    */
-  getCourseMemberByCourse(courseId: number): Observable<string> {
+  public getCourseMemberByCourse(courseId: number): Observable<string> {
     return this.http.get<string>(this.controllerUrl + `getCourseMember/${courseId}`);
   }
 }

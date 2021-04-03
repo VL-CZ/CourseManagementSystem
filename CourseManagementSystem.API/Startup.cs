@@ -51,6 +51,9 @@ namespace CourseManagementSystem.API
             services.AddTransient<IFileService, FileService>();
             services.AddTransient<ICourseTestService, CourseTestService>();
             services.AddTransient<ITestSubmissionService, TestSubmissionService>();
+            services.AddTransient<IForumPostService, ForumPostService>();
+            services.AddTransient<ICourseService, CourseService>();
+            services.AddTransient<IPeopleService, PeopleService>();
 
             services.AddTransient<ITestSubmissionEvaluator, TestSubmissionEvaluator>();
 

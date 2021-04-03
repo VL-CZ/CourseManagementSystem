@@ -5,6 +5,7 @@
     /// </summary>
     public class GradeDetailsVM
     {
+        public GradeDetailsVM() { }
 
         public GradeDetailsVM(int id, double percentualValue, string topic, string comment, int weight)
         {

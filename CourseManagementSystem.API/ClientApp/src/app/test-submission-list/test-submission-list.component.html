@@ -6,9 +6,9 @@
       <th>Score</th>
       <th></th>
     </tr>
-    <tr *ngFor="let testInfo of this.submissionsInfo">
+    <tr *ngFor="let testInfo of this.submissionsInfos">
       <td>{{testInfo.studentEmail}}</td>
-      <td><b>{{getPercentualScore(testInfo.percentualScore)}}%</b></td>
+      <td><b>{{getPercentString(testInfo.percentualScore)}}</b></td>
       <td><a routerLink="/submissions/{{testInfo.testSubmissionId}}">Detail</a></td>
     </tr>
   </table>

@@ -9,4 +9,8 @@
   <div>Points: {{question.points}}</div>
 </div>
 
-<app-test-submission-list [testId]="courseTest.id"></app-test-submission-list>
+<div class="my-3">
+  <button type="button" class="btn btn-warning" routerLink="/tests/edit/{{testId}}">Edit</button>
+</div>
+
+<app-test-submission-list [testId]="testId"></app-test-submission-list>

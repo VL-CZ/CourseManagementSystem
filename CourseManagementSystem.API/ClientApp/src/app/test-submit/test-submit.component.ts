@@ -5,6 +5,9 @@ import {TestSubmissionVM} from '../viewmodels/testSubmissionVM';
 import {TestSubmissionService} from '../test-submission.service';
 import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
 
+/**
+ * component for submitting a test
+ */
 @Component({
   selector: 'app-test-submit',
   templateUrl: './test-submit.component.html',
@@ -12,9 +15,13 @@ import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
 })
 export class TestSubmitComponent implements OnInit {
 
+  /**
+   * test to submit
+   */
+  public testSubmission: TestSubmissionVM = TestSubmissionVM.getDefault();
+
   private router: Router;
   private testSubmitService: TestSubmissionService;
-  public testSubmission: TestSubmissionVM;
 
   constructor(route: ActivatedRoute, courseTestService: CourseTestService, testSubmitService: TestSubmissionService, router: Router) {
     const testId = ActivatedRouteUtils.getIdParam(route);
@@ -29,7 +36,10 @@ export class TestSubmitComponent implements OnInit {
   ngOnInit() {
   }
 
-  public submit() {
+  /**
+   * submit the test
+   */
+  public submit(): void {
     this.testSubmitService.submit(this.testSubmission).subscribe(
       id => this.router.navigate(['/submissions', id]));
   }

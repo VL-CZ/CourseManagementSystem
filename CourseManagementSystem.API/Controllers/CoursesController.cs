@@ -1,4 +1,4 @@
-﻿using CourseManagementSystem.API.Services;
+﻿using CourseManagementSystem.API.Extensions;
 using CourseManagementSystem.API.ViewModels;
 using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 
 namespace CourseManagementSystem.API.Controllers
 {
@@ -54,13 +53,13 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="id">Id of the course</param>
         [HttpGet("{id}/members")]
-        public IEnumerable<PersonVM> GetAllMembers(int id)
+        public IEnumerable<CourseMemberVM> GetAllMembers(int id)
         {
             var course = dbContext.Courses.Include(x => x.Members).Single(x => x.Id == id);
             var courseMemberIDs = course.Members.Select(x => x.Id);
             var people = dbContext.CourseMembers.Include(x => x.User).Where(cm => courseMemberIDs.Contains(cm.Id));
 
-            return people.Select(cm => new PersonVM() { Id = cm.Id.ToString(), Name = cm.User.UserName, Email = cm.User.Email });
+            return people.Select(cm => new CourseMemberVM(cm.Id.ToString(), cm.User.UserName, cm.User.Email));
         }
 
         /// <summary>
@@ -83,7 +82,19 @@ namespace CourseManagementSystem.API.Controllers
         public IEnumerable<CourseTestVM> GetAllTests(int id)
         {
             var courseTests = dbContext.Courses.Include(course => course.Tests).Single(x => x.Id == id).Tests;
-            return courseTests.Select(ct => new CourseTestVM(ct.Id, ct.Topic, ct.Weight, ct.Questions));
+            return courseTests.Select(ct => new CourseTestVM(ct.Id, ct.Topic, ct.Weight, ct.Questions.ToViewModels()));
+        }
+
+        /// <summary>
+        /// get all posts in the course with give id
+        /// </summary>
+        /// <param name="id">identifier of the course</param>
+        /// <returns></returns>
+        [HttpGet("{id}/posts")]
+        public IEnumerable<ForumPostVM> GetAllPosts(int id)
+        {
+            var posts = dbContext.Courses.Include(c => c.ForumPosts).ThenInclude(p => p.Author).SingleOrDefault(course => course.Id == id).ForumPosts;
+            return posts.Select(post => new ForumPostVM(post.Id, post.Author.Email, post.Text));
         }
     }
 }

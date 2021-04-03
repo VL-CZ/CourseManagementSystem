@@ -1,14 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace CourseManagementSystem.API.ViewModels
+﻿namespace CourseManagementSystem.API.ViewModels
 {
+    /// <summary>
+    /// viewmodel for adding a course
+    /// </summary>
     public class AddCourseVM
     {
+        /// <summary>
+        /// name of the course to add
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// id of the admin
+        /// </summary>
         public string AdminId { get; set; }
     }
 }

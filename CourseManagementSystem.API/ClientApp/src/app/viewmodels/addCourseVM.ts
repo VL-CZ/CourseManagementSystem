@@ -1,6 +1,16 @@
+/**
+ * viewmodel for adding a course
+ */
 export class AddCourseVM {
-  name: string;
-  adminId: string;
+  /**
+   * name of the course
+   */
+  public name: string;
+
+  /**
+   * id of the course admin
+   */
+  public adminId: string;
 
   constructor() {
   }

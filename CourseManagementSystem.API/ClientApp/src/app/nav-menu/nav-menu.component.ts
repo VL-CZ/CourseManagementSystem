@@ -1,5 +1,8 @@
 import {Component, Inject} from '@angular/core';
 
+/**
+ * component with navigation menu
+ */
 @Component({
   selector: 'app-nav-menu',
   templateUrl: './nav-menu.component.html',

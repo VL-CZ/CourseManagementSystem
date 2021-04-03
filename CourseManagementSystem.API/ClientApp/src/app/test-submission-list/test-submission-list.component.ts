@@ -3,6 +3,9 @@ import {CourseTestService} from '../course-test.service';
 import {TestSubmissionWithUserInfoVM} from '../viewmodels/testSubmissionWithUserInfoVM';
 import {PercentCalculator} from '../utils/percentCalculator';
 
+/**
+ * component representing submitted solutions of the test
+ */
 @Component({
   selector: 'app-test-submission-list',
   templateUrl: './test-submission-list.component.html',
@@ -11,9 +14,13 @@ import {PercentCalculator} from '../utils/percentCalculator';
 export class TestSubmissionListComponent implements OnInit {
 
   @Input()
-  private testId: number;
+  private testId: string;
 
-  public submissionsInfo: TestSubmissionWithUserInfoVM[] = [];
+  /**
+   * list of test submissions with user name
+   */
+  public submissionsInfos: TestSubmissionWithUserInfoVM[] = [];
+
   private courseTestService: CourseTestService;
 
   constructor(courseTestService: CourseTestService) {
@@ -28,13 +35,16 @@ export class TestSubmissionListComponent implements OnInit {
    * reload data about test submissions
    */
   public reloadData(): void {
-    this.courseTestService.getAllTestSubmissions(this.testId.toString()).subscribe(result => {
-      this.submissionsInfo = result;
+    this.courseTestService.getAllTestSubmissions(this.testId).subscribe(result => {
+      this.submissionsInfos = result;
     });
   }
 
-  public getPercentualScore(doubleValue: number) {
-    return PercentCalculator.doubleToPercent(doubleValue, 2);
+  /**
+   * get percentual string from a double value
+   * @param doubleValue percentual value in double format (0->0%, 1->100%)
+   */
+  public getPercentString(doubleValue: number): string {
+    return PercentCalculator.doubleToPercent(doubleValue, 2).toString() + '%';
   }
-
 }

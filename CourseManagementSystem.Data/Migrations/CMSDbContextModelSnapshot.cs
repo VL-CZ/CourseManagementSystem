@@ -112,6 +112,31 @@ namespace CourseManagementSystem.Data.Migrations
                     b.ToTable("CourseTests");
                 });
 
+            modelBuilder.Entity("CourseManagementSystem.Data.Models.ForumPost", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuthorId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("Posts");
+                });
+
             modelBuilder.Entity("CourseManagementSystem.Data.Models.Grade", b =>
                 {
                     b.Property<int>("Id")
@@ -540,6 +565,17 @@ namespace CourseManagementSystem.Data.Migrations
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CourseManagementSystem.Data.Models.ForumPost", b =>
+                {
+                    b.HasOne("CourseManagementSystem.Data.Models.Person", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId");
+
+                    b.HasOne("CourseManagementSystem.Data.Models.Course", "Course")
+                        .WithMany("ForumPosts")
+                        .HasForeignKey("CourseId");
                 });
 
             modelBuilder.Entity("CourseManagementSystem.Data.Models.Grade", b =>

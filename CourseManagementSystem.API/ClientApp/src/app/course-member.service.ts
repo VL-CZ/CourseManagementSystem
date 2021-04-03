@@ -1,5 +1,5 @@
 import {Inject, Injectable} from '@angular/core';
-import {Student} from './viewmodels/student';
+import {CourseMemberVM} from './viewmodels/courseMemberVM';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {AddGradeVM} from './viewmodels/addGradeVM';
@@ -21,8 +21,8 @@ export class CourseMemberService extends ApiService {
    * get course member by its id
    * @param courseMemberId id of the course member
    */
-  public getById(courseMemberId: string): Observable<Student> {
-    return this.http.get<Student>(this.controllerUrl + courseMemberId);
+  public getById(courseMemberId: string): Observable<CourseMemberVM> {
+    return this.http.get<CourseMemberVM>(this.controllerUrl + courseMemberId);
   }
 
   /**
@@ -40,5 +40,13 @@ export class CourseMemberService extends ApiService {
    */
   public getTestSubmissions(courseMemberId: string): Observable<TestSubmissionInfoVM[]> {
     return this.http.get<TestSubmissionInfoVM[]>(this.controllerUrl + `${courseMemberId}/submissions`);
+  }
+
+  /**
+   * get all grades (except test submissions) of the given course member
+   * @param courseMemberId id of the course member
+   */
+  public getGrades(courseMemberId: string): Observable<GradeDetailsVM[]> {
+    return this.http.get<GradeDetailsVM[]>(this.controllerUrl + `${courseMemberId}/grades`);
   }
 }

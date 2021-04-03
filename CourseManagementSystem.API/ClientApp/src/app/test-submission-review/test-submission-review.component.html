@@ -30,13 +30,13 @@
   </div>
 </div>
 
-<div>
+<div *ngIf="isAdmin">
   <button type="button" class="btn btn-success" (click)="saveUpdates()">Apply updates</button>
   <button type="button" class="btn btn-danger" (click)="discardUpdates()">Discard updates</button>
 </div>
 <br>
 
 <div class="jumbotron">
-  <h2>Total score: {{getPercentualScore(submission)}}%</h2>
+  <h2>Total score: {{getPercentualScore(submission)}}</h2>
   <h3>Points: {{getReceivedPoints(submission)}}/{{getMaximalPoints(submission)}}</h3>
 </div>

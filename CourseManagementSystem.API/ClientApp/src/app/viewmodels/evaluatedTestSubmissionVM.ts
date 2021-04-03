@@ -2,7 +2,7 @@ import {TestWithSubmissionVM} from './testWithSubmissionVM';
 
 export class EvaluatedTestSubmissionVM {
   public testSubmissionId: number;
-  public evaluatedAnswers: EvaluatedAnswerVM[];
+  public evaluatedAnswers: EvaluatedAnswerVM[] = [];
 
   constructor(testSubmissionId: number, evaluatedAnswers: EvaluatedAnswerVM[]) {
     this.testSubmissionId = testSubmissionId;
@@ -21,6 +21,13 @@ export class EvaluatedTestSubmissionVM {
     }
 
     return new EvaluatedTestSubmissionVM(testWithSubmission.submissionId, evaluatedAnswers);
+  }
+
+  /**
+   * get default instance of this class
+   */
+  public static getDefault(): EvaluatedTestSubmissionVM {
+    return new EvaluatedTestSubmissionVM(0, []);
   }
 }
 
