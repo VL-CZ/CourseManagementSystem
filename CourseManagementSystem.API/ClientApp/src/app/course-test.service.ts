@@ -47,4 +47,13 @@ export class CourseTestService extends ApiService {
   public getAllTestSubmissions(testId: string): Observable<TestSubmissionWithUserInfoVM[]> {
     return this.http.get<TestSubmissionWithUserInfoVM[]>(this.controllerUrl + `${testId}/submissions`);
   }
+
+  /**
+   * update properties of the test
+   * @param testId id of the test that we update
+   * @param courseTest new properties of the test
+   */
+  public updateTest(testId: string, courseTest: CourseTestVM): Observable<{}> {
+    return this.http.put(this.controllerUrl + testId, courseTest);
+  }
 }

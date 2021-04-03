@@ -5,6 +5,7 @@ import {CourseTestVM} from '../viewmodels/courseTestVM';
 import { TestQuestionVM } from '../viewmodels/testQuestionVM';
 import { ArrayUtils } from '../utils/arrayUtils';
 import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
+import {TestQuestionNumberSetter} from '../utils/testQuestionNumberSetter';
 
 /**
  * component for creating a test
@@ -57,18 +58,6 @@ export class TestCreateComponent implements OnInit {
     const instance = new TestQuestionVM();
     ArrayUtils.resize<TestQuestionVM>(questions, this.questionCount, instance);
 
-    this.setQuestionNumbers(questions);
-  }
-
-  /**
-   * add numbers to questions
-   * @param questions
-   * @private
-   */
-  private setQuestionNumbers(questions: TestQuestionVM[]): void {
-    for (let i = 0; i < questions.length; i++) {
-      const questionNumber = i + 1;
-      questions[i].number = questionNumber;
-    }
+    TestQuestionNumberSetter.setQuestionNumbers(questions);
   }
 }

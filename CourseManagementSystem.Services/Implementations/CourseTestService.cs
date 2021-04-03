@@ -2,6 +2,7 @@
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CourseManagementSystem.Services.Implementations
@@ -35,6 +36,17 @@ namespace CourseManagementSystem.Services.Implementations
         public CourseTest GetById(int testId)
         {
             return dbContext.CourseTests.Include(x => x.Course).Include(ct => ct.Questions).SingleOrDefault(ct => ct.Id == testId);
+        }
+
+        /// <inheritdoc/>
+        public void Update(CourseTest test, int updatedWeight, string updatedTopic, ICollection<TestQuestion> updatedQuestions)
+        {
+            test.Weight = updatedWeight;
+            test.Topic = updatedTopic;
+            test.Questions.Clear();
+            test.Questions = updatedQuestions;
+
+            dbContext.SaveChanges();
         }
     }
 }

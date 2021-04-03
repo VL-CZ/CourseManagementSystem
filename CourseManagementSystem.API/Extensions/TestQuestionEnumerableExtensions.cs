@@ -19,5 +19,15 @@ namespace CourseManagementSystem.API.Extensions
         {
             return questions.Select(q => new TestQuestionVM(q.Number, q.QuestionText, q.CorrectAnswer, q.Points));
         }
+
+        /// <summary>
+        /// convert enumerable of <see cref="TestQuestionVM"/> to enumerable of <see cref="TestQuestion"/>
+        /// </summary>
+        /// <param name="questionsVMs">enumerable to convert</param>
+        /// <returns></returns>
+        public static IEnumerable<TestQuestion> ToModels(this IEnumerable<TestQuestionVM> questionsVMs)
+        {
+            return questionsVMs.Select(q => new TestQuestion(q.Number, q.QuestionText, q.CorrectAnswer, q.Points));
+        }
     }
 }

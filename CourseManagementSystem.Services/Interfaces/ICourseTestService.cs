@@ -1,4 +1,5 @@
 ﻿using CourseManagementSystem.Data.Models;
+using System.Collections.Generic;
 
 namespace CourseManagementSystem.Services.Interfaces
 {
@@ -21,5 +22,14 @@ namespace CourseManagementSystem.Services.Interfaces
         /// delete test by its Id
         /// </summary>
         void Delete(int testId);
+
+        /// <summary>
+        /// update properties of the <paramref name="test"/>
+        /// </summary>
+        /// <param name="test">test to update</param>
+        /// <param name="updatedWeight">updated value of weight</param>
+        /// <param name="updatedTopic">updated value of topic</param>
+        /// <param name="updatedQuestions">updated questions</param>
+        void Update(CourseTest test, int updatedWeight, string updatedTopic, ICollection<TestQuestion> updatedQuestions);
     }
 }

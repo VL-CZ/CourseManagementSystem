@@ -25,7 +25,8 @@ import {TestSubmissionListComponent} from './test-submission-list/test-submissio
 import {AddGradeComponent} from './add-grade/add-grade.component';
 import {StudentTestSubmissionsComponent} from './student-test-submissions/student-test-submissions.component';
 import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component';
-import { CourseForumComponent } from './course-forum/course-forum.component';
+import {CourseForumComponent} from './course-forum/course-forum.component';
+import {TestEditComponent} from './test-edit/test-edit.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { CourseForumComponent } from './course-forum/course-forum.component';
     AddGradeComponent,
     StudentTestSubmissionsComponent,
     ConfirmDialogComponent,
-    CourseForumComponent
+    CourseForumComponent,
+    TestEditComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -60,6 +62,7 @@ import { CourseForumComponent } from './course-forum/course-forum.component';
       {path: 'courses', component: CourseListComponent},
       {path: 'courses/:id', component: CourseDetailComponent},
       {path: 'tests/:id', component: TestDetailComponent},
+      {path: 'tests/edit/:id', component: TestEditComponent},
       {path: 'tests/create/:id', component: TestCreateComponent},
       {path: 'tests/submit/:id', component: TestSubmitComponent},
       {path: 'submissions/:id', component: TestSubmissionReviewComponent}

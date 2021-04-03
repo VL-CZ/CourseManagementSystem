@@ -1,0 +1,40 @@
+<div class="jumbotron">
+  <h2>Edit a test</h2>
+</div>
+<div class="jumbotron">
+  <div class="form-group">
+    <label for="testTopic">Topic</label>
+    <input type="text" min="0" class="form-control" id="testTopic" [(ngModel)]="courseTest.topic" name="testTopic">
+  </div>
+  <div class="form-group">
+    <label for="testWeight">Test weight</label>
+    <input type="number" min="0" class="form-control" id="testWeight" [(ngModel)]="courseTest.weight" name="testWeight">
+  </div>
+</div>
+<div class="jumbotron" *ngFor="let question of courseTest.questions">
+  <div class="form-group">
+    <label for="questionText{{question.number}}">Question text</label>
+    <textarea class="form-control" id="questionText{{question.number}}"
+              [(ngModel)]="question.questionText" name="questionText{{question.number}}"></textarea>
+  </div>
+  <div class="form-group">
+    <label for="questionAnswer{{question.number}}">Correct answer</label>
+    <textarea class="form-control" id="questionAnswer{{question.number}}"
+              [(ngModel)]="question.correctAnswer" name="questionAnswer{{question.number}}"></textarea>
+  </div>
+  <div class="form-group">
+    <label for="questionPoints{{question.number}}">Points</label>
+    <input type="number" min="0" class="form-control" id="questionPoints{{question.number}}"
+           [(ngModel)]="question.points" name="questionPoints{{question.number}}">
+  </div>
+  <div class="my-3">
+    <input type="button" class="btn btn-danger" (click)="deleteQuestion(question)" value="Delete"/>
+  </div>
+</div>
+<div class="my-3">
+  <button type="button" class="btn btn-primary" (click)="addQuestion()">Add question</button>
+</div>
+<div class="my-3">
+  <button type="button" class="btn btn-warning" (click)="saveChanges()">Save</button>
+  <button type="button" class="btn btn-default" routerLink="/tests/{{testId}}">Cancel</button>
+</div>
