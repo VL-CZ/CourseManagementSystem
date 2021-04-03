@@ -68,7 +68,7 @@ export class CourseForumComponent implements OnInit {
    * add a new post
    */
   public addPost(): void {
-    this.forumPostService.add(this.postToAdd, this.courseId).subscribe(post => {
+    this.forumPostService.add(this.postToAdd, this.courseId).subscribe(() => {
       this.reloadPosts();
       this.postToAdd = new ForumPostVM();
     });
