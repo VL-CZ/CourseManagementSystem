@@ -31,5 +31,11 @@ namespace CourseManagementSystem.Services.Interfaces
         /// <param name="updatedTopic">updated value of topic</param>
         /// <param name="updatedQuestions">updated questions</param>
         void Update(CourseTest test, int updatedWeight, string updatedTopic, ICollection<TestQuestion> updatedQuestions);
+
+        /// <summary>
+        /// publish the test (set <see cref="CourseTest.Status"/> to <see cref="TestStatus.Published"/>)
+        /// </summary>
+        /// <param name="test">test to publish</param>
+        void Publish(CourseTest test);
     }
 }

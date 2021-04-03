@@ -39,6 +39,13 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
+        public void Publish(CourseTest test)
+        {
+            test.Status = TestStatus.Published;
+            dbContext.SaveChanges();
+        }
+
+        /// <inheritdoc/>
         public void Update(CourseTest test, int updatedWeight, string updatedTopic, ICollection<TestQuestion> updatedQuestions)
         {
             test.Weight = updatedWeight;

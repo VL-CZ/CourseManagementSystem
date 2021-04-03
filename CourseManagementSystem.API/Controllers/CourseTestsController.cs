@@ -54,7 +54,7 @@ namespace CourseManagementSystem.API.Controllers
         public CourseTestVM Get(int id)
         {
             var test = courseTestService.GetById(id);
-            return new CourseTestVM(id, test.Topic, test.Weight, test.Questions.ToViewModels());
+            return new CourseTestVM(id, test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status);
         }
 
         /// <summary>
@@ -80,6 +80,17 @@ namespace CourseManagementSystem.API.Controllers
         {
             var testSubmissions = testSubmissionService.GetAllSubmissionsOfTest(testId);
             return testSubmissions.Select(ts => new TestSubmissionWithUserInfoVM(ts.Student.User.Email, ts.Id, TestScoreCalculator.CalculateScore(ts)));
+        }
+
+        /// <summary>
+        /// publish the test with given id
+        /// </summary>
+        /// <param name="id">identifier of the test</param>
+        [HttpPost("{id}/publish")]
+        public void Publish(int id)
+        {
+            var test = courseTestService.GetById(id);
+            courseTestService.Publish(test);
         }
     }
 }
