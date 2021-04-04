@@ -1,0 +1,11 @@
+<div class="jumbotron">
+  <h3>Enroll to a course</h3>
+  <form>
+    <div class="form-group">
+      <label for="courseId">Course ID</label>
+      <input type="number" class="form-control" name="courseId" id="courseId" placeholder="Course ID" required
+             [(ngModel)]="this.courseToEnrollId">
+    </div>
+    <button type="submit" class="btn btn-primary" (click)="enroll()">Enroll</button>
+  </form>
+</div>

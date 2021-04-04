@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using CourseManagementSystem.API.Extensions;
+using CourseManagementSystem.Services.Interfaces;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,11 +23,13 @@ namespace CourseManagementSystem.API.Controllers
     {
         private readonly CMSDbContext dbContext;
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IPeopleService peopleService;
 
-        public PeopleController(CMSDbContext dbContext, ICourseMemberService personService, UserManager<Person> userManager, IHttpContextAccessor httpContextAccessor)
+        public PeopleController(CMSDbContext dbContext, IHttpContextAccessor httpContextAccessor, IPeopleService peopleService)
         {
             this.dbContext = dbContext;
             this.httpContextAccessor = httpContextAccessor;
+            this.peopleService = peopleService;
         }
 
         /// <summary>
@@ -37,7 +40,7 @@ namespace CourseManagementSystem.API.Controllers
         public void EnrollTo(int courseId)
         {
             var course = dbContext.Courses.Find(courseId);
-            var user = dbContext.Users.Find(GetCurrentUserId());
+            var user = peopleService.GetById(GetCurrentUserId());
 
             var cm = new CourseMember() { Course = course, User = user };
             dbContext.CourseMembers.Add(cm);
