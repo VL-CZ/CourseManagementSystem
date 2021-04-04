@@ -27,6 +27,11 @@ namespace CourseManagementSystem.Data.Models
         public TestStatus Status { get; set; }
 
         /// <summary>
+        /// deadline of the test (day and exact time)
+        /// </summary>
+        public DateTime Deadline { get; set; }
+
+        /// <summary>
         /// course that contains this test
         /// </summary>
         [Required]
@@ -49,11 +54,12 @@ namespace CourseManagementSystem.Data.Models
             Status = TestStatus.New;
         }
 
-        public CourseTest(string topic, ICollection<TestQuestion> questions, int weight) : this()
+        public CourseTest(string topic, ICollection<TestQuestion> questions, int weight, DateTime deadline) : this()
         {
             Topic = topic;
             Questions = questions;
             Weight = weight;
+            Deadline = deadline;
         }
 
         /// <summary>

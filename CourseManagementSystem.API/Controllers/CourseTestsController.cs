@@ -31,7 +31,7 @@ namespace CourseManagementSystem.API.Controllers
         public void Add(CourseTestVM testToAdd, int courseId)
         {
             var mappedQuestions = testToAdd.Questions.ToModels();
-            var test = new CourseTest(testToAdd.Topic, mappedQuestions.ToList(), testToAdd.Weight);
+            var test = new CourseTest(testToAdd.Topic, mappedQuestions.ToList(), testToAdd.Weight, testToAdd.Deadline);
             courseTestService.AddToCourse(test, courseId);
         }
 
@@ -54,11 +54,11 @@ namespace CourseManagementSystem.API.Controllers
         public CourseTestVM Get(int id)
         {
             var test = courseTestService.GetById(id);
-            return new CourseTestVM(id, test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status);
+            return new CourseTestVM(id, test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status, test.Deadline);
         }
 
         /// <summary>
-        /// update properties (and questions) of the test
+        /// update properties (including questions) of the test
         /// </summary>
         /// <param name="id">id of the test that we edit</param>
         /// <param name="updatedTest">test with updated properties</param>
@@ -67,7 +67,7 @@ namespace CourseManagementSystem.API.Controllers
         {
             var test = courseTestService.GetById(id);
             var updatedQuestions = updatedTest.Questions.ToModels();
-            courseTestService.Update(test, updatedTest.Weight, updatedTest.Topic, updatedQuestions.ToList());
+            courseTestService.Update(test, updatedTest.Weight, updatedTest.Topic, updatedTest.Deadline, updatedQuestions.ToList());
         }
 
         /// <summary>
