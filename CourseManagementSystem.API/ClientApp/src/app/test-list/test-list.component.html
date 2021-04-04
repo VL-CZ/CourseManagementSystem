@@ -6,6 +6,9 @@
         <a *ngIf="isAdmin" routerLink="/tests/{{test.id}}">{{test.topic}}</a>
         <a *ngIf="!isAdmin" routerLink="/tests/submit/{{test.id}}">{{test.topic}}</a>
       </td>
+      <td>
+        <b>Deadline: {{test.deadline.toLocaleString()}}</b>
+      </td>
       <td *ngIf="isAdmin && !isPublished(test)">
         <button class="btn btn-info" (click)="publishTest(test)">Publish</button>
       </td>

@@ -25,6 +25,11 @@ export class CourseTestVM {
   public status: TestStatus;
 
   /**
+   * deadline of the test
+   */
+  public deadline: Date;
+
+  /**
    * questions contained in this test
    */
   public questions: TestQuestionVM[] = [];
