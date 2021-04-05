@@ -1,19 +1,15 @@
 ﻿using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
+using CourseManagementSystem.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Linq;
 
-namespace CourseManagementSystem.API.Services
+namespace CourseManagementSystem.Services.Implementations
 {
-    public class CourseMemberService : ICourseMemberService
+    public class CourseMemberService : DbService, ICourseMemberService
     {
-        private CMSDbContext dbContext;
-
-        public CourseMemberService(CMSDbContext dbContext)
-        {
-            this.dbContext = dbContext;
-        }
+        public CourseMemberService(CMSDbContext dbContext) : base(dbContext)
+        { }
 
         /// <inheritdoc/>
         public void AssignGrade(CourseMember courseMember, Grade grade)

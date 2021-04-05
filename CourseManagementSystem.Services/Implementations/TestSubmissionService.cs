@@ -7,14 +7,10 @@ using System.Linq;
 
 namespace CourseManagementSystem.Services.Implementations
 {
-    public class TestSubmissionService : ITestSubmissionService
+    public class TestSubmissionService : DbService, ITestSubmissionService
     {
-        private readonly CMSDbContext dbContext;
-
-        public TestSubmissionService(CMSDbContext dbContext)
-        {
-            this.dbContext = dbContext;
-        }
+        public TestSubmissionService(CMSDbContext dbContext) : base(dbContext)
+        { }
 
         /// <inheritdoc/>
         public IEnumerable<TestSubmission> GetAllSubmissionsOfCourseMember(int courseMemberId)

@@ -7,14 +7,10 @@ using System.Linq;
 
 namespace CourseManagementSystem.Services.Implementations
 {
-    public class CourseService : ICourseService
+    public class CourseService : DbService, ICourseService
     {
-        private readonly CMSDbContext dbContext;
-
-        public CourseService(CMSDbContext dbContext)
-        {
-            this.dbContext = dbContext;
-        }
+        public CourseService(CMSDbContext dbContext) : base(dbContext)
+        { }
 
         /// <inheritdoc/>
         public void DeleteById(int courseId)

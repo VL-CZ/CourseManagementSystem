@@ -7,13 +7,10 @@ using System.Linq;
 
 namespace CourseManagementSystem.Services.Implementations
 {
-    public class PeopleService : IPeopleService
+    public class PeopleService : DbService, IPeopleService
     {
-        private readonly CMSDbContext dbContext;
-
-        public PeopleService(CMSDbContext dbContext)
+        public PeopleService(CMSDbContext dbContext) : base(dbContext)
         {
-            this.dbContext = dbContext;
         }
 
         /// <inheritdoc/>

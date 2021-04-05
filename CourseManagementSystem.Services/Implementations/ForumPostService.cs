@@ -4,13 +4,10 @@ using CourseManagementSystem.Services.Interfaces;
 
 namespace CourseManagementSystem.Services.Implementations
 {
-    public class ForumPostService : IForumPostService
+    public class ForumPostService : DbService, IForumPostService
     {
-        private readonly CMSDbContext dbContext;
-
-        public ForumPostService(CMSDbContext dbContext)
+        public ForumPostService(CMSDbContext dbContext) : base(dbContext)
         {
-            this.dbContext = dbContext;
         }
 
         /// <inheritdoc/>

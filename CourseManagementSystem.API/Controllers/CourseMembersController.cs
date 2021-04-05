@@ -1,6 +1,4 @@
-﻿using CourseManagementSystem.API.Services;
-using CourseManagementSystem.API.ViewModels;
-using CourseManagementSystem.Data;
+﻿using CourseManagementSystem.API.ViewModels;
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services;
 using CourseManagementSystem.Services.Interfaces;

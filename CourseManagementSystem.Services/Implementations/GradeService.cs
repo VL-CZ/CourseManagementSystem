@@ -3,13 +3,10 @@ using CourseManagementSystem.Services.Interfaces;
 
 namespace CourseManagementSystem.Services.Implementations
 {
-    public class GradeService : IGradeService
+    public class GradeService : DbService, IGradeService
     {
-        private CMSDbContext dbContext;
-
-        public GradeService(CMSDbContext dbContext)
+        public GradeService(CMSDbContext dbContext):base(dbContext)
         {
-            this.dbContext = dbContext;
         }
 
         /// <inheritdoc/>
