@@ -2,8 +2,8 @@ import {Inject, Injectable} from '@angular/core';
 import {CourseMemberVM} from './viewmodels/courseMemberVM';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {AddGradeVM} from './viewmodels/addGradeVM';
-import {GradeDetailsVM} from './viewmodels/gradeDetailsVM';
+import {AddGradeVM} from './viewmodels/gradeVM';
+import {GradeDetailsVM} from './viewmodels/gradeVM';
 import {ApiService} from './api.service';
 import {TestSubmissionInfoVM} from './viewmodels/testSubmisionInfoVM';
 

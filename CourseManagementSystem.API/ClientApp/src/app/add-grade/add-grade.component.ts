@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {AddGradeVM} from '../viewmodels/addGradeVM';
+import {AddGradeVM} from '../viewmodels/gradeVM';
 import {PercentCalculator} from '../utils/percentCalculator';
 import {CourseMemberService} from '../course-member.service';
 import {RouterUtils} from '../utils/routerUtils';
