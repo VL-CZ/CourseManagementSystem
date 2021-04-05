@@ -48,9 +48,7 @@ export class FileListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.courseService.getAllFiles(this.courseId).subscribe(result => {
-      this.uploadedFiles = result;
-    });
+    this.reloadFileData();
   }
 
   /**
@@ -65,8 +63,8 @@ export class FileListComponent implements OnInit {
    * upload a new file
    */
   public uploadFile(): void {
-    this.fileService.uploadTo(this.fileToUpload, this.courseId).subscribe(result => {
-      this.uploadedFiles.push(result);
+    this.fileService.uploadTo(this.fileToUpload, this.courseId).subscribe(() => {
+      this.reloadFileData();
     });
     this.fileToUpload = null;
     this.inputFile.nativeElement.value = ''; // clear file input
@@ -87,5 +85,15 @@ export class FileListComponent implements OnInit {
    */
   public downloadFile(fileId: number): void {
     this.fileService.download(fileId);
+  }
+
+  /**
+   * reload uploaded files
+   * @private
+   */
+  private reloadFileData(): void {
+    this.courseService.getAllFiles(this.courseId).subscribe(result => {
+      this.uploadedFiles = result;
+    });
   }
 }
