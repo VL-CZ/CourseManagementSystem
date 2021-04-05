@@ -70,10 +70,10 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id">Id of the course</param>
         /// <returns></returns>
         [HttpGet("{id}/tests")]
-        public IEnumerable<CourseTestVM> GetAllTests(int id)
+        public IEnumerable<CourseTestDetailsVM> GetAllTests(int id)
         {
             var courseTests = courseService.GetTests(id);
-            return courseTests.Select(test => new CourseTestVM(test.Id, test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status, test.Deadline));
+            return courseTests.Select(test => new CourseTestDetailsVM(test.Id, test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status, test.Deadline));
         }
 
         /// <summary>

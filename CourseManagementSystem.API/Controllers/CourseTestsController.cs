@@ -28,7 +28,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testToAdd"></param>
         /// <param name="courseId"></param>
         [HttpPost("{courseId}")]
-        public void Add(CourseTestVM testToAdd, int courseId)
+        public void Add(AddCourseTestVM testToAdd, int courseId)
         {
             var mappedQuestions = testToAdd.Questions.ToModels();
             var test = new CourseTest(testToAdd.Topic, mappedQuestions.ToList(), testToAdd.Weight, testToAdd.Deadline);
@@ -51,10 +51,10 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public CourseTestVM Get(int id)
+        public CourseTestDetailsVM Get(int id)
         {
             var test = courseTestService.GetById(id);
-            return new CourseTestVM(id, test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status, test.Deadline);
+            return new CourseTestDetailsVM(id, test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status, test.Deadline);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id">id of the test that we edit</param>
         /// <param name="updatedTest">test with updated properties</param>
         [HttpPut("{id}")]
-        public void Update(int id, CourseTestVM updatedTest)
+        public void Update(int id, AddCourseTestVM updatedTest)
         {
             var test = courseTestService.GetById(id);
             var updatedQuestions = updatedTest.Questions.ToModels();

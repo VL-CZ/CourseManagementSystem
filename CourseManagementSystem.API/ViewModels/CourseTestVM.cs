@@ -5,26 +5,21 @@ using System.Collections.Generic;
 namespace CourseManagementSystem.API.ViewModels
 {
     /// <summary>
-    /// viewmodel representing a test in a course
+    /// base viewmodel for course tests
     /// </summary>
-    public class CourseTestVM
+    public abstract class BaseCourseTestVM
     {
-        public CourseTestVM() { }
-
-        public CourseTestVM(int id, string topic, int scoreWeight, IEnumerable<TestQuestionVM> questions, TestStatus testStatus, DateTime deadline)
+        protected BaseCourseTestVM()
         {
-            Id = id;
-            Topic = topic;
-            Questions = questions;
-            Weight = scoreWeight;
-            Status = testStatus;
-            Deadline = deadline;
         }
 
-        /// <summary>
-        /// id of the test
-        /// </summary>
-        public int Id { get; set; }
+        protected BaseCourseTestVM(int weight, string topic, DateTime deadline, IEnumerable<TestQuestionVM> questions)
+        {
+            Weight = weight;
+            Topic = topic;
+            Deadline = deadline;
+            Questions = questions;
+        }
 
         /// <summary>
         /// weight of the score from the test (e.g. test of weight 2 has twice bigger impact on overall score than test of weight 1)
@@ -37,11 +32,6 @@ namespace CourseManagementSystem.API.ViewModels
         public string Topic { get; set; }
 
         /// <summary>
-        /// status of the test see
-        /// </summary>
-        public TestStatus Status { get; set; }
-
-        /// <summary>
         /// deadline of the test
         /// </summary>
         public DateTime Deadline { get; set; }
@@ -50,5 +40,40 @@ namespace CourseManagementSystem.API.ViewModels
         /// questions in this test
         /// </summary>
         public IEnumerable<TestQuestionVM> Questions { get; set; }
+    }
+
+    /// <summary>
+    /// viewmodel for adding a course test
+    /// </summary>
+    public class AddCourseTestVM : BaseCourseTestVM
+    {
+        public AddCourseTestVM() : base()
+        { }
+    }
+
+    /// <summary>
+    /// viewmodel representing a test in a course
+    /// </summary>
+    public class CourseTestDetailsVM : BaseCourseTestVM
+    {
+        public CourseTestDetailsVM() : base()
+        { }
+
+        public CourseTestDetailsVM(int id, string topic, int scoreWeight, IEnumerable<TestQuestionVM> questions, TestStatus testStatus, DateTime deadline)
+            : base(scoreWeight, topic, deadline, questions)
+        {
+            Id = id;
+            Status = testStatus;
+        }
+
+        /// <summary>
+        /// id of the test
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
+        /// status of the test see
+        /// </summary>
+        public TestStatus Status { get; set; }
     }
 }
