@@ -1,4 +1,4 @@
-﻿using CourseManagementSystem.Data;
+﻿using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,23 +9,21 @@ namespace CourseManagementSystem.API.Controllers
     [ApiController]
     public class GradesController : ControllerBase
     {
-        private readonly CMSDbContext dbContext;
+        private readonly IGradeService gradeService;
 
-        public GradesController(CMSDbContext dbContext)
+        public GradesController(IGradeService gradeService)
         {
-            this.dbContext = dbContext;
+            this.gradeService = gradeService;
         }
 
         /// <summary>
         /// remove grade with selected id
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">id of the grade</param>
         [HttpDelete("delete/{id}")]
         public void Delete(int id)
         {
-            var grade = dbContext.Grades.Find(id);
-            dbContext.Grades.Remove(grade);
-            dbContext.SaveChanges();
+            gradeService.DeleteById(id);
         }
     }
 }
