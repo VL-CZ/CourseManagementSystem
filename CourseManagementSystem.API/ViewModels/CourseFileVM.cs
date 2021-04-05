@@ -5,6 +5,16 @@
     /// </summary>
     public class CourseFileVM
     {
+        public CourseFileVM()
+        {
+        }
+
+        public CourseFileVM(int id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
+
         /// <summary>
         /// identifier of the file
         /// </summary>
