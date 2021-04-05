@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using CourseManagementSystem.Data.Models;
+using System;
+using System.Collections.Generic;
 
 namespace CourseManagementSystem.API.ViewModels
 {
@@ -9,12 +11,14 @@ namespace CourseManagementSystem.API.ViewModels
     {
         public CourseTestVM() { }
 
-        public CourseTestVM(int id, string topic, int scoreWeight, IEnumerable<TestQuestionVM> questions)
+        public CourseTestVM(int id, string topic, int scoreWeight, IEnumerable<TestQuestionVM> questions, TestStatus testStatus, DateTime deadline)
         {
             Id = id;
             Topic = topic;
             Questions = questions;
             Weight = scoreWeight;
+            Status = testStatus;
+            Deadline = deadline;
         }
 
         /// <summary>
@@ -31,6 +35,16 @@ namespace CourseManagementSystem.API.ViewModels
         /// topic of the test
         /// </summary>
         public string Topic { get; set; }
+
+        /// <summary>
+        /// status of the test see
+        /// </summary>
+        public TestStatus Status { get; set; }
+
+        /// <summary>
+        /// deadline of the test
+        /// </summary>
+        public DateTime Deadline { get; set; }
 
         /// <summary>
         /// questions in this test

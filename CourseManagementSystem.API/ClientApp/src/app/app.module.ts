@@ -27,6 +27,7 @@ import {StudentTestSubmissionsComponent} from './student-test-submissions/studen
 import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component';
 import {CourseForumComponent} from './course-forum/course-forum.component';
 import {TestEditComponent} from './test-edit/test-edit.component';
+import { CourseEnrollmentComponent } from './course-enrollment/course-enrollment.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import {TestEditComponent} from './test-edit/test-edit.component';
     StudentTestSubmissionsComponent,
     ConfirmDialogComponent,
     CourseForumComponent,
-    TestEditComponent
+    TestEditComponent,
+    CourseEnrollmentComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),

@@ -19,7 +19,7 @@ export class PeopleService extends ApiService {
    * @param courseId id of the course to enroll
    */
   public enrollToCourse(courseId: number): Observable<{}> {
-    return this.http.post<{}>(this.controllerUrl + courseId, {});
+    return this.http.post<{}>(this.controllerUrl + `enroll/${courseId}`, {});
   }
 
   /**

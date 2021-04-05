@@ -36,6 +36,7 @@ export class CourseListComponent implements OnInit {
   public isAdmin: boolean;
 
   private readonly courseService: CourseService;
+  private readonly peopleService: PeopleService;
   private currentUserId: string;
 
   constructor(courseService: CourseService, peopleService: PeopleService, roleAuthService: RoleAuthService) {
@@ -44,14 +45,7 @@ export class CourseListComponent implements OnInit {
     this.managedCourses = [];
     this.memberCourses = [];
     this.courseService = courseService;
-
-    peopleService.getMemberCourses().subscribe(result => {
-      this.memberCourses = result;
-    });
-
-    peopleService.getManagedCourses().subscribe(result => {
-      this.managedCourses = result;
-    });
+    this.peopleService = peopleService;
 
     roleAuthService.isAdmin().subscribe(result => {
       this.isAdmin = result.isAdmin;
@@ -60,6 +54,8 @@ export class CourseListComponent implements OnInit {
     roleAuthService.getCurrentUserId().subscribe(result => {
       this.currentUserId = result.id;
     });
+
+    this.reloadCourseInfo();
   }
 
   ngOnInit() {
@@ -70,9 +66,9 @@ export class CourseListComponent implements OnInit {
    * @param courseId identifier of the course to delete
    */
   public removeCourse(courseId: number): void {
-    this.courseService.delete(courseId).subscribe();
-    this.memberCourses = this.memberCourses.filter(c => c.id !== courseId);
-    this.managedCourses = this.managedCourses.filter(c => c.id !== courseId);
+    this.courseService.delete(courseId).subscribe(() => {
+      this.reloadCourseInfo();
+    });
   }
 
   /**
@@ -80,8 +76,21 @@ export class CourseListComponent implements OnInit {
    */
   public addCourse(): void {
     this.newCourse.adminId = this.currentUserId;
-    this.courseService.create(this.newCourse).subscribe(result => {
-      this.memberCourses.push(result);
+    this.courseService.create(this.newCourse).subscribe(() => {
+      this.reloadCourseInfo();
+    });
+  }
+
+  /**
+   * reload info about courses
+   */
+  private reloadCourseInfo(): void {
+    this.peopleService.getMemberCourses().subscribe(result => {
+      this.memberCourses = result;
+    });
+
+    this.peopleService.getManagedCourses().subscribe(result => {
+      this.managedCourses = result;
     });
   }
 }

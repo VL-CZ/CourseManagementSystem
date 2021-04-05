@@ -56,4 +56,12 @@ export class CourseTestService extends ApiService {
   public updateTest(testId: string, courseTest: CourseTestVM): Observable<{}> {
     return this.http.put(this.controllerUrl + testId, courseTest);
   }
+
+  /**
+   * publish the test
+   * @param testId id of the test to publish
+   */
+  public publishTest(testId: string): Observable<{}> {
+    return this.http.post(this.controllerUrl + `${testId}/publish`, {});
+  }
 }

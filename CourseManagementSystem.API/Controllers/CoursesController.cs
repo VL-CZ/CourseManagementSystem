@@ -82,11 +82,11 @@ namespace CourseManagementSystem.API.Controllers
         public IEnumerable<CourseTestVM> GetAllTests(int id)
         {
             var courseTests = dbContext.Courses.Include(course => course.Tests).Single(x => x.Id == id).Tests;
-            return courseTests.Select(ct => new CourseTestVM(ct.Id, ct.Topic, ct.Weight, ct.Questions.ToViewModels()));
+            return courseTests.Select(test => new CourseTestVM(test.Id, test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status,test.Deadline));
         }
 
         /// <summary>
-        /// get all posts in the course with give id
+        /// get all posts in the course with given id
         /// </summary>
         /// <param name="id">identifier of the course</param>
         /// <returns></returns>

@@ -2,6 +2,7 @@
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -39,10 +40,18 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public void Update(CourseTest test, int updatedWeight, string updatedTopic, ICollection<TestQuestion> updatedQuestions)
+        public void Publish(CourseTest test)
+        {
+            test.Status = TestStatus.Published;
+            dbContext.SaveChanges();
+        }
+
+        /// <inheritdoc/>
+        public void Update(CourseTest test, int updatedWeight, string updatedTopic, DateTime updatedDeadline, ICollection<TestQuestion> updatedQuestions)
         {
             test.Weight = updatedWeight;
             test.Topic = updatedTopic;
+            test.Deadline = updatedDeadline;
             test.Questions.Clear();
             test.Questions = updatedQuestions;
 

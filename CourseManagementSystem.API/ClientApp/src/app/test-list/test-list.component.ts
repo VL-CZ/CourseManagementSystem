@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {CourseTestVM} from '../viewmodels/courseTestVM';
+import {CourseTestVM, TestStatus} from '../viewmodels/courseTestVM';
 import {CourseService} from '../course.service';
 import {RoleAuthService} from '../role-auth.service';
 import {CourseTestService} from '../course-test.service';
@@ -43,13 +43,44 @@ export class TestListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.courseService.getAllTests(this.courseId).subscribe(tests => {
-      this.tests = tests;
+    this.reloadTests();
+  }
+
+  /**
+   * delete a test
+   * @param test test to delete
+   */
+  public deleteTest(test: CourseTestVM): void {
+    this.courseTestService.delete(test.id.toString()).subscribe(() => {
+      this.reloadTests();
     });
   }
 
-  public deleteTest(testId: number): void {
-    this.courseTestService.delete(testId.toString()).subscribe();
-    this.tests = this.tests.filter(test => test.id !== testId);
+  /**
+   * publish a test
+   * @param test test to publish
+   */
+  public publishTest(test: CourseTestVM): void {
+    this.courseTestService.publishTest(test.id.toString()).subscribe(() => {
+      this.reloadTests();
+    });
+  }
+
+  /**
+   * check if the test has already been published
+   * @param test given test
+   */
+  public isPublished(test: CourseTestVM): boolean {
+    return test.status === TestStatus.Published;
+  }
+
+  /**
+   * reload the tests (set `tests` variable)
+   * @private
+   */
+  private reloadTests(): void {
+    this.courseService.getAllTests(this.courseId).subscribe(tests => {
+      this.tests = tests;
+    });
   }
 }
