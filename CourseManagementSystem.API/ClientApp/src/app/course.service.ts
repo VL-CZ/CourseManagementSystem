@@ -5,7 +5,7 @@ import {Observable} from 'rxjs';
 import {CourseInfoVM} from './viewmodels/courseVM';
 import {AddCourseVM} from './viewmodels/courseVM';
 import {CourseMemberVM} from './viewmodels/courseMemberVM';
-import {FileVM} from './viewmodels/fileVM';
+import {CourseFileVM} from './viewmodels/courseFileVM';
 import {CourseTestVM} from './viewmodels/courseTestVM';
 import {ForumPostVM} from './viewmodels/forumPostVM';
 
@@ -47,8 +47,8 @@ export class CourseService extends ApiService {
    * get all shared files in this this course
    * @param courseId identifier of the course
    */
-  public getAllFiles(courseId: string): Observable<FileVM[]> {
-    return this.http.get<FileVM[]>(this.controllerUrl + `${courseId}/files`);
+  public getAllFiles(courseId: string): Observable<CourseFileVM[]> {
+    return this.http.get<CourseFileVM[]>(this.controllerUrl + `${courseId}/files`);
   }
 
   /**

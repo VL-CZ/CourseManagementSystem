@@ -1,7 +1,7 @@
 /**
  * viewmodel representing a file
  */
-export class FileVM {
+export class CourseFileVM {
   /**
    * id of the file
    */

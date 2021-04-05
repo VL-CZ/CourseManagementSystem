@@ -1,7 +1,7 @@
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {RoleAuthService} from '../role-auth.service';
 import {FileService} from '../file.service';
-import {FileVM} from '../viewmodels/fileVM';
+import {CourseFileVM} from '../viewmodels/courseFileVM';
 import {CourseService} from '../course.service';
 
 /**
@@ -36,7 +36,7 @@ export class FileListComponent implements OnInit {
   /**
    * list of uploaded files in this course
    */
-  public uploadedFiles: FileVM[] = [];
+  public uploadedFiles: CourseFileVM[] = [];
 
   constructor(roleAuthService: RoleAuthService, fileService: FileService, courseService: CourseService) {
     this.fileService = fileService;
