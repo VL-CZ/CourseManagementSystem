@@ -1,14 +1,9 @@
 import {TestQuestionVM} from './testQuestionVM';
 
 /**
- * viewmodel representing a test
+ * base viewmodel for course test
  */
-export class CourseTestVM {
-  /**
-   * id of the test
-   */
-  public id: number;
-
+abstract class BaseCourseTestVM {
   /**
    * topic of the test
    */
@@ -20,11 +15,6 @@ export class CourseTestVM {
   public weight: number;
 
   /**
-   * status of the test (is it already published?)
-   */
-  public status: TestStatus;
-
-  /**
    * deadline of the test
    */
   public deadline: Date;
@@ -33,6 +23,27 @@ export class CourseTestVM {
    * questions contained in this test
    */
   public questions: TestQuestionVM[] = [];
+}
+
+/**
+ * viewmodel for adding a course test
+ */
+export class AddCourseTestVM extends BaseCourseTestVM {
+}
+
+/**
+ * viewmodel representing details of a test
+ */
+export class CourseTestDetailsVM extends BaseCourseTestVM {
+  /**
+   * id of the test
+   */
+  public id: number;
+
+  /**
+   * status of the test (is it already published?)
+   */
+  public status: TestStatus;
 }
 
 /**

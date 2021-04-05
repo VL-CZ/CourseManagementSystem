@@ -1,7 +1,7 @@
 /**
  * base viewmodel for a course
  */
-export abstract class BaseCourseVM {
+abstract class BaseCourseVM {
   /**
    * name of the course
    */
