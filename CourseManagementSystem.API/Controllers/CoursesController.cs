@@ -24,15 +24,12 @@ namespace CourseManagementSystem.API.Controllers
         /// <summary>
         /// create new course
         /// </summary>
-        /// <returns></returns>
         [HttpPost("create")]
-        public CourseInfoVM Create([FromBody] AddCourseVM courseVM)
+        public void Create([FromBody] AddCourseVM courseVM)
         {
             Person admin = peopleService.GetById(courseVM.AdminId);
             Course createdCourse = new Course(courseVM.Name, admin);
             courseService.AddCourse(createdCourse);
-
-            return new CourseInfoVM(createdCourse.Id, createdCourse.Name);
         }
 
         /// <summary>

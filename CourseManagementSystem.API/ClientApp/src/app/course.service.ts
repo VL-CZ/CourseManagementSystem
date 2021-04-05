@@ -23,8 +23,8 @@ export class CourseService extends ApiService {
    * create new course
    * @returns created course info
    */
-  public create(courseVM: AddCourseVM): Observable<CourseInfoVM> {
-    return this.http.post<CourseInfoVM>(this.controllerUrl + 'create', courseVM);
+  public create(courseVM: AddCourseVM): Observable<{}> {
+    return this.http.post<{}>(this.controllerUrl + 'create', courseVM);
   }
 
   /**
