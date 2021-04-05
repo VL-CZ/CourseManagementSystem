@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {PercentCalculator} from '../utils/percentCalculator';
 import {GradeService} from '../grade.service';
-import {GradeDetailsVM} from '../viewmodels/gradeDetailsVM';
+import {GradeDetailsVM} from '../viewmodels/gradeVM';
 import {CourseMemberService} from '../course-member.service';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';

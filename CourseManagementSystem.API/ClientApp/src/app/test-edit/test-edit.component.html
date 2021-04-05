@@ -4,18 +4,18 @@
 <div class="jumbotron">
   <div class="form-group">
     <label for="testTopic">Topic</label>
-    <input type="text" min="0" class="form-control" id="testTopic" [(ngModel)]="courseTest.topic" name="testTopic">
+    <input type="text" min="0" class="form-control" id="testTopic" [(ngModel)]="testToUpdate.topic" name="testTopic">
   </div>
   <div class="form-group">
     <label for="testWeight">Test weight</label>
-    <input type="number" min="0" class="form-control" id="testWeight" [(ngModel)]="courseTest.weight" name="testWeight">
+    <input type="number" min="0" class="form-control" id="testWeight" [(ngModel)]="testToUpdate.weight" name="testWeight">
   </div>
   <div class="form-group">
     <label for="testDeadline">Deadline</label>
-    <input type="datetime-local" class="form-control" id="testDeadline" [(ngModel)]="courseTest.deadline" name="testDeadline">
+    <input type="datetime-local" class="form-control" id="testDeadline" [(ngModel)]="testToUpdate.deadline" name="testDeadline">
   </div>
 </div>
-<div class="jumbotron" *ngFor="let question of courseTest.questions">
+<div class="jumbotron" *ngFor="let question of testToUpdate.questions">
   <div class="form-group">
     <label for="questionText{{question.number}}">Question text</label>
     <textarea class="form-control" id="questionText{{question.number}}"

@@ -27,7 +27,7 @@ export class ForumPostService extends ApiService {
    * @param post forum post to add
    * @param courseId identifier of the course where to add the post
    */
-  public add(post: ForumPostVM, courseId: string): Observable<ForumPostVM> {
-    return this.http.post<ForumPostVM>(this.controllerUrl + courseId, post);
+  public add(post: ForumPostVM, courseId: string): Observable<{}> {
+    return this.http.post<{}>(this.controllerUrl + courseId, post);
   }
 }

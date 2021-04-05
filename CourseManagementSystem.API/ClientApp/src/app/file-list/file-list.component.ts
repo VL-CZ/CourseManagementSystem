@@ -1,7 +1,7 @@
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {RoleAuthService} from '../role-auth.service';
 import {FileService} from '../file.service';
-import {FileVM} from '../viewmodels/fileVM';
+import {CourseFileVM} from '../viewmodels/courseFileVM';
 import {CourseService} from '../course.service';
 
 /**
@@ -36,7 +36,7 @@ export class FileListComponent implements OnInit {
   /**
    * list of uploaded files in this course
    */
-  public uploadedFiles: FileVM[] = [];
+  public uploadedFiles: CourseFileVM[] = [];
 
   constructor(roleAuthService: RoleAuthService, fileService: FileService, courseService: CourseService) {
     this.fileService = fileService;
@@ -48,9 +48,7 @@ export class FileListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.courseService.getAllFiles(this.courseId).subscribe(result => {
-      this.uploadedFiles = result;
-    });
+    this.reloadFileData();
   }
 
   /**
@@ -65,8 +63,8 @@ export class FileListComponent implements OnInit {
    * upload a new file
    */
   public uploadFile(): void {
-    this.fileService.uploadTo(this.fileToUpload, this.courseId).subscribe(result => {
-      this.uploadedFiles.push(result);
+    this.fileService.uploadTo(this.fileToUpload, this.courseId).subscribe(() => {
+      this.reloadFileData();
     });
     this.fileToUpload = null;
     this.inputFile.nativeElement.value = ''; // clear file input
@@ -87,5 +85,15 @@ export class FileListComponent implements OnInit {
    */
   public downloadFile(fileId: number): void {
     this.fileService.download(fileId);
+  }
+
+  /**
+   * reload uploaded files
+   * @private
+   */
+  private reloadFileData(): void {
+    this.courseService.getAllFiles(this.courseId).subscribe(result => {
+      this.uploadedFiles = result;
+    });
   }
 }

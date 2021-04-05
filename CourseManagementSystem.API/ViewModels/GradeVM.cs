@@ -1,25 +1,22 @@
 ﻿namespace CourseManagementSystem.API.ViewModels
 {
     /// <summary>
-    /// class representing grade with its details
+    /// base viewmodel for grades
     /// </summary>
-    public class GradeDetailsVM
+    public abstract class BaseGradeVM
     {
-        public GradeDetailsVM() { }
-
-        public GradeDetailsVM(int id, double percentualValue, string topic, string comment, int weight)
+        protected BaseGradeVM()
         {
-            Id = id;
+        }
+
+        protected BaseGradeVM(double percentualValue, string topic, string comment, int weight)
+        {
             PercentualValue = percentualValue;
             Topic = topic;
             Comment = comment;
             Weight = weight;
         }
 
-        /// <summary>
-        /// identifier of the grade
-        /// </summary>
-        public int Id { get; set; }
 
         /// <summary>
         /// percentual value of the grade (0=0%, 1=100%, may be greater than 1 in case of bonus points)
@@ -42,5 +39,32 @@
         /// e.g. grade with weight 2 has the same weight as two grades weighted 1
         /// </summary>
         public int Weight { get; set; }
+    }
+
+    /// <summary>
+    /// viewmodel for adding new grade
+    /// </summary>
+    public class AddGradeVM : BaseGradeVM
+    {
+        public AddGradeVM() : base()
+        { }
+    }
+
+    /// <summary>
+    /// class representing grade with its details
+    /// </summary>
+    public class GradeDetailsVM : BaseGradeVM
+    {
+        public GradeDetailsVM() { }
+
+        public GradeDetailsVM(int id, double percentualValue, string topic, string comment, int weight) : base(percentualValue, topic, comment, weight)
+        {
+            Id = id;
+        }
+
+        /// <summary>
+        /// identifier of the grade
+        /// </summary>
+        public int Id { get; set; }
     }
 }

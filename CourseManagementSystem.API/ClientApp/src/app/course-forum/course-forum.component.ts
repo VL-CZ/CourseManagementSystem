@@ -46,15 +46,6 @@ export class CourseForumComponent implements OnInit {
   }
 
   /**
-   * reload the forum posts
-   */
-  public reloadPosts(): void {
-    this.courseService.getAllPosts(this.courseId).subscribe(posts => {
-      this.posts = posts;
-    });
-  }
-
-  /**
    * delete the given post
    * @param post post to delete
    */
@@ -71,6 +62,15 @@ export class CourseForumComponent implements OnInit {
     this.forumPostService.add(this.postToAdd, this.courseId).subscribe(() => {
       this.reloadPosts();
       this.postToAdd = new ForumPostVM();
+    });
+  }
+
+  /**
+   * reload the forum posts
+   */
+  private reloadPosts(): void {
+    this.courseService.getAllPosts(this.courseId).subscribe(posts => {
+      this.posts = posts;
     });
   }
 }

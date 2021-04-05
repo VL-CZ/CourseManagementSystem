@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CourseTestService} from '../course-test.service';
-import {CourseTestVM} from '../viewmodels/courseTestVM';
+import {AddCourseTestVM, CourseTestDetailsVM} from '../viewmodels/courseTestVM';
 import { TestQuestionVM } from '../viewmodels/testQuestionVM';
 import { ArrayUtils } from '../utils/arrayUtils';
 import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
@@ -23,7 +23,7 @@ export class TestCreateComponent implements OnInit {
   /**
    * test that will be created
    */
-  public testToCreate: CourseTestVM;
+  public testToCreate: AddCourseTestVM;
 
   /**
    * number of questions in the test
@@ -34,7 +34,7 @@ export class TestCreateComponent implements OnInit {
     this.courseId = ActivatedRouteUtils.getIdParam(route);
     this.courseTestService = courseTestService;
     this.router = router;
-    this.testToCreate = new CourseTestVM();
+    this.testToCreate = new AddCourseTestVM();
   }
 
   ngOnInit() {

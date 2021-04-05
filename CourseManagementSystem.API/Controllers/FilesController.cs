@@ -27,10 +27,9 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="file"></param>
         /// <returns></returns>
         [HttpPost("upload/{courseId}")]
-        public CourseFileVM Upload(IFormFile file, int courseId)
+        public void Upload(IFormFile file, int courseId)
         {
-            CourseFile courseFile = fileService.SaveTo(courseId, file);
-            return new CourseFileVM() { Id = courseFile.ID, Name = courseFile.Name };
+            fileService.SaveTo(courseId, file);
         }
 
         /// <summary>

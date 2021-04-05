@@ -24,7 +24,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <summary>
         /// get person by id
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">identifier of the person</param>
         /// <returns></returns>
         [HttpGet("{id}")]
         public CourseMemberVM Get(int id)
@@ -36,17 +36,15 @@ namespace CourseManagementSystem.API.Controllers
         /// <summary>
         /// assign grade to the person with selected id
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="g"></param>
+        /// <param name="id">identifier of the <see cref="CourseMember"/></param>
+        /// <param name="g">grade viewmodel to add</param>
         /// <returns>assigned grade</returns>
         [HttpPost("{id}/assignGrade")]
-        public GradeDetailsVM AssignGrade(int id, [FromBody] AddGradeVM g)
+        public void AssignGrade(int id, AddGradeVM g)
         {
             CourseMember cm = courseMemberService.GetMemberByID(id);
             Grade grade = new Grade(g.PercentualValue, g.Comment, g.Topic, g.Weight);
             courseMemberService.AssignGrade(cm, grade);
-
-            return new GradeDetailsVM(grade.Id, grade.PercentualValue, grade.Topic, grade.Comment, grade.Weight);
         }
 
         /// <summary>

@@ -2,11 +2,10 @@ import {Inject, Injectable} from '@angular/core';
 import {ApiService} from './api.service';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {CourseInfoVM} from './viewmodels/courseInfoVM';
-import {AddCourseVM} from './viewmodels/addCourseVM';
+import {AddCourseVM} from './viewmodels/courseVM';
 import {CourseMemberVM} from './viewmodels/courseMemberVM';
-import {FileVM} from './viewmodels/fileVM';
-import {CourseTestVM} from './viewmodels/courseTestVM';
+import {CourseFileVM} from './viewmodels/courseFileVM';
+import {CourseTestDetailsVM} from './viewmodels/courseTestVM';
 import {ForumPostVM} from './viewmodels/forumPostVM';
 
 @Injectable({
@@ -23,8 +22,8 @@ export class CourseService extends ApiService {
    * create new course
    * @returns created course info
    */
-  public create(courseVM: AddCourseVM): Observable<CourseInfoVM> {
-    return this.http.post<CourseInfoVM>(this.controllerUrl + 'create', courseVM);
+  public create(courseVM: AddCourseVM): Observable<{}> {
+    return this.http.post<{}>(this.controllerUrl + 'create', courseVM);
   }
 
   /**
@@ -47,16 +46,16 @@ export class CourseService extends ApiService {
    * get all shared files in this this course
    * @param courseId identifier of the course
    */
-  public getAllFiles(courseId: string): Observable<FileVM[]> {
-    return this.http.get<FileVM[]>(this.controllerUrl + `${courseId}/files`);
+  public getAllFiles(courseId: string): Observable<CourseFileVM[]> {
+    return this.http.get<CourseFileVM[]>(this.controllerUrl + `${courseId}/files`);
   }
 
   /**
    * get all tests in this course
    * @param courseId identifier of the course
    */
-  public getAllTests(courseId: string): Observable<CourseTestVM[]> {
-    return this.http.get<CourseTestVM[]>(this.controllerUrl + `${courseId}/tests`);
+  public getAllTests(courseId: string): Observable<CourseTestDetailsVM[]> {
+    return this.http.get<CourseTestDetailsVM[]>(this.controllerUrl + `${courseId}/tests`);
   }
 
   /**

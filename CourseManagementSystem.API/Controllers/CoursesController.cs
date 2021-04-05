@@ -24,15 +24,12 @@ namespace CourseManagementSystem.API.Controllers
         /// <summary>
         /// create new course
         /// </summary>
-        /// <returns></returns>
         [HttpPost("create")]
-        public CourseInfoVM Create([FromBody] AddCourseVM courseVM)
+        public void Create([FromBody] AddCourseVM courseVM)
         {
             Person admin = peopleService.GetById(courseVM.AdminId);
             Course createdCourse = new Course(courseVM.Name, admin);
             courseService.AddCourse(createdCourse);
-
-            return new CourseInfoVM(createdCourse.Id, createdCourse.Name);
         }
 
         /// <summary>
@@ -73,10 +70,10 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id">Id of the course</param>
         /// <returns></returns>
         [HttpGet("{id}/tests")]
-        public IEnumerable<CourseTestVM> GetAllTests(int id)
+        public IEnumerable<CourseTestDetailsVM> GetAllTests(int id)
         {
             var courseTests = courseService.GetTests(id);
-            return courseTests.Select(test => new CourseTestVM(test.Id, test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status, test.Deadline));
+            return courseTests.Select(test => new CourseTestDetailsVM(test.Id, test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status, test.Deadline));
         }
 
         /// <summary>

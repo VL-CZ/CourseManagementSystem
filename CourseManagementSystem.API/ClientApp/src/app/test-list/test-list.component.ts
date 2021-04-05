@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {CourseTestVM, TestStatus} from '../viewmodels/courseTestVM';
+import {CourseTestDetailsVM, TestStatus} from '../viewmodels/courseTestVM';
 import {CourseService} from '../course.service';
 import {RoleAuthService} from '../role-auth.service';
 import {CourseTestService} from '../course-test.service';
@@ -23,7 +23,7 @@ export class TestListComponent implements OnInit {
   /**
    * list of test in this course
    */
-  public tests: CourseTestVM[] = [];
+  public tests: CourseTestDetailsVM[] = [];
 
   /**
    * is the current user admin?
@@ -50,7 +50,7 @@ export class TestListComponent implements OnInit {
    * delete a test
    * @param test test to delete
    */
-  public deleteTest(test: CourseTestVM): void {
+  public deleteTest(test: CourseTestDetailsVM): void {
     this.courseTestService.delete(test.id.toString()).subscribe(() => {
       this.reloadTests();
     });
@@ -60,7 +60,7 @@ export class TestListComponent implements OnInit {
    * publish a test
    * @param test test to publish
    */
-  public publishTest(test: CourseTestVM): void {
+  public publishTest(test: CourseTestDetailsVM): void {
     this.courseTestService.publishTest(test.id.toString()).subscribe(() => {
       this.reloadTests();
     });
@@ -70,7 +70,7 @@ export class TestListComponent implements OnInit {
    * check if the test has already been published
    * @param test given test
    */
-  public isPublished(test: CourseTestVM): boolean {
+  public isPublished(test: CourseTestDetailsVM): boolean {
     return test.status === TestStatus.Published;
   }
 

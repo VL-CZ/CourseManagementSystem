@@ -1,7 +1,7 @@
 /**
- * viewmodel for adding a grade
+ * base viewmodel for a grade
  */
-export class AddGradeVM {
+abstract class BaseGradeVM {
   /**
    * percentual value of the grade (0=0%,1=100%)
    */
@@ -21,7 +21,20 @@ export class AddGradeVM {
    * weight of the grade
    */
   public weight: number;
+}
 
-  constructor() {
-  }
+/**
+ * viewmodel for adding a grade
+ */
+export class AddGradeVM extends BaseGradeVM {
+}
+
+/**
+ * viewmodel representing details about a grade
+ */
+export class GradeDetailsVM extends BaseGradeVM {
+  /**
+   * id of the grade
+   */
+  public id: number;
 }

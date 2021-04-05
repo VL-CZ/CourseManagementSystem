@@ -2,8 +2,8 @@ import {Inject, Injectable} from '@angular/core';
 import {CourseMemberVM} from './viewmodels/courseMemberVM';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {AddGradeVM} from './viewmodels/addGradeVM';
-import {GradeDetailsVM} from './viewmodels/gradeDetailsVM';
+import {AddGradeVM} from './viewmodels/gradeVM';
+import {GradeDetailsVM} from './viewmodels/gradeVM';
 import {ApiService} from './api.service';
 import {TestSubmissionInfoVM} from './viewmodels/testSubmisionInfoVM';
 
@@ -30,8 +30,8 @@ export class CourseMemberService extends ApiService {
    * @param courseMemberId
    * @param grade created grade (contains id)
    */
-  public assignGrade(courseMemberId: string, grade: AddGradeVM): Observable<GradeDetailsVM> {
-    return this.http.post<GradeDetailsVM>(this.controllerUrl + `${courseMemberId}/assignGrade`, grade);
+  public assignGrade(courseMemberId: string, grade: AddGradeVM): Observable<{}> {
+    return this.http.post<{}>(this.controllerUrl + `${courseMemberId}/assignGrade`, grade);
   }
 
   /**
