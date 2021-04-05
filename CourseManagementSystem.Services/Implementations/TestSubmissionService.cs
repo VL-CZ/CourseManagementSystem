@@ -2,21 +2,15 @@
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CourseManagementSystem.Services.Implementations
 {
-    public class TestSubmissionService : ITestSubmissionService
+    public class TestSubmissionService : DbService, ITestSubmissionService
     {
-        private readonly CMSDbContext dbContext;
-
-        public TestSubmissionService(CMSDbContext dbContext)
-        {
-            this.dbContext = dbContext;
-        }
+        public TestSubmissionService(CMSDbContext dbContext) : base(dbContext)
+        { }
 
         /// <inheritdoc/>
         public IEnumerable<TestSubmission> GetAllSubmissionsOfCourseMember(int courseMemberId)
@@ -40,6 +34,21 @@ namespace CourseManagementSystem.Services.Implementations
         public TestSubmission GetSubmissionById(int testSubmissionId)
         {
             return dbContext.TestSubmissions.Include(ts => ts.Answers).ThenInclude(a => a.Question).Include(ts => ts.Test).SingleOrDefault(ts => ts.Id == testSubmissionId);
+        }
+
+        /// <inheritdoc/>
+        public void Save(TestSubmission testSubmission)
+        {
+            dbContext.TestSubmissions.Add(testSubmission);
+            dbContext.SaveChanges();
+        }
+
+        /// <inheritdoc/>
+        public void UpdateAnswer(TestSubmissionAnswer answerToEvaluate, int updatedPoints, string updatedComment)
+        {
+            answerToEvaluate.Points = updatedPoints;
+            answerToEvaluate.Comment = updatedComment;
+            dbContext.SaveChanges();
         }
 
         /// <summary>

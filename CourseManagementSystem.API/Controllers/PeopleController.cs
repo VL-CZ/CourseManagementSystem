@@ -1,17 +1,13 @@
-﻿using CourseManagementSystem.API.Services;
+﻿using CourseManagementSystem.API.Extensions;
 using CourseManagementSystem.API.ViewModels;
 using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
-using Microsoft.AspNetCore.Authorization;
+using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using CourseManagementSystem.API.Extensions;
-using CourseManagementSystem.Services.Interfaces;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,15 +17,15 @@ namespace CourseManagementSystem.API.Controllers
     [ApiController]
     public class PeopleController : ControllerBase
     {
-        private readonly CMSDbContext dbContext;
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IPeopleService peopleService;
+        private readonly ICourseService courseService;
 
-        public PeopleController(CMSDbContext dbContext, IHttpContextAccessor httpContextAccessor, IPeopleService peopleService)
+        public PeopleController(IHttpContextAccessor httpContextAccessor, IPeopleService peopleService, ICourseService courseService)
         {
-            this.dbContext = dbContext;
             this.httpContextAccessor = httpContextAccessor;
             this.peopleService = peopleService;
+            this.courseService = courseService;
         }
 
         /// <summary>
@@ -39,12 +35,10 @@ namespace CourseManagementSystem.API.Controllers
         [HttpPost("enroll/{courseId}")]
         public void EnrollTo(int courseId)
         {
-            var course = dbContext.Courses.Find(courseId);
-            var user = peopleService.GetById(GetCurrentUserId());
+            var course = courseService.GetById(courseId);
+            var currentUser = peopleService.GetById(GetCurrentUserId());
 
-            var cm = new CourseMember() { Course = course, User = user };
-            dbContext.CourseMembers.Add(cm);
-            dbContext.SaveChanges();
+            peopleService.EnrollTo(currentUser, course);
         }
 
         /// <summary>
@@ -54,12 +48,8 @@ namespace CourseManagementSystem.API.Controllers
         [HttpGet("memberCourses")]
         public IEnumerable<CourseInfoVM> GetMemberCourses()
         {
-            var courseMembershipIds = dbContext.Users.Include(u => u.CourseMemberships).Single(u => u.Id == GetCurrentUserId()).CourseMemberships.Select(cm => cm.Id);
-            var courseVMs = dbContext.CourseMembers.Include(cm => cm.Course)
-                .Where(cm => courseMembershipIds.Contains(cm.Id))
-                .Select(cm => new CourseInfoVM(cm.Course.Id, cm.Course.Name));
-
-            return courseVMs;
+            var memberCourses = peopleService.GetMemberCourses(GetCurrentUserId());
+            return memberCourses.Select(course => new CourseInfoVM(course.Id, course.Name));
         }
 
         /// <summary>
@@ -69,24 +59,22 @@ namespace CourseManagementSystem.API.Controllers
         [HttpGet("managedCourses")]
         public IEnumerable<CourseInfoVM> GetManagedCourses()
         {
-            var managedCourses = dbContext.Courses.Include(c => c.Admin).Where(c => c.Admin.Id == GetCurrentUserId());
+            var managedCourses = peopleService.GetManagedCourses(GetCurrentUserId());
             return managedCourses.Select(c => new CourseInfoVM(c.Id, c.Name));
         }
 
         /// <summary>
-        /// get course member object of current user in the selected course
+        /// get course member id of current user in the selected course
         /// </summary>
         /// <param name="courseId">Id of the course</param>
         /// <returns></returns>
         [HttpGet("getCourseMember/{courseId}")]
         public int GetMemberByCourseId(int courseId)
         {
-            var currentUserId = GetCurrentUserId();
-            return dbContext.CourseMembers.Include(cm => cm.Course).Include(cm => cm.User)
-                .Where(cm => cm.User.Id == GetCurrentUserId())
-                .Where(cm => cm.Course.Id == courseId)
-                .Select(cm => cm.Id)
-                .Single();
+            var person = peopleService.GetById(GetCurrentUserId());
+            var course = courseService.GetById(courseId);
+
+            return peopleService.GetCourseMembership(person, course).Id;
         }
 
         /// <summary>

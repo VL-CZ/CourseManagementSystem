@@ -1,7 +1,5 @@
 ﻿using CourseManagementSystem.Data.Models;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace CourseManagementSystem.Services.Interfaces
 {
@@ -35,5 +33,19 @@ namespace CourseManagementSystem.Services.Interfaces
         /// <param name="questionNumber">number of the question we search for</param>
         /// <returns>answer to question with given question number</returns>
         TestSubmissionAnswer GetAnswerByQuestionNumber(TestSubmission testSubmission, int questionNumber);
+
+        /// <summary>
+        /// save a test submission
+        /// </summary>
+        /// <param name="testSubmission">test submission to save</param>
+        void Save(TestSubmission testSubmission);
+
+        /// <summary>
+        /// update properties of the answer
+        /// </summary>
+        /// <param name="answer">answer to update</param>
+        /// <param name="updatedPoints">updated value of <see cref="TestSubmissionAnswer.Points"/></param>
+        /// <param name="updatedComment">updated value of <see cref="TestSubmissionAnswer.Comment"/></param>
+        void UpdateAnswer(TestSubmissionAnswer answer, int updatedPoints, string updatedComment);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using CourseManagementSystem.Data.Models;
 
-namespace CourseManagementSystem.API.Services
+namespace CourseManagementSystem.Services.Interfaces
 {
     public interface ICourseMemberService
     {

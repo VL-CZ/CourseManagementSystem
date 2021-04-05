@@ -1,4 +1,3 @@
-using CourseManagementSystem.API.Services;
 using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Implementations;
@@ -54,6 +53,7 @@ namespace CourseManagementSystem.API
             services.AddTransient<IForumPostService, ForumPostService>();
             services.AddTransient<ICourseService, CourseService>();
             services.AddTransient<IPeopleService, PeopleService>();
+            services.AddTransient<IGradeService, GradeService>();
 
             services.AddTransient<ITestSubmissionEvaluator, TestSubmissionEvaluator>();
 

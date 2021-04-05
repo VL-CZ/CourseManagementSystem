@@ -13,6 +13,12 @@ namespace CourseManagementSystem.Data.Models
             TestSubmissions = new List<TestSubmission>();
         }
 
+        public CourseMember(Person user, Course course) : this()
+        {
+            User = user;
+            Course = course;
+        }
+
         [Key]
         public int Id { get; set; }
 

@@ -1,9 +1,8 @@
 ﻿using CourseManagementSystem.API.Extensions;
 using CourseManagementSystem.API.ViewModels;
-using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
+using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,11 +12,13 @@ namespace CourseManagementSystem.API.Controllers
     [ApiController]
     public class CoursesController : ControllerBase
     {
-        private readonly CMSDbContext dbContext;
+        private readonly ICourseService courseService;
+        private readonly IPeopleService peopleService;
 
-        public CoursesController(CMSDbContext dbContext)
+        public CoursesController(ICourseService courseService, IPeopleService peopleService)
         {
-            this.dbContext = dbContext;
+            this.courseService = courseService;
+            this.peopleService = peopleService;
         }
 
         /// <summary>
@@ -27,11 +28,9 @@ namespace CourseManagementSystem.API.Controllers
         [HttpPost("create")]
         public CourseInfoVM Create([FromBody] AddCourseVM courseVM)
         {
-            Person admin = dbContext.Users.Single(x => x.Id == courseVM.AdminId);
+            Person admin = peopleService.GetById(courseVM.AdminId);
             Course createdCourse = new Course(courseVM.Name, admin);
-
-            dbContext.Courses.Add(createdCourse);
-            dbContext.SaveChanges();
+            courseService.AddCourse(createdCourse);
 
             return new CourseInfoVM(createdCourse.Id, createdCourse.Name);
         }
@@ -43,9 +42,7 @@ namespace CourseManagementSystem.API.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            Course c = dbContext.Courses.Find(id);
-            dbContext.Courses.Remove(c);
-            dbContext.SaveChanges();
+            courseService.DeleteById(id);
         }
 
         /// <summary>
@@ -55,10 +52,7 @@ namespace CourseManagementSystem.API.Controllers
         [HttpGet("{id}/members")]
         public IEnumerable<CourseMemberVM> GetAllMembers(int id)
         {
-            var course = dbContext.Courses.Include(x => x.Members).Single(x => x.Id == id);
-            var courseMemberIDs = course.Members.Select(x => x.Id);
-            var people = dbContext.CourseMembers.Include(x => x.User).Where(cm => courseMemberIDs.Contains(cm.Id));
-
+            var people = courseService.GetMembers(id);
             return people.Select(cm => new CourseMemberVM(cm.Id.ToString(), cm.User.UserName, cm.User.Email));
         }
 
@@ -70,7 +64,7 @@ namespace CourseManagementSystem.API.Controllers
         [HttpGet("{id}/files")]
         public IEnumerable<CourseFileVM> GetAllFiles(int id)
         {
-            return dbContext.Courses.Include(c => c.Files).Single(x => x.Id == id).Files.Select(f => new CourseFileVM { Id = f.ID, Name = f.Name });
+            return courseService.GetFiles(id).Select(file => new CourseFileVM(file.ID, file.Name));
         }
 
         /// <summary>
@@ -81,8 +75,8 @@ namespace CourseManagementSystem.API.Controllers
         [HttpGet("{id}/tests")]
         public IEnumerable<CourseTestVM> GetAllTests(int id)
         {
-            var courseTests = dbContext.Courses.Include(course => course.Tests).Single(x => x.Id == id).Tests;
-            return courseTests.Select(test => new CourseTestVM(test.Id, test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status,test.Deadline));
+            var courseTests = courseService.GetTests(id);
+            return courseTests.Select(test => new CourseTestVM(test.Id, test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status, test.Deadline));
         }
 
         /// <summary>
@@ -93,7 +87,7 @@ namespace CourseManagementSystem.API.Controllers
         [HttpGet("{id}/posts")]
         public IEnumerable<ForumPostVM> GetAllPosts(int id)
         {
-            var posts = dbContext.Courses.Include(c => c.ForumPosts).ThenInclude(p => p.Author).SingleOrDefault(course => course.Id == id).ForumPosts;
+            var posts = courseService.GetPostsWithAuthors(id);
             return posts.Select(post => new ForumPostVM(post.Id, post.Author.Email, post.Text));
         }
     }

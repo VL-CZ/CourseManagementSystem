@@ -8,13 +8,10 @@ using System.Linq;
 
 namespace CourseManagementSystem.Services.Implementations
 {
-    public class CourseTestService : ICourseTestService
+    public class CourseTestService : DbService, ICourseTestService
     {
-        private readonly CMSDbContext dbContext;
-
-        public CourseTestService(CMSDbContext dbContext)
+        public CourseTestService(CMSDbContext dbContext) : base(dbContext)
         {
-            this.dbContext = dbContext;
         }
 
         /// <inheritdoc/>

@@ -1,12 +1,9 @@
 ﻿using CourseManagementSystem.API.Extensions;
-using CourseManagementSystem.API.Services;
 using CourseManagementSystem.API.ViewModels;
-using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace CourseManagementSystem.API.Controllers
@@ -20,14 +17,12 @@ namespace CourseManagementSystem.API.Controllers
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly ITestSubmissionService testSubmissionService;
         private readonly ITestSubmissionEvaluator testSubmissionEvaluator;
-        private readonly CMSDbContext dbContext;
 
         public TestSubmissionsController(ICourseTestService courseTestService, ICourseMemberService courseMemberService, IHttpContextAccessor httpContextAccessor,
-            CMSDbContext dbContext, ITestSubmissionService testSubmissionService, ITestSubmissionEvaluator testSubmissionEvaluator)
+            ITestSubmissionService testSubmissionService, ITestSubmissionEvaluator testSubmissionEvaluator)
         {
             this.courseTestService = courseTestService;
             this.courseMemberService = courseMemberService;
-            this.dbContext = dbContext;
             this.httpContextAccessor = httpContextAccessor;
             this.testSubmissionService = testSubmissionService;
             this.testSubmissionEvaluator = testSubmissionEvaluator;
@@ -50,9 +45,7 @@ namespace CourseManagementSystem.API.Controllers
                 testSubmissionVM.Answers.Select(answer => new TestSubmissionAnswer(test.GetQuestionByNumber(answer.QuestionNumber), answer.AnswerText)).ToList());
 
             testSubmissionEvaluator.Evaluate(testSubmission);
-
-            dbContext.TestSubmissions.Add(testSubmission);
-            dbContext.SaveChanges();
+            testSubmissionService.Save(testSubmission);
 
             return testSubmission.Id;
         }
@@ -81,7 +74,7 @@ namespace CourseManagementSystem.API.Controllers
         {
             TestSubmission submission = testSubmissionService.GetSubmissionById(testSubmissionId);
             var answersVM = submission.Answers.Select(a =>
-            new SubmissionAnswerWithCorrectAnswerVM(a.Question.Number, a.Question.QuestionText, a.Text, a.Question.CorrectAnswer, a.Points, a.Question.Points, a.Comment));
+                new SubmissionAnswerWithCorrectAnswerVM(a.Question.Number, a.Question.QuestionText, a.Text, a.Question.CorrectAnswer, a.Points, a.Question.Points, a.Comment));
 
             return new TestWithSubmissionVM(submission.Test.Id, submission.Test.Topic, submission.Id, answersVM);
         }
@@ -98,10 +91,8 @@ namespace CourseManagementSystem.API.Controllers
             foreach (var evaluatedAnswer in evaluatedTestSubmission.EvaluatedAnswers)
             {
                 var answer = testSubmissionService.GetAnswerByQuestionNumber(submission, evaluatedAnswer.QuestionNumber);
-                answer.Points = evaluatedAnswer.UpdatedPoints;
-                answer.Comment = evaluatedAnswer.UpdatedComment;
+                testSubmissionService.UpdateAnswer(answer, evaluatedAnswer.UpdatedPoints, evaluatedAnswer.UpdatedComment);
             }
-            dbContext.SaveChanges();
         }
     }
 }
