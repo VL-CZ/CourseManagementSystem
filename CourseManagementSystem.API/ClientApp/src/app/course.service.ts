@@ -2,11 +2,10 @@ import {Inject, Injectable} from '@angular/core';
 import {ApiService} from './api.service';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {CourseInfoVM} from './viewmodels/courseVM';
 import {AddCourseVM} from './viewmodels/courseVM';
 import {CourseMemberVM} from './viewmodels/courseMemberVM';
 import {CourseFileVM} from './viewmodels/courseFileVM';
-import {CourseTestVM} from './viewmodels/courseTestVM';
+import {CourseTestDetailsVM} from './viewmodels/courseTestVM';
 import {ForumPostVM} from './viewmodels/forumPostVM';
 
 @Injectable({
@@ -55,8 +54,8 @@ export class CourseService extends ApiService {
    * get all tests in this course
    * @param courseId identifier of the course
    */
-  public getAllTests(courseId: string): Observable<CourseTestVM[]> {
-    return this.http.get<CourseTestVM[]>(this.controllerUrl + `${courseId}/tests`);
+  public getAllTests(courseId: string): Observable<CourseTestDetailsVM[]> {
+    return this.http.get<CourseTestDetailsVM[]>(this.controllerUrl + `${courseId}/tests`);
   }
 
   /**

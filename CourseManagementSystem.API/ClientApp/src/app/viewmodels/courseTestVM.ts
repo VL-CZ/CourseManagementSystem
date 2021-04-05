@@ -29,6 +29,21 @@ abstract class BaseCourseTestVM {
  * viewmodel for adding a course test
  */
 export class AddCourseTestVM extends BaseCourseTestVM {
+
+  /**
+   * get class instance from `CourseTestDetailsVM`
+   * @param courseTest test
+   * @constructor
+   */
+  public static getFrom(courseTest: CourseTestDetailsVM): AddCourseTestVM {
+    const testToAdd = new AddCourseTestVM();
+    testToAdd.weight = courseTest.weight;
+    testToAdd.deadline = courseTest.deadline;
+    testToAdd.questions = courseTest.questions;
+    testToAdd.topic = courseTest.topic;
+
+    return testToAdd;
+  }
 }
 
 /**

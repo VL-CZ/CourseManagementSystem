@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {CourseTestVM} from '../viewmodels/courseTestVM';
+import {CourseTestDetailsVM} from '../viewmodels/courseTestVM';
 import {CourseTestService} from '../course-test.service';
 import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
 
@@ -16,7 +16,7 @@ export class TestDetailComponent implements OnInit {
   /**
    * current course test
    */
-  public courseTest: CourseTestVM = new CourseTestVM();
+  public courseTest: CourseTestDetailsVM = new CourseTestDetailsVM();
 
   /**
    * id of the test
