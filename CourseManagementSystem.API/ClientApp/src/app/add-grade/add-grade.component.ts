@@ -48,7 +48,7 @@ export class AddGradeComponent implements OnInit {
     this.gradeToAdd.percentualValue = PercentCalculator.percentToDouble(this.gradeToAdd.percentualValue);
 
     this.courseMemberService.assignGrade(this.courseMemberId, this.gradeToAdd).subscribe(
-      result => {
+      () => {
         RouterUtils.reloadPage(this.router, this.activatedRoute);
       });
   }

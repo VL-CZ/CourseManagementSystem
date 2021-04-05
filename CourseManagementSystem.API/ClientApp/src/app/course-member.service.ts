@@ -30,8 +30,8 @@ export class CourseMemberService extends ApiService {
    * @param courseMemberId
    * @param grade created grade (contains id)
    */
-  public assignGrade(courseMemberId: string, grade: AddGradeVM): Observable<GradeDetailsVM> {
-    return this.http.post<GradeDetailsVM>(this.controllerUrl + `${courseMemberId}/assignGrade`, grade);
+  public assignGrade(courseMemberId: string, grade: AddGradeVM): Observable<{}> {
+    return this.http.post<{}>(this.controllerUrl + `${courseMemberId}/assignGrade`, grade);
   }
 
   /**
