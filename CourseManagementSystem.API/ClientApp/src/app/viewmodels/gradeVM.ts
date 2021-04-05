@@ -1,7 +1,7 @@
 /**
  * base viewmodel for a grade
  */
-export abstract class BaseGradeVM {
+abstract class BaseGradeVM {
   /**
    * percentual value of the grade (0=0%,1=100%)
    */
