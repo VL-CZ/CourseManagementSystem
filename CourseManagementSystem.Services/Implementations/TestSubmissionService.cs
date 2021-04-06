@@ -37,6 +37,13 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
+        public void MarkAsReviewed(TestSubmission testSubmission)
+        {
+            testSubmission.IsReviewed = true;
+            dbContext.SaveChanges();
+        }
+
+        /// <inheritdoc/>
         public void Save(TestSubmission testSubmission)
         {
             dbContext.TestSubmissions.Add(testSubmission);
