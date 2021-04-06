@@ -40,9 +40,10 @@ namespace CourseManagementSystem.API.Controllers
 
             string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
             var courseMember = courseMemberService.GetMemberByUserAndCourse(currentUserId, test.Course.Id);
+            var submittedAnswers = testSubmissionVM.Answers.Select(answer => new TestSubmissionAnswer(test.GetQuestionByNumber(answer.QuestionNumber), answer.AnswerText));
 
             var testSubmission = new TestSubmission(test, courseMember,
-                testSubmissionVM.Answers.Select(answer => new TestSubmissionAnswer(test.GetQuestionByNumber(answer.QuestionNumber), answer.AnswerText)).ToList());
+                submittedAnswers.ToList());
 
             testSubmissionEvaluator.Evaluate(testSubmission);
             testSubmissionService.Save(testSubmission);
