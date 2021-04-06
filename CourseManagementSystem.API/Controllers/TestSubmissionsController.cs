@@ -34,7 +34,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testSubmissionVM">solution to submit</param>
         /// <returns>Id of the test submission</returns>
         [HttpPost("")]
-        public int Submit(TestSubmissionVM testSubmissionVM)
+        public int Submit(SubmitTestVM testSubmissionVM)
         {
             var test = courseTestService.GetById(testSubmissionVM.TestId);
 
@@ -56,12 +56,12 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testId"></param>
         /// <returns></returns>
         [HttpGet("emptyTest/{testId}")]
-        public TestSubmissionVM GetEmptySubmission(int testId)
+        public SubmitTestVM GetEmptySubmission(int testId)
         {
             var test = courseTestService.GetById(testId);
             var submissionAnswers = test.Questions.Select(question => new SubmissionAnswerVM(question.Number, question.QuestionText, string.Empty));
 
-            return new TestSubmissionVM(test.Id, test.Topic, submissionAnswers);
+            return new SubmitTestVM(test.Id, test.Topic, submissionAnswers);
         }
 
         /// <summary>
@@ -93,6 +93,8 @@ namespace CourseManagementSystem.API.Controllers
                 var answer = testSubmissionService.GetAnswerByQuestionNumber(submission, evaluatedAnswer.QuestionNumber);
                 testSubmissionService.UpdateAnswer(answer, evaluatedAnswer.UpdatedPoints, evaluatedAnswer.UpdatedComment);
             }
+
+            testSubmissionService.MarkAsReviewed(submission);
         }
     }
 }

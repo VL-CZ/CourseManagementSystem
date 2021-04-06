@@ -53,10 +53,10 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id">ID of the <see cref="CourseMember"/></param>
         /// <returns>all test submissions of the course member</returns>
         [HttpGet("{id}/submissions")]
-        public IEnumerable<TestSubmissionInfoVM> GetTestSubmissions(int id)
+        public IEnumerable<TestSubmissionSummaryVM> GetTestSubmissions(int id)
         {
             var userSubmissions = testSubmissionService.GetAllSubmissionsOfCourseMember(id);
-            return userSubmissions.Select(ts => new TestSubmissionInfoVM(ts.Id, ts.Test.Topic, ts.Test.Weight, TestScoreCalculator.CalculateScore(ts)));
+            return userSubmissions.Select(ts => new TestSubmissionSummaryVM(ts.Id, ts.Test.Topic, ts.Test.Weight, TestScoreCalculator.CalculateScore(ts)));
         }
 
         /// <summary>

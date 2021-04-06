@@ -1,27 +1,33 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace CourseManagementSystem.API.ViewModels
 {
-    /// <summary>
-    /// viewmodel for test submission
-    /// </summary>
-    public class TestSubmissionVM
+    public abstract class BaseTestInfoVM
     {
-        public TestSubmissionVM()
-        {
-        }
 
-        public TestSubmissionVM(int testId, string testTopic, IEnumerable<SubmissionAnswerVM> answers)
+    }
+
+    /// <summary>
+    /// class representing basic info about a test submission
+    /// </summary>
+    public class TestSubmissionSummaryVM
+    {
+        public TestSubmissionSummaryVM()
+        { }
+
+        public TestSubmissionSummaryVM(int testSubmissionId, string testTopic, int testWeight, double percentualScore)
         {
-            TestId = testId;
+            TestSubmissionId = testSubmissionId;
             TestTopic = testTopic;
-            Answers = answers;
+            TestWeight = testWeight;
+            PercentualScore = percentualScore;
         }
 
         /// <summary>
-        /// id of the test
+        /// id of the test submission
         /// </summary>
-        public int TestId { get; set; }
+        public int TestSubmissionId { get; set; }
 
         /// <summary>
         /// topic of the test
@@ -29,40 +35,109 @@ namespace CourseManagementSystem.API.ViewModels
         public string TestTopic { get; set; }
 
         /// <summary>
-        /// answers submitted by student
+        /// weight of the test
         /// </summary>
-        public IEnumerable<SubmissionAnswerVM> Answers { get; set; }
+        public int TestWeight { get; set; }
+
+        /// <summary>
+        /// score from the test (in percents)
+        /// </summary>
+        public double PercentualScore { get; set; }
+
+        /// <summary>
+        /// datetime when this test was submitted
+        /// </summary>
+        public DateTime SubmittedDateTime { get; set; }
+
+        /// <summary>
+        /// has this test already been reviewed?
+        /// </summary>
+        public bool IsReviewed { get; set; }
     }
 
     /// <summary>
-    /// class representing the submission answers submitted by students
+    /// class representing info about test submission and course memeber
     /// </summary>
-    public class SubmissionAnswerVM
+    public class TestSubmissionWithUserInfoVM
     {
-        public SubmissionAnswerVM()
+        public TestSubmissionWithUserInfoVM() { }
+
+        public TestSubmissionWithUserInfoVM(string studentEmail, int testSubmissionId, double percentualScore)
         {
+            StudentEmail = studentEmail;
+            TestSubmissionId = testSubmissionId;
+            PercentualScore = percentualScore;
         }
 
-        public SubmissionAnswerVM(int questionNumber, string questionText, string answerText)
+        /// <summary>
+        /// email of the student
+        /// </summary>
+        public string StudentEmail { get; set; }
+
+        /// <summary>
+        /// id of the test submission
+        /// </summary>
+        public int TestSubmissionId { get; set; }
+
+        /// <summary>
+        /// percentual score gained from the test
+        /// </summary>
+        public double PercentualScore { get; set; }
+
+        /// <summary>
+        /// datetime when this test was submitted
+        /// </summary>
+        public DateTime SubmittedDateTime { get; set; }
+
+        /// <summary>
+        /// has this test already been reviewed?
+        /// </summary>
+        public bool IsReviewed { get; set; }
+    }
+
+    /// <summary>
+    /// this class represents viewmodel for test with submission
+    /// </summary>
+    public class TestWithSubmissionVM
+    {
+        public TestWithSubmissionVM() { }
+
+        public TestWithSubmissionVM(int testId, string testTopic, int submissionId, IEnumerable<SubmissionAnswerWithCorrectAnswerVM> answers)
         {
-            QuestionNumber = questionNumber;
-            QuestionText = questionText;
-            AnswerText = answerText;
+            TestId = testId;
+            TestTopic = testTopic;
+            Answers = answers;
+            SubmissionId = submissionId;
         }
 
         /// <summary>
-        /// number of question that this answer belongs to
+        /// id of the test
         /// </summary>
-        public int QuestionNumber { get; set; }
+        public int TestId { get; }
 
         /// <summary>
-        /// text of the question
+        /// topic of the test
         /// </summary>
-        public string QuestionText { get; set; }
+        public string TestTopic { get; }
 
         /// <summary>
-        /// answer submitted by the student
+        /// id of the test submission
         /// </summary>
-        public string AnswerText { get; set; }
+        public int SubmissionId { get; }
+
+        /// <summary>
+        /// datetime when this test was submitted
+        /// </summary>
+        public DateTime SubmittedDateTime { get; set; }
+
+        /// <summary>
+        /// has this test already been reviewed?
+        /// </summary>
+        public bool IsReviewed { get; set; }
+
+        /// <summary>
+        /// submitted and correct answers
+        /// </summary>
+        public IEnumerable<SubmissionAnswerWithCorrectAnswerVM> Answers { get; }
     }
 }
