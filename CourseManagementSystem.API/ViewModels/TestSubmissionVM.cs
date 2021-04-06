@@ -37,12 +37,12 @@ namespace CourseManagementSystem.API.ViewModels
     /// <summary>
     /// class representing basic info about a test submission
     /// </summary>
-    public class TestSubmissionSummaryVM : BaseTestSubmissionVM
+    public class TestSubmissionInfoVM : BaseTestSubmissionVM
     {
-        public TestSubmissionSummaryVM() : base()
+        public TestSubmissionInfoVM() : base()
         { }
 
-        public TestSubmissionSummaryVM(int testSubmissionId, string testTopic, int testWeight, double percentualScore, DateTime submittedDateTime, bool isReviewed)
+        public TestSubmissionInfoVM(int testSubmissionId, string testTopic, int testWeight, double percentualScore, DateTime submittedDateTime, bool isReviewed)
             : base(testSubmissionId, submittedDateTime, isReviewed)
         {
             TestTopic = testTopic;
