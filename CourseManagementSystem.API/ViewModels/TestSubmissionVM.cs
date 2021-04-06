@@ -3,31 +3,52 @@ using System.Collections.Generic;
 
 namespace CourseManagementSystem.API.ViewModels
 {
-    public abstract class BaseTestInfoVM
-    {
-
-    }
-
     /// <summary>
-    /// class representing basic info about a test submission
+    /// base viewmodel for a test submission
     /// </summary>
-    public class TestSubmissionSummaryVM
+    public abstract class BaseTestSubmissionVM
     {
-        public TestSubmissionSummaryVM()
+        protected BaseTestSubmissionVM()
         { }
 
-        public TestSubmissionSummaryVM(int testSubmissionId, string testTopic, int testWeight, double percentualScore)
+        protected BaseTestSubmissionVM(int testSubmissionId, DateTime submittedDateTime, bool isReviewed)
         {
             TestSubmissionId = testSubmissionId;
-            TestTopic = testTopic;
-            TestWeight = testWeight;
-            PercentualScore = percentualScore;
+            SubmittedDateTime = submittedDateTime;
+            IsReviewed = isReviewed;
         }
 
         /// <summary>
         /// id of the test submission
         /// </summary>
         public int TestSubmissionId { get; set; }
+
+        /// <summary>
+        /// datetime when this test was submitted
+        /// </summary>
+        public DateTime SubmittedDateTime { get; set; }
+
+        /// <summary>
+        /// has this test already been reviewed?
+        /// </summary>
+        public bool IsReviewed { get; set; }
+    }
+
+    /// <summary>
+    /// class representing basic info about a test submission
+    /// </summary>
+    public class TestSubmissionSummaryVM : BaseTestSubmissionVM
+    {
+        public TestSubmissionSummaryVM() : base()
+        { }
+
+        public TestSubmissionSummaryVM(int testSubmissionId, string testTopic, int testWeight, double percentualScore, DateTime submittedDateTime, bool isReviewed)
+            : base(testSubmissionId, submittedDateTime, isReviewed)
+        {
+            TestTopic = testTopic;
+            TestWeight = testWeight;
+            PercentualScore = percentualScore;
+        }
 
         /// <summary>
         /// topic of the test
@@ -43,29 +64,20 @@ namespace CourseManagementSystem.API.ViewModels
         /// score from the test (in percents)
         /// </summary>
         public double PercentualScore { get; set; }
-
-        /// <summary>
-        /// datetime when this test was submitted
-        /// </summary>
-        public DateTime SubmittedDateTime { get; set; }
-
-        /// <summary>
-        /// has this test already been reviewed?
-        /// </summary>
-        public bool IsReviewed { get; set; }
     }
 
     /// <summary>
     /// class representing info about test submission and course memeber
     /// </summary>
-    public class TestSubmissionWithUserInfoVM
+    public class TestSubmissionWithUserInfoVM : BaseTestSubmissionVM
     {
-        public TestSubmissionWithUserInfoVM() { }
+        public TestSubmissionWithUserInfoVM() : base()
+        { }
 
-        public TestSubmissionWithUserInfoVM(string studentEmail, int testSubmissionId, double percentualScore)
+        public TestSubmissionWithUserInfoVM(string studentEmail, int testSubmissionId, double percentualScore, DateTime submittedDateTime, bool isReviewed)
+            : base(testSubmissionId, submittedDateTime, isReviewed)
         {
             StudentEmail = studentEmail;
-            TestSubmissionId = testSubmissionId;
             PercentualScore = percentualScore;
         }
 
@@ -75,69 +87,40 @@ namespace CourseManagementSystem.API.ViewModels
         public string StudentEmail { get; set; }
 
         /// <summary>
-        /// id of the test submission
-        /// </summary>
-        public int TestSubmissionId { get; set; }
-
-        /// <summary>
         /// percentual score gained from the test
         /// </summary>
         public double PercentualScore { get; set; }
-
-        /// <summary>
-        /// datetime when this test was submitted
-        /// </summary>
-        public DateTime SubmittedDateTime { get; set; }
-
-        /// <summary>
-        /// has this test already been reviewed?
-        /// </summary>
-        public bool IsReviewed { get; set; }
     }
 
     /// <summary>
     /// this class represents viewmodel for test with submission
     /// </summary>
-    public class TestWithSubmissionVM
+    public class TestWithSubmissionVM : BaseTestSubmissionVM
     {
-        public TestWithSubmissionVM() { }
+        public TestWithSubmissionVM() : base()
+        { }
 
-        public TestWithSubmissionVM(int testId, string testTopic, int submissionId, IEnumerable<SubmissionAnswerWithCorrectAnswerVM> answers)
+        public TestWithSubmissionVM(int testId, string testTopic, int testSubmissionId, IEnumerable<SubmissionAnswerWithCorrectAnswerVM> answers,
+            DateTime submittedDateTime, bool isReviewed) : base(testSubmissionId, submittedDateTime, isReviewed)
         {
             TestId = testId;
             TestTopic = testTopic;
             Answers = answers;
-            SubmissionId = submissionId;
         }
 
         /// <summary>
         /// id of the test
         /// </summary>
-        public int TestId { get; }
+        public int TestId { get; set; }
 
         /// <summary>
         /// topic of the test
         /// </summary>
-        public string TestTopic { get; }
-
-        /// <summary>
-        /// id of the test submission
-        /// </summary>
-        public int SubmissionId { get; }
-
-        /// <summary>
-        /// datetime when this test was submitted
-        /// </summary>
-        public DateTime SubmittedDateTime { get; set; }
-
-        /// <summary>
-        /// has this test already been reviewed?
-        /// </summary>
-        public bool IsReviewed { get; set; }
+        public string TestTopic { get; set; }
 
         /// <summary>
         /// submitted and correct answers
         /// </summary>
-        public IEnumerable<SubmissionAnswerWithCorrectAnswerVM> Answers { get; }
+        public IEnumerable<SubmissionAnswerWithCorrectAnswerVM> Answers { get; set; }
     }
 }
