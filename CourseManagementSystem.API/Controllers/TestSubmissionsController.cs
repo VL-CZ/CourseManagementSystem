@@ -76,7 +76,7 @@ namespace CourseManagementSystem.API.Controllers
             var answersVM = submission.Answers.Select(a =>
                 new SubmissionAnswerWithCorrectAnswerVM(a.Question.Number, a.Question.QuestionText, a.Text, a.Question.CorrectAnswer, a.Points, a.Question.Points, a.Comment));
 
-            return new TestWithSubmissionVM(submission.Test.Id, submission.Test.Topic, submission.Id, answersVM);
+            return new TestWithSubmissionVM(submission.Test.Id, submission.Test.Topic, submission.Id, answersVM, submission.SubmittedDateTime, submission.IsReviewed);
         }
 
         /// <summary>
