@@ -34,7 +34,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testSubmissionVM">solution to submit</param>
         /// <returns>Id of the test submission</returns>
         [HttpPost("")]
-        public int Submit(SubmitTestVM testSubmissionVM)
+        public string Submit(SubmitTestVM testSubmissionVM)
         {
             var test = courseTestService.GetById(testSubmissionVM.TestId);
 
@@ -57,7 +57,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testId"></param>
         /// <returns></returns>
         [HttpGet("emptyTest/{testId}")]
-        public SubmitTestVM GetEmptySubmission(int testId)
+        public SubmitTestVM GetEmptySubmission(string testId)
         {
             var test = courseTestService.GetById(testId);
             var submissionAnswers = test.Questions.Select(question => new SubmissionAnswerVM(question.Number, question.QuestionText, string.Empty));
@@ -71,7 +71,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testSubmissionId">id of the submission</param>
         /// <returns>test submission with the given id</returns>
         [HttpGet("{testSubmissionId}")]
-        public TestWithSubmissionVM GetTestSubmission(int testSubmissionId)
+        public TestWithSubmissionVM GetTestSubmission(string testSubmissionId)
         {
             TestSubmission submission = testSubmissionService.GetSubmissionById(testSubmissionId);
             var answersVM = submission.Answers.Select(a =>
@@ -86,7 +86,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testSubmissionId">id of the submission that is evaluated</param>
         /// <param name="evaluatedTestSubmission">the evaluated test submission</param>
         [HttpPut("{testSubmissionId}")]
-        public void UpdateTestSubmission(int testSubmissionId, EvaluatedTestSubmissionVM evaluatedTestSubmission)
+        public void UpdateTestSubmission(string testSubmissionId, EvaluatedTestSubmissionVM evaluatedTestSubmission)
         {
             TestSubmission submission = testSubmissionService.GetSubmissionById(testSubmissionId);
             foreach (var evaluatedAnswer in evaluatedTestSubmission.EvaluatedAnswers)

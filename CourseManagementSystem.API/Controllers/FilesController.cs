@@ -27,7 +27,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="file"></param>
         /// <returns></returns>
         [HttpPost("upload/{courseId}")]
-        public void Upload(IFormFile file, int courseId)
+        public void Upload(IFormFile file, string courseId)
         {
             fileService.SaveTo(courseId, file);
         }
@@ -38,7 +38,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public FileContentResult Download(int id)
+        public FileContentResult Download(string id)
         {
             CourseFile file = fileService.GetFileById(id);
             return File(file.Data, file.ContentType, file.Name);
@@ -49,7 +49,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="id"></param>
         [HttpDelete("delete/{id}")]
-        public void Delete(int id)
+        public void Delete(string id)
         {
             fileService.DeleteFileById(id);
         }

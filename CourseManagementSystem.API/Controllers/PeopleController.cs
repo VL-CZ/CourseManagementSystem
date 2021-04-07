@@ -33,7 +33,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="courseId"></param>
         [HttpPost("enroll/{courseId}")]
-        public void EnrollTo(int courseId)
+        public void EnrollTo(string courseId)
         {
             var course = courseService.GetById(courseId);
             var currentUser = peopleService.GetById(GetCurrentUserId());
@@ -69,7 +69,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="courseId">Id of the course</param>
         /// <returns></returns>
         [HttpGet("getCourseMember/{courseId}")]
-        public int GetMemberByCourseId(int courseId)
+        public int GetMemberByCourseId(string courseId)
         {
             var person = peopleService.GetById(GetCurrentUserId());
             var course = courseService.GetById(courseId);

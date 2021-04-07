@@ -27,7 +27,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id">identifier of the person</param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public CourseMemberVM Get(int id)
+        public CourseMemberVM Get(string id)
         {
             CourseMember cm = courseMemberService.GetMemberByID(id);
             return new CourseMemberVM(cm.User.Id, cm.User.UserName, cm.User.Email);
@@ -40,7 +40,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="g">grade viewmodel to add</param>
         /// <returns>assigned grade</returns>
         [HttpPost("{id}/assignGrade")]
-        public void AssignGrade(int id, AddGradeVM g)
+        public void AssignGrade(string id, AddGradeVM g)
         {
             CourseMember cm = courseMemberService.GetMemberByID(id);
             Grade grade = new Grade(g.PercentualValue, g.Comment, g.Topic, g.Weight);
@@ -53,7 +53,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id">ID of the <see cref="CourseMember"/></param>
         /// <returns>all test submissions of the course member</returns>
         [HttpGet("{id}/submissions")]
-        public IEnumerable<TestSubmissionInfoVM> GetTestSubmissions(int id)
+        public IEnumerable<TestSubmissionInfoVM> GetTestSubmissions(string id)
         {
             var userSubmissions = testSubmissionService.GetAllSubmissionsOfCourseMember(id);
             return userSubmissions.Select(ts => new TestSubmissionInfoVM(ts.Id, ts.Test.Topic, ts.Test.Weight,
@@ -66,7 +66,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id">ID of the <see cref="CourseMember"/></param>
         /// <returns>all grades (excluding test submissions) of the course member</returns>
         [HttpGet("{id}/grades")]
-        public IEnumerable<GradeDetailsVM> GetGrades(int id)
+        public IEnumerable<GradeDetailsVM> GetGrades(string id)
         {
             var courseMember = courseMemberService.GetMemberByID(id);
             return courseMember.Grades.Select(g => new GradeDetailsVM(g.Id, g.PercentualValue, g.Topic, g.Comment, g.Weight));

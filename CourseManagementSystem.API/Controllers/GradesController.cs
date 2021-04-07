@@ -21,7 +21,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="id">id of the grade</param>
         [HttpDelete("delete/{id}")]
-        public void Delete(int id)
+        public void Delete(string id)
         {
             gradeService.DeleteById(id);
         }

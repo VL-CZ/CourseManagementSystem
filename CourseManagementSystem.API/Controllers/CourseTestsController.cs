@@ -28,7 +28,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testToAdd"></param>
         /// <param name="courseId"></param>
         [HttpPost("{courseId}")]
-        public void Add(AddCourseTestVM testToAdd, int courseId)
+        public void Add(AddCourseTestVM testToAdd, string courseId)
         {
             var mappedQuestions = testToAdd.Questions.ToModels();
             var test = new CourseTest(testToAdd.Topic, mappedQuestions.ToList(), testToAdd.Weight, testToAdd.Deadline);
@@ -40,7 +40,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="id"></param>
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void Delete(string id)
         {
             courseTestService.Delete(id);
         }
@@ -51,7 +51,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public CourseTestDetailsVM Get(int id)
+        public CourseTestDetailsVM Get(string id)
         {
             var test = courseTestService.GetById(id);
             return new CourseTestDetailsVM(id, test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status, test.Deadline);
@@ -63,7 +63,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id">id of the test that we edit</param>
         /// <param name="updatedTest">test with updated properties</param>
         [HttpPut("{id}")]
-        public void Update(int id, AddCourseTestVM updatedTest)
+        public void Update(string id, AddCourseTestVM updatedTest)
         {
             var test = courseTestService.GetById(id);
             var updatedQuestions = updatedTest.Questions.ToModels();
@@ -76,7 +76,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testId">id of the test</param>
         /// <returns>collection of submissions</returns>
         [HttpGet("{testId}/submissions")]
-        public IEnumerable<TestSubmissionWithUserInfoVM> GetAllSubmissions(int testId)
+        public IEnumerable<TestSubmissionWithUserInfoVM> GetAllSubmissions(string testId)
         {
             var testSubmissions = testSubmissionService.GetAllSubmissionsOfTest(testId);
             return testSubmissions.Select(ts => new TestSubmissionWithUserInfoVM(ts.Student.User.Email, ts.Id,
@@ -88,7 +88,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="id">identifier of the test</param>
         [HttpPost("{id}/publish")]
-        public void Publish(int id)
+        public void Publish(string id)
         {
             var test = courseTestService.GetById(id);
             courseTestService.Publish(test);
