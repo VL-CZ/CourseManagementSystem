@@ -19,20 +19,20 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public CourseMember GetMemberByID(int id)
+        public CourseMember GetMemberByID(string id)
         {
-            return dbContext.CourseMembers.Include(cm => cm.User).Include(cm => cm.Grades).Single(x => x.Id == id);
+            return dbContext.CourseMembers.Include(cm => cm.User).Include(cm => cm.Grades).Single(cm => cm.Id.ToString() == id);
         }
 
         /// <inheritdoc/>
-        public CourseMember GetMemberByUserAndCourse(string personId, int courseId)
+        public CourseMember GetMemberByUserAndCourse(string personId, string courseId)
         {
             Person user = dbContext.Users.Include(u => u.CourseMemberships).ThenInclude(cm => cm.Course).SingleOrDefault(user => user.Id == personId);
-            return user.CourseMemberships.SingleOrDefault(cm => cm.Course.Id == courseId);
+            return user.CourseMemberships.SingleOrDefault(cm => cm.Course.Id.ToString() == courseId);
         }
 
         /// <inheritdoc/>
-        public void RemoveMemberById(int id)
+        public void RemoveMemberById(string id)
         {
             CourseMember cm = GetMemberByID(id);
             dbContext.CourseMembers.Remove(cm);

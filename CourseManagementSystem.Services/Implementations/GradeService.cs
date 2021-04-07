@@ -10,7 +10,7 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public void DeleteById(int gradeId)
+        public void DeleteById(string gradeId)
         {
             var grade = dbContext.Grades.Find(gradeId);
             dbContext.Grades.Remove(grade);

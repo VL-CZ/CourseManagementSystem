@@ -19,7 +19,7 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public void DeleteById(int postId)
+        public void DeleteById(string postId)
         {
             var post = dbContext.Posts.Find(postId);
             dbContext.Posts.Remove(post);
