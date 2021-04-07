@@ -3,7 +3,7 @@ import {ApiService} from './api.service';
 import {HttpClient} from '@angular/common/http';
 import {AddCourseTestVM, CourseTestDetailsVM} from './viewmodels/courseTestVM';
 import {Observable} from 'rxjs';
-import {TestSubmissionWithUserInfoVM} from './viewmodels/testSubmissionWithUserInfoVM';
+import {TestSubmissionWithUserInfoVM} from './viewmodels/testSubmissionVM';
 
 @Injectable({
   providedIn: 'root'

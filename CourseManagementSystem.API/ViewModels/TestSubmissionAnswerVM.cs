@@ -1,41 +1,35 @@
-﻿using System.Collections.Generic;
-
-namespace CourseManagementSystem.API.ViewModels
+﻿namespace CourseManagementSystem.API.ViewModels
 {
     /// <summary>
-    /// this class represents viewmodel for test with submission
+    /// class representing the submission answers submitted by students
     /// </summary>
-    public class TestWithSubmissionVM
+    public class SubmissionAnswerVM
     {
-        public TestWithSubmissionVM() { }
-
-        public TestWithSubmissionVM(int testId, string testTopic, int submissionId, IEnumerable<SubmissionAnswerWithCorrectAnswerVM> answers)
+        public SubmissionAnswerVM()
         {
-            TestId = testId;
-            TestTopic = testTopic;
-            Answers = answers;
-            SubmissionId = submissionId;
+        }
+
+        public SubmissionAnswerVM(int questionNumber, string questionText, string answerText)
+        {
+            QuestionNumber = questionNumber;
+            QuestionText = questionText;
+            AnswerText = answerText;
         }
 
         /// <summary>
-        /// id of the test
+        /// number of question that this answer belongs to
         /// </summary>
-        public int TestId { get; }
+        public int QuestionNumber { get; set; }
 
         /// <summary>
-        /// topic of the test
+        /// text of the question
         /// </summary>
-        public string TestTopic { get; }
+        public string QuestionText { get; set; }
 
         /// <summary>
-        /// id of the test submission
+        /// answer submitted by the student
         /// </summary>
-        public int SubmissionId { get; }
-
-        /// <summary>
-        /// submitted and correct answers
-        /// </summary>
-        public IEnumerable<SubmissionAnswerWithCorrectAnswerVM> Answers { get; }
+        public string AnswerText { get; set; }
     }
 
     /// <summary>

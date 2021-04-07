@@ -21,6 +21,8 @@ namespace CourseManagementSystem.Data.Models
             Test = test;
             Student = student;
             Answers = submittedAnswers;
+            SubmittedDateTime = DateTime.Now;
+            IsReviewed = false;
         }
 
         [Key]
@@ -37,6 +39,16 @@ namespace CourseManagementSystem.Data.Models
         /// </summary>
         [Required]
         public CourseMember Student { get; set; }
+
+        /// <summary>
+        /// when was this test submitted
+        /// </summary>
+        public DateTime SubmittedDateTime { get; set; }
+
+        /// <summary>
+        /// has this test already been reviewed?
+        /// </summary>
+        public bool IsReviewed { get; set; }
 
         /// <summary>
         /// submitted answers

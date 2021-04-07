@@ -56,7 +56,8 @@ namespace CourseManagementSystem.API.Controllers
         public IEnumerable<TestSubmissionInfoVM> GetTestSubmissions(int id)
         {
             var userSubmissions = testSubmissionService.GetAllSubmissionsOfCourseMember(id);
-            return userSubmissions.Select(ts => new TestSubmissionInfoVM(ts.Id, ts.Test.Topic, ts.Test.Weight, TestScoreCalculator.CalculateScore(ts)));
+            return userSubmissions.Select(ts => new TestSubmissionInfoVM(ts.Id, ts.Test.Topic, ts.Test.Weight,
+                TestScoreCalculator.CalculateScore(ts), ts.SubmittedDateTime, ts.IsReviewed));
         }
 
         /// <summary>

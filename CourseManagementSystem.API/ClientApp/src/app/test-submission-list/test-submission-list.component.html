@@ -4,11 +4,15 @@
     <tr>
       <th>User</th>
       <th>Score</th>
+      <th>Submitted at</th>
+      <th>Reviewed?</th>
       <th></th>
     </tr>
     <tr *ngFor="let testInfo of this.submissionsInfos">
       <td>{{testInfo.studentEmail}}</td>
       <td><b>{{getPercentString(testInfo.percentualScore)}}</b></td>
+      <td>{{testInfo.submittedDateTime}}</td>
+      <td>{{testInfo.isReviewed ? 'YES' : 'NO'}}</td>
       <td><a routerLink="/submissions/{{testInfo.testSubmissionId}}">Detail</a></td>
     </tr>
   </table>

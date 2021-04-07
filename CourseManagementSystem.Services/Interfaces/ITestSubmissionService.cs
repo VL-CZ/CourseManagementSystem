@@ -47,5 +47,11 @@ namespace CourseManagementSystem.Services.Interfaces
         /// <param name="updatedPoints">updated value of <see cref="TestSubmissionAnswer.Points"/></param>
         /// <param name="updatedComment">updated value of <see cref="TestSubmissionAnswer.Comment"/></param>
         void UpdateAnswer(TestSubmissionAnswer answer, int updatedPoints, string updatedComment);
+
+        /// <summary>
+        /// mark the test submission as reviewed
+        /// </summary>
+        /// <param name="testSubmission">reviewed test submission</param>
+        void MarkAsReviewed(TestSubmission testSubmission);
     }
 }

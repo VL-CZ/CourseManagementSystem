@@ -2,8 +2,8 @@ import {Inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {ApiService} from './api.service';
-import {TestSubmissionVM} from './viewmodels/testSubmissionVM';
-import {TestWithSubmissionVM} from './viewmodels/testWithSubmissionVM';
+import {SubmitTestVM} from './viewmodels/submitTestVM';
+import {TestWithSubmissionVM} from './viewmodels/testSubmissionVM';
 import {EvaluatedTestSubmissionVM} from './viewmodels/evaluatedTestSubmissionVM';
 
 @Injectable({
@@ -20,7 +20,7 @@ export class TestSubmissionService extends ApiService {
    * submit student's solution
    * @param submission test to submit
    */
-  public submit(submission: TestSubmissionVM): Observable<string> {
+  public submit(submission: SubmitTestVM): Observable<string> {
     return this.http.post<string>(this.controllerUrl, submission);
   }
 
@@ -28,8 +28,8 @@ export class TestSubmissionService extends ApiService {
    * get new empty submission for given test
    * @param testId id of the test we submit
    */
-  public getEmptySubmission(testId: string): Observable<TestSubmissionVM> {
-    return this.http.get<TestSubmissionVM>(this.controllerUrl + `emptyTest/${testId}`);
+  public getEmptySubmission(testId: string): Observable<SubmitTestVM> {
+    return this.http.get<SubmitTestVM>(this.controllerUrl + `emptyTest/${testId}`);
   }
 
   /**

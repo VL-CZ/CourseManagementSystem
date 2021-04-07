@@ -34,15 +34,16 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testSubmissionVM">solution to submit</param>
         /// <returns>Id of the test submission</returns>
         [HttpPost("")]
-        public int Submit(TestSubmissionVM testSubmissionVM)
+        public int Submit(SubmitTestVM testSubmissionVM)
         {
             var test = courseTestService.GetById(testSubmissionVM.TestId);
 
             string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
             var courseMember = courseMemberService.GetMemberByUserAndCourse(currentUserId, test.Course.Id);
+            var submittedAnswers = testSubmissionVM.Answers.Select(answer => new TestSubmissionAnswer(test.GetQuestionByNumber(answer.QuestionNumber), answer.AnswerText));
 
             var testSubmission = new TestSubmission(test, courseMember,
-                testSubmissionVM.Answers.Select(answer => new TestSubmissionAnswer(test.GetQuestionByNumber(answer.QuestionNumber), answer.AnswerText)).ToList());
+                submittedAnswers.ToList());
 
             testSubmissionEvaluator.Evaluate(testSubmission);
             testSubmissionService.Save(testSubmission);
@@ -56,12 +57,12 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testId"></param>
         /// <returns></returns>
         [HttpGet("emptyTest/{testId}")]
-        public TestSubmissionVM GetEmptySubmission(int testId)
+        public SubmitTestVM GetEmptySubmission(int testId)
         {
             var test = courseTestService.GetById(testId);
             var submissionAnswers = test.Questions.Select(question => new SubmissionAnswerVM(question.Number, question.QuestionText, string.Empty));
 
-            return new TestSubmissionVM(test.Id, test.Topic, submissionAnswers);
+            return new SubmitTestVM(test.Id, test.Topic, submissionAnswers);
         }
 
         /// <summary>
@@ -76,7 +77,7 @@ namespace CourseManagementSystem.API.Controllers
             var answersVM = submission.Answers.Select(a =>
                 new SubmissionAnswerWithCorrectAnswerVM(a.Question.Number, a.Question.QuestionText, a.Text, a.Question.CorrectAnswer, a.Points, a.Question.Points, a.Comment));
 
-            return new TestWithSubmissionVM(submission.Test.Id, submission.Test.Topic, submission.Id, answersVM);
+            return new TestWithSubmissionVM(submission.Test.Id, submission.Test.Topic, submission.Id, answersVM, submission.SubmittedDateTime, submission.IsReviewed);
         }
 
         /// <summary>
@@ -93,6 +94,8 @@ namespace CourseManagementSystem.API.Controllers
                 var answer = testSubmissionService.GetAnswerByQuestionNumber(submission, evaluatedAnswer.QuestionNumber);
                 testSubmissionService.UpdateAnswer(answer, evaluatedAnswer.UpdatedPoints, evaluatedAnswer.UpdatedComment);
             }
+
+            testSubmissionService.MarkAsReviewed(submission);
         }
     }
 }

@@ -5,6 +5,8 @@
       <th>Topic</th>
       <th>Score</th>
       <th>Weight</th>
+      <th>Submitted at</th>
+      <th>Reviewed</th>
     </tr>
     <tr *ngFor="let submission of testSubmissions">
       <td>
@@ -13,7 +15,15 @@
       <td>
         <b>{{getPercentString(submission.percentualScore)}}</b>
       </td>
-      <td>{{submission.testWeight}}</td>
+      <td>
+        {{submission.testWeight}}
+      </td>
+      <td>
+        {{submission.submittedDateTime}}
+      </td>
+      <td>
+        {{submission.isReviewed ? 'YES' : 'NO'}}
+      </td>
     </tr>
   </table>
 </div>

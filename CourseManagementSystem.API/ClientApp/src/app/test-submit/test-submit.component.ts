@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CourseTestService} from '../course-test.service';
-import {TestSubmissionVM} from '../viewmodels/testSubmissionVM';
+import {SubmitTestVM} from '../viewmodels/submitTestVM';
 import {TestSubmissionService} from '../test-submission.service';
 import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
 
@@ -18,7 +18,7 @@ export class TestSubmitComponent implements OnInit {
   /**
    * test to submit
    */
-  public testSubmission: TestSubmissionVM = TestSubmissionVM.getDefault();
+  public testSubmission: SubmitTestVM = new SubmitTestVM();
 
   private router: Router;
   private testSubmitService: TestSubmissionService;
