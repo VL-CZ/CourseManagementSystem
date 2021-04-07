@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CourseManagementSystem.Data.Models
 {
-    public class CourseMember
+    public class CourseMember : IGuidIdObject
     {
         public CourseMember()
         {
@@ -19,8 +19,12 @@ namespace CourseManagementSystem.Data.Models
             Course = course;
         }
 
+        /// <summary>
+        /// identifier of the course member
+        /// </summary>
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// reference to person

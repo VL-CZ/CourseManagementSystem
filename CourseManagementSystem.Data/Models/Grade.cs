@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CourseManagementSystem.Data.Models
 {
-    public class Grade
+    public class Grade : IGuidIdObject
     {
         public Grade()
         {
@@ -19,8 +21,9 @@ namespace CourseManagementSystem.Data.Models
         /// <summary>
         /// identifier of the grade
         /// </summary>
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// percentual value of the grade (0=0%, 1=100%, may be greater than 1 in case of bonus points)

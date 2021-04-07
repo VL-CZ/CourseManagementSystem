@@ -1,11 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CourseManagementSystem.Data.Models
 {
     /// <summary>
     /// class representing one post in a course forum
     /// </summary>
-    public class ForumPost
+    public class ForumPost : IGuidIdObject
     {
         public ForumPost() { }
 
@@ -19,8 +21,9 @@ namespace CourseManagementSystem.Data.Models
         /// <summary>
         /// identifier of the post 
         /// </summary>
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// content of the post

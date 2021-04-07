@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CourseManagementSystem.Data.Models
 {
     /// <summary>
     /// class representing one submitted answer of the test
     /// </summary>
-    public class TestSubmissionAnswer
+    public class TestSubmissionAnswer : IGuidIdObject
     {
         public TestSubmissionAnswer()
         { }
@@ -19,8 +18,12 @@ namespace CourseManagementSystem.Data.Models
             Text = answerText;
         }
 
+        /// <summary>
+        /// identifier of the answer in a test submission
+        /// </summary>
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// question which is answered
