@@ -7,7 +7,7 @@ abstract class BaseTestSubmissionVM {
   /**
    * id of the test submission
    */
-  public testSubmissionId: number;
+  public testSubmissionId: string;
 
   /**
    * datetime when this test was submitted

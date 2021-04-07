@@ -7,7 +7,7 @@ export class SubmitTestVM {
   /**
    * id of the test
    */
-  public testId: number;
+  public testId: string;
 
   /**
    * topic of the test

@@ -5,7 +5,7 @@ export class CourseFileVM {
   /**
    * id of the file
    */
-  public id: number;
+  public id: string;
 
   /**
    * name of the file

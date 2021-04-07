@@ -15,7 +15,7 @@ export class CourseInfoVM extends BaseCourseVM {
   /**
    * id of the course
    */
-  public id: number;
+  public id: string;
 }
 
 /**
