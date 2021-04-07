@@ -4,168 +4,22 @@ using CourseManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CourseManagementSystem.Data.Migrations
 {
     [DbContext(typeof(CMSDbContext))]
-    partial class CMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210407215632_Tables_removed")]
+    partial class Tables_removed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("CourseManagementSystem.Data.Models.Course", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("AdminId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AdminId");
-
-                    b.ToTable("Courses");
-                });
-
-            modelBuilder.Entity("CourseManagementSystem.Data.Models.CourseFile", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ContentType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("CourseId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<byte[]>("Data")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("Files");
-                });
-
-            modelBuilder.Entity("CourseManagementSystem.Data.Models.CourseMember", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CourseId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("CourseMembers");
-                });
-
-            modelBuilder.Entity("CourseManagementSystem.Data.Models.CourseTest", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CourseId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("Deadline")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Topic")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Weight")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("CourseTests");
-                });
-
-            modelBuilder.Entity("CourseManagementSystem.Data.Models.ForumPost", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("AuthorId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<Guid?>("CourseId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Text")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AuthorId");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("Posts");
-                });
-
-            modelBuilder.Entity("CourseManagementSystem.Data.Models.Grade", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("CourseMemberId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double>("PercentualValue")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Topic")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Weight")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseMemberId");
-
-                    b.ToTable("Grades");
-                });
 
             modelBuilder.Entity("CourseManagementSystem.Data.Models.Person", b =>
                 {
@@ -230,91 +84,6 @@ namespace CourseManagementSystem.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("CourseManagementSystem.Data.Models.TestQuestion", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CorrectAnswer")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("CourseTestId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Points")
-                        .HasColumnType("int");
-
-                    b.Property<string>("QuestionText")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseTestId");
-
-                    b.ToTable("TestQuestions");
-                });
-
-            modelBuilder.Entity("CourseManagementSystem.Data.Models.TestSubmission", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsReviewed")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("StudentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("SubmittedDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("TestId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StudentId");
-
-                    b.HasIndex("TestId");
-
-                    b.ToTable("TestSubmissions");
-                });
-
-            modelBuilder.Entity("CourseManagementSystem.Data.Models.TestSubmissionAnswer", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Points")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("QuestionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("TestSubmissionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Text")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.HasIndex("TestSubmissionId");
-
-                    b.ToTable("TestSubmissionAnswers");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.DeviceFlowCodes", b =>
@@ -532,93 +301,6 @@ namespace CourseManagementSystem.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("CourseManagementSystem.Data.Models.Course", b =>
-                {
-                    b.HasOne("CourseManagementSystem.Data.Models.Person", "Admin")
-                        .WithMany()
-                        .HasForeignKey("AdminId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("CourseManagementSystem.Data.Models.CourseFile", b =>
-                {
-                    b.HasOne("CourseManagementSystem.Data.Models.Course", null)
-                        .WithMany("Files")
-                        .HasForeignKey("CourseId");
-                });
-
-            modelBuilder.Entity("CourseManagementSystem.Data.Models.CourseMember", b =>
-                {
-                    b.HasOne("CourseManagementSystem.Data.Models.Course", "Course")
-                        .WithMany("Members")
-                        .HasForeignKey("CourseId");
-
-                    b.HasOne("CourseManagementSystem.Data.Models.Person", "User")
-                        .WithMany("CourseMemberships")
-                        .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("CourseManagementSystem.Data.Models.CourseTest", b =>
-                {
-                    b.HasOne("CourseManagementSystem.Data.Models.Course", "Course")
-                        .WithMany("Tests")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("CourseManagementSystem.Data.Models.ForumPost", b =>
-                {
-                    b.HasOne("CourseManagementSystem.Data.Models.Person", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId");
-
-                    b.HasOne("CourseManagementSystem.Data.Models.Course", "Course")
-                        .WithMany("ForumPosts")
-                        .HasForeignKey("CourseId");
-                });
-
-            modelBuilder.Entity("CourseManagementSystem.Data.Models.Grade", b =>
-                {
-                    b.HasOne("CourseManagementSystem.Data.Models.CourseMember", null)
-                        .WithMany("Grades")
-                        .HasForeignKey("CourseMemberId");
-                });
-
-            modelBuilder.Entity("CourseManagementSystem.Data.Models.TestQuestion", b =>
-                {
-                    b.HasOne("CourseManagementSystem.Data.Models.CourseTest", null)
-                        .WithMany("Questions")
-                        .HasForeignKey("CourseTestId");
-                });
-
-            modelBuilder.Entity("CourseManagementSystem.Data.Models.TestSubmission", b =>
-                {
-                    b.HasOne("CourseManagementSystem.Data.Models.CourseMember", "Student")
-                        .WithMany("TestSubmissions")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CourseManagementSystem.Data.Models.CourseTest", "Test")
-                        .WithMany("Submissions")
-                        .HasForeignKey("TestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("CourseManagementSystem.Data.Models.TestSubmissionAnswer", b =>
-                {
-                    b.HasOne("CourseManagementSystem.Data.Models.TestQuestion", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId");
-
-                    b.HasOne("CourseManagementSystem.Data.Models.TestSubmission", null)
-                        .WithMany("Answers")
-                        .HasForeignKey("TestSubmissionId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
