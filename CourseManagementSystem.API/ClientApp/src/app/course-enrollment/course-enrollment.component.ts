@@ -14,7 +14,7 @@ export class CourseEnrollmentComponent implements OnInit {
   /**
    * id of the course that we enroll to
    */
-  public courseToEnrollId: number;
+  public courseToEnrollId: string;
 
   private readonly peopleService: PeopleService;
 

@@ -39,7 +39,7 @@ export class CourseDetailComponent implements OnInit {
       this.isAdmin = result.isAdmin;
 
       if (!this.isAdmin) {
-        peopleService.getCourseMemberByCourse(parseInt(this.courseId, 10)).subscribe(res => {
+        peopleService.getCourseMemberByCourse(this.courseId).subscribe(res => {
           this.currentCourseMemberId = res;
         });
       }

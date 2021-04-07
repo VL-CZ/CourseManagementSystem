@@ -46,16 +46,14 @@ export class StudentGradeListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.courseMemberService.getGrades(this.courseMemberId).subscribe(grades => {
-      this.grades = grades;
-    });
+    this.reloadGrades();
   }
 
   /**
    * remove a grade with given id
    * @param gradeId identifier of the grade
    */
-  public removeGrade(gradeId: number): void {
+  public removeGrade(gradeId: string): void {
     // this.gradeService.delete(gradeId).subscribe();
     // this.grades = this.grades.filter(grade => grade.id !== gradeId);
 
@@ -63,8 +61,9 @@ export class StudentGradeListComponent implements OnInit {
       title: 'Delete a grade',
       text: 'Are you sure you want to delete this grade?',
       onConfirm: () => {
-        this.gradeService.delete(gradeId).subscribe();
-        this.grades = this.grades.filter(grade => grade.id !== gradeId);
+        this.gradeService.delete(gradeId).subscribe(() => {
+          this.reloadGrades();
+        });
       }
     };
     this.bsModalRef = this.modalService.show(ConfirmDialogComponent, {initialState});
@@ -76,5 +75,15 @@ export class StudentGradeListComponent implements OnInit {
    */
   public getPercentString(doubleValue: number): string {
     return PercentCalculator.doubleToPercent(doubleValue, 2).toString() + '%';
+  }
+
+  /**
+   * reload data about grades
+   * @private
+   */
+  private reloadGrades() {
+    this.courseMemberService.getGrades(this.courseMemberId).subscribe(grades => {
+      this.grades = grades;
+    });
   }
 }

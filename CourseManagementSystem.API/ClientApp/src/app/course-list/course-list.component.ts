@@ -65,7 +65,7 @@ export class CourseListComponent implements OnInit {
    * remove course with the given id
    * @param courseId identifier of the course to delete
    */
-  public removeCourse(courseId: number): void {
+  public removeCourse(courseId: string): void {
     this.courseService.delete(courseId).subscribe(() => {
       this.reloadCourseInfo();
     });
