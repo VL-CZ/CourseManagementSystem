@@ -1,5 +1,11 @@
 <div class="jumbotron">
   <h2>{{submission.testTopic}}</h2>
+  <div>
+    Submitted at: {{submission.submittedDateTime}}
+  </div>
+  <div *ngIf="submission.isReviewed">
+    <b>Reviewed</b>
+  </div>
 </div>
 
 <div *ngFor="let answer of submission.answers" class="jumbotron"
