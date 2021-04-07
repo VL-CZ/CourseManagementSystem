@@ -1,5 +1,6 @@
 ﻿using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
+using CourseManagementSystem.Services.Extensions;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace CourseManagementSystem.Services.Implementations
         /// <inheritdoc/>
         public Course GetById(string courseId)
         {
-            return dbContext.Courses.Find(courseId);
+            return dbContext.Courses.FindById(courseId);
         }
 
 
