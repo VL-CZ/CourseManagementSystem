@@ -56,7 +56,7 @@ namespace CourseManagementSystem.API.Controllers
         public IEnumerable<TestSubmissionInfoVM> GetTestSubmissions(string id)
         {
             var userSubmissions = testSubmissionService.GetAllSubmissionsOfCourseMember(id);
-            return userSubmissions.Select(ts => new TestSubmissionInfoVM(ts.Id, ts.Test.Topic, ts.Test.Weight,
+            return userSubmissions.Select(ts => new TestSubmissionInfoVM(ts.Id.ToString(), ts.Test.Topic, ts.Test.Weight,
                 TestScoreCalculator.CalculateScore(ts), ts.SubmittedDateTime, ts.IsReviewed));
         }
 
@@ -69,7 +69,7 @@ namespace CourseManagementSystem.API.Controllers
         public IEnumerable<GradeDetailsVM> GetGrades(string id)
         {
             var courseMember = courseMemberService.GetMemberByID(id);
-            return courseMember.Grades.Select(g => new GradeDetailsVM(g.Id, g.PercentualValue, g.Topic, g.Comment, g.Weight));
+            return courseMember.Grades.Select(g => new GradeDetailsVM(g.Id.ToString(), g.PercentualValue, g.Topic, g.Comment, g.Weight));
         }
     }
 }

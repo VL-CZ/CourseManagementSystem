@@ -79,7 +79,7 @@ namespace CourseManagementSystem.API.Controllers
         public IEnumerable<TestSubmissionWithUserInfoVM> GetAllSubmissions(string testId)
         {
             var testSubmissions = testSubmissionService.GetAllSubmissionsOfTest(testId);
-            return testSubmissions.Select(ts => new TestSubmissionWithUserInfoVM(ts.Student.User.Email, ts.Id,
+            return testSubmissions.Select(ts => new TestSubmissionWithUserInfoVM(ts.Student.User.Email, ts.Id.ToString(),
                 TestScoreCalculator.CalculateScore(ts), ts.SubmittedDateTime, ts.IsReviewed));
         }
 

@@ -61,7 +61,7 @@ namespace CourseManagementSystem.API.Controllers
         [HttpGet("{id}/files")]
         public IEnumerable<CourseFileVM> GetAllFiles(string id)
         {
-            return courseService.GetFiles(id).Select(file => new CourseFileVM(file.Id, file.Name));
+            return courseService.GetFiles(id).Select(file => new CourseFileVM(file.Id.ToString(), file.Name));
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace CourseManagementSystem.API.Controllers
         public IEnumerable<CourseTestDetailsVM> GetAllTests(string id)
         {
             var courseTests = courseService.GetTests(id);
-            return courseTests.Select(test => new CourseTestDetailsVM(test.Id, test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status, test.Deadline));
+            return courseTests.Select(test => new CourseTestDetailsVM(test.Id.ToString(), test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status, test.Deadline));
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace CourseManagementSystem.API.Controllers
         public IEnumerable<ForumPostVM> GetAllPosts(string id)
         {
             var posts = courseService.GetPostsWithAuthors(id);
-            return posts.Select(post => new ForumPostVM(post.Id, post.Author.Email, post.Text));
+            return posts.Select(post => new ForumPostVM(post.Id.ToString(), post.Author.Email, post.Text));
         }
     }
 }
