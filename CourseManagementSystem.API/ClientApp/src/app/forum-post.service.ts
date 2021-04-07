@@ -18,7 +18,7 @@ export class ForumPostService extends ApiService {
    * delete forum post by its id
    * @param postId identifier of the forum post
    */
-  public delete(postId: number): Observable<{}> {
+  public delete(postId: string): Observable<{}> {
     return this.http.delete(this.controllerUrl + postId);
   }
 
