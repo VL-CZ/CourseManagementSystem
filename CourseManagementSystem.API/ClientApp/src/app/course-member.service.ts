@@ -5,7 +5,7 @@ import {Observable} from 'rxjs';
 import {AddGradeVM} from './viewmodels/gradeVM';
 import {GradeDetailsVM} from './viewmodels/gradeVM';
 import {ApiService} from './api.service';
-import {TestSubmissionInfoVM} from './viewmodels/testSubmisionInfoVM';
+import {TestSubmissionInfoVM} from './viewmodels/testSubmissionVM';
 
 @Injectable({
   providedIn: 'root'

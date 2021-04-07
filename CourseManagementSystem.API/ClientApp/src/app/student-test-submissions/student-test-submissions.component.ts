@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {TestSubmissionInfoVM} from '../viewmodels/testSubmisionInfoVM';
+import {TestSubmissionInfoVM} from '../viewmodels/testSubmissionVM';
 import {CourseMemberService} from '../course-member.service';
 import {PercentCalculator} from '../utils/percentCalculator';
 

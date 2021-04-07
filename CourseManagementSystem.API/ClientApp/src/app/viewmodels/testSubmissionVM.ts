@@ -1,9 +1,67 @@
+import {SubmissionAnswerWithCorrectAnswerVM} from './testSubmissionAnswerVM';
+
 /**
- * viewmodel representing a test submission
+ * base viewmodel for a test submission
  */
-export class TestSubmissionVM {
+abstract class BaseTestSubmissionVM {
   /**
-   * id of the test
+   * id of the test submission
+   */
+  public testSubmissionId: number;
+
+  /**
+   * datetime when this test was submitted
+   */
+  public submittedDateTime: Date;
+
+  /**
+   * has this test submission already been reviewed?
+   */
+  public isReviewed: boolean;
+}
+
+/**
+ * viewmodel representing info about a test submission
+ */
+export class TestSubmissionInfoVM extends BaseTestSubmissionVM {
+
+  /**
+   * topic of the test
+   */
+  public testTopic: string;
+
+  /**
+   * weight of the test (e.g. impact on total grade)
+   */
+  public testWeight: number;
+
+  /**
+   * score from the test in percents (0=0%,1=100%)
+   */
+  public percentualScore: number;
+}
+
+/**
+ * class representing a test submission with information about an user
+ */
+export class TestSubmissionWithUserInfoVM extends BaseTestSubmissionVM {
+  /**
+   * email of the student
+   */
+  public studentEmail: string;
+
+  /**
+   * percentual score from the test (0=0%,1=100%)
+   */
+  public percentualScore: number;
+}
+
+/**
+ * class representing a test with a submission
+ */
+export class TestWithSubmissionVM extends BaseTestSubmissionVM {
+  /**
+   * identifier of the test
    */
   public testId: number;
 
@@ -13,46 +71,7 @@ export class TestSubmissionVM {
   public testTopic: string;
 
   /**
-   * answers to the test
+   * answers in the submission
    */
-  public answers: SubmissionAnswerVM[];
-
-  constructor(testId: number, testTopic: string) {
-    this.testId = testId;
-    this.testTopic = testTopic;
-    this.answers = [];
-  }
-
-  /**
-   * get default instance of this class
-   */
-  public static getDefault(): TestSubmissionVM {
-    return new TestSubmissionVM(0, '');
-  }
-}
-
-/**
- * viewmodel representing an answer within a test submission
- */
-export class SubmissionAnswerVM {
-  /**
-   * number of question that this answer belongs to
-   */
-  public questionNumber: number;
-
-  /**
-   * text provided to the question
-   */
-  public questionText: string;
-
-  /**
-   * answer to the question
-   */
-  public answerText: string;
-
-  constructor(questionNumber: number, questionText: string, answerText: string) {
-    this.questionNumber = questionNumber;
-    this.questionText = questionText;
-    this.answerText = answerText;
-  }
+  public answers: SubmissionAnswerWithCorrectAnswerVM[] = [];
 }

@@ -2,12 +2,13 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TestSubmissionService} from '../test-submission.service';
 import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
-import {SubmissionAnswerWithCorrectAnswerVM, TestWithSubmissionVM} from '../viewmodels/testWithSubmissionVM';
+import {TestWithSubmissionVM} from '../viewmodels/testSubmissionVM';
 import {ArrayUtils} from '../utils/arrayUtils';
 import {PercentCalculator} from '../utils/percentCalculator';
 import {RoleAuthService} from '../role-auth.service';
 import {EvaluatedAnswerVM, EvaluatedTestSubmissionVM} from '../viewmodels/evaluatedTestSubmissionVM';
 import {RouterUtils} from '../utils/routerUtils';
+import {SubmissionAnswerWithCorrectAnswerVM} from '../viewmodels/testSubmissionAnswerVM';
 
 /**
  * component representing detail of the submitted test solution
@@ -21,7 +22,7 @@ export class TestSubmissionReviewComponent implements OnInit {
   /**
    * submitted test solution
    */
-  public submission: TestWithSubmissionVM = TestWithSubmissionVM.getDefault();
+  public submission: TestWithSubmissionVM = new TestWithSubmissionVM();
 
   /**
    * test solution with updates (manually evaluated answers)
@@ -110,7 +111,7 @@ export class TestSubmissionReviewComponent implements OnInit {
    * save updates of the test submission
    */
   public saveUpdates(): void {
-    this.testSubmissionService.updateSubmission(this.submission.submissionId.toString(), this.evaluatedTestSubmission)
+    this.testSubmissionService.updateSubmission(this.submission.testSubmissionId.toString(), this.evaluatedTestSubmission)
       .subscribe(() => {
         RouterUtils.reloadPage(this.router, this.activatedRoute);
       });

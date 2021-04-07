@@ -1,4 +1,4 @@
-import {TestWithSubmissionVM} from './testWithSubmissionVM';
+import {TestWithSubmissionVM} from './testSubmissionVM';
 
 export class EvaluatedTestSubmissionVM {
   public testSubmissionId: number;
@@ -20,7 +20,7 @@ export class EvaluatedTestSubmissionVM {
       evaluatedAnswers.push(evaluatedAnswer);
     }
 
-    return new EvaluatedTestSubmissionVM(testWithSubmission.submissionId, evaluatedAnswers);
+    return new EvaluatedTestSubmissionVM(testWithSubmission.testSubmissionId, evaluatedAnswers);
   }
 
   /**
