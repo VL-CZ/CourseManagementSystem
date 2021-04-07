@@ -28,7 +28,7 @@
         public CourseInfoVM() : base()
         { }
 
-        public CourseInfoVM(int id, string name):base(name)
+        public CourseInfoVM(string id, string name):base(name)
         {
             Id = id;
         }
@@ -36,7 +36,7 @@
         /// <summary>
         /// id of the course
         /// </summary>
-        public int Id { get; set; }
+        public string Id { get; set; }
     }
 
     /// <summary>

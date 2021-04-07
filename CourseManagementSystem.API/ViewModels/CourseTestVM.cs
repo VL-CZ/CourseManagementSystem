@@ -59,7 +59,7 @@ namespace CourseManagementSystem.API.ViewModels
         public CourseTestDetailsVM() : base()
         { }
 
-        public CourseTestDetailsVM(int id, string topic, int scoreWeight, IEnumerable<TestQuestionVM> questions, TestStatus testStatus, DateTime deadline)
+        public CourseTestDetailsVM(string id, string topic, int scoreWeight, IEnumerable<TestQuestionVM> questions, TestStatus testStatus, DateTime deadline)
             : base(scoreWeight, topic, deadline, questions)
         {
             Id = id;
@@ -69,7 +69,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// id of the test
         /// </summary>
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// status of the test see

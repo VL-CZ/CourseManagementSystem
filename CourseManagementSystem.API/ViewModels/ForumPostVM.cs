@@ -8,7 +8,7 @@
         public ForumPostVM()
         { }
 
-        public ForumPostVM(int id, string author, string text)
+        public ForumPostVM(string id, string author, string text)
         {
             Id = id;
             Author = author;
@@ -18,7 +18,7 @@
         /// <summary>
         /// identifier of the post
         /// </summary>
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// author of the post

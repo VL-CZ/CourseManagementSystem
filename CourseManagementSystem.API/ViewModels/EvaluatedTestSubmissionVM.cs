@@ -12,7 +12,7 @@ namespace CourseManagementSystem.API.ViewModels
             EvaluatedAnswers = new List<EvaluatedAnswerVM>();
         }
 
-        public EvaluatedTestSubmissionVM(int testSubmissionId, ICollection<EvaluatedAnswerVM> evaluatedAnswers)
+        public EvaluatedTestSubmissionVM(string testSubmissionId, ICollection<EvaluatedAnswerVM> evaluatedAnswers)
         {
             TestSubmissionId = testSubmissionId;
             EvaluatedAnswers = evaluatedAnswers;
@@ -21,7 +21,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// id of the test submission these properties belongs to
         /// </summary>
-        public int TestSubmissionId { get; set; }
+        public string TestSubmissionId { get; set; }
 
         /// <summary>
         /// collection of evaluated answers
