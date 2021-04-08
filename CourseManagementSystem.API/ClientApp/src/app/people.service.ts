@@ -3,6 +3,7 @@ import {ApiService} from './api.service';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {CourseInfoVM} from './viewmodels/courseVM';
+import {WrapperVM} from './viewmodels/wrapperVM';
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +41,7 @@ export class PeopleService extends ApiService {
    * get course member Id of current user in selected course
    * @param courseId Id of the selected course
    */
-  public getCourseMemberByCourse(courseId: string): Observable<string> {
-    return this.http.get<string>(this.controllerUrl + `getCourseMember/${courseId}`);
+  public getCourseMemberByCourse(courseId: string): Observable<WrapperVM<string>> {
+    return this.http.get<WrapperVM<string>>(this.controllerUrl + `getCourseMember/${courseId}`);
   }
 }

@@ -48,11 +48,11 @@ export class CourseListComponent implements OnInit {
     this.peopleService = peopleService;
 
     roleAuthService.isAdmin().subscribe(result => {
-      this.isAdmin = result.isAdmin;
+      this.isAdmin = result.value;
     });
 
     roleAuthService.getCurrentUserId().subscribe(result => {
-      this.currentUserId = result.id;
+      this.currentUserId = result.value;
     });
 
     this.reloadCourseInfo();

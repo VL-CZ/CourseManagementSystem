@@ -43,7 +43,7 @@ export class FileListComponent implements OnInit {
     this.courseService = courseService;
 
     roleAuthService.isAdmin().subscribe(result => {
-      this.isAdmin = result.isAdmin;
+      this.isAdmin = result.value;
     });
   }
 

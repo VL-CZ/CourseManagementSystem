@@ -38,7 +38,7 @@ export class TestListComponent implements OnInit {
     this.courseTestService = courseTestService;
 
     roleAuthService.isAdmin().subscribe(result => {
-      this.isAdmin = result.isAdmin;
+      this.isAdmin = result.value;
     });
   }
 
