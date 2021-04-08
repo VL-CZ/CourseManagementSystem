@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text;
 
 namespace CourseManagementSystem.Data.Models
 {
-    public class CourseTest
+    public class CourseTest : IGuidIdObject
     {
+        /// <summary>
+        /// identifier of the test
+        /// </summary>
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// topic of the test
@@ -83,6 +87,7 @@ namespace CourseManagementSystem.Data.Models
         /// test hasn't been published yet
         /// </summary>
         New,
+
         /// <summary>
         /// test has been published
         /// </summary>

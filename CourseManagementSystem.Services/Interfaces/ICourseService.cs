@@ -10,13 +10,13 @@ namespace CourseManagementSystem.Services.Interfaces
         /// </summary>
         /// <param name="courseId">identifier of the course</param>
         /// <returns></returns>
-        Course GetById(int courseId);
+        Course GetById(string courseId);
 
         /// <summary>
         /// delete course by its id
         /// </summary>
         /// <param name="courseId">id of the course to delete</param>
-        void DeleteById(int courseId);
+        void DeleteById(string courseId);
 
         /// <summary>
         /// add the course into the database
@@ -29,27 +29,27 @@ namespace CourseManagementSystem.Services.Interfaces
         /// </summary>
         /// <param name="courseId">identifier of the course</param>
         /// <returns></returns>
-        ICollection<CourseFile> GetFiles(int courseId);
+        ICollection<CourseFile> GetFiles(string courseId);
 
         /// <summary>
         /// get all tests in the course with the given id
         /// </summary>
         /// <param name="courseId">identifier of the course</param>
         /// <returns></returns>
-        ICollection<CourseTest> GetTests(int courseId);
+        ICollection<CourseTest> GetTests(string courseId);
 
         /// <summary>
         /// get all posts posted in this course including their authors
         /// </summary>
         /// <param name="courseId">identifier of the course</param>
         /// <returns></returns>
-        ICollection<ForumPost> GetPostsWithAuthors(int courseId);
+        ICollection<ForumPost> GetPostsWithAuthors(string courseId);
 
         /// <summary>
         /// get all members of the course
         /// </summary>
         /// <param name="courseId">identifier of the course</param>
         /// <returns></returns>
-        ICollection<CourseMember> GetMembers(int courseId);
+        ICollection<CourseMember> GetMembers(string courseId);
     }
 }

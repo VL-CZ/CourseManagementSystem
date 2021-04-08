@@ -37,7 +37,7 @@ export class CourseForumComponent implements OnInit {
     this.forumPostService = forumPostService;
 
     roleAuthService.isAdmin().subscribe(res => {
-      this.isAdmin = res.isAdmin;
+      this.isAdmin = res.value;
     });
   }
 

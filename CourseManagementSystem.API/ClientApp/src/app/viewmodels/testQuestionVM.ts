@@ -5,7 +5,7 @@ export class TestQuestionVM {
   /**
    * id of the question
    */
-  public id: number;
+  public id: string;
 
   /**
    * question number

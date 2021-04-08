@@ -20,7 +20,7 @@
         /// <summary>
         /// unique identifier of the question
         /// </summary>
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// number of the question

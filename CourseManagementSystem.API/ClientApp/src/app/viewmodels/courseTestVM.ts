@@ -53,7 +53,7 @@ export class CourseTestDetailsVM extends BaseCourseTestVM {
   /**
    * id of the test
    */
-  public id: number;
+  public id: string;
 
   /**
    * status of the test (is it already published?)

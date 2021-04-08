@@ -13,15 +13,15 @@ namespace CourseManagementSystem.Services.Implementations
         { }
 
         /// <inheritdoc/>
-        public IEnumerable<TestSubmission> GetAllSubmissionsOfCourseMember(int courseMemberId)
+        public IEnumerable<TestSubmission> GetAllSubmissionsOfCourseMember(string courseMemberId)
         {
-            return GetTestSubmissionsWithTestAndStudent().Where(ts => ts.Student.Id == courseMemberId);
+            return GetTestSubmissionsWithTestAndStudent().Where(ts => ts.Student.Id.ToString() == courseMemberId);
         }
 
         /// <inheritdoc/>
-        public IEnumerable<TestSubmission> GetAllSubmissionsOfTest(int testId)
+        public IEnumerable<TestSubmission> GetAllSubmissionsOfTest(string testId)
         {
-            return GetTestSubmissionsWithTestAndStudent().Where(ts => ts.Test.Id == testId);
+            return GetTestSubmissionsWithTestAndStudent().Where(ts => ts.Test.Id.ToString() == testId);
         }
 
         /// <inheritdoc/>
@@ -31,9 +31,10 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public TestSubmission GetSubmissionById(int testSubmissionId)
+        public TestSubmission GetSubmissionById(string testSubmissionId)
         {
-            return dbContext.TestSubmissions.Include(ts => ts.Answers).ThenInclude(a => a.Question).Include(ts => ts.Test).SingleOrDefault(ts => ts.Id == testSubmissionId);
+            return dbContext.TestSubmissions.Include(ts => ts.Answers).ThenInclude(a => a.Question).Include(ts => ts.Test)
+                .SingleOrDefault(ts => ts.Id.ToString() == testSubmissionId);
         }
 
         /// <inheritdoc/>

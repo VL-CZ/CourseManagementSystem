@@ -17,7 +17,7 @@ export class FileService extends ApiService {
    * download the file by its Id
    * @param fileId
    */
-  public download(fileId: number): void {
+  public download(fileId: string): void {
     window.open(this.controllerUrl + fileId);
   }
 
@@ -38,7 +38,7 @@ export class FileService extends ApiService {
    * delete file by its Id
    * @param fileId
    */
-  public delete(fileId: number): Observable<{}> {
+  public delete(fileId: string): Observable<{}> {
     return this.http.delete(this.controllerUrl + `delete/${fileId}`);
   }
 }

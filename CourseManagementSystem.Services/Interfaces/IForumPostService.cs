@@ -8,7 +8,7 @@ namespace CourseManagementSystem.Services.Interfaces
         /// delete post by its id
         /// </summary>
         /// <param name="postId">identifier of the post</param>
-        void DeleteById(int postId);
+        void DeleteById(string postId);
 
         /// <summary>
         /// add post to the course

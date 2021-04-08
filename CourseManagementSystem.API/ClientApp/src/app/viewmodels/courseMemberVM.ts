@@ -1,14 +1,12 @@
-export class PersonIdVM {
+/**
+ * viewmodel representing member of a course
+ */
+export class CourseMemberVM {
   /**
    * identifier of the person
    */
   public id: string;
-}
 
-/**
- * viewmodel representing member of a course
- */
-export class CourseMemberVM extends PersonIdVM {
   /**
    * name of the person
    */

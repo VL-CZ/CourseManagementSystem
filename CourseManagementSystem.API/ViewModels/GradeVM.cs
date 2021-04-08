@@ -57,7 +57,7 @@
     {
         public GradeDetailsVM() { }
 
-        public GradeDetailsVM(int id, double percentualValue, string topic, string comment, int weight) : base(percentualValue, topic, comment, weight)
+        public GradeDetailsVM(string id, double percentualValue, string topic, string comment, int weight) : base(percentualValue, topic, comment, weight)
         {
             Id = id;
         }
@@ -65,6 +65,6 @@
         /// <summary>
         /// identifier of the grade
         /// </summary>
-        public int Id { get; set; }
+        public string Id { get; set; }
     }
 }

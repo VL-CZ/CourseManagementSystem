@@ -34,12 +34,12 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testSubmissionVM">solution to submit</param>
         /// <returns>Id of the test submission</returns>
         [HttpPost("")]
-        public int Submit(SubmitTestVM testSubmissionVM)
+        public WrapperVM<string> Submit(SubmitTestVM testSubmissionVM)
         {
             var test = courseTestService.GetById(testSubmissionVM.TestId);
 
             string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
-            var courseMember = courseMemberService.GetMemberByUserAndCourse(currentUserId, test.Course.Id);
+            var courseMember = courseMemberService.GetMemberByUserAndCourse(currentUserId, test.Course.Id.ToString());
             var submittedAnswers = testSubmissionVM.Answers.Select(answer => new TestSubmissionAnswer(test.GetQuestionByNumber(answer.QuestionNumber), answer.AnswerText));
 
             var testSubmission = new TestSubmission(test, courseMember,
@@ -48,7 +48,7 @@ namespace CourseManagementSystem.API.Controllers
             testSubmissionEvaluator.Evaluate(testSubmission);
             testSubmissionService.Save(testSubmission);
 
-            return testSubmission.Id;
+            return new WrapperVM<string>(testSubmission.Id.ToString());
         }
 
         /// <summary>
@@ -57,12 +57,12 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testId"></param>
         /// <returns></returns>
         [HttpGet("emptyTest/{testId}")]
-        public SubmitTestVM GetEmptySubmission(int testId)
+        public SubmitTestVM GetEmptySubmission(string testId)
         {
             var test = courseTestService.GetById(testId);
             var submissionAnswers = test.Questions.Select(question => new SubmissionAnswerVM(question.Number, question.QuestionText, string.Empty));
 
-            return new SubmitTestVM(test.Id, test.Topic, submissionAnswers);
+            return new SubmitTestVM(test.Id.ToString(), test.Topic, submissionAnswers);
         }
 
         /// <summary>
@@ -71,13 +71,13 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testSubmissionId">id of the submission</param>
         /// <returns>test submission with the given id</returns>
         [HttpGet("{testSubmissionId}")]
-        public TestWithSubmissionVM GetTestSubmission(int testSubmissionId)
+        public TestWithSubmissionVM GetTestSubmission(string testSubmissionId)
         {
             TestSubmission submission = testSubmissionService.GetSubmissionById(testSubmissionId);
             var answersVM = submission.Answers.Select(a =>
                 new SubmissionAnswerWithCorrectAnswerVM(a.Question.Number, a.Question.QuestionText, a.Text, a.Question.CorrectAnswer, a.Points, a.Question.Points, a.Comment));
 
-            return new TestWithSubmissionVM(submission.Test.Id, submission.Test.Topic, submission.Id, answersVM, submission.SubmittedDateTime, submission.IsReviewed);
+            return new TestWithSubmissionVM(submission.Test.Id.ToString(), submission.Test.Topic, submission.Id.ToString(), answersVM, submission.SubmittedDateTime, submission.IsReviewed);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testSubmissionId">id of the submission that is evaluated</param>
         /// <param name="evaluatedTestSubmission">the evaluated test submission</param>
         [HttpPut("{testSubmissionId}")]
-        public void UpdateTestSubmission(int testSubmissionId, EvaluatedTestSubmissionVM evaluatedTestSubmission)
+        public void UpdateTestSubmission(string testSubmissionId, EvaluatedTestSubmissionVM evaluatedTestSubmission)
         {
             TestSubmission submission = testSubmissionService.GetSubmissionById(testSubmissionId);
             foreach (var evaluatedAnswer in evaluatedTestSubmission.EvaluatedAnswers)

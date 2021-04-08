@@ -1,5 +1,6 @@
 ﻿using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
+using CourseManagementSystem.Services.Extensions;
 using CourseManagementSystem.Services.Interfaces;
 
 namespace CourseManagementSystem.Services.Implementations
@@ -19,11 +20,21 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public void DeleteById(int postId)
+        public void DeleteById(string postId)
         {
-            var post = dbContext.Posts.Find(postId);
+            var post = GetById(postId);
             dbContext.Posts.Remove(post);
             dbContext.SaveChanges();
+        }
+
+        /// <summary>
+        /// find a post by its id
+        /// </summary>
+        /// <param name="postId">identifier of the post</param>
+        /// <returns></returns>
+        private ForumPost GetById(string postId)
+        {
+            return dbContext.Posts.FindById(postId);
         }
     }
 }

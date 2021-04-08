@@ -1,4 +1,6 @@
 ﻿using CourseManagementSystem.Data;
+using CourseManagementSystem.Data.Models;
+using CourseManagementSystem.Services.Extensions;
 using CourseManagementSystem.Services.Interfaces;
 
 namespace CourseManagementSystem.Services.Implementations
@@ -10,11 +12,21 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public void DeleteById(int gradeId)
+        public void DeleteById(string gradeId)
         {
-            var grade = dbContext.Grades.Find(gradeId);
+            var grade = GetById(gradeId);
             dbContext.Grades.Remove(grade);
             dbContext.SaveChanges();
+        }
+
+        /// <summary>
+        /// get grade by its id
+        /// </summary>
+        /// <param name="gradeId">identifier of the grade</param>
+        /// <returns></returns>
+        private Grade GetById(string gradeId)
+        {
+            return dbContext.Grades.FindById(gradeId);
         }
     }
 }

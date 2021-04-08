@@ -11,7 +11,7 @@ namespace CourseManagementSystem.API.ViewModels
         {
         }
 
-        public SubmitTestVM(int testId, string testTopic, IEnumerable<SubmissionAnswerVM> answers)
+        public SubmitTestVM(string testId, string testTopic, IEnumerable<SubmissionAnswerVM> answers)
         {
             TestId = testId;
             TestTopic = testTopic;
@@ -21,7 +21,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// id of the test
         /// </summary>
-        public int TestId { get; set; }
+        public string TestId { get; set; }
 
         /// <summary>
         /// topic of the test

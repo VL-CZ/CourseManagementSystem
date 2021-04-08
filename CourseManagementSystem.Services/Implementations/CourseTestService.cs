@@ -1,5 +1,6 @@
 ﻿using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
+using CourseManagementSystem.Services.Extensions;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,15 +16,15 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public void AddToCourse(CourseTest test, int courseId)
+        public void AddToCourse(CourseTest test, string courseId)
         {
-            var course = dbContext.Courses.Find(courseId);
+            var course = dbContext.Courses.FindById(courseId);
             course.Tests.Add(test);
             dbContext.SaveChanges();
         }
 
         /// <inheritdoc/>
-        public void Delete(int testId)
+        public void Delete(string testId)
         {
             var testToRemove = GetById(testId);
             dbContext.CourseTests.Remove(testToRemove);
@@ -31,9 +32,9 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public CourseTest GetById(int testId)
+        public CourseTest GetById(string testId)
         {
-            return dbContext.CourseTests.Include(x => x.Course).Include(ct => ct.Questions).SingleOrDefault(ct => ct.Id == testId);
+            return dbContext.CourseTests.Include(ct => ct.Course).Include(ct => ct.Questions).SingleOrDefault(ct => ct.Id.ToString() == testId);
         }
 
         /// <inheritdoc/>

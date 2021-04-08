@@ -1,5 +1,6 @@
 ﻿using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
+using CourseManagementSystem.Services.Extensions;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -15,21 +16,21 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public void DeleteFileById(int id)
+        public void DeleteFileById(string id)
         {
-            var file = dbContext.Files.Find(id);
+            var file = GetFileById(id);
             dbContext.Files.Remove(file);
             dbContext.SaveChanges();
         }
 
         /// <inheritdoc/>
-        public CourseFile GetFileById(int id)
+        public CourseFile GetFileById(string id)
         {
-            return dbContext.Files.Find(id);
+            return dbContext.Files.FindById(id);
         }
 
         /// <inheritdoc/>
-        public CourseFile SaveTo(int courseId, IFormFile file)
+        public CourseFile SaveTo(string courseId, IFormFile file)
         {
             var courseFile = new CourseFile() { Name = file.FileName, ContentType = file.ContentType };
             using (var target = new MemoryStream())
@@ -38,7 +39,7 @@ namespace CourseManagementSystem.Services.Implementations
                 courseFile.Data = target.ToArray();
             }
 
-            Course c = dbContext.Courses.Include(c => c.Files).Single(c => c.Id == courseId);
+            Course c = dbContext.Courses.Include(c => c.Files).Single(c => c.Id.ToString() == courseId);
 
             c.Files.Add(courseFile);
             dbContext.SaveChanges();

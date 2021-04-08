@@ -30,7 +30,7 @@ export class CourseService extends ApiService {
    * delete course by id
    * @param id identifier of the course
    */
-  public delete(id: number): Observable<{}> {
+  public delete(id: string): Observable<{}> {
     return this.http.delete(this.controllerUrl + id);
   }
 

@@ -1,15 +1,17 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CourseManagementSystem.Data.Models
 {
-    public class CourseFile
+    public class CourseFile : IGuidIdObject
     {
+        /// <summary>
+        /// identifier of the file
+        /// </summary>
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        public int ID { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// content of the file

@@ -33,7 +33,7 @@ export class StudentDetailComponent implements OnInit {
     });
 
     roleAuthService.isAdmin().subscribe(result => {
-      this.isAdmin = result.isAdmin;
+      this.isAdmin = result.value;
     });
   }
 

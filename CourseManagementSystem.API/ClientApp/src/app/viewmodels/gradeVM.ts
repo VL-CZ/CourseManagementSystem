@@ -36,5 +36,5 @@ export class GradeDetailsVM extends BaseGradeVM {
   /**
    * id of the grade
    */
-  public id: number;
+  public id: string;
 }

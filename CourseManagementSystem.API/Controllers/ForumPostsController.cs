@@ -30,7 +30,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="courseId">id of the course</param>
         /// <param name="forumPostVM">post to add</param>
         [HttpPost("{courseId}")]
-        public void AddToCourse(int courseId, ForumPostVM forumPostVM)
+        public void AddToCourse(string courseId, ForumPostVM forumPostVM)
         {
             string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
 
@@ -45,7 +45,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="postId">id of the post to delete</param>
         [HttpDelete("{postId}")]
-        public void Delete(int postId)
+        public void Delete(string postId)
         {
             forumPostService.DeleteById(postId);
         }

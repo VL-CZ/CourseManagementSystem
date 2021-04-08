@@ -37,7 +37,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="id"></param>
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void Delete(string id)
         {
             courseService.DeleteById(id);
         }
@@ -47,7 +47,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="id">Id of the course</param>
         [HttpGet("{id}/members")]
-        public IEnumerable<CourseMemberVM> GetAllMembers(int id)
+        public IEnumerable<CourseMemberVM> GetAllMembers(string id)
         {
             var people = courseService.GetMembers(id);
             return people.Select(cm => new CourseMemberVM(cm.Id.ToString(), cm.User.UserName, cm.User.Email));
@@ -59,9 +59,9 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id">Id of the course</param>
         /// <returns></returns>
         [HttpGet("{id}/files")]
-        public IEnumerable<CourseFileVM> GetAllFiles(int id)
+        public IEnumerable<CourseFileVM> GetAllFiles(string id)
         {
-            return courseService.GetFiles(id).Select(file => new CourseFileVM(file.ID, file.Name));
+            return courseService.GetFiles(id).Select(file => new CourseFileVM(file.Id.ToString(), file.Name));
         }
 
         /// <summary>
@@ -70,10 +70,10 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id">Id of the course</param>
         /// <returns></returns>
         [HttpGet("{id}/tests")]
-        public IEnumerable<CourseTestDetailsVM> GetAllTests(int id)
+        public IEnumerable<CourseTestDetailsVM> GetAllTests(string id)
         {
             var courseTests = courseService.GetTests(id);
-            return courseTests.Select(test => new CourseTestDetailsVM(test.Id, test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status, test.Deadline));
+            return courseTests.Select(test => new CourseTestDetailsVM(test.Id.ToString(), test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status, test.Deadline));
         }
 
         /// <summary>
@@ -82,10 +82,10 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id">identifier of the course</param>
         /// <returns></returns>
         [HttpGet("{id}/posts")]
-        public IEnumerable<ForumPostVM> GetAllPosts(int id)
+        public IEnumerable<ForumPostVM> GetAllPosts(string id)
         {
             var posts = courseService.GetPostsWithAuthors(id);
-            return posts.Select(post => new ForumPostVM(post.Id, post.Author.Email, post.Text));
+            return posts.Select(post => new ForumPostVM(post.Id.ToString(), post.Author.Email, post.Text));
         }
     }
 }

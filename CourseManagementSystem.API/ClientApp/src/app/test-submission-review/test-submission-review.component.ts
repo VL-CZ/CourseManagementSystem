@@ -47,7 +47,7 @@ export class TestSubmissionReviewComponent implements OnInit {
     const submissionId = ActivatedRouteUtils.getIdParam(activatedRoute);
 
     roleAuthService.isAdmin().subscribe(result => {
-      this.isAdmin = result.isAdmin;
+      this.isAdmin = result.value;
     });
 
     testSubmissionService.getSubmissionById(submissionId).subscribe(submission => {

@@ -11,7 +11,7 @@ namespace CourseManagementSystem.API.ViewModels
         protected BaseTestSubmissionVM()
         { }
 
-        protected BaseTestSubmissionVM(int testSubmissionId, DateTime submittedDateTime, bool isReviewed)
+        protected BaseTestSubmissionVM(string testSubmissionId, DateTime submittedDateTime, bool isReviewed)
         {
             TestSubmissionId = testSubmissionId;
             SubmittedDateTime = submittedDateTime;
@@ -21,7 +21,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// id of the test submission
         /// </summary>
-        public int TestSubmissionId { get; set; }
+        public string TestSubmissionId { get; set; }
 
         /// <summary>
         /// datetime when this test was submitted
@@ -42,7 +42,7 @@ namespace CourseManagementSystem.API.ViewModels
         public TestSubmissionInfoVM() : base()
         { }
 
-        public TestSubmissionInfoVM(int testSubmissionId, string testTopic, int testWeight, double percentualScore, DateTime submittedDateTime, bool isReviewed)
+        public TestSubmissionInfoVM(string testSubmissionId, string testTopic, int testWeight, double percentualScore, DateTime submittedDateTime, bool isReviewed)
             : base(testSubmissionId, submittedDateTime, isReviewed)
         {
             TestTopic = testTopic;
@@ -74,7 +74,7 @@ namespace CourseManagementSystem.API.ViewModels
         public TestSubmissionWithUserInfoVM() : base()
         { }
 
-        public TestSubmissionWithUserInfoVM(string studentEmail, int testSubmissionId, double percentualScore, DateTime submittedDateTime, bool isReviewed)
+        public TestSubmissionWithUserInfoVM(string studentEmail, string testSubmissionId, double percentualScore, DateTime submittedDateTime, bool isReviewed)
             : base(testSubmissionId, submittedDateTime, isReviewed)
         {
             StudentEmail = studentEmail;
@@ -100,7 +100,7 @@ namespace CourseManagementSystem.API.ViewModels
         public TestWithSubmissionVM() : base()
         { }
 
-        public TestWithSubmissionVM(int testId, string testTopic, int testSubmissionId, IEnumerable<SubmissionAnswerWithCorrectAnswerVM> answers,
+        public TestWithSubmissionVM(string testId, string testTopic, string testSubmissionId, IEnumerable<SubmissionAnswerWithCorrectAnswerVM> answers,
             DateTime submittedDateTime, bool isReviewed) : base(testSubmissionId, submittedDateTime, isReviewed)
         {
             TestId = testId;
@@ -111,7 +111,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// id of the test
         /// </summary>
-        public int TestId { get; set; }
+        public string TestId { get; set; }
 
         /// <summary>
         /// topic of the test

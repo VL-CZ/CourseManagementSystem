@@ -48,11 +48,11 @@ export class CourseListComponent implements OnInit {
     this.peopleService = peopleService;
 
     roleAuthService.isAdmin().subscribe(result => {
-      this.isAdmin = result.isAdmin;
+      this.isAdmin = result.value;
     });
 
     roleAuthService.getCurrentUserId().subscribe(result => {
-      this.currentUserId = result.id;
+      this.currentUserId = result.value;
     });
 
     this.reloadCourseInfo();
@@ -65,7 +65,7 @@ export class CourseListComponent implements OnInit {
    * remove course with the given id
    * @param courseId identifier of the course to delete
    */
-  public removeCourse(courseId: number): void {
+  public removeCourse(courseId: string): void {
     this.courseService.delete(courseId).subscribe(() => {
       this.reloadCourseInfo();
     });

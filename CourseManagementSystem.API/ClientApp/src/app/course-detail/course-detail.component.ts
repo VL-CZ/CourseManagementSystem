@@ -36,11 +36,11 @@ export class CourseDetailComponent implements OnInit {
     this.courseService = courseService;
 
     roleAuthService.isAdmin().subscribe(result => {
-      this.isAdmin = result.isAdmin;
+      this.isAdmin = result.value;
 
       if (!this.isAdmin) {
-        peopleService.getCourseMemberByCourse(parseInt(this.courseId, 10)).subscribe(res => {
-          this.currentCourseMemberId = res;
+        peopleService.getCourseMemberByCourse(this.courseId).subscribe(res => {
+          this.currentCourseMemberId = res.value;
         });
       }
     });

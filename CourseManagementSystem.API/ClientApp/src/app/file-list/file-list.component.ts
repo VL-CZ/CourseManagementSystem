@@ -43,7 +43,7 @@ export class FileListComponent implements OnInit {
     this.courseService = courseService;
 
     roleAuthService.isAdmin().subscribe(result => {
-      this.isAdmin = result.isAdmin;
+      this.isAdmin = result.value;
     });
   }
 
@@ -74,16 +74,17 @@ export class FileListComponent implements OnInit {
    * remove a file with given id
    * @param fileId identifier of the file
    */
-  public removeFile(fileId: number): void {
-    this.fileService.delete(fileId).subscribe();
-    this.uploadedFiles = this.uploadedFiles.filter(f => f.id !== fileId);
+  public removeFile(fileId: string): void {
+    this.fileService.delete(fileId).subscribe(() => {
+      this.reloadFileData();
+    });
   }
 
   /**
    * download a file with given id
    * @param fileId identifier of the file
    */
-  public downloadFile(fileId: number): void {
+  public downloadFile(fileId: string): void {
     this.fileService.download(fileId);
   }
 

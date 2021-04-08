@@ -33,7 +33,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="courseId"></param>
         [HttpPost("enroll/{courseId}")]
-        public void EnrollTo(int courseId)
+        public void EnrollTo(string courseId)
         {
             var course = courseService.GetById(courseId);
             var currentUser = peopleService.GetById(GetCurrentUserId());
@@ -49,7 +49,7 @@ namespace CourseManagementSystem.API.Controllers
         public IEnumerable<CourseInfoVM> GetMemberCourses()
         {
             var memberCourses = peopleService.GetMemberCourses(GetCurrentUserId());
-            return memberCourses.Select(course => new CourseInfoVM(course.Id, course.Name));
+            return memberCourses.Select(course => new CourseInfoVM(course.Id.ToString(), course.Name));
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace CourseManagementSystem.API.Controllers
         public IEnumerable<CourseInfoVM> GetManagedCourses()
         {
             var managedCourses = peopleService.GetManagedCourses(GetCurrentUserId());
-            return managedCourses.Select(c => new CourseInfoVM(c.Id, c.Name));
+            return managedCourses.Select(course => new CourseInfoVM(course.Id.ToString(), course.Name));
         }
 
         /// <summary>
@@ -69,12 +69,13 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="courseId">Id of the course</param>
         /// <returns></returns>
         [HttpGet("getCourseMember/{courseId}")]
-        public int GetMemberByCourseId(int courseId)
+        public WrapperVM<string> GetMemberByCourseId(string courseId)
         {
             var person = peopleService.GetById(GetCurrentUserId());
             var course = courseService.GetById(courseId);
 
-            return peopleService.GetCourseMembership(person, course).Id;
+            var courseMember = peopleService.GetCourseMembership(person, course);
+            return new WrapperVM<string>(courseMember.Id.ToString());
         }
 
         /// <summary>

@@ -10,19 +10,19 @@ namespace CourseManagementSystem.Services.Interfaces
         /// add test to given course
         /// </summary>
         /// <returns></returns>
-        void AddToCourse(CourseTest test, int courseId);
+        void AddToCourse(CourseTest test, string courseId);
 
         /// <summary>
         /// get test with given Id
         /// </summary>
         /// <param name="testId"></param>
         /// <returns></returns>
-        CourseTest GetById(int testId);
+        CourseTest GetById(string testId);
 
         /// <summary>
         /// delete test by its Id
         /// </summary>
-        void Delete(int testId);
+        void Delete(string testId);
 
         /// <summary>
         /// update properties of the <paramref name="test"/>

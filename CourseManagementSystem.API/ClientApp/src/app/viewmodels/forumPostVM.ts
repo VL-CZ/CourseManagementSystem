@@ -6,7 +6,7 @@ export class ForumPostVM {
   /**
    * identifier of the post
    */
-  public id: number;
+  public id: string;
 
   /**
    * author of the post
@@ -17,7 +17,4 @@ export class ForumPostVM {
    * text of the post
    */
   public text: string;
-
-  constructor() {
-  }
 }

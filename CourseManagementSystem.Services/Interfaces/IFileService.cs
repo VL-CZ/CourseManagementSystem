@@ -13,19 +13,19 @@ namespace CourseManagementSystem.Services.Interfaces
         /// </summary>
         /// <param name="file"></param>
         /// <returns>saved file</returns>
-        CourseFile SaveTo(int courseId, IFormFile file);
+        CourseFile SaveTo(string courseId, IFormFile file);
 
         /// <summary>
         /// delete file with selected Id
         /// </summary>
         /// <param name="id"></param>
-        void DeleteFileById(int id);
+        void DeleteFileById(string id);
 
         /// <summary>
         /// get file by its Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        CourseFile GetFileById(int id);
+        CourseFile GetFileById(string id);
     }
 }

@@ -5,6 +5,7 @@ import {ApiService} from './api.service';
 import {SubmitTestVM} from './viewmodels/submitTestVM';
 import {TestWithSubmissionVM} from './viewmodels/testSubmissionVM';
 import {EvaluatedTestSubmissionVM} from './viewmodels/evaluatedTestSubmissionVM';
+import {WrapperVM} from './viewmodels/wrapperVM';
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +21,8 @@ export class TestSubmissionService extends ApiService {
    * submit student's solution
    * @param submission test to submit
    */
-  public submit(submission: SubmitTestVM): Observable<string> {
-    return this.http.post<string>(this.controllerUrl, submission);
+  public submit(submission: SubmitTestVM): Observable<WrapperVM<string>> {
+    return this.http.post<WrapperVM<string>>(this.controllerUrl, submission);
   }
 
   /**

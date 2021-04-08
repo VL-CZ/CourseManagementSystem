@@ -9,7 +9,7 @@
         {
         }
 
-        public CourseFileVM(int id, string name)
+        public CourseFileVM(string id, string name)
         {
             Id = id;
             Name = name;
@@ -18,7 +18,7 @@
         /// <summary>
         /// identifier of the file
         /// </summary>
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// name of the file

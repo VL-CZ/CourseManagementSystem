@@ -23,10 +23,10 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("getId")]
-        public PersonIdVM GetId()
+        public WrapperVM<string> GetId()
         {
             string userId = httpContextAccessor.HttpContext.GetCurrentUserId();
-            return new PersonIdVM() { Id = userId };
+            return new WrapperVM<string>(userId);
         }
 
         /// <summary>
@@ -34,10 +34,11 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("isAdmin")]
-        public IsAdminVM IsAdmin()
+        public WrapperVM<bool> IsAdmin()
         {
             // TO-DO: add roles
-            return new IsAdminVM() { IsAdmin = httpContextAccessor.HttpContext.GetCurrentUserId() == "b7a6f405-c226-4f5a-a0cb-2ba4c47582a3" };
+            bool isAdmin = httpContextAccessor.HttpContext.GetCurrentUserId() == "b7a6f405-c226-4f5a-a0cb-2ba4c47582a3";
+            return new WrapperVM<bool>(isAdmin);
         }
     }
 }

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CourseManagementSystem.Data.Models
 {
-    public class Course
+    public class Course : IGuidIdObject
     {
         public Course()
         {
@@ -21,8 +21,12 @@ namespace CourseManagementSystem.Data.Models
             Admin = admin;
         }
 
+        /// <summary>
+        /// identifier of the couse
+        /// </summary>
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// name of the course
