@@ -34,7 +34,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testSubmissionVM">solution to submit</param>
         /// <returns>Id of the test submission</returns>
         [HttpPost("")]
-        public string Submit(SubmitTestVM testSubmissionVM)
+        public WrapperVM<string> Submit(SubmitTestVM testSubmissionVM)
         {
             var test = courseTestService.GetById(testSubmissionVM.TestId);
 
@@ -48,7 +48,7 @@ namespace CourseManagementSystem.API.Controllers
             testSubmissionEvaluator.Evaluate(testSubmission);
             testSubmissionService.Save(testSubmission);
 
-            return testSubmission.Id.ToString();
+            return new WrapperVM<string>(testSubmission.Id.ToString());
         }
 
         /// <summary>

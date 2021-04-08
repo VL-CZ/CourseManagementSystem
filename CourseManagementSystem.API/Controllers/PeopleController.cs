@@ -69,12 +69,13 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="courseId">Id of the course</param>
         /// <returns></returns>
         [HttpGet("getCourseMember/{courseId}")]
-        public string GetMemberByCourseId(string courseId)
+        public WrapperVM<string> GetMemberByCourseId(string courseId)
         {
             var person = peopleService.GetById(GetCurrentUserId());
             var course = courseService.GetById(courseId);
 
-            return peopleService.GetCourseMembership(person, course).Id.ToString();
+            var courseMember = peopleService.GetCourseMembership(person, course);
+            return new WrapperVM<string>(courseMember.Id.ToString());
         }
 
         /// <summary>
