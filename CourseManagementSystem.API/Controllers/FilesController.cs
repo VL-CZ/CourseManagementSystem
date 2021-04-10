@@ -1,17 +1,14 @@
-﻿using CourseManagementSystem.API.ViewModels;
-using CourseManagementSystem.Data;
-using CourseManagementSystem.Data.Models;
+﻿using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace CourseManagementSystem.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class FilesController : ControllerBase
     {
         private readonly IFileService fileService;
@@ -53,6 +50,5 @@ namespace CourseManagementSystem.API.Controllers
         {
             fileService.DeleteFileById(id);
         }
-
     }
 }
