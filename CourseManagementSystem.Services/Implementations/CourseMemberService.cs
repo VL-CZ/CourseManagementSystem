@@ -20,7 +20,7 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         ///<inheritdoc/>
-        public string GetCourseId(string objectId)
+        public string GetCourseIdOf(string objectId)
         {
             return dbContext.CourseMembers.GetCourseIdOf(objectId);
         }

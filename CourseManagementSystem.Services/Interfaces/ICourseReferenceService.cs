@@ -10,6 +10,6 @@
         /// </summary>
         /// <param name="objectId">id of the object</param>
         /// <returns></returns>
-        string GetCourseId(string objectId);
+        string GetCourseIdOf(string objectId);
     }
 }
