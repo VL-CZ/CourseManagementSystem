@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace CourseManagementSystem.Data.Models
 {
-    public class CourseTest : IGuidIdObject
+    public class CourseTest : IGuidIdObject, ICourseReferenceObject
     {
         /// <summary>
         /// identifier of the test

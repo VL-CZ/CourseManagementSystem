@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CourseManagementSystem.Data.Models
 {
-    public class CourseFile : IGuidIdObject
+    public class CourseFile : IGuidIdObject, ICourseReferenceObject
     {
         /// <summary>
         /// identifier of the file
@@ -27,5 +27,10 @@ namespace CourseManagementSystem.Data.Models
         /// content type of the data
         /// </summary>
         public string ContentType { get; set; }
+
+        /// <summary>
+        /// course that this file belongs to
+        /// </summary>
+        public Course Course { get; set; }
     }
 }

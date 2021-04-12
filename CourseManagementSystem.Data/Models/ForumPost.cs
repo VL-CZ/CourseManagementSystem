@@ -7,7 +7,7 @@ namespace CourseManagementSystem.Data.Models
     /// <summary>
     /// class representing one post in a course forum
     /// </summary>
-    public class ForumPost : IGuidIdObject
+    public class ForumPost : IGuidIdObject, ICourseReferenceObject
     {
         public ForumPost() { }
 
