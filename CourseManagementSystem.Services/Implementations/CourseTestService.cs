@@ -32,6 +32,12 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
+        public string GetCourseId(string testId)
+        {
+            return GetById(testId).Course.Id.ToString();
+        }
+
+        /// <inheritdoc/>
         public CourseTest GetById(string testId)
         {
             return dbContext.CourseTests.Include(ct => ct.Course).Include(ct => ct.Questions).SingleOrDefault(ct => ct.Id.ToString() == testId);

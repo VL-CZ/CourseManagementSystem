@@ -39,5 +39,12 @@ namespace CourseManagementSystem.Services.Interfaces
         /// </summary>
         /// <param name="test">test to publish</param>
         void Publish(CourseTest test);
+
+        /// <summary>
+        /// get id of course that the object belongs to
+        /// </summary>
+        /// <param name="objectId">id of the object</param>
+        /// <returns></returns>
+        string GetCourseId(string objectId);
     }
 }

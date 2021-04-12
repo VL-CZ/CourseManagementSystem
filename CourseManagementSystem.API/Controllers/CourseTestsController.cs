@@ -1,4 +1,5 @@
-﻿using CourseManagementSystem.API.Extensions;
+﻿using CourseManagementSystem.API.Auth;
+using CourseManagementSystem.API.Extensions;
 using CourseManagementSystem.API.ViewModels;
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services;
@@ -40,34 +41,37 @@ namespace CourseManagementSystem.API.Controllers
         /// <summary>
         /// delete test by its id
         /// </summary>
-        /// <param name="id"></param>
-        [HttpDelete("{id}")]
-        public void Delete(string id)
+        /// <param name="testId"></param>
+        [HttpDelete("{testId}")]
+        [Authorize(Policy = CourseAdminRequirement.policyName)]
+        public void Delete(string testId)
         {
-            courseTestService.Delete(id);
+            courseTestService.Delete(testId);
         }
 
         /// <summary>
         /// get test by Id
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="testId"></param>
         /// <returns></returns>
-        [HttpGet("{id}")]
-        public CourseTestDetailsVM Get(string id)
+        [HttpGet("{testId}")]
+        [Authorize(Policy = CourseAdminRequirement.policyName)]
+        public CourseTestDetailsVM Get(string testId)
         {
-            var test = courseTestService.GetById(id);
-            return new CourseTestDetailsVM(id, test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status, test.Deadline);
+            var test = courseTestService.GetById(testId);
+            return new CourseTestDetailsVM(testId, test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status, test.Deadline);
         }
 
         /// <summary>
         /// update properties (including questions) of the test
         /// </summary>
-        /// <param name="id">id of the test that we edit</param>
+        /// <param name="testId">id of the test that we edit</param>
         /// <param name="updatedTest">test with updated properties</param>
-        [HttpPut("{id}")]
-        public void Update(string id, AddCourseTestVM updatedTest)
+        [HttpPut("{testId}")]
+        [Authorize(Policy = CourseAdminRequirement.policyName)]
+        public void Update(string testId, AddCourseTestVM updatedTest)
         {
-            var test = courseTestService.GetById(id);
+            var test = courseTestService.GetById(testId);
             var updatedQuestions = updatedTest.Questions.ToModels();
             courseTestService.Update(test, updatedTest.Weight, updatedTest.Topic, updatedTest.Deadline, updatedQuestions.ToList());
         }
@@ -78,6 +82,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testId">id of the test</param>
         /// <returns>collection of submissions</returns>
         [HttpGet("{testId}/submissions")]
+        [Authorize(Policy = CourseAdminRequirement.policyName)]
         public IEnumerable<TestSubmissionWithUserInfoVM> GetAllSubmissions(string testId)
         {
             var testSubmissions = testSubmissionService.GetAllSubmissionsOfTest(testId);
@@ -88,11 +93,12 @@ namespace CourseManagementSystem.API.Controllers
         /// <summary>
         /// publish the test with given id
         /// </summary>
-        /// <param name="id">identifier of the test</param>
-        [HttpPost("{id}/publish")]
-        public void Publish(string id)
+        /// <param name="testId">identifier of the test</param>
+        [HttpPost("{testId}/publish")]
+        [Authorize(Policy = CourseAdminRequirement.policyName)]
+        public void Publish(string testId)
         {
-            var test = courseTestService.GetById(id);
+            var test = courseTestService.GetById(testId);
             courseTestService.Publish(test);
         }
     }
