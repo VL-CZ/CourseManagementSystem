@@ -1,12 +1,9 @@
 ﻿using CourseManagementSystem.Data.Models;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CourseManagementSystem.Services.Interfaces
 {
-    public interface IFileService
+    public interface IFileService : ICourseReferenceService
     {
         /// <summary>
         /// save the file into the course

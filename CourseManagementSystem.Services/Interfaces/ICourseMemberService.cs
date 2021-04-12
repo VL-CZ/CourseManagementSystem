@@ -2,7 +2,7 @@
 
 namespace CourseManagementSystem.Services.Interfaces
 {
-    public interface ICourseMemberService
+    public interface ICourseMemberService : ICourseReferenceService
     {
         /// <summary>
         /// get CourseMember by ID

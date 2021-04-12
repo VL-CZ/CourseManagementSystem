@@ -29,6 +29,12 @@ namespace CourseManagementSystem.Services.Implementations
             return dbContext.Files.FindById(id);
         }
 
+        ///<inheritdoc/>
+        public string GetCourseId(string objectId)
+        {
+            return dbContext.Files.GetCourseIdOf(objectId);
+        }
+
         /// <inheritdoc/>
         public CourseFile SaveTo(string courseId, IFormFile file)
         {
