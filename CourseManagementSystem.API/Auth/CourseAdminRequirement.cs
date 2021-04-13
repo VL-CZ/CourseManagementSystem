@@ -16,14 +16,13 @@ namespace CourseManagementSystem.API.Auth
     {
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IPeopleService peopleService;
-        private readonly ICourseTestService courseTestService;
+        private readonly ICourseReferenceServiceFactory dataServiceFactory;
 
-        public CourseAdminHandler(IHttpContextAccessor httpContextAccessor, IPeopleService peopleService, ICourseTestService courseTestService)
+        public CourseAdminHandler(IHttpContextAccessor httpContextAccessor, IPeopleService peopleService, ICourseReferenceServiceFactory dataServiceFactory)
         {
             this.httpContextAccessor = httpContextAccessor;
             this.peopleService = peopleService;
-            this.courseTestService = courseTestService;
-            var collections = new ICourseReferenceService[] { courseTestService };
+            this.dataServiceFactory = dataServiceFactory;
         }
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, CourseAdminRequirement requirement)
@@ -31,7 +30,8 @@ namespace CourseManagementSystem.API.Auth
             string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
             string testId = httpContextAccessor.HttpContext.Request.RouteValues[CourseAdminRequirement.testIdFieldName].ToString();
 
-            string courseId = courseTestService.GetCourseIdOf(testId);
+            var service = dataServiceFactory.GetByEntityType(EntityType.CourseTest);
+            string courseId = service.GetCourseIdOf(testId);
 
             if (peopleService.IsAdminOfCourse(currentUserId, courseId))
             {

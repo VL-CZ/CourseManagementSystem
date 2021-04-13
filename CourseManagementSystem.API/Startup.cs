@@ -43,7 +43,7 @@ namespace CourseManagementSystem.API
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(CourseAdminRequirement.policyName, 
+                options.AddPolicy(CourseAdminRequirement.policyName,
                     policy => policy.Requirements.Add(new CourseAdminRequirement()));
             });
 
@@ -68,6 +68,8 @@ namespace CourseManagementSystem.API
             services.AddTransient<ITestSubmissionEvaluator, TestSubmissionEvaluator>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddTransient<ICourseReferenceServiceFactory, CourseReferenceServiceFactory>();
 
             // add Auth handlers
             services.AddTransient<IAuthorizationHandler, CourseAdminHandler>();
