@@ -26,7 +26,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="file"></param>
         /// <returns></returns>
         [HttpPost("upload/{courseId}")]
-        [AuthorizeCourseAdminOf(EntityType.CourseTest, "courseId")]
+        [AuthorizeCourseAdminOf(EntityType.Course, "courseId")]
         public void Upload(IFormFile file, string courseId)
         {
             fileService.SaveTo(courseId, file);

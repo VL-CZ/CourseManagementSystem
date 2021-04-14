@@ -39,7 +39,7 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
-        /// assign grade to the person with selected id
+        /// assign grade to the course member with selected id
         /// </summary>
         /// <param name="id">identifier of the <see cref="CourseMember"/></param>
         /// <param name="g">grade viewmodel to add</param>
