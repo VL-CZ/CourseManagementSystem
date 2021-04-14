@@ -1,4 +1,5 @@
 ﻿using CourseManagementSystem.API.Auth;
+using CourseManagementSystem.API.Auth.Attributes;
 using CourseManagementSystem.API.Extensions;
 using CourseManagementSystem.API.ViewModels;
 using CourseManagementSystem.Data.Models;

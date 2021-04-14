@@ -1,4 +1,5 @@
 ﻿using CourseManagementSystem.API.Auth;
+using CourseManagementSystem.API.Auth.Attributes;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

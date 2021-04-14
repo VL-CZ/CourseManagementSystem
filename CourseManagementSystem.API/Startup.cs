@@ -1,4 +1,4 @@
-using CourseManagementSystem.API.Auth;
+using CourseManagementSystem.API.Auth.Factories;
 using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Implementations;
@@ -66,6 +66,7 @@ namespace CourseManagementSystem.API
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddTransient<ICourseReferenceServiceFactory, CourseReferenceServiceFactory>();
+            services.AddTransient<ICourseMemberReferenceServiceFactory, CourseMemberReferenceServiceFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

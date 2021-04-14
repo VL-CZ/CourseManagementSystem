@@ -1,7 +1,7 @@
 ﻿using CourseManagementSystem.Services.Interfaces;
 using System.Collections.Generic;
 
-namespace CourseManagementSystem.API.Auth
+namespace CourseManagementSystem.API.Auth.Factories
 {
     /// <summary>
     /// interface for <see cref="ICourseReferenceService"/> factory
@@ -54,9 +54,9 @@ namespace CourseManagementSystem.API.Auth
         }
 
         /// <inheritdoc/>
-        public ICourseReferenceService GetByEntityType(EntityType authEnum)
+        public ICourseReferenceService GetByEntityType(EntityType entityType)
         {
-            return dataServices[authEnum];
+            return dataServices[entityType];
         }
     }
 }
