@@ -43,7 +43,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="g">grade viewmodel to add</param>
         /// <returns>assigned grade</returns>
         [HttpPost("{id}/assignGrade")]
-        [AllowCourseAdminOf(EntityType.CourseMember, "id")]
+        [AuthorizeCourseAdminOf(EntityType.CourseMember, "id")]
         public void AssignGrade(string id, AddGradeVM g)
         {
             CourseMember cm = courseMemberService.GetMemberByID(id);

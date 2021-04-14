@@ -46,16 +46,16 @@ namespace CourseManagementSystem.API.Auth
     }
 
     /// <summary>
-    /// allow only course admin
+    /// attribute for authorizing admin of a course
     /// </summary>
-    public class AllowCourseAdminOfAttribute : TypeFilterAttribute
+    public class AuthorizeCourseAdminOfAttribute : TypeFilterAttribute
     {
         /// <summary>
         /// allow only course admin of a selected entity
         /// </summary>
         /// <param name="entityType">type of the selected entity</param>
         /// <param name="entityIdFieldName">name of the field that contains id of the entity</param>
-        public AllowCourseAdminOfAttribute(EntityType entityType, string entityIdFieldName) : base(typeof(CourseAdminAuthorizeFilter))
+        public AuthorizeCourseAdminOfAttribute(EntityType entityType, string entityIdFieldName) : base(typeof(CourseAdminAuthorizeFilter))
         {
             Arguments = new object[] { entityType, entityIdFieldName };
         }

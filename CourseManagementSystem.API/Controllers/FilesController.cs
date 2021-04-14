@@ -25,7 +25,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="file"></param>
         /// <returns></returns>
         [HttpPost("upload/{courseId}")]
-        [AllowCourseAdminOf(EntityType.CourseTest, "courseId")]
+        [AuthorizeCourseAdminOf(EntityType.CourseTest, "courseId")]
         public void Upload(IFormFile file, string courseId)
         {
             fileService.SaveTo(courseId, file);
@@ -48,7 +48,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="id"></param>
         [HttpDelete("delete/{id}")]
-        [AllowCourseAdminOf(EntityType.CourseFile, "id")]
+        [AuthorizeCourseAdminOf(EntityType.CourseFile, "id")]
         public void Delete(string id)
         {
             fileService.DeleteFileById(id);

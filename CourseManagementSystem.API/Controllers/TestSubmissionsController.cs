@@ -89,7 +89,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testSubmissionId">id of the submission that is evaluated</param>
         /// <param name="evaluatedTestSubmission">the evaluated test submission</param>
         [HttpPut("{testSubmissionId}")]
-        [AllowCourseAdminOf(EntityType.TestSubmission, "testSubmissionId")]
+        [AuthorizeCourseAdminOf(EntityType.TestSubmission, "testSubmissionId")]
         public void UpdateTestSubmission(string testSubmissionId, EvaluatedTestSubmissionVM evaluatedTestSubmission)
         {
             TestSubmission submission = testSubmissionService.GetSubmissionById(testSubmissionId);

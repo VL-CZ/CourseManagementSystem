@@ -31,7 +31,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testToAdd"></param>
         /// <param name="courseId"></param>
         [HttpPost("{courseId}")]
-        [AllowCourseAdminOf(EntityType.Course, "courseId")]
+        [AuthorizeCourseAdminOf(EntityType.Course, "courseId")]
         public void Add(AddCourseTestVM testToAdd, string courseId)
         {
             var mappedQuestions = testToAdd.Questions.ToModels();
@@ -44,7 +44,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="testId"></param>
         [HttpDelete("{testId}")]
-        [AllowCourseAdminOf(EntityType.CourseTest, "testId")]
+        [AuthorizeCourseAdminOf(EntityType.CourseTest, "testId")]
         public void Delete(string testId)
         {
             courseTestService.Delete(testId);
@@ -56,7 +56,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testId"></param>
         /// <returns></returns>
         [HttpGet("{testId}")]
-        [AllowCourseAdminOf(EntityType.CourseTest, "testId")]
+        [AuthorizeCourseAdminOf(EntityType.CourseTest, "testId")]
         public CourseTestDetailsVM Get(string testId)
         {
             var test = courseTestService.GetById(testId);
@@ -69,7 +69,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testId">id of the test that we edit</param>
         /// <param name="updatedTest">test with updated properties</param>
         [HttpPut("{testId}")]
-        [AllowCourseAdminOf(EntityType.CourseTest, "testId")]
+        [AuthorizeCourseAdminOf(EntityType.CourseTest, "testId")]
         public void Update(string testId, AddCourseTestVM updatedTest)
         {
             var test = courseTestService.GetById(testId);
@@ -83,7 +83,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testId">id of the test</param>
         /// <returns>collection of submissions</returns>
         [HttpGet("{testId}/submissions")]
-        [AllowCourseAdminOf(EntityType.CourseTest, "testId")]
+        [AuthorizeCourseAdminOf(EntityType.CourseTest, "testId")]
         public IEnumerable<TestSubmissionWithUserInfoVM> GetAllSubmissions(string testId)
         {
             var testSubmissions = testSubmissionService.GetAllSubmissionsOfTest(testId);
@@ -96,7 +96,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="testId">identifier of the test</param>
         [HttpPost("{testId}/publish")]
-        [AllowCourseAdminOf(EntityType.CourseTest, "testId")]
+        [AuthorizeCourseAdminOf(EntityType.CourseTest, "testId")]
         public void Publish(string testId)
         {
             var test = courseTestService.GetById(testId);

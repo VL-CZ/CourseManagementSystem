@@ -48,7 +48,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="postId">id of the post to delete</param>
         [HttpDelete("{postId}")]
-        [AllowCourseAdminOf(EntityType.ForumPost, "postId")]
+        [AuthorizeCourseAdminOf(EntityType.ForumPost, "postId")]
         public void Delete(string postId)
         {
             forumPostService.DeleteById(postId);

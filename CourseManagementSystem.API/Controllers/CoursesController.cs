@@ -40,7 +40,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="id"></param>
         [HttpDelete("{id}")]
-        [AllowCourseAdminOf(EntityType.Course, "id")]
+        [AuthorizeCourseAdminOf(EntityType.Course, "id")]
         public void Delete(string id)
         {
             courseService.DeleteById(id);
@@ -51,7 +51,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="id">Id of the course</param>
         [HttpGet("{id}/members")]
-        [AllowCourseAdminOf(EntityType.Course, "id")]
+        [AuthorizeCourseAdminOf(EntityType.Course, "id")]
         public IEnumerable<CourseMemberVM> GetAllMembers(string id)
         {
             var people = courseService.GetMembers(id);
