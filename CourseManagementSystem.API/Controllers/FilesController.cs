@@ -37,6 +37,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
+        [AuthorizeCourseAdminOrMemberOf(EntityType.CourseFile, "id")]
         public FileContentResult Download(string id)
         {
             CourseFile file = fileService.GetFileById(id);

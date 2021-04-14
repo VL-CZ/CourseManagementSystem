@@ -60,6 +60,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testId"></param>
         /// <returns></returns>
         [HttpGet("emptyTest/{testId}")]
+        [AuthorizeCourseAdminOrMemberOf(EntityType.CourseTest, "testId")]
         public SubmitTestVM GetEmptySubmission(string testId)
         {
             var test = courseTestService.GetById(testId);

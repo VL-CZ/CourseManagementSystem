@@ -33,6 +33,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="courseId">id of the course</param>
         /// <param name="forumPostVM">post to add</param>
         [HttpPost("{courseId}")]
+        [AuthorizeCourseAdminOrMemberOf(EntityType.Course, "courseId")]
         public void AddToCourse(string courseId, ForumPostVM forumPostVM)
         {
             string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
