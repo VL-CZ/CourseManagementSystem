@@ -41,11 +41,7 @@ namespace CourseManagementSystem.API
             services.AddAuthentication()
                 .AddIdentityServerJwt();
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(CourseAdminRequirement.policyName,
-                    policy => policy.Requirements.Add(new CourseAdminRequirement()));
-            });
+            services.AddAuthorization();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -70,9 +66,6 @@ namespace CourseManagementSystem.API
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddTransient<ICourseReferenceServiceFactory, CourseReferenceServiceFactory>();
-
-            // add Auth handlers
-            services.AddTransient<IAuthorizationHandler, CourseAdminHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

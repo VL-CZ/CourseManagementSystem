@@ -1,4 +1,5 @@
-﻿using CourseManagementSystem.Services.Interfaces;
+﻿using CourseManagementSystem.API.Auth;
+using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +22,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="id">id of the grade</param>
         [HttpDelete("delete/{id}")]
+        [AllowCourseAdminOf(EntityType.Grade, "id")]
         public void Delete(string id)
         {
             gradeService.DeleteById(id);

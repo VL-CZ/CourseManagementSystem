@@ -1,4 +1,5 @@
-﻿using CourseManagementSystem.Data.Models;
+﻿using CourseManagementSystem.API.Auth;
+using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -24,6 +25,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="file"></param>
         /// <returns></returns>
         [HttpPost("upload/{courseId}")]
+        [AllowCourseAdminOf(EntityType.CourseTest, "courseId")]
         public void Upload(IFormFile file, string courseId)
         {
             fileService.SaveTo(courseId, file);
@@ -46,6 +48,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="id"></param>
         [HttpDelete("delete/{id}")]
+        [AllowCourseAdminOf(EntityType.CourseFile, "id")]
         public void Delete(string id)
         {
             fileService.DeleteFileById(id);

@@ -1,4 +1,5 @@
-﻿using CourseManagementSystem.API.ViewModels;
+﻿using CourseManagementSystem.API.Auth;
+using CourseManagementSystem.API.ViewModels;
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services;
 using CourseManagementSystem.Services.Interfaces;
@@ -42,6 +43,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="g">grade viewmodel to add</param>
         /// <returns>assigned grade</returns>
         [HttpPost("{id}/assignGrade")]
+        [AllowCourseAdminOf(EntityType.CourseMember, "id")]
         public void AssignGrade(string id, AddGradeVM g)
         {
             CourseMember cm = courseMemberService.GetMemberByID(id);

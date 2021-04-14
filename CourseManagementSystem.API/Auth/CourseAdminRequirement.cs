@@ -1,47 +1,63 @@
 ﻿using CourseManagementSystem.API.Extensions;
 using CourseManagementSystem.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace CourseManagementSystem.API.Auth
 {
-    public class CourseAdminRequirement : IAuthorizationRequirement
+    /// <summary>
+    /// filter authorizing admin of a course
+    /// </summary>
+    public class CourseAdminAuthorizeFilter : IAuthorizationFilter
     {
-        public const string testIdFieldName = "testId";
-        public const string policyName = "IsCourseAdmin";
-    }
-
-    public class CourseAdminHandler : AuthorizationHandler<CourseAdminRequirement>
-    {
-        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly EntityType entityType;
         private readonly IPeopleService peopleService;
-        private readonly ICourseReferenceServiceFactory dataServiceFactory;
+        private readonly ICourseReferenceServiceFactory courseReferenceServiceFactory;
+        private readonly string idFieldName;
 
-        public CourseAdminHandler(IHttpContextAccessor httpContextAccessor, IPeopleService peopleService, ICourseReferenceServiceFactory dataServiceFactory)
+        public CourseAdminAuthorizeFilter(EntityType entityType, string entityIdFieldName,
+            [FromServices] IPeopleService peopleService, [FromServices] ICourseReferenceServiceFactory courseReferenceServiceFactory)
         {
-            this.httpContextAccessor = httpContextAccessor;
+            this.entityType = entityType;
             this.peopleService = peopleService;
-            this.dataServiceFactory = dataServiceFactory;
+            this.courseReferenceServiceFactory = courseReferenceServiceFactory;
+            this.idFieldName = entityIdFieldName;
         }
 
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, CourseAdminRequirement requirement)
+        /// <inheritdoc/>
+        public void OnAuthorization(AuthorizationFilterContext context)
         {
-            string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
-            string testId = httpContextAccessor.HttpContext.Request.RouteValues[CourseAdminRequirement.testIdFieldName].ToString();
-
-            var service = dataServiceFactory.GetByEntityType(EntityType.CourseTest);
-            string courseId = service.GetCourseIdOf(testId);
-
-            if (peopleService.IsAdminOfCourse(currentUserId, courseId))
+            if (context.HttpContext.User.Identity.IsAuthenticated)
             {
-                context.Succeed(requirement);
+                string currentUserId = context.HttpContext.GetCurrentUserId();
+                string objectId = context.HttpContext.Request.RouteValues[idFieldName].ToString();
+
+                var service = courseReferenceServiceFactory.GetByEntityType(entityType);
+                string courseId = service.GetCourseIdOf(objectId);
+
+                if (peopleService.IsAdminOfCourse(currentUserId, courseId))
+                {
+                    // authorization passed -> proceed to controller
+                    return;
+                }
             }
-            else
-            {
-                context.Fail();
-            }
-            return Task.CompletedTask;
+            context.Result = new UnauthorizedResult();
+        }
+    }
+
+    /// <summary>
+    /// allow only course admin
+    /// </summary>
+    public class AllowCourseAdminOfAttribute : TypeFilterAttribute
+    {
+        /// <summary>
+        /// allow only course admin of a selected entity
+        /// </summary>
+        /// <param name="entityType">type of the selected entity</param>
+        /// <param name="entityIdFieldName">name of the field that contains id of the entity</param>
+        public AllowCourseAdminOfAttribute(EntityType entityType, string entityIdFieldName) : base(typeof(CourseAdminAuthorizeFilter))
+        {
+            Arguments = new object[] { entityType, entityIdFieldName };
         }
     }
 }

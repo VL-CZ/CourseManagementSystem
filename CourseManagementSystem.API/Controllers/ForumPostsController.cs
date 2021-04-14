@@ -1,4 +1,5 @@
-﻿using CourseManagementSystem.API.Extensions;
+﻿using CourseManagementSystem.API.Auth;
+using CourseManagementSystem.API.Extensions;
 using CourseManagementSystem.API.ViewModels;
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
@@ -47,6 +48,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="postId">id of the post to delete</param>
         [HttpDelete("{postId}")]
+        [AllowCourseAdminOf(EntityType.ForumPost, "postId")]
         public void Delete(string postId)
         {
             forumPostService.DeleteById(postId);

@@ -1,4 +1,5 @@
-﻿using CourseManagementSystem.API.Extensions;
+﻿using CourseManagementSystem.API.Auth;
+using CourseManagementSystem.API.Extensions;
 using CourseManagementSystem.API.ViewModels;
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
@@ -88,6 +89,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testSubmissionId">id of the submission that is evaluated</param>
         /// <param name="evaluatedTestSubmission">the evaluated test submission</param>
         [HttpPut("{testSubmissionId}")]
+        [AllowCourseAdminOf(EntityType.TestSubmission, "testSubmissionId")]
         public void UpdateTestSubmission(string testSubmissionId, EvaluatedTestSubmissionVM evaluatedTestSubmission)
         {
             TestSubmission submission = testSubmissionService.GetSubmissionById(testSubmissionId);

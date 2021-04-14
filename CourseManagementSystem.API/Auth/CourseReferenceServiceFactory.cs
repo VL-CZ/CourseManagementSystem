@@ -36,7 +36,7 @@ namespace CourseManagementSystem.API.Auth
         /// <summary>
         /// dictionary of data services where the key is <see cref="EntityType"/>
         /// </summary>
-        private readonly IDictionary<EntityType, ICourseReferenceService> dataServices;
+        private readonly IReadOnlyDictionary<EntityType, ICourseReferenceService> dataServices;
 
         public CourseReferenceServiceFactory(ICourseMemberService courseMemberService, ICourseTestService courseTestService,
             IFileService fileService, IForumPostService forumPostService, IGradeService gradeService, ITestSubmissionService testSubmissionService)
