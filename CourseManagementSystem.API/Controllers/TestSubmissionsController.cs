@@ -75,6 +75,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testSubmissionId">id of the submission</param>
         /// <returns>test submission with the given id</returns>
         [HttpGet("{testSubmissionId}")]
+        [AuthorizeCourseAdminOrOwnerOf(EntityType.TestSubmission,"testSubmissionId")]
         public TestWithSubmissionVM GetTestSubmission(string testSubmissionId)
         {
             TestSubmission submission = testSubmissionService.GetSubmissionById(testSubmissionId);

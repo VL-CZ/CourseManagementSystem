@@ -25,11 +25,12 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
-        /// get person by id
+        /// get course member by its id
         /// </summary>
-        /// <param name="id">identifier of the person</param>
+        /// <param name="id">identifier of the course member</param>
         /// <returns></returns>
         [HttpGet("{id}")]
+        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "id")]
         public CourseMemberVM Get(string id)
         {
             CourseMember cm = courseMemberService.GetMemberByID(id);
@@ -57,6 +58,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id">ID of the <see cref="CourseMember"/></param>
         /// <returns>all test submissions of the course member</returns>
         [HttpGet("{id}/submissions")]
+        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "id")]
         public IEnumerable<TestSubmissionInfoVM> GetTestSubmissions(string id)
         {
             var userSubmissions = testSubmissionService.GetAllSubmissionsOfCourseMember(id);
@@ -70,6 +72,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id">ID of the <see cref="CourseMember"/></param>
         /// <returns>all grades (excluding test submissions) of the course member</returns>
         [HttpGet("{id}/grades")]
+        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "id")]
         public IEnumerable<GradeDetailsVM> GetGrades(string id)
         {
             var courseMember = courseMemberService.GetMemberByID(id);
