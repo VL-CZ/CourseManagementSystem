@@ -54,5 +54,11 @@ namespace CourseManagementSystem.Services.Implementations
         {
             return GetManagedCourses(personId).Any(course => course.Id.ToString() == courseId);
         }
+
+        /// <inheritdoc/>
+        public bool IsMemberOfCourse(string personId, string courseId)
+        {
+            return GetMemberCourses(personId).Any(course => course.Id.ToString() == courseId);
+        }
     }
 }

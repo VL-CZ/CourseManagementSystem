@@ -13,7 +13,7 @@ namespace CourseManagementSystem.API.Auth
         private readonly EntityType entityType;
         private readonly IPeopleService peopleService;
         private readonly ICourseReferenceServiceFactory courseReferenceServiceFactory;
-        private readonly string idFieldName;
+        private readonly string entityIdFieldName;
 
         public CourseAdminAuthorizeFilter(EntityType entityType, string entityIdFieldName,
             [FromServices] IPeopleService peopleService, [FromServices] ICourseReferenceServiceFactory courseReferenceServiceFactory)
@@ -21,7 +21,7 @@ namespace CourseManagementSystem.API.Auth
             this.entityType = entityType;
             this.peopleService = peopleService;
             this.courseReferenceServiceFactory = courseReferenceServiceFactory;
-            this.idFieldName = entityIdFieldName;
+            this.entityIdFieldName = entityIdFieldName;
         }
 
         /// <inheritdoc/>
@@ -30,7 +30,7 @@ namespace CourseManagementSystem.API.Auth
             if (context.HttpContext.User.Identity.IsAuthenticated)
             {
                 string currentUserId = context.HttpContext.GetCurrentUserId();
-                string objectId = context.HttpContext.Request.RouteValues[idFieldName].ToString();
+                string objectId = context.HttpContext.Request.RouteValues[entityIdFieldName].ToString();
 
                 var service = courseReferenceServiceFactory.GetByEntityType(entityType);
                 string courseId = service.GetCourseIdOf(objectId);
