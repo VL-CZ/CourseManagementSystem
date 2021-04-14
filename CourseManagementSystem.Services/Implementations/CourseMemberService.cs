@@ -19,6 +19,12 @@ namespace CourseManagementSystem.Services.Implementations
             dbContext.SaveChanges();
         }
 
+        /// <inheritdoc/>
+        public bool BelongsTo(string courseMemberId, string personId)
+        {
+            return GetMemberByID(courseMemberId).User.Id == personId;
+        }
+
         ///<inheritdoc/>
         public string GetCourseIdOf(string objectId)
         {

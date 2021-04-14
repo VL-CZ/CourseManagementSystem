@@ -20,6 +20,14 @@ namespace CourseManagementSystem.Services.Interfaces
         CourseMember GetMemberByUserAndCourse(string userId, string courseId);
 
         /// <summary>
+        /// check if the course member belongs to the given person
+        /// </summary>
+        /// <param name="courseMemberId">identifier of the course member</param>
+        /// <param name="personId">identifier of the person</param>
+        /// <returns></returns>
+        bool BelongsTo(string courseMemberId, string personId);
+
+        /// <summary>
         /// remove person with selected ID
         /// </summary>
         /// <param name="id">identifier of the <see cref="CourseMember"/> instance</param>

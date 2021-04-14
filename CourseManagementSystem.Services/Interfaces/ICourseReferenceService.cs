@@ -6,7 +6,7 @@
     public interface ICourseReferenceService
     {
         /// <summary>
-        /// get id of course that the object belongs to
+        /// get id of <see cref="Data.Models.Course"/> that the object belongs to
         /// </summary>
         /// <param name="objectId">id of the object</param>
         /// <returns></returns>

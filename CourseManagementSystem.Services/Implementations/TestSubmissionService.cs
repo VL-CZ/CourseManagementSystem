@@ -34,8 +34,14 @@ namespace CourseManagementSystem.Services.Implementations
         /// <inheritdoc/>
         public string GetCourseIdOf(string objectId)
         {
-            string courseMemberId = dbContext.TestSubmissions.GetCourseMemberIdOf(objectId);
+            string courseMemberId = GetCourseMemberIdOf(objectId);
             return dbContext.CourseMembers.GetCourseIdOf(courseMemberId);
+        }
+
+        /// <inheritdoc/>
+        public string GetCourseMemberIdOf(string objectId)
+        {
+            return dbContext.TestSubmissions.GetCourseMemberIdOf(objectId);
         }
 
         /// <inheritdoc/>
