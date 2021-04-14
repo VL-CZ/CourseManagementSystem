@@ -44,7 +44,7 @@ namespace CourseManagementSystem.API.Auth.Attributes
         /// </summary>
         /// <param name="entityType">type of the selected entity</param>
         /// <param name="entityIdFieldName">name of the field that contains id of the entity</param>
-        public AuthorizeCourseAdminOrOwnerOfAttribute(EntityType entityType, string entityIdFieldName) : base(typeof(CourseAdminAuthorizeFilter))
+        public AuthorizeCourseAdminOrOwnerOfAttribute(EntityType entityType, string entityIdFieldName) : base(typeof(CourseAdminOrOwnerAuthorizeFilter))
         {
             Arguments = new object[] { entityType, entityIdFieldName };
         }
