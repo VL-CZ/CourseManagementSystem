@@ -10,6 +10,6 @@ namespace CourseManagementSystem.Data
         /// <summary>
         /// identifier of the object
         /// </summary>
-        Guid Id { get; }
+        Guid Id { get; set; }
     }
 }

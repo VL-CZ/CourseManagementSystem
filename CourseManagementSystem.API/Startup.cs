@@ -1,8 +1,10 @@
+using CourseManagementSystem.API.Auth.Factories;
 using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Implementations;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -38,6 +40,9 @@ namespace CourseManagementSystem.API
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
+
+            services.AddAuthorization();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
             // In production, the Angular files will be served from this directory
@@ -46,6 +51,7 @@ namespace CourseManagementSystem.API
                 configuration.RootPath = "ClientApp/dist";
             });
 
+            // add dependendies to IoC container
             services.AddTransient<ICourseMemberService, CourseMemberService>();
             services.AddTransient<IFileService, FileService>();
             services.AddTransient<ICourseTestService, CourseTestService>();
@@ -58,6 +64,9 @@ namespace CourseManagementSystem.API
             services.AddTransient<ITestSubmissionEvaluator, TestSubmissionEvaluator>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddTransient<ICourseReferenceServiceFactory, CourseReferenceServiceFactory>();
+            services.AddTransient<ICourseMemberReferenceServiceFactory, CourseMemberReferenceServiceFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,7 +1,10 @@
-﻿using CourseManagementSystem.API.Extensions;
+﻿using CourseManagementSystem.API.Auth;
+using CourseManagementSystem.API.Auth.Attributes;
+using CourseManagementSystem.API.Extensions;
 using CourseManagementSystem.API.ViewModels;
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -10,6 +13,7 @@ namespace CourseManagementSystem.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TestSubmissionsController : ControllerBase
     {
         private readonly ICourseTestService courseTestService;
@@ -33,10 +37,11 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="testSubmissionVM">solution to submit</param>
         /// <returns>Id of the test submission</returns>
-        [HttpPost("")]
-        public WrapperVM<string> Submit(SubmitTestVM testSubmissionVM)
+        [HttpPost("{testId}/submit")]
+        [AuthorizeCourseAdminOrMemberOf(EntityType.CourseTest, "testId")]
+        public WrapperVM<string> Submit(string testId, SubmitTestVM testSubmissionVM)
         {
-            var test = courseTestService.GetById(testSubmissionVM.TestId);
+            var test = courseTestService.GetById(testId);
 
             string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
             var courseMember = courseMemberService.GetMemberByUserAndCourse(currentUserId, test.Course.Id.ToString());
@@ -57,6 +62,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testId"></param>
         /// <returns></returns>
         [HttpGet("emptyTest/{testId}")]
+        [AuthorizeCourseAdminOrMemberOf(EntityType.CourseTest, "testId")]
         public SubmitTestVM GetEmptySubmission(string testId)
         {
             var test = courseTestService.GetById(testId);
@@ -71,6 +77,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testSubmissionId">id of the submission</param>
         /// <returns>test submission with the given id</returns>
         [HttpGet("{testSubmissionId}")]
+        [AuthorizeCourseAdminOrOwnerOf(EntityType.TestSubmission,"testSubmissionId")]
         public TestWithSubmissionVM GetTestSubmission(string testSubmissionId)
         {
             TestSubmission submission = testSubmissionService.GetSubmissionById(testSubmissionId);
@@ -86,6 +93,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testSubmissionId">id of the submission that is evaluated</param>
         /// <param name="evaluatedTestSubmission">the evaluated test submission</param>
         [HttpPut("{testSubmissionId}")]
+        [AuthorizeCourseAdminOf(EntityType.TestSubmission, "testSubmissionId")]
         public void UpdateTestSubmission(string testSubmissionId, EvaluatedTestSubmissionVM evaluatedTestSubmission)
         {
             TestSubmission submission = testSubmissionService.GetSubmissionById(testSubmissionId);

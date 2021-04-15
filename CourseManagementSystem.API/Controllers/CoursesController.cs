@@ -1,7 +1,10 @@
-﻿using CourseManagementSystem.API.Extensions;
+﻿using CourseManagementSystem.API.Auth;
+using CourseManagementSystem.API.Auth.Attributes;
+using CourseManagementSystem.API.Extensions;
 using CourseManagementSystem.API.ViewModels;
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +13,7 @@ namespace CourseManagementSystem.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CoursesController : ControllerBase
     {
         private readonly ICourseService courseService;
@@ -37,6 +41,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="id"></param>
         [HttpDelete("{id}")]
+        [AuthorizeCourseAdminOf(EntityType.Course, "id")]
         public void Delete(string id)
         {
             courseService.DeleteById(id);
@@ -47,6 +52,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="id">Id of the course</param>
         [HttpGet("{id}/members")]
+        [AuthorizeCourseAdminOf(EntityType.Course, "id")]
         public IEnumerable<CourseMemberVM> GetAllMembers(string id)
         {
             var people = courseService.GetMembers(id);
@@ -59,6 +65,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id">Id of the course</param>
         /// <returns></returns>
         [HttpGet("{id}/files")]
+        [AuthorizeCourseAdminOrMemberOf(EntityType.Course,"id")]
         public IEnumerable<CourseFileVM> GetAllFiles(string id)
         {
             return courseService.GetFiles(id).Select(file => new CourseFileVM(file.Id.ToString(), file.Name));
@@ -70,6 +77,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id">Id of the course</param>
         /// <returns></returns>
         [HttpGet("{id}/tests")]
+        [AuthorizeCourseAdminOrMemberOf(EntityType.Course, "id")]
         public IEnumerable<CourseTestDetailsVM> GetAllTests(string id)
         {
             var courseTests = courseService.GetTests(id);
@@ -82,6 +90,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id">identifier of the course</param>
         /// <returns></returns>
         [HttpGet("{id}/posts")]
+        [AuthorizeCourseAdminOrMemberOf(EntityType.Course, "id")]
         public IEnumerable<ForumPostVM> GetAllPosts(string id)
         {
             var posts = courseService.GetPostsWithAuthors(id);

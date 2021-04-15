@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CourseManagementSystem.Data.Models
 {
-    public class CourseMember : IGuidIdObject
+    public class CourseMember : IGuidIdObject, ICourseReferenceObject
     {
         public CourseMember()
         {

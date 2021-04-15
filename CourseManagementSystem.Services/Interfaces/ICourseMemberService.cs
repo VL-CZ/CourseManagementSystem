@@ -2,7 +2,7 @@
 
 namespace CourseManagementSystem.Services.Interfaces
 {
-    public interface ICourseMemberService
+    public interface ICourseMemberService : ICourseReferenceService
     {
         /// <summary>
         /// get CourseMember by ID
@@ -18,6 +18,14 @@ namespace CourseManagementSystem.Services.Interfaces
         /// <param name="courseId">Id of the course</param>
         /// <returns><see cref="CourseMember"/> instance that belongs to the given user and course, or null</returns>
         CourseMember GetMemberByUserAndCourse(string userId, string courseId);
+
+        /// <summary>
+        /// check if the course member belongs to the given person
+        /// </summary>
+        /// <param name="courseMemberId">identifier of the course member</param>
+        /// <param name="personId">identifier of the person</param>
+        /// <returns></returns>
+        bool BelongsTo(string courseMemberId, string personId);
 
         /// <summary>
         /// remove person with selected ID

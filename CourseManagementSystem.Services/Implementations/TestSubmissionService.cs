@@ -1,5 +1,6 @@
 ﻿using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
+using CourseManagementSystem.Services.Extensions;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -28,6 +29,19 @@ namespace CourseManagementSystem.Services.Implementations
         public TestSubmissionAnswer GetAnswerByQuestionNumber(TestSubmission testSubmission, int questionNumber)
         {
             return testSubmission.Answers.SingleOrDefault(answer => answer.Question.Number == questionNumber);
+        }
+
+        /// <inheritdoc/>
+        public string GetCourseIdOf(string objectId)
+        {
+            string courseMemberId = GetCourseMemberIdOf(objectId);
+            return dbContext.CourseMembers.GetCourseIdOf(courseMemberId);
+        }
+
+        /// <inheritdoc/>
+        public string GetCourseMemberIdOf(string objectId)
+        {
+            return dbContext.TestSubmissions.GetCourseMemberIdOf(objectId);
         }
 
         /// <inheritdoc/>

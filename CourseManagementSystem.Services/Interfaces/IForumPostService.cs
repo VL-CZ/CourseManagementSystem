@@ -2,7 +2,7 @@
 
 namespace CourseManagementSystem.Services.Interfaces
 {
-    public interface IForumPostService
+    public interface IForumPostService : ICourseReferenceService
     {
         /// <summary>
         /// delete post by its id

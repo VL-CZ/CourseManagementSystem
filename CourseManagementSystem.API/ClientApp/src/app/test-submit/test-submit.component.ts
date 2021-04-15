@@ -41,6 +41,6 @@ export class TestSubmitComponent implements OnInit {
    */
   public submit(): void {
     this.testSubmitService.submit(this.testSubmission).subscribe(
-      id => this.router.navigate(['/submissions', id]));
+      testSubmissionId => this.router.navigate(['/submissions', testSubmissionId.value]));
   }
 }

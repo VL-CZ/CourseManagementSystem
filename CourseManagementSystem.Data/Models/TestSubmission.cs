@@ -8,7 +8,7 @@ namespace CourseManagementSystem.Data.Models
     /// <summary>
     /// class representing one submission of the test
     /// </summary>
-    public class TestSubmission : IGuidIdObject
+    public class TestSubmission : IGuidIdObject, ICourseMemberReferenceObject
     {
         public TestSubmission()
         {

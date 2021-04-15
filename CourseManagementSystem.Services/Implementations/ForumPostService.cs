@@ -27,6 +27,12 @@ namespace CourseManagementSystem.Services.Implementations
             dbContext.SaveChanges();
         }
 
+        ///<inheritdoc/>
+        public string GetCourseIdOf(string objectId)
+        {
+            return dbContext.Posts.GetCourseIdOf(objectId);
+        }
+
         /// <summary>
         /// find a post by its id
         /// </summary>

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CourseManagementSystem.Data.Models
 {
-    public class Grade : IGuidIdObject
+    public class Grade : IGuidIdObject, ICourseMemberReferenceObject
     {
         public Grade()
         {
@@ -49,5 +49,10 @@ namespace CourseManagementSystem.Data.Models
         /// additional comment to the grade
         /// </summary>
         public string Comment { get; set; }
+
+        /// <summary>
+        /// course member that this grade belongs to
+        /// </summary>
+        public CourseMember Student { get; set; }
     }
 }

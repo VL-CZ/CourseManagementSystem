@@ -1,17 +1,16 @@
-﻿using CourseManagementSystem.API.ViewModels;
-using CourseManagementSystem.Data;
+﻿using CourseManagementSystem.API.Auth;
+using CourseManagementSystem.API.Auth.Attributes;
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace CourseManagementSystem.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class FilesController : ControllerBase
     {
         private readonly IFileService fileService;
@@ -27,6 +26,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="file"></param>
         /// <returns></returns>
         [HttpPost("upload/{courseId}")]
+        [AuthorizeCourseAdminOf(EntityType.Course, "courseId")]
         public void Upload(IFormFile file, string courseId)
         {
             fileService.SaveTo(courseId, file);
@@ -38,7 +38,8 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public FileContentResult Download(string id)
+        [AuthorizeCourseAdminOrMemberOf(EntityType.CourseFile, "id")]
+        public ActionResult<FileContentResult> Download(string id)
         {
             CourseFile file = fileService.GetFileById(id);
             return File(file.Data, file.ContentType, file.Name);
@@ -49,10 +50,10 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="id"></param>
         [HttpDelete("delete/{id}")]
+        [AuthorizeCourseAdminOf(EntityType.CourseFile, "id")]
         public void Delete(string id)
         {
             fileService.DeleteFileById(id);
         }
-
     }
 }

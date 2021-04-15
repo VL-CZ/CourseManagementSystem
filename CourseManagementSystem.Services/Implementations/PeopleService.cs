@@ -48,5 +48,17 @@ namespace CourseManagementSystem.Services.Implementations
             return dbContext.CourseMembers.Include(cm => cm.Course).Include(cm => cm.User)
                 .Where(cm => cm.User.Id == personId).Select(cm => cm.Course);
         }
+
+        /// <inheritdoc/>
+        public bool IsAdminOfCourse(string personId, string courseId)
+        {
+            return GetManagedCourses(personId).Any(course => course.Id.ToString() == courseId);
+        }
+
+        /// <inheritdoc/>
+        public bool IsMemberOfCourse(string personId, string courseId)
+        {
+            return GetMemberCourses(personId).Any(course => course.Id.ToString() == courseId);
+        }
     }
 }

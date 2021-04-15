@@ -1,20 +1,17 @@
 ﻿using CourseManagementSystem.API.Extensions;
 using CourseManagementSystem.API.ViewModels;
-using CourseManagementSystem.Data;
-using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace CourseManagementSystem.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PeopleController : ControllerBase
     {
         private readonly IHttpContextAccessor httpContextAccessor;

@@ -7,7 +7,7 @@ namespace CourseManagementSystem.Services.Implementations
 {
     public class GradeService : DbService, IGradeService
     {
-        public GradeService(CMSDbContext dbContext):base(dbContext)
+        public GradeService(CMSDbContext dbContext) : base(dbContext)
         {
         }
 
@@ -17,6 +17,13 @@ namespace CourseManagementSystem.Services.Implementations
             var grade = GetById(gradeId);
             dbContext.Grades.Remove(grade);
             dbContext.SaveChanges();
+        }
+
+        /// <inheritdoc/>
+        public string GetCourseIdOf(string objectId)
+        {
+            string courseMemberId = dbContext.Grades.GetCourseMemberIdOf(objectId);
+            return dbContext.CourseMembers.GetCourseIdOf(courseMemberId);
         }
 
         /// <summary>

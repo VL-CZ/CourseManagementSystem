@@ -1,7 +1,10 @@
-﻿using CourseManagementSystem.API.ViewModels;
+﻿using CourseManagementSystem.API.Auth;
+using CourseManagementSystem.API.Auth.Attributes;
+using CourseManagementSystem.API.ViewModels;
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services;
 using CourseManagementSystem.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +13,7 @@ namespace CourseManagementSystem.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CourseMembersController : ControllerBase
     {
         private readonly ICourseMemberService courseMemberService;
@@ -22,11 +26,12 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
-        /// get person by id
+        /// get course member by its id
         /// </summary>
-        /// <param name="id">identifier of the person</param>
+        /// <param name="id">identifier of the course member</param>
         /// <returns></returns>
         [HttpGet("{id}")]
+        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "id")]
         public CourseMemberVM Get(string id)
         {
             CourseMember cm = courseMemberService.GetMemberByID(id);
@@ -34,12 +39,13 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
-        /// assign grade to the person with selected id
+        /// assign grade to the course member with selected id
         /// </summary>
         /// <param name="id">identifier of the <see cref="CourseMember"/></param>
         /// <param name="g">grade viewmodel to add</param>
         /// <returns>assigned grade</returns>
         [HttpPost("{id}/assignGrade")]
+        [AuthorizeCourseAdminOf(EntityType.CourseMember, "id")]
         public void AssignGrade(string id, AddGradeVM g)
         {
             CourseMember cm = courseMemberService.GetMemberByID(id);
@@ -53,6 +59,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id">ID of the <see cref="CourseMember"/></param>
         /// <returns>all test submissions of the course member</returns>
         [HttpGet("{id}/submissions")]
+        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "id")]
         public IEnumerable<TestSubmissionInfoVM> GetTestSubmissions(string id)
         {
             var userSubmissions = testSubmissionService.GetAllSubmissionsOfCourseMember(id);
@@ -66,6 +73,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id">ID of the <see cref="CourseMember"/></param>
         /// <returns>all grades (excluding test submissions) of the course member</returns>
         [HttpGet("{id}/grades")]
+        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "id")]
         public IEnumerable<GradeDetailsVM> GetGrades(string id)
         {
             var courseMember = courseMemberService.GetMemberByID(id);

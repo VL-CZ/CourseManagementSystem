@@ -1,6 +1,7 @@
 ﻿using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
+using CourseManagementSystem.Services.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
@@ -16,6 +17,18 @@ namespace CourseManagementSystem.Services.Implementations
         {
             courseMember.Grades.Add(grade);
             dbContext.SaveChanges();
+        }
+
+        /// <inheritdoc/>
+        public bool BelongsTo(string courseMemberId, string personId)
+        {
+            return GetMemberByID(courseMemberId).User.Id == personId;
+        }
+
+        ///<inheritdoc/>
+        public string GetCourseIdOf(string objectId)
+        {
+            return dbContext.CourseMembers.GetCourseIdOf(objectId);
         }
 
         /// <inheritdoc/>

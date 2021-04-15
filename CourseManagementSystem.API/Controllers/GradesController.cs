@@ -1,12 +1,14 @@
-﻿using CourseManagementSystem.Services.Interfaces;
+﻿using CourseManagementSystem.API.Auth;
+using CourseManagementSystem.API.Auth.Attributes;
+using CourseManagementSystem.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace CourseManagementSystem.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class GradesController : ControllerBase
     {
         private readonly IGradeService gradeService;
@@ -21,6 +23,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="id">id of the grade</param>
         [HttpDelete("delete/{id}")]
+        [AuthorizeCourseAdminOf(EntityType.Grade, "id")]
         public void Delete(string id)
         {
             gradeService.DeleteById(id);

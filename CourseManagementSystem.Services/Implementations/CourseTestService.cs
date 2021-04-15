@@ -37,6 +37,12 @@ namespace CourseManagementSystem.Services.Implementations
             return dbContext.CourseTests.Include(ct => ct.Course).Include(ct => ct.Questions).SingleOrDefault(ct => ct.Id.ToString() == testId);
         }
 
+        ///<inheritdoc/>
+        public string GetCourseIdOf(string objectId)
+        {
+            return dbContext.CourseTests.GetCourseIdOf(objectId);
+        }
+
         /// <inheritdoc/>
         public void Publish(CourseTest test)
         {

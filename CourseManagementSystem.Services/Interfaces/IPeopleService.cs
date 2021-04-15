@@ -34,6 +34,22 @@ namespace CourseManagementSystem.Services.Interfaces
         IEnumerable<Course> GetMemberCourses(string personId);
 
         /// <summary>
+        /// check if the given person is admin of the course
+        /// </summary>
+        /// <param name="personId">identifier of the person</param>
+        /// <param name="courseId">identifier of the course</param>
+        /// <returns></returns>
+        bool IsAdminOfCourse(string personId, string courseId);
+
+        /// <summary>
+        /// check if the given person is member of the course
+        /// </summary>
+        /// <param name="personId">identifier of the person</param>
+        /// <param name="courseId">identifier of the course</param>
+        /// <returns></returns>
+        bool IsMemberOfCourse(string personId, string courseId);
+
+        /// <summary>
         /// get course membership of the <paramref name="person"/> in <paramref name="course"/>
         /// <br/>
         /// or return null if the <paramref name="person"/> is not member of <paramref name="course"/>
