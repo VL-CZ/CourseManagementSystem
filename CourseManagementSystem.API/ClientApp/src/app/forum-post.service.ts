@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {ApiService} from './api.service';
 import {Observable} from 'rxjs';
 import {ForumPostVM} from './viewmodels/forumPostVM';
+import {WrapperVM} from './viewmodels/wrapperVM';
 
 @Injectable({
   providedIn: 'root'
@@ -24,10 +25,10 @@ export class ForumPostService extends ApiService {
 
   /**
    * add new forum post into a course
-   * @param post forum post to add
+   * @param postToAdd forum post to add
    * @param courseId identifier of the course where to add the post
    */
-  public add(post: ForumPostVM, courseId: string): Observable<{}> {
-    return this.http.post<{}>(this.controllerUrl + courseId, post);
+  public add(postToAdd: WrapperVM<string>, courseId: string): Observable<{}> {
+    return this.http.post<{}>(this.controllerUrl + courseId, postToAdd);
   }
 }
