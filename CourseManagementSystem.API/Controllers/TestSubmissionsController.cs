@@ -37,10 +37,11 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="testSubmissionVM">solution to submit</param>
         /// <returns>Id of the test submission</returns>
-        [HttpPost("")]
-        public WrapperVM<string> Submit(SubmitTestVM testSubmissionVM)
+        [HttpPost("{testId}/submit")]
+        [AuthorizeCourseAdminOrMemberOf(EntityType.CourseTest, "testId")]
+        public WrapperVM<string> Submit(string testId, SubmitTestVM testSubmissionVM)
         {
-            var test = courseTestService.GetById(testSubmissionVM.TestId);
+            var test = courseTestService.GetById(testId);
 
             string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
             var courseMember = courseMemberService.GetMemberByUserAndCourse(currentUserId, test.Course.Id.ToString());

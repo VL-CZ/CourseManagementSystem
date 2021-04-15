@@ -22,7 +22,7 @@ export class TestSubmissionService extends ApiService {
    * @param submission test to submit
    */
   public submit(submission: SubmitTestVM): Observable<WrapperVM<string>> {
-    return this.http.post<WrapperVM<string>>(this.controllerUrl, submission);
+    return this.http.post<WrapperVM<string>>(this.controllerUrl + `${submission.testId}/submit`, submission);
   }
 
   /**
