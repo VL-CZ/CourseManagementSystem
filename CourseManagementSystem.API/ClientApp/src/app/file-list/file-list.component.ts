@@ -3,6 +3,8 @@ import {RoleAuthService} from '../role-auth.service';
 import {FileService} from '../file.service';
 import {CourseFileVM} from '../viewmodels/courseFileVM';
 import {CourseService} from '../course.service';
+import * as FileSaver from 'file-saver';
+
 
 /**
  * component representing list of files
@@ -83,9 +85,12 @@ export class FileListComponent implements OnInit {
   /**
    * download a file with given id
    * @param fileId identifier of the file
+   * @param fileName name of the downloaded file
    */
-  public downloadFile(fileId: string): void {
-    this.fileService.download(fileId);
+  public downloadFile(fileId: string, fileName: string): void {
+    this.fileService.download(fileId).subscribe(file => {
+      FileSaver.saveAs(file, fileName);
+    });
   }
 
   /**
