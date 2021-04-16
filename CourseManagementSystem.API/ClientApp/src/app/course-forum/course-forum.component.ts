@@ -3,6 +3,7 @@ import {ForumPostVM} from '../viewmodels/forumPostVM';
 import {CourseService} from '../course.service';
 import {ForumPostService} from '../forum-post.service';
 import {RoleAuthService} from '../role-auth.service';
+import {WrapperVM} from '../viewmodels/wrapperVM';
 
 @Component({
   selector: 'app-course-forum',
@@ -22,7 +23,7 @@ export class CourseForumComponent implements OnInit {
   /**
    * post to add
    */
-  public postToAdd: ForumPostVM = new ForumPostVM();
+  public postToAdd: WrapperVM<string> = new WrapperVM<string>();
 
   /**
    * is the current user admin?
@@ -61,7 +62,7 @@ export class CourseForumComponent implements OnInit {
   public addPost(): void {
     this.forumPostService.add(this.postToAdd, this.courseId).subscribe(() => {
       this.reloadPosts();
-      this.postToAdd = new ForumPostVM();
+      this.postToAdd = new WrapperVM<string>();
     });
   }
 

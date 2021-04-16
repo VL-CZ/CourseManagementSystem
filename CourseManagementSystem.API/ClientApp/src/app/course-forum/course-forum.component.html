@@ -17,7 +17,7 @@
       <div class="form-group">
         <label for="newPostText">Text</label>
         <textarea class="form-control" name="topic" id="newPostText" placeholder="Text" required
-                  [(ngModel)]="postToAdd.text"></textarea>
+                  [(ngModel)]="postToAdd.value"></textarea>
       </div>
     <button type="submit" class="btn btn-primary" (click)="addPost()">Add</button>
   </form>

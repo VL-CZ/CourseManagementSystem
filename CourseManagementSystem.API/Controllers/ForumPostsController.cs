@@ -35,14 +35,14 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="forumPostVM">post to add</param>
         [HttpPost("{courseId}")]
         [AuthorizeCourseAdminOrMemberOf(EntityType.Course, "courseId")]
-        public void AddToCourse(string courseId, ForumPostVM forumPostVM)
+        public void AddToCourse(string courseId, WrapperVM<string> postTextObject)
         {
             string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
 
             Course course = courseService.GetById(courseId);
             Person person = peopleService.GetById(currentUserId);
 
-            forumPostService.AddPostTo(forumPostVM.Text, course, person);
+            forumPostService.AddPostTo(postTextObject.Value, course, person);
         }
 
         /// <summary>
