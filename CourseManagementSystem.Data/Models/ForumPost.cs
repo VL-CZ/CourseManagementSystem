@@ -28,6 +28,7 @@ namespace CourseManagementSystem.Data.Models
         /// <summary>
         /// content of the post
         /// </summary>
+        [Required]
         public string Text { get; set; }
 
         /// <summary>
