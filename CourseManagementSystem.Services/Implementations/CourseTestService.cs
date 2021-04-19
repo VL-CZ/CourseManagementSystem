@@ -61,5 +61,11 @@ namespace CourseManagementSystem.Services.Implementations
 
             dbContext.SaveChanges();
         }
+
+        /// <inheritdoc/>
+        public TestQuestion GetQuestionByNumber(CourseTest test, int questionNumber)
+        {
+            return test.Questions.SingleOrDefault(question => question.Number == questionNumber);
+        }
     }
 }

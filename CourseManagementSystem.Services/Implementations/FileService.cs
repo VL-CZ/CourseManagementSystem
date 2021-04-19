@@ -38,12 +38,14 @@ namespace CourseManagementSystem.Services.Implementations
         /// <inheritdoc/>
         public CourseFile SaveTo(string courseId, IFormFile file)
         {
-            var courseFile = new CourseFile() { Name = file.FileName, ContentType = file.ContentType };
+            byte[] fileData;
             using (var target = new MemoryStream())
             {
                 file.CopyTo(target);
-                courseFile.Data = target.ToArray();
+                fileData = target.ToArray();
             }
+
+            var courseFile = new CourseFile(fileData, file.Name, file.ContentType);
 
             Course c = dbContext.Courses.Include(c => c.Files).Single(c => c.Id.ToString() == courseId);
 

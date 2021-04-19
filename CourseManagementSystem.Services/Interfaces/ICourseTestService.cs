@@ -39,5 +39,13 @@ namespace CourseManagementSystem.Services.Interfaces
         /// </summary>
         /// <param name="test">test to publish</param>
         void Publish(CourseTest test);
+
+        /// <summary>
+        /// get question in the test by its number
+        /// </summary>
+        /// <param name="test">given test</param>
+        /// <param name="questionNumber">number of the question</param>
+        /// <returns></returns>
+        TestQuestion GetQuestionByNumber(CourseTest test, int questionNumber);
     }
 }
