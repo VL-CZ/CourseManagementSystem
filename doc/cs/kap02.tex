@@ -88,7 +88,7 @@ public class Course : IGuidIdObject
 Vidíme, že každá entita obsahuje veřejné vlastnosti (public properties) s gettery a settery. Tyto vlastnosti budou v databázové tabulce reprezentovány jako sloupce. Některé vlastnosti (jako např. Id) obsahují ještě doplňující atributy, ty slouží k upřesnění informací o dané vlastnosti. Například atribut [Key] určuje, že tato vlastnost bude v databázi primární klíč, atribut [Required] určuje, že daný sloupec bude v tabulce u všech záznamů povinný (tedy hodnoty budou NOT NULL).
 Dále musí každá entita obsahovat konstruktor bez parametrů.
 
-Vazby mezi entitami jsou reprezentovené pomocí tzv. navigačních vlastností. V případě, že chci vytvořit vazbu typu one-to-many mezi entitami A a B, tak stačí do vlastností třídy A přidat kolekci objektů typu B, a naopak do třídy B vlastnost typu A. Framework pak při provádění migrace vytvoří v databázové tabulce entity B vytvoří sloupec s cizím klíčem, který bude obsahovat identifikátor entity A, ke které patří.
+Vazby mezi entitami jsou reprezentované pomocí tzv. navigačních vlastností. V případě, že chci vytvořit vazbu typu one-to-many mezi entitami A a B, tak stačí do vlastností třídy A přidat kolekci objektů typu B, a naopak do třídy B vlastnost typu A. Framework pak při provádění migrace vytvoří v databázové tabulce entity B vytvoří sloupec s cizím klíčem, který bude obsahovat identifikátor entity A, ke které patří.
 
 V aplikaci je vazba one-to-many použita mimo jiné mezi entitami Course a CourseTest, a to tak, že každý test je obsažen v právě jednom kurzu, a v daném kurzu může být N testů.
 Kód pak tedy vypadá takto: ve třídě Course je kolekce objektů typu CourseTest
@@ -110,7 +110,7 @@ a ve třídě CourseTest je pak vlastnost typu Course
 public Course Course { get; set; }
 \end{lstlisting}
 
-Po provedení databázové migrace (viz. dále) se v tablulce CourseTest vytvoří sloupec CourseId s cizím klíčem, který odkazuje na identifikátor kurzu (tzn. vlastnost Course.Id).
+Po provedení databázové migrace (viz. dále) se v tabulce CourseTest vytvoří sloupec CourseId s cizím klíčem, který odkazuje na identifikátor kurzu (tzn. vlastnost Course.Id).
 
 Také si můžeme všimnout, že všechny entity (kromě entity Person) implementují rozhraní IGuidObject. To je jednoduché rozhraní, které obsahuje pouze jednu vlastnost - Id typu Guid. Tímto jsem si zajistil jednotu identifikátorů, tedy že všechny entity, které toto rozhraní implementují, budou mít identifikátor typu Guid.
 
