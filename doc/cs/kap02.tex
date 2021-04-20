@@ -10,7 +10,7 @@ TODO: u každé dopodrobna rozepsat co obsahuje, k čemu slouží + ukázky kód
 
 Tento projekt se stará primárně o komunikaci s databází, pro tento účel jsem použil ORM framework Entity Framework Core. 
 
-Ve složce Models jsou objekty reprezentující databázové entity. Každá z entit pak v databázi představuje jednu tabulku. V aplikaci jsem použil tyto entity:
+Ve složce Models jsou třídy reprezentující databázové entity. Každá z entit pak v databázi představuje jednu tabulku. V aplikaci jsem použil tyto entity:
 
 \begin{itemize}
 	\item Course - tato entita reprezentuje kurz
@@ -25,7 +25,17 @@ Ve složce Models jsou objekty reprezentující databázové entity. Každá z e
 	\item TestSubmissionAnswer - představuje odpověď k dané otázce v testu
 \end{itemize}
 
-např. entita Course vypadá takto:
+\newpage
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{db_model.PNG}
+	\caption{Databázový model aplikace}
+\end{figure}
+
+\newpage
+
+např. kód třídy Course vypadá takto:
 
 \begin{lstlisting}
 public class Course : IGuidIdObject
