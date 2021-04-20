@@ -1,6 +1,8 @@
-﻿using CourseManagementSystem.Data.Models;
+﻿using CourseManagementSystem.API.Configuration;
+using CourseManagementSystem.Data.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace CourseManagementSystem.API.ViewModels
 {
@@ -29,6 +31,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// topic of the test
         /// </summary>
+        [MaxLength(ValidationConfig.maxStringLength)]
         public string Topic { get; set; }
 
         /// <summary>

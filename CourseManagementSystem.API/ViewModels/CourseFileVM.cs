@@ -1,4 +1,6 @@
-﻿namespace CourseManagementSystem.API.ViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CourseManagementSystem.API.ViewModels
 {
     /// <summary>
     /// viewmodel representing a shared file in the course
@@ -18,6 +20,7 @@
         /// <summary>
         /// identifier of the file
         /// </summary>
+        [Required]
         public string Id { get; set; }
 
         /// <summary>

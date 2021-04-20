@@ -1,4 +1,7 @@
-﻿namespace CourseManagementSystem.API.ViewModels
+﻿using CourseManagementSystem.API.Configuration;
+using System.ComponentModel.DataAnnotations;
+
+namespace CourseManagementSystem.API.ViewModels
 {
     /// <summary>
     /// viewmodel representing member of a course
@@ -22,11 +25,13 @@
         /// <summary>
         /// name of the person
         /// </summary>
+        [MaxLength(ValidationConfig.maxStringLength)]
         public string Name { get; set; }
 
         /// <summary>
         /// email of the person
         /// </summary>
+        [MaxLength(ValidationConfig.maxStringLength)]
         public string Email { get; set; }
     }
 }
