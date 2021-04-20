@@ -8,7 +8,7 @@ namespace CourseManagementSystem.API.Controllers
         [Route("/error")]
         public IActionResult Error()
         {
-            return ;
+            return Problem("An error occured");
         }
     }
 }

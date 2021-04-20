@@ -1,9 +1,10 @@
 import {Inject, Injectable} from '@angular/core';
 import {ApiService} from './api.service';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {AddCourseTestVM, CourseTestDetailsVM} from './viewmodels/courseTestVM';
-import {Observable} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
 import {TestSubmissionWithUserInfoVM} from './viewmodels/testSubmissionVM';
+import {catchError, retry} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +38,12 @@ export class CourseTestService extends ApiService {
    * @param courseId Id of the course
    */
   public addToCourse(testToAdd: AddCourseTestVM, courseId: string): Observable<{}> {
-    return this.http.post(this.controllerUrl + courseId, testToAdd);
+    return this.http.post(this.controllerUrl + courseId, testToAdd).pipe(retry(1),
+      catchError((error: HttpErrorResponse) => {
+        alert(error.error.title);
+        return throwError(error);
+      })
+    );
   }
 
   /**
