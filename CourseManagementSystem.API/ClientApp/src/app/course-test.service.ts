@@ -39,9 +39,9 @@ export class CourseTestService extends ApiService {
    */
   public addToCourse(testToAdd: AddCourseTestVM, courseId: string): Observable<{}> {
     return this.http.post(this.controllerUrl + courseId, testToAdd).pipe(retry(1),
-      catchError((error: HttpErrorResponse) => {
-        alert(error.error.title);
-        return throwError(error);
+      catchError((response: HttpErrorResponse) => {
+        alert(JSON.stringify(response));
+        return throwError(response);
       })
     );
   }
