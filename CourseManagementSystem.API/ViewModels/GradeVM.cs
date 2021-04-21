@@ -1,4 +1,8 @@
-﻿namespace CourseManagementSystem.API.ViewModels
+﻿using CourseManagementSystem.API.Configuration;
+using IdentityServer4.Models;
+using System.ComponentModel.DataAnnotations;
+
+namespace CourseManagementSystem.API.ViewModels
 {
     /// <summary>
     /// base viewmodel for grades
@@ -26,11 +30,13 @@
         /// <summary>
         /// topic that this grade belongs to
         /// </summary>
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
         public string Topic { get; set; }
 
         /// <summary>
         /// comment to the grade provided by teacher
         /// </summary>
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
         public string Comment { get; set; }
 
         /// <summary>
@@ -65,6 +71,7 @@
         /// <summary>
         /// identifier of the grade
         /// </summary>
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
         public string Id { get; set; }
     }
 }

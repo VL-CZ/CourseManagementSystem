@@ -1,4 +1,7 @@
-﻿namespace CourseManagementSystem.API.ViewModels
+﻿using CourseManagementSystem.API.Configuration;
+using System.ComponentModel.DataAnnotations;
+
+namespace CourseManagementSystem.API.ViewModels
 {
     /// <summary>
     /// viewmodel representing a question in a test
@@ -20,6 +23,7 @@
         /// <summary>
         /// unique identifier of the question
         /// </summary>
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
         public string Id { get; set; }
 
         /// <summary>
@@ -30,11 +34,13 @@
         /// <summary>
         /// text of the question
         /// </summary>
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
         public string QuestionText { get; set; }
 
         /// <summary>
         /// correct answer to the question
         /// </summary>
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
         public string CorrectAnswer { get; set; }
 
         /// <summary>

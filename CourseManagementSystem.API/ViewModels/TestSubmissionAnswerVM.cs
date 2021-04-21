@@ -1,4 +1,7 @@
-﻿namespace CourseManagementSystem.API.ViewModels
+﻿using CourseManagementSystem.API.Configuration;
+using System.ComponentModel.DataAnnotations;
+
+namespace CourseManagementSystem.API.ViewModels
 {
     /// <summary>
     /// class representing the submission answers submitted by students
@@ -24,11 +27,13 @@
         /// <summary>
         /// text of the question
         /// </summary>
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
         public string QuestionText { get; set; }
 
         /// <summary>
         /// answer submitted by the student
         /// </summary>
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
         public string AnswerText { get; set; }
     }
 
@@ -49,21 +54,23 @@
         /// <summary>
         /// text of the correct answer
         /// </summary>
-        public string CorrectAnswer { get; }
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        public string CorrectAnswer { get; set; }
 
         /// <summary>
         /// points received for the answer
         /// </summary>
-        public int ReceivedPoints { get; }
+        public int ReceivedPoints { get; set; }
 
         /// <summary>
         /// maximal obtained points for the question
         /// </summary>
-        public int MaximalPoints { get; }
+        public int MaximalPoints { get; set; }
 
         /// <summary>
         /// comment to the answer provided by teacher
         /// </summary>
-        public string Comment { get; }
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        public string Comment { get; set; }
     }
 }

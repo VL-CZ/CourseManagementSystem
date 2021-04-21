@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CourseManagementSystem.API.Configuration;
+using System.ComponentModel.DataAnnotations;
 
 namespace CourseManagementSystem.API.ViewModels
 {
@@ -19,6 +20,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// value of the object
         /// </summary>
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
         public T Value { get; set; }
     }
 }

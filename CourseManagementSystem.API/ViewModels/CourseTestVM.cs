@@ -31,7 +31,8 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// topic of the test
         /// </summary>
-        [MaxLength(ValidationConfig.maxStringLength)]
+        //[MaxLength(ValidationConfig.maxStringLength)]
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
         public string Topic { get; set; }
 
         /// <summary>
@@ -42,6 +43,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// questions in this test
         /// </summary>
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
         public IEnumerable<TestQuestionVM> Questions { get; set; }
     }
 
@@ -72,6 +74,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// id of the test
         /// </summary>
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
         public string Id { get; set; }
 
         /// <summary>

@@ -20,18 +20,22 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// identifier of the person
         /// </summary>
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
         public string Id { get; set; }
 
         /// <summary>
         /// name of the person
         /// </summary>
-        [MaxLength(ValidationConfig.maxStringLength)]
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        //[MaxLength(ValidationConfig.maxStringLength)]
         public string Name { get; set; }
 
         /// <summary>
         /// email of the person
         /// </summary>
-        [MaxLength(ValidationConfig.maxStringLength)]
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [DataType(DataType.EmailAddress)]
+        //[MaxLength(ValidationConfig.maxStringLength)]
         public string Email { get; set; }
     }
 }

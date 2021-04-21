@@ -1,5 +1,7 @@
-﻿using System;
+﻿using CourseManagementSystem.API.Configuration;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace CourseManagementSystem.API.ViewModels
 {
@@ -21,6 +23,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// id of the test submission
         /// </summary>
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
         public string TestSubmissionId { get; set; }
 
         /// <summary>
@@ -53,6 +56,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// topic of the test
         /// </summary>
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
         public string TestTopic { get; set; }
 
         /// <summary>
@@ -84,6 +88,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// email of the student
         /// </summary>
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
         public string StudentEmail { get; set; }
 
         /// <summary>
@@ -111,16 +116,19 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// id of the test
         /// </summary>
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
         public string TestId { get; set; }
 
         /// <summary>
         /// topic of the test
         /// </summary>
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
         public string TestTopic { get; set; }
 
         /// <summary>
         /// submitted and correct answers
         /// </summary>
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
         public IEnumerable<SubmissionAnswerWithCorrectAnswerVM> Answers { get; set; }
     }
 }

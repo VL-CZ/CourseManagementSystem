@@ -1,4 +1,7 @@
-﻿namespace CourseManagementSystem.API.ViewModels
+﻿using CourseManagementSystem.API.Configuration;
+using System.ComponentModel.DataAnnotations;
+
+namespace CourseManagementSystem.API.ViewModels
 {
     /// <summary>
     /// base viewmodel for a course
@@ -17,6 +20,7 @@
         /// <summary>
         /// name of the course to add
         /// </summary>
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
         public string Name { get; set; }
     }
 
@@ -36,6 +40,7 @@
         /// <summary>
         /// id of the course
         /// </summary>
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
         public string Id { get; set; }
     }
 
@@ -56,6 +61,7 @@
         /// <summary>
         /// id of the admin
         /// </summary>
+        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
         public string AdminId { get; set; }
     }
 }
