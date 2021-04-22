@@ -34,7 +34,6 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// comment to the grade provided by teacher
         /// </summary>
-        [RequiredWithDefaultErrorMessage(AllowEmptyStrings = true)]
         public string Comment { get; set; }
 
         /// <summary>

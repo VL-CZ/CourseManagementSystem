@@ -62,7 +62,6 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// updated comment for the answer
         /// </summary>
-        [RequiredWithDefaultErrorMessage(AllowEmptyStrings = true)]
         public string UpdatedComment { get; set; }
     }
 }

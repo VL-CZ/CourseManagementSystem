@@ -33,7 +33,6 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// answer submitted by the student
         /// </summary>
-        [RequiredWithDefaultErrorMessage(AllowEmptyStrings = true)]
         public string AnswerText { get; set; }
     }
 
@@ -72,7 +71,6 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// comment to the answer provided by teacher
         /// </summary>
-        [RequiredWithDefaultErrorMessage(AllowEmptyStrings = true)]
         public string Comment { get; set; }
     }
 }
