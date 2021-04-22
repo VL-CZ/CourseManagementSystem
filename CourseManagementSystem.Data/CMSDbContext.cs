@@ -98,6 +98,26 @@ namespace CourseManagementSystem.Data
                 .HasOne(grade => grade.Student)
                 .WithMany(cm => cm.Grades)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // TestSubmission
+
+            builder.Entity<TestSubmission>()
+                .HasOne(ts => ts.Test)
+                .WithMany(test => test.Submissions)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<TestSubmission>()
+                .HasOne(ts => ts.Student)
+                .WithMany(cm => cm.TestSubmissions)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // TestSubmissionAnswer
+
+            builder.Entity<TestSubmissionAnswer>()
+                .HasOne(answer => answer.Question)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

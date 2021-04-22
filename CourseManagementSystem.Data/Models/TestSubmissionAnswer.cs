@@ -28,6 +28,7 @@ namespace CourseManagementSystem.Data.Models
         /// <summary>
         /// question which is answered
         /// </summary>
+        [Required]
         public TestQuestion Question { get; set; }
 
         /// <summary>
