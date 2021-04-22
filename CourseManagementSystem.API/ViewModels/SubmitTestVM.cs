@@ -1,6 +1,5 @@
-﻿using CourseManagementSystem.API.Configuration;
+﻿using CourseManagementSystem.API.Validation.Attributes;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace CourseManagementSystem.API.ViewModels
 {
@@ -23,19 +22,19 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// id of the test
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage]
         public string TestId { get; set; }
 
         /// <summary>
         /// topic of the test
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage]
         public string TestTopic { get; set; }
 
         /// <summary>
         /// answers submitted by student
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage]
         public IEnumerable<SubmissionAnswerVM> Answers { get; set; }
     }
 }

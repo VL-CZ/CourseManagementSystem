@@ -1,6 +1,4 @@
-﻿using CourseManagementSystem.API.Configuration;
-using IdentityServer4.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using CourseManagementSystem.API.Validation.Attributes;
 
 namespace CourseManagementSystem.API.ViewModels
 {
@@ -21,7 +19,6 @@ namespace CourseManagementSystem.API.ViewModels
             Weight = weight;
         }
 
-
         /// <summary>
         /// percentual value of the grade (0=0%, 1=100%, may be greater than 1 in case of bonus points)
         /// </summary>
@@ -30,13 +27,13 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// topic that this grade belongs to
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage]
         public string Topic { get; set; }
 
         /// <summary>
         /// comment to the grade provided by teacher
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage(AllowEmptyStrings = true)]
         public string Comment { get; set; }
 
         /// <summary>
@@ -61,7 +58,9 @@ namespace CourseManagementSystem.API.ViewModels
     /// </summary>
     public class GradeDetailsVM : BaseGradeVM
     {
-        public GradeDetailsVM() { }
+        public GradeDetailsVM()
+        {
+        }
 
         public GradeDetailsVM(string id, double percentualValue, string topic, string comment, int weight) : base(percentualValue, topic, comment, weight)
         {
@@ -71,7 +70,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// identifier of the grade
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage]
         public string Id { get; set; }
     }
 }

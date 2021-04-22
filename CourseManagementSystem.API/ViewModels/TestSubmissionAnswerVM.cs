@@ -1,5 +1,4 @@
-﻿using CourseManagementSystem.API.Configuration;
-using System.ComponentModel.DataAnnotations;
+﻿using CourseManagementSystem.API.Validation.Attributes;
 
 namespace CourseManagementSystem.API.ViewModels
 {
@@ -27,13 +26,13 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// text of the question
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage]
         public string QuestionText { get; set; }
 
         /// <summary>
         /// answer submitted by the student
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage(AllowEmptyStrings = true)]
         public string AnswerText { get; set; }
     }
 
@@ -54,7 +53,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// text of the correct answer
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage]
         public string CorrectAnswer { get; set; }
 
         /// <summary>
@@ -70,7 +69,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// comment to the answer provided by teacher
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage(AllowEmptyStrings = true)]
         public string Comment { get; set; }
     }
 }

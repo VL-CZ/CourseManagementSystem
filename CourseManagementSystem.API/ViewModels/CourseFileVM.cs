@@ -1,5 +1,4 @@
-﻿using CourseManagementSystem.API.Configuration;
-using System.ComponentModel.DataAnnotations;
+﻿using CourseManagementSystem.API.Validation.Attributes;
 
 namespace CourseManagementSystem.API.ViewModels
 {
@@ -21,13 +20,13 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// identifier of the file
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage]
         public string Id { get; set; }
 
         /// <summary>
         /// name of the file
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage]
         public string Name { get; set; }
     }
 }

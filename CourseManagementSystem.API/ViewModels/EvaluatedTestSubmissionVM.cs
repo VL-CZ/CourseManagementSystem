@@ -1,4 +1,5 @@
-﻿using CourseManagementSystem.API.Configuration;
+﻿using CourseManagementSystem.API.Validation;
+using CourseManagementSystem.API.Validation.Attributes;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -23,13 +24,13 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// id of the test submission these properties belongs to
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage]
         public string TestSubmissionId { get; set; }
 
         /// <summary>
         /// collection of evaluated answers
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage]
         public ICollection<EvaluatedAnswerVM> EvaluatedAnswers { get; set; }
     }
 
@@ -61,7 +62,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// updated comment for the answer
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage(AllowEmptyStrings = true)]
         public string UpdatedComment { get; set; }
     }
 }

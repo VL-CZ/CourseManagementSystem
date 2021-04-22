@@ -1,4 +1,5 @@
-﻿using CourseManagementSystem.API.Configuration;
+﻿using CourseManagementSystem.API.Validation;
+using CourseManagementSystem.API.Validation.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace CourseManagementSystem.API.ViewModels
@@ -20,22 +21,20 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// identifier of the person
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage]
         public string Id { get; set; }
 
         /// <summary>
         /// name of the person
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
-        //[MaxLength(ValidationConfig.maxStringLength)]
+        [RequiredWithDefaultErrorMessage]
         public string Name { get; set; }
 
         /// <summary>
         /// email of the person
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage]
         [DataType(DataType.EmailAddress)]
-        //[MaxLength(ValidationConfig.maxStringLength)]
         public string Email { get; set; }
     }
 }

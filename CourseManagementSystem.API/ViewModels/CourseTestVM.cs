@@ -1,4 +1,4 @@
-﻿using CourseManagementSystem.API.Configuration;
+﻿using CourseManagementSystem.API.Validation.Attributes;
 using CourseManagementSystem.Data.Models;
 using System;
 using System.Collections.Generic;
@@ -26,13 +26,14 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// weight of the score from the test (e.g. test of weight 2 has twice bigger impact on overall score than test of weight 1)
         /// </summary>
+        [Range(1, int.MaxValue)]
         public int Weight { get; set; }
 
         /// <summary>
         /// topic of the test
         /// </summary>
         //[MaxLength(ValidationConfig.maxStringLength)]
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage]
         public string Topic { get; set; }
 
         /// <summary>
@@ -43,7 +44,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// questions in this test
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage]
         public IEnumerable<TestQuestionVM> Questions { get; set; }
     }
 
@@ -74,7 +75,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// id of the test
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage]
         public string Id { get; set; }
 
         /// <summary>

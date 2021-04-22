@@ -1,7 +1,6 @@
-﻿using CourseManagementSystem.API.Configuration;
+﻿using CourseManagementSystem.API.Validation.Attributes;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace CourseManagementSystem.API.ViewModels
 {
@@ -23,7 +22,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// id of the test submission
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage]
         public string TestSubmissionId { get; set; }
 
         /// <summary>
@@ -56,7 +55,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// topic of the test
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage]
         public string TestTopic { get; set; }
 
         /// <summary>
@@ -88,7 +87,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// email of the student
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage]
         public string StudentEmail { get; set; }
 
         /// <summary>
@@ -116,19 +115,19 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// id of the test
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage]
         public string TestId { get; set; }
 
         /// <summary>
         /// topic of the test
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage]
         public string TestTopic { get; set; }
 
         /// <summary>
         /// submitted and correct answers
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage]
         public IEnumerable<SubmissionAnswerWithCorrectAnswerVM> Answers { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-﻿using CourseManagementSystem.API.Configuration;
-using System.ComponentModel.DataAnnotations;
+﻿using CourseManagementSystem.API.Validation.Attributes;
 
 namespace CourseManagementSystem.API.ViewModels
 {
@@ -20,7 +19,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// name of the course to add
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage]
         public string Name { get; set; }
     }
 
@@ -32,7 +31,7 @@ namespace CourseManagementSystem.API.ViewModels
         public CourseInfoVM() : base()
         { }
 
-        public CourseInfoVM(string id, string name):base(name)
+        public CourseInfoVM(string id, string name) : base(name)
         {
             Id = id;
         }
@@ -40,7 +39,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// id of the course
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage]
         public string Id { get; set; }
     }
 
@@ -53,7 +52,7 @@ namespace CourseManagementSystem.API.ViewModels
         {
         }
 
-        public AddCourseVM(string name, string adminId):base(name)
+        public AddCourseVM(string name, string adminId) : base(name)
         {
             AdminId = adminId;
         }
@@ -61,7 +60,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// id of the admin
         /// </summary>
-        [Required(ErrorMessage = ValidationConfig.requiredFieldErrorMessage)]
+        [RequiredWithDefaultErrorMessage]
         public string AdminId { get; set; }
     }
 }
