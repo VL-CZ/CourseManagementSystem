@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 
 namespace CourseManagementSystem.Data.Models
 {
@@ -54,6 +53,7 @@ namespace CourseManagementSystem.Data.Models
         /// <summary>
         /// course that contains this test
         /// </summary>
+        [Required]
         public Course Course { get; set; }
 
         /// <summary>

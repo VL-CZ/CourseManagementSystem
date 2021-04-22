@@ -42,8 +42,20 @@ namespace CourseManagementSystem.Data
         {
             base.OnModelCreating(builder);
 
-            // configure foreign keys behaviour
-            
+            ConfigureForeignKeys(builder);
+        }
+
+        private void ConfigureForeignKeys(ModelBuilder builder)
+        {
+            //// CourseFile
+
+            //builder.Entity<CourseFile>()
+            //    .HasOne(file => file.Course)
+            //    .WithMany(course => course.Files)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
+            // CourseMember
+
             builder.Entity<CourseMember>()
                 .HasOne(cm => cm.User)
                 .WithMany(person => person.CourseMemberships)
@@ -53,6 +65,15 @@ namespace CourseManagementSystem.Data
                 .HasOne(cm => cm.Course)
                 .WithMany(course => course.Members)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // CourseTest
+
+            builder.Entity<CourseTest>()
+                .HasOne(test => test.Course)
+                .WithMany(course => course.Tests)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
         }
     }
 }
