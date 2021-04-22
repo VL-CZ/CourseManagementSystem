@@ -4,6 +4,7 @@ using CourseManagementSystem.API.Extensions;
 using CourseManagementSystem.API.ViewModels;
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
+using CourseManagementSystem.TestEvaluation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,16 +21,16 @@ namespace CourseManagementSystem.API.Controllers
         private readonly ICourseMemberService courseMemberService;
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly ITestSubmissionService testSubmissionService;
-        private readonly ITestSubmissionEvaluator testSubmissionEvaluator;
+        private readonly TestSubmissionEvaluator testSubmissionEvaluator;
 
         public TestSubmissionsController(ICourseTestService courseTestService, ICourseMemberService courseMemberService, IHttpContextAccessor httpContextAccessor,
-            ITestSubmissionService testSubmissionService, ITestSubmissionEvaluator testSubmissionEvaluator)
+            ITestSubmissionService testSubmissionService)
         {
             this.courseTestService = courseTestService;
             this.courseMemberService = courseMemberService;
             this.httpContextAccessor = httpContextAccessor;
             this.testSubmissionService = testSubmissionService;
-            this.testSubmissionEvaluator = testSubmissionEvaluator;
+            testSubmissionEvaluator = new TestSubmissionEvaluator();
         }
 
         /// <summary>
