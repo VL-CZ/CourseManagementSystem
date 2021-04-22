@@ -37,5 +37,22 @@ namespace CourseManagementSystem.Data
         public DbSet<TestSubmissionAnswer> TestSubmissionAnswers { get; set; }
 
         public DbSet<ForumPost> Posts { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            // configure foreign keys behaviour
+            
+            builder.Entity<CourseMember>()
+                .HasOne(cm => cm.User)
+                .WithMany(person => person.CourseMemberships)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<CourseMember>()
+                .HasOne(cm => cm.Course)
+                .WithMany(course => course.Members)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
     }
 }
