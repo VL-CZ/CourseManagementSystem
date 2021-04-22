@@ -44,6 +44,7 @@ namespace CourseManagementSystem.Data.Models
         /// <summary>
         /// course that this file belongs to
         /// </summary>
+        [Required]
         public Course Course { get; set; }
     }
 }

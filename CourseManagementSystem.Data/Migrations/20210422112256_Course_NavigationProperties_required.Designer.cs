@@ -4,14 +4,16 @@ using CourseManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CourseManagementSystem.Data.Migrations
 {
     [DbContext(typeof(CMSDbContext))]
-    partial class CMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210422112256_Course_NavigationProperties_required")]
+    partial class Course_NavigationProperties_required
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +52,7 @@ namespace CourseManagementSystem.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("CourseId")
+                    b.Property<Guid?>("CourseId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("Data")
@@ -556,8 +558,7 @@ namespace CourseManagementSystem.Data.Migrations
                     b.HasOne("CourseManagementSystem.Data.Models.Course", "Course")
                         .WithMany("Files")
                         .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("CourseManagementSystem.Data.Models.CourseMember", b =>

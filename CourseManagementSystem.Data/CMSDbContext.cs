@@ -47,12 +47,19 @@ namespace CourseManagementSystem.Data
 
         private void ConfigureForeignKeys(ModelBuilder builder)
         {
-            //// CourseFile
+            // Course
 
-            //builder.Entity<CourseFile>()
-            //    .HasOne(file => file.Course)
-            //    .WithMany(course => course.Files)
-            //    .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Course>()
+                .HasOne(course => course.Admin)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // CourseFile
+
+            builder.Entity<CourseFile>()
+                .HasOne(file => file.Course)
+                .WithMany(course => course.Files)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // CourseMember
 
