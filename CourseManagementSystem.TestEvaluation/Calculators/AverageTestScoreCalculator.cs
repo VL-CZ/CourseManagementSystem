@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using CourseManagementSystem.TestEvaluation.DTOs;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace CourseManagementSystem.Services
+namespace CourseManagementSystem.TestEvaluation.Calculators
 {
     /// <summary>
     /// class responsible for calculating overall score for the submissions

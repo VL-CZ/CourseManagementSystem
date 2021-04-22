@@ -1,7 +1,7 @@
 ﻿using CourseManagementSystem.Data.Models;
 using System.Linq;
 
-namespace CourseManagementSystem.Services
+namespace CourseManagementSystem.TestEvaluation.Calculators
 {
     /// <summary>
     /// class responsible for calculating test score
