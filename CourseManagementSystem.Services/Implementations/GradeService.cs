@@ -16,7 +16,12 @@ namespace CourseManagementSystem.Services.Implementations
         {
             var grade = GetById(gradeId);
             dbContext.Grades.Remove(grade);
-            dbContext.SaveChanges();
+        }
+
+        /// <inheritdoc/>
+        public void AssignGrade(Grade grade)
+        {
+            dbContext.Grades.Add(grade);
         }
 
         /// <inheritdoc/>

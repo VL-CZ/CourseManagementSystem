@@ -43,6 +43,8 @@ namespace CourseManagementSystem.API.Controllers
             Person person = peopleService.GetById(currentUserId);
 
             forumPostService.AddPostTo(postTextObject.Value, course, person);
+
+            forumPostService.CommitChanges();
         }
 
         /// <summary>
@@ -54,6 +56,8 @@ namespace CourseManagementSystem.API.Controllers
         public void Delete(string postId)
         {
             forumPostService.DeleteById(postId);
+
+            forumPostService.CommitChanges();
         }
     }
 }

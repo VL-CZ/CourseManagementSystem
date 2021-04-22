@@ -1,4 +1,4 @@
-﻿namespace CourseManagementSystem.Services.Interfaces
+﻿namespace CourseManagementSystem.Services
 {
     /// <summary>
     /// interface for services of entities that logically belong to a course

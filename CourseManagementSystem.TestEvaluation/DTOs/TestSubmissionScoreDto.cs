@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CourseManagementSystem.Services
+﻿namespace CourseManagementSystem.TestEvaluation.DTOs
 {
     /// <summary>
     /// DTO for test submission weight and score

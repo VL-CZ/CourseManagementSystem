@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CourseManagementSystem.Services.Interfaces
 {
-    public interface ICourseService
+    public interface ICourseService : IDbService
     {
         /// <summary>
         /// get course by its id
@@ -32,7 +32,7 @@ namespace CourseManagementSystem.Services.Interfaces
         ICollection<CourseFile> GetFiles(string courseId);
 
         /// <summary>
-        /// get all tests in the course with the given id
+        /// get all tests with questions in the course with the given id
         /// </summary>
         /// <param name="courseId">identifier of the course</param>
         /// <returns></returns>
@@ -46,10 +46,10 @@ namespace CourseManagementSystem.Services.Interfaces
         ICollection<ForumPost> GetPostsWithAuthors(string courseId);
 
         /// <summary>
-        /// get all members of the course
+        /// get all members of the course including <see cref="CourseMember.User"/> object
         /// </summary>
         /// <param name="courseId">identifier of the course</param>
         /// <returns></returns>
-        ICollection<CourseMember> GetMembers(string courseId);
+        ICollection<CourseMember> GetMembersWithUsers(string courseId);
     }
 }

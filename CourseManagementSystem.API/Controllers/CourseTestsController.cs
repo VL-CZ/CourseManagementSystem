@@ -3,8 +3,8 @@ using CourseManagementSystem.API.Auth.Attributes;
 using CourseManagementSystem.API.Extensions;
 using CourseManagementSystem.API.ViewModels;
 using CourseManagementSystem.Data.Models;
-using CourseManagementSystem.Services;
 using CourseManagementSystem.Services.Interfaces;
+using CourseManagementSystem.TestEvaluation.Calculators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -37,7 +37,10 @@ namespace CourseManagementSystem.API.Controllers
         {
             var mappedQuestions = testToAdd.Questions.ToModels();
             var test = new CourseTest(testToAdd.Topic, mappedQuestions.ToList(), testToAdd.Weight, testToAdd.Deadline);
+            
             courseTestService.AddToCourse(test, courseId);
+
+            courseTestService.CommitChanges();
         }
 
         /// <summary>
@@ -49,6 +52,7 @@ namespace CourseManagementSystem.API.Controllers
         public void Delete(string testId)
         {
             courseTestService.Delete(testId);
+            courseTestService.CommitChanges();
         }
 
         /// <summary>
@@ -60,7 +64,7 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOf(EntityType.CourseTest, "testId")]
         public CourseTestDetailsVM Get(string testId)
         {
-            var test = courseTestService.GetById(testId);
+            var test = courseTestService.GetWithQuestions(testId);
             return new CourseTestDetailsVM(testId, test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status, test.Deadline);
         }
 
@@ -73,9 +77,12 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOf(EntityType.CourseTest, "testId")]
         public void Update(string testId, AddCourseTestVM updatedTest)
         {
-            var test = courseTestService.GetById(testId);
+            var test = courseTestService.GetWithQuestions(testId);
             var updatedQuestions = updatedTest.Questions.ToModels();
+            
             courseTestService.Update(test, updatedTest.Weight, updatedTest.Topic, updatedTest.Deadline, updatedQuestions.ToList());
+
+            courseTestService.CommitChanges();
         }
 
         /// <summary>
@@ -100,8 +107,10 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOf(EntityType.CourseTest, "testId")]
         public void Publish(string testId)
         {
-            var test = courseTestService.GetById(testId);
+            var test = courseTestService.GetWithQuestions(testId);
             courseTestService.Publish(test);
+
+            courseTestService.CommitChanges();
         }
     }
 }

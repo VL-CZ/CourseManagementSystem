@@ -4,6 +4,7 @@ using CourseManagementSystem.API.Extensions;
 using CourseManagementSystem.API.ViewModels;
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
+using CourseManagementSystem.TestEvaluation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,16 +21,16 @@ namespace CourseManagementSystem.API.Controllers
         private readonly ICourseMemberService courseMemberService;
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly ITestSubmissionService testSubmissionService;
-        private readonly ITestSubmissionEvaluator testSubmissionEvaluator;
+        private readonly TestSubmissionEvaluator testSubmissionEvaluator;
 
         public TestSubmissionsController(ICourseTestService courseTestService, ICourseMemberService courseMemberService, IHttpContextAccessor httpContextAccessor,
-            ITestSubmissionService testSubmissionService, ITestSubmissionEvaluator testSubmissionEvaluator)
+            ITestSubmissionService testSubmissionService)
         {
             this.courseTestService = courseTestService;
             this.courseMemberService = courseMemberService;
             this.httpContextAccessor = httpContextAccessor;
             this.testSubmissionService = testSubmissionService;
-            this.testSubmissionEvaluator = testSubmissionEvaluator;
+            testSubmissionEvaluator = new TestSubmissionEvaluator();
         }
 
         /// <summary>
@@ -41,10 +42,12 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOrMemberOf(EntityType.CourseTest, "testId")]
         public WrapperVM<string> Submit(string testId, SubmitTestVM testSubmissionVM)
         {
-            var test = courseTestService.GetById(testId);
+            var test = courseTestService.GetWithQuestions(testId);
+
+            string courseId = courseTestService.GetCourseIdOf(testId);
 
             string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
-            var courseMember = courseMemberService.GetMemberByUserAndCourse(currentUserId, test.Course.Id.ToString());
+            var courseMember = courseMemberService.GetMemberByUserAndCourse(currentUserId, courseId);
             var submittedAnswers = testSubmissionVM.Answers.Select(
                 answer => new TestSubmissionAnswer(courseTestService.GetQuestionByNumber(test, answer.QuestionNumber), answer.AnswerText));
 
@@ -53,6 +56,8 @@ namespace CourseManagementSystem.API.Controllers
 
             testSubmissionEvaluator.Evaluate(testSubmission);
             testSubmissionService.Save(testSubmission);
+
+            testSubmissionService.CommitChanges();
 
             return new WrapperVM<string>(testSubmission.Id.ToString());
         }
@@ -66,7 +71,7 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOrMemberOf(EntityType.CourseTest, "testId")]
         public SubmitTestVM GetEmptySubmission(string testId)
         {
-            var test = courseTestService.GetById(testId);
+            var test = courseTestService.GetWithQuestions(testId);
             var submissionAnswers = test.Questions.Select(question => new SubmissionAnswerVM(question.Number, question.QuestionText, string.Empty));
 
             return new SubmitTestVM(test.Id.ToString(), test.Topic, submissionAnswers);
@@ -81,7 +86,7 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOrOwnerOf(EntityType.TestSubmission, "testSubmissionId")]
         public TestWithSubmissionVM GetTestSubmission(string testSubmissionId)
         {
-            TestSubmission submission = testSubmissionService.GetSubmissionById(testSubmissionId);
+            TestSubmission submission = testSubmissionService.GetSubmissionWithTestAndQuestions(testSubmissionId);
             var answersVM = submission.Answers.Select(a =>
                 new SubmissionAnswerWithCorrectAnswerVM(a.Question.Number, a.Question.QuestionText, a.Text, a.Question.CorrectAnswer, a.Points, a.Question.Points, a.Comment));
 
@@ -97,7 +102,7 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOf(EntityType.TestSubmission, "testSubmissionId")]
         public void UpdateTestSubmission(string testSubmissionId, EvaluatedTestSubmissionVM evaluatedTestSubmission)
         {
-            TestSubmission submission = testSubmissionService.GetSubmissionById(testSubmissionId);
+            TestSubmission submission = testSubmissionService.GetSubmissionWithTestAndQuestions(testSubmissionId);
             foreach (var evaluatedAnswer in evaluatedTestSubmission.EvaluatedAnswers)
             {
                 var answer = testSubmissionService.GetAnswerByQuestionNumber(submission, evaluatedAnswer.QuestionNumber);
@@ -105,6 +110,8 @@ namespace CourseManagementSystem.API.Controllers
             }
 
             testSubmissionService.MarkAsReviewed(submission);
+
+            testSubmissionService.CommitChanges();
         }
     }
 }

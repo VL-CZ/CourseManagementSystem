@@ -20,7 +20,6 @@ namespace CourseManagementSystem.Services.Implementations
         {
             var file = GetFileById(id);
             dbContext.Files.Remove(file);
-            dbContext.SaveChanges();
         }
 
         /// <inheritdoc/>
@@ -36,7 +35,7 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public CourseFile SaveTo(string courseId, IFormFile file)
+        public void SaveTo(string courseId, IFormFile file)
         {
             byte[] fileData;
             using (var target = new MemoryStream())
@@ -45,14 +44,9 @@ namespace CourseManagementSystem.Services.Implementations
                 fileData = target.ToArray();
             }
 
-            var courseFile = new CourseFile(fileData, file.Name, file.ContentType);
-
-            Course c = dbContext.Courses.Include(c => c.Files).Single(c => c.Id.ToString() == courseId);
-
-            c.Files.Add(courseFile);
-            dbContext.SaveChanges();
-
-            return courseFile;
+            Course course = dbContext.Courses.FindById(courseId);
+            var fileToAdd = new CourseFile(fileData, file.Name, file.ContentType,course);
+            dbContext.Files.Add(fileToAdd);
         }
     }
 }

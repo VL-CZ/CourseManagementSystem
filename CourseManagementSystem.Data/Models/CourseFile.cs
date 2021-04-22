@@ -7,13 +7,14 @@ namespace CourseManagementSystem.Data.Models
     public class CourseFile : IGuidIdObject, ICourseReferenceObject
     {
         public CourseFile()
-        {}
+        { }
 
-        public CourseFile(byte[] data, string name, string contentType)
+        public CourseFile(byte[] data, string name, string contentType, Course course)
         {
             Data = data;
             Name = name;
             ContentType = contentType;
+            Course = course;
         }
 
         /// <summary>

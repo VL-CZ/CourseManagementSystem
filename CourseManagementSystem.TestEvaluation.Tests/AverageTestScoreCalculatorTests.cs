@@ -1,5 +1,5 @@
-﻿using CourseManagementSystem.Data.Models;
-using CourseManagementSystem.Services;
+﻿using CourseManagementSystem.TestEvaluation.Calculators;
+using CourseManagementSystem.TestEvaluation.DTOs;
 using System.Collections.Generic;
 using Xunit;
 

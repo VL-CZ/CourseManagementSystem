@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CourseManagementSystem.Services.Interfaces
 {
-    public interface ITestSubmissionService : ICourseReferenceService, ICourseMemberReferenceService
+    public interface ITestSubmissionService : ICourseReferenceService, ICourseMemberReferenceService, IDbService
     {
         /// <summary>
         /// get all submissions of the given <see cref="CourseMember"/>
@@ -20,11 +20,11 @@ namespace CourseManagementSystem.Services.Interfaces
         IEnumerable<TestSubmission> GetAllSubmissionsOfTest(string testId);
 
         /// <summary>
-        /// get test submission (with answers and test included) by its id
+        /// get test submission by its id including the test with questions and answers
         /// </summary>
         /// <param name="testSubmissionId">id of the submission to select</param>
         /// <returns><see cref="TestSubmission"/> with answers and test included</returns>
-        TestSubmission GetSubmissionById(string testSubmissionId);
+        TestSubmission GetSubmissionWithTestAndQuestions(string testSubmissionId);
 
         /// <summary>
         /// get answer to the question with given question number

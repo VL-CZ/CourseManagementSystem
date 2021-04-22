@@ -1,11 +1,11 @@
 ﻿using CourseManagementSystem.Data;
 
-namespace CourseManagementSystem.Services.Implementations
+namespace CourseManagementSystem.Services
 {
     /// <summary>
     /// class representing base database service
     /// </summary>
-    public abstract class DbService
+    public abstract class DbService : IDbService
     {
         /// <summary>
         /// context of the CMS database
@@ -19,6 +19,12 @@ namespace CourseManagementSystem.Services.Implementations
         protected DbService(CMSDbContext dbContext)
         {
             this.dbContext = dbContext;
+        }
+
+        /// <inheritdoc/>
+        public void CommitChanges()
+        {
+            dbContext.SaveChanges();
         }
     }
 }
