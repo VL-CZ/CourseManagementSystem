@@ -16,7 +16,6 @@ namespace CourseManagementSystem.Services.Implementations
         {
             var grade = GetById(gradeId);
             dbContext.Grades.Remove(grade);
-            dbContext.SaveChanges();
         }
 
         /// <inheritdoc/>

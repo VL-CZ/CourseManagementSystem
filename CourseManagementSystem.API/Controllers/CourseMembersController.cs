@@ -55,7 +55,7 @@ namespace CourseManagementSystem.API.Controllers
             
             gradeService.AssignGrade(grade);
 
-            courseMemberService.CommitChanges();
+            gradeService.CommitChanges();
         }
 
         /// <summary>

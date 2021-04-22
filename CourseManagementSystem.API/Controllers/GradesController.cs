@@ -27,6 +27,8 @@ namespace CourseManagementSystem.API.Controllers
         public void Delete(string id)
         {
             gradeService.DeleteById(id);
+
+            gradeService.CommitChanges();
         }
     }
 }
