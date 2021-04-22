@@ -7,14 +7,14 @@ namespace CourseManagementSystem.API.Validation.Attributes
     /// <br/>
     /// if validation fails <see cref="defaultErrorMessage"/> is displayed
     /// </summary>
-    public class NonNegativeDoubleRangeAttribute : RangeAttribute
+    public class NonNegativeDoubleValueAttribute : RangeAttribute
     {
         /// <summary>
         /// default error message displayed ({0} is replaced by the field name that this attribute belongs to)
         /// </summary>
         public const string defaultErrorMessage = "The field {0} must be non-negative";
 
-        public NonNegativeDoubleRangeAttribute() : base(0, double.MaxValue)
+        public NonNegativeDoubleValueAttribute() : base(0, double.MaxValue)
         {
             ErrorMessage = defaultErrorMessage;
         }

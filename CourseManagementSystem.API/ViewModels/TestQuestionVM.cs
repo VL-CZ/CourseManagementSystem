@@ -27,6 +27,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// number of the question
         /// </summary>
+        [PositiveIntValue]
         public int Number { get; set; }
 
         /// <summary>
@@ -44,6 +45,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// number of points for this question
         /// </summary>
+        [PositiveIntValue]
         public int Points { get; set; }
     }
 }

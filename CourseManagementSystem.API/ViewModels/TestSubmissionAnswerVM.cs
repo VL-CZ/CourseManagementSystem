@@ -21,6 +21,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// number of question that this answer belongs to
         /// </summary>
+        [PositiveIntValue]
         public int QuestionNumber { get; set; }
 
         /// <summary>
@@ -59,11 +60,13 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// points received for the answer
         /// </summary>
+        [NonNegativeIntValue]
         public int ReceivedPoints { get; set; }
 
         /// <summary>
         /// maximal obtained points for the question
         /// </summary>
+        [PositiveIntValue]
         public int MaximalPoints { get; set; }
 
         /// <summary>

@@ -61,11 +61,13 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// weight of the test
         /// </summary>
+        [PositiveIntValue]
         public int TestWeight { get; set; }
 
         /// <summary>
         /// score from the test (in percents)
         /// </summary>
+        [NonNegativeDoubleValue]
         public double PercentualScore { get; set; }
     }
 
@@ -93,6 +95,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// percentual score gained from the test
         /// </summary>
+        [NonNegativeDoubleValue]
         public double PercentualScore { get; set; }
     }
 

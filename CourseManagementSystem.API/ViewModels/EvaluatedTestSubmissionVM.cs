@@ -1,7 +1,5 @@
-﻿using CourseManagementSystem.API.Validation;
-using CourseManagementSystem.API.Validation.Attributes;
+﻿using CourseManagementSystem.API.Validation.Attributes;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace CourseManagementSystem.API.ViewModels
 {
@@ -52,11 +50,13 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// number of test question that these data belong to
         /// </summary>
+        [PositiveIntValue]
         public int QuestionNumber { get; set; }
 
         /// <summary>
         /// updated points for the answer
         /// </summary>
+        [NonNegativeIntValue]
         public int UpdatedPoints { get; set; }
 
         /// <summary>

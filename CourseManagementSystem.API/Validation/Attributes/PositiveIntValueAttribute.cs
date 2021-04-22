@@ -7,14 +7,14 @@ namespace CourseManagementSystem.API.Validation.Attributes
     /// <br/>
     /// if validation fails <see cref="defaultErrorMessage"/> is displayed
     /// </summary>
-    public class PositiveIntRangeAttribute : RangeAttribute
+    public class PositiveIntValueAttribute : RangeAttribute
     {
         /// <summary>
         /// default error message displayed ({0} is replaced by the field name that this attribute belongs to)
         /// </summary>
         public const string defaultErrorMessage = "The field {0} must be a positive integer (greater than or equal to 1)";
 
-        public PositiveIntRangeAttribute() : base(1, int.MaxValue)
+        public PositiveIntValueAttribute() : base(1, int.MaxValue)
         {
             ErrorMessage = defaultErrorMessage;
         }

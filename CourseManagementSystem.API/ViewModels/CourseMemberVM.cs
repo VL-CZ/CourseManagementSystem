@@ -1,5 +1,4 @@
-﻿using CourseManagementSystem.API.Validation;
-using CourseManagementSystem.API.Validation.Attributes;
+﻿using CourseManagementSystem.API.Validation.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace CourseManagementSystem.API.ViewModels
@@ -9,7 +8,9 @@ namespace CourseManagementSystem.API.ViewModels
     /// </summary>
     public class CourseMemberVM
     {
-        public CourseMemberVM() { }
+        public CourseMemberVM()
+        {
+        }
 
         public CourseMemberVM(string id, string name, string email)
         {

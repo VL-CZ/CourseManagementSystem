@@ -2,7 +2,6 @@
 using CourseManagementSystem.Data.Models;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace CourseManagementSystem.API.ViewModels
 {
@@ -26,7 +25,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// weight of the score from the test (e.g. test of weight 2 has twice bigger impact on overall score than test of weight 1)
         /// </summary>
-        [Range(1, int.MaxValue)]
+        [PositiveIntValue]
         public int Weight { get; set; }
 
         /// <summary>
