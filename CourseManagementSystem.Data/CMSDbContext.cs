@@ -45,6 +45,10 @@ namespace CourseManagementSystem.Data
             ConfigureForeignKeys(builder);
         }
 
+        /// <summary>
+        /// configure foreign keys of the database
+        /// </summary>
+        /// <param name="builder"></param>
         private void ConfigureForeignKeys(ModelBuilder builder)
         {
             // Course
