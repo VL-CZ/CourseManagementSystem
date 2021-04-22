@@ -36,6 +36,8 @@ namespace CourseManagementSystem.API.Controllers
             var currentUser = peopleService.GetById(GetCurrentUserId());
 
             peopleService.EnrollTo(currentUser, course);
+
+            peopleService.CommitChanges();
         }
 
         /// <summary>

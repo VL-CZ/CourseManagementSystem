@@ -18,7 +18,6 @@ namespace CourseManagementSystem.Services.Implementations
         {
             var cm = new CourseMember(person, course);
             dbContext.CourseMembers.Add(cm);
-            dbContext.SaveChanges();
         }
 
         /// <inheritdoc/>
@@ -39,14 +38,19 @@ namespace CourseManagementSystem.Services.Implementations
         /// <inheritdoc/>
         public IEnumerable<Course> GetManagedCourses(string personId)
         {
-            return dbContext.Courses.Include(c => c.Admin).Where(c => c.Admin.Id == personId);
+            return dbContext.Courses
+                .Include(course => course.Admin)
+                .Where(course => course.Admin.Id == personId);
         }
 
         /// <inheritdoc/>
         public IEnumerable<Course> GetMemberCourses(string personId)
         {
-            return dbContext.CourseMembers.Include(cm => cm.Course).Include(cm => cm.User)
-                .Where(cm => cm.User.Id == personId).Select(cm => cm.Course);
+            return dbContext.CourseMembers
+                .Include(cm => cm.Course)
+                .Include(cm => cm.User)
+                .Where(cm => cm.User.Id == personId)
+                .Select(cm => cm.Course);
         }
 
         /// <inheritdoc/>
