@@ -20,21 +20,21 @@ namespace CourseManagementSystem.Services.Implementations
         {
             var course = dbContext.Courses.FindById(courseId);
             course.Tests.Add(test);
-            dbContext.SaveChanges();
         }
 
         /// <inheritdoc/>
         public void Delete(string testId)
         {
-            var testToRemove = GetById(testId);
+            var testToRemove = GetWithQuestions(testId);
             dbContext.CourseTests.Remove(testToRemove);
-            dbContext.SaveChanges();
         }
 
         /// <inheritdoc/>
-        public CourseTest GetById(string testId)
+        public CourseTest GetWithQuestions(string testId)
         {
-            return dbContext.CourseTests.Include(ct => ct.Course).Include(ct => ct.Questions).SingleOrDefault(ct => ct.Id.ToString() == testId);
+            return dbContext.CourseTests
+                .Include(test => test.Questions)
+                .SingleOrDefault(ct => ct.Id.ToString() == testId);
         }
 
         ///<inheritdoc/>
@@ -47,7 +47,6 @@ namespace CourseManagementSystem.Services.Implementations
         public void Publish(CourseTest test)
         {
             test.Status = TestStatus.Published;
-            dbContext.SaveChanges();
         }
 
         /// <inheritdoc/>
@@ -58,14 +57,13 @@ namespace CourseManagementSystem.Services.Implementations
             test.Deadline = updatedDeadline;
             test.Questions.Clear();
             test.Questions = updatedQuestions;
-
-            dbContext.SaveChanges();
         }
 
         /// <inheritdoc/>
         public TestQuestion GetQuestionByNumber(CourseTest test, int questionNumber)
         {
-            return test.Questions.SingleOrDefault(question => question.Number == questionNumber);
+            return test.Questions
+                .SingleOrDefault(question => question.Number == questionNumber);
         }
     }
 }

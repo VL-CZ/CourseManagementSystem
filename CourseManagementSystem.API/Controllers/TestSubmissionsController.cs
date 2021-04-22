@@ -41,10 +41,12 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOrMemberOf(EntityType.CourseTest, "testId")]
         public WrapperVM<string> Submit(string testId, SubmitTestVM testSubmissionVM)
         {
-            var test = courseTestService.GetById(testId);
+            var test = courseTestService.GetWithQuestions(testId);
+
+            string courseId = courseTestService.GetCourseIdOf(testId);
 
             string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
-            var courseMember = courseMemberService.GetMemberByUserAndCourse(currentUserId, test.Course.Id.ToString());
+            var courseMember = courseMemberService.GetMemberByUserAndCourse(currentUserId, courseId);
             var submittedAnswers = testSubmissionVM.Answers.Select(
                 answer => new TestSubmissionAnswer(courseTestService.GetQuestionByNumber(test, answer.QuestionNumber), answer.AnswerText));
 
@@ -66,7 +68,7 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOrMemberOf(EntityType.CourseTest, "testId")]
         public SubmitTestVM GetEmptySubmission(string testId)
         {
-            var test = courseTestService.GetById(testId);
+            var test = courseTestService.GetWithQuestions(testId);
             var submissionAnswers = test.Questions.Select(question => new SubmissionAnswerVM(question.Number, question.QuestionText, string.Empty));
 
             return new SubmitTestVM(test.Id.ToString(), test.Topic, submissionAnswers);

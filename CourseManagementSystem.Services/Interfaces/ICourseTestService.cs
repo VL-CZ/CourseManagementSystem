@@ -13,11 +13,11 @@ namespace CourseManagementSystem.Services.Interfaces
         void AddToCourse(CourseTest test, string courseId);
 
         /// <summary>
-        /// get test with given Id
+        /// get test with the given Id including <see cref="CourseTest.Questions"/>
         /// </summary>
-        /// <param name="testId"></param>
+        /// <param name="testId">identifier of the <see cref="CourseTest"/></param>
         /// <returns></returns>
-        CourseTest GetById(string testId);
+        CourseTest GetWithQuestions(string testId);
 
         /// <summary>
         /// delete test by its Id
