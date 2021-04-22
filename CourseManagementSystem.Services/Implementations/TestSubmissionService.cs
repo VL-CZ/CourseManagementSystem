@@ -45,9 +45,12 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public TestSubmission GetSubmissionById(string testSubmissionId)
+        public TestSubmission GetSubmissionWithTestAndQuestions(string testSubmissionId)
         {
-            return dbContext.TestSubmissions.Include(ts => ts.Answers).ThenInclude(a => a.Question).Include(ts => ts.Test)
+            return dbContext.TestSubmissions
+                .Include(ts => ts.Answers)
+                .ThenInclude(a => a.Question)
+                .Include(ts => ts.Test)
                 .SingleOrDefault(ts => ts.Id.ToString() == testSubmissionId);
         }
 
@@ -55,14 +58,12 @@ namespace CourseManagementSystem.Services.Implementations
         public void MarkAsReviewed(TestSubmission testSubmission)
         {
             testSubmission.IsReviewed = true;
-            dbContext.SaveChanges();
         }
 
         /// <inheritdoc/>
         public void Save(TestSubmission testSubmission)
         {
             dbContext.TestSubmissions.Add(testSubmission);
-            dbContext.SaveChanges();
         }
 
         /// <inheritdoc/>
@@ -70,7 +71,6 @@ namespace CourseManagementSystem.Services.Implementations
         {
             answerToEvaluate.Points = updatedPoints;
             answerToEvaluate.Comment = updatedComment;
-            dbContext.SaveChanges();
         }
 
         /// <summary>

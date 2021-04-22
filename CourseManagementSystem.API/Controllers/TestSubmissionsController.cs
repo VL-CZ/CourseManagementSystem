@@ -56,6 +56,8 @@ namespace CourseManagementSystem.API.Controllers
             testSubmissionEvaluator.Evaluate(testSubmission);
             testSubmissionService.Save(testSubmission);
 
+            testSubmissionService.CommitChanges();
+
             return new WrapperVM<string>(testSubmission.Id.ToString());
         }
 
@@ -83,7 +85,7 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOrOwnerOf(EntityType.TestSubmission, "testSubmissionId")]
         public TestWithSubmissionVM GetTestSubmission(string testSubmissionId)
         {
-            TestSubmission submission = testSubmissionService.GetSubmissionById(testSubmissionId);
+            TestSubmission submission = testSubmissionService.GetSubmissionWithTestAndQuestions(testSubmissionId);
             var answersVM = submission.Answers.Select(a =>
                 new SubmissionAnswerWithCorrectAnswerVM(a.Question.Number, a.Question.QuestionText, a.Text, a.Question.CorrectAnswer, a.Points, a.Question.Points, a.Comment));
 
@@ -99,7 +101,7 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOf(EntityType.TestSubmission, "testSubmissionId")]
         public void UpdateTestSubmission(string testSubmissionId, EvaluatedTestSubmissionVM evaluatedTestSubmission)
         {
-            TestSubmission submission = testSubmissionService.GetSubmissionById(testSubmissionId);
+            TestSubmission submission = testSubmissionService.GetSubmissionWithTestAndQuestions(testSubmissionId);
             foreach (var evaluatedAnswer in evaluatedTestSubmission.EvaluatedAnswers)
             {
                 var answer = testSubmissionService.GetAnswerByQuestionNumber(submission, evaluatedAnswer.QuestionNumber);
@@ -107,6 +109,8 @@ namespace CourseManagementSystem.API.Controllers
             }
 
             testSubmissionService.MarkAsReviewed(submission);
+
+            testSubmissionService.CommitChanges();
         }
     }
 }
