@@ -2,12 +2,26 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 
 namespace CourseManagementSystem.Data.Models
 {
     public class CourseTest : IGuidIdObject, ICourseReferenceObject
     {
+        public CourseTest()
+        {
+            Questions = new List<TestQuestion>();
+            Submissions = new List<TestSubmission>();
+            Status = TestStatus.New;
+        }
+
+        public CourseTest(string topic, ICollection<TestQuestion> questions, int weight, DateTime deadline) : this()
+        {
+            Topic = topic;
+            Questions = questions;
+            Weight = weight;
+            Deadline = deadline;
+        }
+
         /// <summary>
         /// identifier of the test
         /// </summary>
@@ -18,6 +32,7 @@ namespace CourseManagementSystem.Data.Models
         /// <summary>
         /// topic of the test
         /// </summary>
+        [Required]
         public string Topic { get; set; }
 
         /// <summary>
@@ -50,32 +65,6 @@ namespace CourseManagementSystem.Data.Models
         /// students' submissions of this test
         /// </summary>
         public ICollection<TestSubmission> Submissions { get; set; }
-
-        public CourseTest()
-        {
-            Questions = new List<TestQuestion>();
-            Submissions = new List<TestSubmission>();
-            Status = TestStatus.New;
-        }
-
-        public CourseTest(string topic, ICollection<TestQuestion> questions, int weight, DateTime deadline) : this()
-        {
-            Topic = topic;
-            Questions = questions;
-            Weight = weight;
-            Deadline = deadline;
-        }
-
-        /// <summary>
-        /// get question by its number
-        /// </summary>
-        /// <param name="test">given test</param>
-        /// <param name="questionNumber">number of the question</param>
-        /// <returns></returns>
-        public TestQuestion GetQuestionByNumber(int questionNumber)
-        {
-            return Questions.Single(q => q.Number == questionNumber);
-        }
     }
 
     /// <summary>

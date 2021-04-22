@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CourseManagementSystem.API.Validation.Attributes;
+using System;
 using System.Collections.Generic;
 
 namespace CourseManagementSystem.API.ViewModels
@@ -21,6 +22,7 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// id of the test submission
         /// </summary>
+        [RequiredWithDefaultErrorMessage]
         public string TestSubmissionId { get; set; }
 
         /// <summary>
@@ -53,16 +55,19 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// topic of the test
         /// </summary>
+        [RequiredWithDefaultErrorMessage]
         public string TestTopic { get; set; }
 
         /// <summary>
         /// weight of the test
         /// </summary>
+        [PositiveIntValue]
         public int TestWeight { get; set; }
 
         /// <summary>
         /// score from the test (in percents)
         /// </summary>
+        [NonNegativeDoubleValue]
         public double PercentualScore { get; set; }
     }
 
@@ -84,11 +89,13 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// email of the student
         /// </summary>
+        [RequiredWithDefaultErrorMessage]
         public string StudentEmail { get; set; }
 
         /// <summary>
         /// percentual score gained from the test
         /// </summary>
+        [NonNegativeDoubleValue]
         public double PercentualScore { get; set; }
     }
 
@@ -111,16 +118,19 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// id of the test
         /// </summary>
+        [RequiredWithDefaultErrorMessage]
         public string TestId { get; set; }
 
         /// <summary>
         /// topic of the test
         /// </summary>
+        [RequiredWithDefaultErrorMessage]
         public string TestTopic { get; set; }
 
         /// <summary>
         /// submitted and correct answers
         /// </summary>
+        [RequiredWithDefaultErrorMessage]
         public IEnumerable<SubmissionAnswerWithCorrectAnswerVM> Answers { get; set; }
     }
 }

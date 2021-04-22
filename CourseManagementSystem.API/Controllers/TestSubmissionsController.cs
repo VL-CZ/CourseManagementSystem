@@ -45,7 +45,8 @@ namespace CourseManagementSystem.API.Controllers
 
             string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
             var courseMember = courseMemberService.GetMemberByUserAndCourse(currentUserId, test.Course.Id.ToString());
-            var submittedAnswers = testSubmissionVM.Answers.Select(answer => new TestSubmissionAnswer(test.GetQuestionByNumber(answer.QuestionNumber), answer.AnswerText));
+            var submittedAnswers = testSubmissionVM.Answers.Select(
+                answer => new TestSubmissionAnswer(courseTestService.GetQuestionByNumber(test, answer.QuestionNumber), answer.AnswerText));
 
             var testSubmission = new TestSubmission(test, courseMember,
                 submittedAnswers.ToList());
@@ -77,7 +78,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testSubmissionId">id of the submission</param>
         /// <returns>test submission with the given id</returns>
         [HttpGet("{testSubmissionId}")]
-        [AuthorizeCourseAdminOrOwnerOf(EntityType.TestSubmission,"testSubmissionId")]
+        [AuthorizeCourseAdminOrOwnerOf(EntityType.TestSubmission, "testSubmissionId")]
         public TestWithSubmissionVM GetTestSubmission(string testSubmissionId)
         {
             TestSubmission submission = testSubmissionService.GetSubmissionById(testSubmissionId);

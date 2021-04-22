@@ -4,14 +4,16 @@ using CourseManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CourseManagementSystem.Data.Migrations
 {
     [DbContext(typeof(CMSDbContext))]
-    partial class CMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210419193449_Properties_made_required")]
+    partial class Properties_made_required
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +52,7 @@ namespace CourseManagementSystem.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("CourseId")
+                    b.Property<Guid?>("CourseId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("Data")
@@ -74,11 +76,10 @@ namespace CourseManagementSystem.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CourseId")
+                    b.Property<Guid?>("CourseId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -96,7 +97,7 @@ namespace CourseManagementSystem.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CourseId")
+                    b.Property<Guid?>("CourseId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Deadline")
@@ -126,10 +127,9 @@ namespace CourseManagementSystem.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AuthorId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("CourseId")
+                    b.Property<Guid?>("CourseId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Text")
@@ -157,7 +157,7 @@ namespace CourseManagementSystem.Data.Migrations
                     b.Property<double>("PercentualValue")
                         .HasColumnType("float");
 
-                    b.Property<Guid>("StudentId")
+                    b.Property<Guid?>("StudentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Topic")
@@ -249,7 +249,7 @@ namespace CourseManagementSystem.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("CourseTestId")
+                    b.Property<Guid?>("CourseTestId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Number")
@@ -308,7 +308,7 @@ namespace CourseManagementSystem.Data.Migrations
                     b.Property<int>("Points")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("QuestionId")
+                    b.Property<Guid?>("QuestionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("TestSubmissionId")
@@ -548,7 +548,7 @@ namespace CourseManagementSystem.Data.Migrations
                     b.HasOne("CourseManagementSystem.Data.Models.Person", "Admin")
                         .WithMany()
                         .HasForeignKey("AdminId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -556,66 +556,50 @@ namespace CourseManagementSystem.Data.Migrations
                 {
                     b.HasOne("CourseManagementSystem.Data.Models.Course", "Course")
                         .WithMany("Files")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("CourseId");
                 });
 
             modelBuilder.Entity("CourseManagementSystem.Data.Models.CourseMember", b =>
                 {
                     b.HasOne("CourseManagementSystem.Data.Models.Course", "Course")
                         .WithMany("Members")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("CourseId");
 
                     b.HasOne("CourseManagementSystem.Data.Models.Person", "User")
                         .WithMany("CourseMemberships")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("CourseManagementSystem.Data.Models.CourseTest", b =>
                 {
                     b.HasOne("CourseManagementSystem.Data.Models.Course", "Course")
                         .WithMany("Tests")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("CourseId");
                 });
 
             modelBuilder.Entity("CourseManagementSystem.Data.Models.ForumPost", b =>
                 {
                     b.HasOne("CourseManagementSystem.Data.Models.Person", "Author")
                         .WithMany()
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("AuthorId");
 
                     b.HasOne("CourseManagementSystem.Data.Models.Course", "Course")
                         .WithMany("ForumPosts")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("CourseId");
                 });
 
             modelBuilder.Entity("CourseManagementSystem.Data.Models.Grade", b =>
                 {
                     b.HasOne("CourseManagementSystem.Data.Models.CourseMember", "Student")
                         .WithMany("Grades")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("StudentId");
                 });
 
             modelBuilder.Entity("CourseManagementSystem.Data.Models.TestQuestion", b =>
                 {
                     b.HasOne("CourseManagementSystem.Data.Models.CourseTest", null)
                         .WithMany("Questions")
-                        .HasForeignKey("CourseTestId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("CourseTestId");
                 });
 
             modelBuilder.Entity("CourseManagementSystem.Data.Models.TestSubmission", b =>
@@ -623,13 +607,13 @@ namespace CourseManagementSystem.Data.Migrations
                     b.HasOne("CourseManagementSystem.Data.Models.CourseMember", "Student")
                         .WithMany("TestSubmissions")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("CourseManagementSystem.Data.Models.CourseTest", "Test")
                         .WithMany("Submissions")
                         .HasForeignKey("TestId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -637,9 +621,7 @@ namespace CourseManagementSystem.Data.Migrations
                 {
                     b.HasOne("CourseManagementSystem.Data.Models.TestQuestion", "Question")
                         .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("QuestionId");
 
                     b.HasOne("CourseManagementSystem.Data.Models.TestSubmission", null)
                         .WithMany("Answers")

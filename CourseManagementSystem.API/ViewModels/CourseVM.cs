@@ -1,4 +1,6 @@
-﻿namespace CourseManagementSystem.API.ViewModels
+﻿using CourseManagementSystem.API.Validation.Attributes;
+
+namespace CourseManagementSystem.API.ViewModels
 {
     /// <summary>
     /// base viewmodel for a course
@@ -17,6 +19,7 @@
         /// <summary>
         /// name of the course to add
         /// </summary>
+        [RequiredWithDefaultErrorMessage]
         public string Name { get; set; }
     }
 
@@ -28,7 +31,7 @@
         public CourseInfoVM() : base()
         { }
 
-        public CourseInfoVM(string id, string name):base(name)
+        public CourseInfoVM(string id, string name) : base(name)
         {
             Id = id;
         }
@@ -36,6 +39,7 @@
         /// <summary>
         /// id of the course
         /// </summary>
+        [RequiredWithDefaultErrorMessage]
         public string Id { get; set; }
     }
 
@@ -48,7 +52,7 @@
         {
         }
 
-        public AddCourseVM(string name, string adminId):base(name)
+        public AddCourseVM(string name, string adminId) : base(name)
         {
             AdminId = adminId;
         }
@@ -56,6 +60,7 @@
         /// <summary>
         /// id of the admin
         /// </summary>
+        [RequiredWithDefaultErrorMessage]
         public string AdminId { get; set; }
     }
 }

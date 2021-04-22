@@ -1,4 +1,6 @@
-﻿namespace CourseManagementSystem.API.ViewModels
+﻿using CourseManagementSystem.API.Validation.Attributes;
+
+namespace CourseManagementSystem.API.ViewModels
 {
     /// <summary>
     /// class representing the submission answers submitted by students
@@ -19,16 +21,19 @@
         /// <summary>
         /// number of question that this answer belongs to
         /// </summary>
+        [PositiveIntValue]
         public int QuestionNumber { get; set; }
 
         /// <summary>
         /// text of the question
         /// </summary>
+        [RequiredWithDefaultErrorMessage]
         public string QuestionText { get; set; }
 
         /// <summary>
         /// answer submitted by the student
         /// </summary>
+        [RequiredWithDefaultErrorMessage(AllowEmptyStrings = true)]
         public string AnswerText { get; set; }
     }
 
@@ -49,21 +54,25 @@
         /// <summary>
         /// text of the correct answer
         /// </summary>
-        public string CorrectAnswer { get; }
+        [RequiredWithDefaultErrorMessage]
+        public string CorrectAnswer { get; set; }
 
         /// <summary>
         /// points received for the answer
         /// </summary>
-        public int ReceivedPoints { get; }
+        [NonNegativeIntValue]
+        public int ReceivedPoints { get; set; }
 
         /// <summary>
         /// maximal obtained points for the question
         /// </summary>
-        public int MaximalPoints { get; }
+        [PositiveIntValue]
+        public int MaximalPoints { get; set; }
 
         /// <summary>
         /// comment to the answer provided by teacher
         /// </summary>
-        public string Comment { get; }
+        [RequiredWithDefaultErrorMessage(AllowEmptyStrings = true)]
+        public string Comment { get; set; }
     }
 }

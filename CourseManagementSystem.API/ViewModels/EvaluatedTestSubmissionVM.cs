@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using CourseManagementSystem.API.Validation.Attributes;
+using System.Collections.Generic;
 
 namespace CourseManagementSystem.API.ViewModels
 {
@@ -21,11 +22,13 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// id of the test submission these properties belongs to
         /// </summary>
+        [RequiredWithDefaultErrorMessage]
         public string TestSubmissionId { get; set; }
 
         /// <summary>
         /// collection of evaluated answers
         /// </summary>
+        [RequiredWithDefaultErrorMessage]
         public ICollection<EvaluatedAnswerVM> EvaluatedAnswers { get; set; }
     }
 
@@ -47,16 +50,19 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// number of test question that these data belong to
         /// </summary>
+        [PositiveIntValue]
         public int QuestionNumber { get; set; }
 
         /// <summary>
         /// updated points for the answer
         /// </summary>
+        [NonNegativeIntValue]
         public int UpdatedPoints { get; set; }
 
         /// <summary>
         /// updated comment for the answer
         /// </summary>
+        [RequiredWithDefaultErrorMessage(AllowEmptyStrings = true)]
         public string UpdatedComment { get; set; }
     }
 }

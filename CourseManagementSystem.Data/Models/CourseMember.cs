@@ -29,11 +29,13 @@ namespace CourseManagementSystem.Data.Models
         /// <summary>
         /// reference to person
         /// </summary>
+        [Required]
         public Person User { get; set; }
 
         /// <summary>
         /// reference to course
         /// </summary>
+        [Required]
         public Course Course { get; set; }
 
         /// <summary>

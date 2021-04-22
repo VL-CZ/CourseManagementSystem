@@ -31,11 +31,13 @@ namespace CourseManagementSystem.Data.Models
         /// <summary>
         /// text of the question
         /// </summary>
+        [Required(AllowEmptyStrings = true)]
         public string QuestionText { get; set; }
 
         /// <summary>
         /// correct answer to the question
         /// </summary>
+        [Required(AllowEmptyStrings = true)]
         public string CorrectAnswer { get; set; }
 
         /// <summary>

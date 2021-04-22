@@ -4,14 +4,16 @@ using CourseManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CourseManagementSystem.Data.Migrations
 {
     [DbContext(typeof(CMSDbContext))]
-    partial class CMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210422113239_ForumPost_and_Grade_NavigationProperties_required")]
+    partial class ForumPost_and_Grade_NavigationProperties_required
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -249,7 +251,7 @@ namespace CourseManagementSystem.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("CourseTestId")
+                    b.Property<Guid?>("CourseTestId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Number")
@@ -308,7 +310,7 @@ namespace CourseManagementSystem.Data.Migrations
                     b.Property<int>("Points")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("QuestionId")
+                    b.Property<Guid?>("QuestionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("TestSubmissionId")
@@ -613,9 +615,7 @@ namespace CourseManagementSystem.Data.Migrations
                 {
                     b.HasOne("CourseManagementSystem.Data.Models.CourseTest", null)
                         .WithMany("Questions")
-                        .HasForeignKey("CourseTestId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("CourseTestId");
                 });
 
             modelBuilder.Entity("CourseManagementSystem.Data.Models.TestSubmission", b =>
@@ -623,13 +623,13 @@ namespace CourseManagementSystem.Data.Migrations
                     b.HasOne("CourseManagementSystem.Data.Models.CourseMember", "Student")
                         .WithMany("TestSubmissions")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("CourseManagementSystem.Data.Models.CourseTest", "Test")
                         .WithMany("Submissions")
                         .HasForeignKey("TestId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -637,9 +637,7 @@ namespace CourseManagementSystem.Data.Migrations
                 {
                     b.HasOne("CourseManagementSystem.Data.Models.TestQuestion", "Question")
                         .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("QuestionId");
 
                     b.HasOne("CourseManagementSystem.Data.Models.TestSubmission", null)
                         .WithMany("Answers")

@@ -1,4 +1,6 @@
-﻿namespace CourseManagementSystem.API.ViewModels
+﻿using CourseManagementSystem.API.Validation.Attributes;
+
+namespace CourseManagementSystem.API.ViewModels
 {
     /// <summary>
     /// viewmodel representing a question in a test
@@ -25,21 +27,25 @@
         /// <summary>
         /// number of the question
         /// </summary>
+        [PositiveIntValue]
         public int Number { get; set; }
 
         /// <summary>
         /// text of the question
         /// </summary>
+        [RequiredWithDefaultErrorMessage]
         public string QuestionText { get; set; }
 
         /// <summary>
         /// correct answer to the question
         /// </summary>
+        [RequiredWithDefaultErrorMessage]
         public string CorrectAnswer { get; set; }
 
         /// <summary>
         /// number of points for this question
         /// </summary>
+        [PositiveIntValue]
         public int Points { get; set; }
     }
 }

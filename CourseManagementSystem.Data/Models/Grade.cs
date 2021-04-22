@@ -28,7 +28,6 @@ namespace CourseManagementSystem.Data.Models
         /// <summary>
         /// percentual value of the grade (0=0%, 1=100%, may be greater than 1 in case of bonus points)
         /// </summary>
-        [Required]
         public double PercentualValue { get; set; }
 
         /// <summary>
@@ -36,7 +35,6 @@ namespace CourseManagementSystem.Data.Models
         /// <br/>
         /// e.g. grade with weight 2 has the same weight as two grades weighted 1
         /// </summary>
-        [Required]
         public int Weight { get; set; }
 
         /// <summary>
@@ -53,6 +51,7 @@ namespace CourseManagementSystem.Data.Models
         /// <summary>
         /// course member that this grade belongs to
         /// </summary>
+        [Required]
         public CourseMember Student { get; set; }
     }
 }

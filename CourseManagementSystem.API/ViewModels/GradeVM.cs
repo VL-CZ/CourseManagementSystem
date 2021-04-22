@@ -1,4 +1,6 @@
-﻿namespace CourseManagementSystem.API.ViewModels
+﻿using CourseManagementSystem.API.Validation.Attributes;
+
+namespace CourseManagementSystem.API.ViewModels
 {
     /// <summary>
     /// base viewmodel for grades
@@ -17,20 +19,22 @@
             Weight = weight;
         }
 
-
         /// <summary>
         /// percentual value of the grade (0=0%, 1=100%, may be greater than 1 in case of bonus points)
         /// </summary>
+        [NonNegativeDoubleValue]
         public double PercentualValue { get; set; }
 
         /// <summary>
         /// topic that this grade belongs to
         /// </summary>
+        [RequiredWithDefaultErrorMessage]
         public string Topic { get; set; }
 
         /// <summary>
         /// comment to the grade provided by teacher
         /// </summary>
+        [RequiredWithDefaultErrorMessage(AllowEmptyStrings = true)]
         public string Comment { get; set; }
 
         /// <summary>
@@ -38,6 +42,7 @@
         /// <br/>
         /// e.g. grade with weight 2 has the same weight as two grades weighted 1
         /// </summary>
+        [PositiveIntValue]
         public int Weight { get; set; }
     }
 
@@ -55,7 +60,9 @@
     /// </summary>
     public class GradeDetailsVM : BaseGradeVM
     {
-        public GradeDetailsVM() { }
+        public GradeDetailsVM()
+        {
+        }
 
         public GradeDetailsVM(string id, double percentualValue, string topic, string comment, int weight) : base(percentualValue, topic, comment, weight)
         {
@@ -65,6 +72,7 @@
         /// <summary>
         /// identifier of the grade
         /// </summary>
+        [RequiredWithDefaultErrorMessage]
         public string Id { get; set; }
     }
 }
