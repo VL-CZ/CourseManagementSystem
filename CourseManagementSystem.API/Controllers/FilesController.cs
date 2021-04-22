@@ -30,6 +30,8 @@ namespace CourseManagementSystem.API.Controllers
         public void Upload(IFormFile file, string courseId)
         {
             fileService.SaveTo(courseId, file);
+
+            fileService.CommitChanges();
         }
 
         /// <summary>
@@ -54,6 +56,8 @@ namespace CourseManagementSystem.API.Controllers
         public void Delete(string id)
         {
             fileService.DeleteFileById(id);
+
+            fileService.CommitChanges();
         }
     }
 }
