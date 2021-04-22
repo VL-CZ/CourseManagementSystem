@@ -16,7 +16,6 @@ namespace CourseManagementSystem.Services.Implementations
         {
             var post = new ForumPost(postContent, author, course);
             dbContext.Posts.Add(post);
-            dbContext.SaveChanges();
         }
 
         /// <inheritdoc/>
@@ -24,7 +23,6 @@ namespace CourseManagementSystem.Services.Implementations
         {
             var post = GetById(postId);
             dbContext.Posts.Remove(post);
-            dbContext.SaveChanges();
         }
 
         ///<inheritdoc/>
