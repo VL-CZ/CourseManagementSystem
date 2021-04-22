@@ -99,6 +99,14 @@ namespace CourseManagementSystem.Data
                 .WithMany(cm => cm.Grades)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // TestQuestion
+
+            builder.Entity<TestQuestion>()
+                .HasOne<CourseTest>()
+                .WithMany(test => test.Questions)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
             // TestSubmission
 
             builder.Entity<TestSubmission>()
