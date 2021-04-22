@@ -34,11 +34,13 @@ namespace CourseManagementSystem.Data.Models
         /// <summary>
         /// author of the post
         /// </summary>
+        [Required]
         public Person Author { get; set; }
 
         /// <summary>
         /// course that this posts belongs to
         /// </summary>
+        [Required]
         public Course Course { get; set; }
     }
 }

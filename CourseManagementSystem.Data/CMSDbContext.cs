@@ -80,7 +80,24 @@ namespace CourseManagementSystem.Data
                 .WithMany(course => course.Tests)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // ForumPost
 
+            builder.Entity<ForumPost>()
+                .HasOne(post => post.Course)
+                .WithMany(course => course.ForumPosts)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ForumPost>()
+                .HasOne(post => post.Author)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Grade
+
+            builder.Entity<Grade>()
+                .HasOne(grade => grade.Student)
+                .WithMany(cm => cm.Grades)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

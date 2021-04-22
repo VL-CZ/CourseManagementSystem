@@ -51,6 +51,7 @@ namespace CourseManagementSystem.Data.Models
         /// <summary>
         /// course member that this grade belongs to
         /// </summary>
+        [Required]
         public CourseMember Student { get; set; }
     }
 }
