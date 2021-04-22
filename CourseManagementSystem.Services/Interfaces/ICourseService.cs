@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CourseManagementSystem.Services.Interfaces
 {
-    public interface ICourseService
+    public interface ICourseService : IDbService
     {
         /// <summary>
         /// get course by its id

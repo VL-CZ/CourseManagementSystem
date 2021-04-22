@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CourseManagementSystem.Services.Interfaces
 {
-    public interface ITestSubmissionService : ICourseReferenceService, ICourseMemberReferenceService
+    public interface ITestSubmissionService : ICourseReferenceService, ICourseMemberReferenceService, IDbService
     {
         /// <summary>
         /// get all submissions of the given <see cref="CourseMember"/>

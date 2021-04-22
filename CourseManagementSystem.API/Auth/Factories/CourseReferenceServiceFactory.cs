@@ -1,4 +1,5 @@
-﻿using CourseManagementSystem.Services.Interfaces;
+﻿using CourseManagementSystem.Services;
+using CourseManagementSystem.Services.Interfaces;
 using System.Collections.Generic;
 
 namespace CourseManagementSystem.API.Auth.Factories

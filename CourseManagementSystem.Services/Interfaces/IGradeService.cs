@@ -1,6 +1,6 @@
 ﻿namespace CourseManagementSystem.Services.Interfaces
 {
-    public interface IGradeService : ICourseReferenceService
+    public interface IGradeService : ICourseReferenceService, IDbService
     {
         /// <summary>
         /// delete a grade with the given id

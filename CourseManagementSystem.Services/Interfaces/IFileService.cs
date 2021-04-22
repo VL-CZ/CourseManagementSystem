@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace CourseManagementSystem.Services.Interfaces
 {
-    public interface IFileService : ICourseReferenceService
+    public interface IFileService : ICourseReferenceService, IDbService
     {
         /// <summary>
         /// save the file into the course

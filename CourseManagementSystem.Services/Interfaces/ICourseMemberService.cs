@@ -2,10 +2,10 @@
 
 namespace CourseManagementSystem.Services.Interfaces
 {
-    public interface ICourseMemberService : ICourseReferenceService
+    public interface ICourseMemberService : ICourseReferenceService, IDbService
     {
         /// <summary>
-        /// get CourseMember by ID
+        /// get CourseMember by ID including <see cref="CourseMember.User"/> and <see cref="CourseMember.Grades"/>
         /// </summary>
         /// <param name="id">identifier of the <see cref="CourseMember"/> instance</param>
         /// <returns>course member with the given id</returns>

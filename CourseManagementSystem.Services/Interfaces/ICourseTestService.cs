@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace CourseManagementSystem.Services.Interfaces
 {
-    public interface ICourseTestService : ICourseReferenceService
+    public interface ICourseTestService : ICourseReferenceService, IDbService
     {
         /// <summary>
         /// add test to given course

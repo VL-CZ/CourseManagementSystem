@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CourseManagementSystem.Services.Interfaces
 {
-    public interface IPeopleService
+    public interface IPeopleService : IDbService
     {
         /// <summary>
         /// get person by its id
