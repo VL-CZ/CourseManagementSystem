@@ -13,16 +13,9 @@ namespace CourseManagementSystem.Services.Implementations
         { }
 
         /// <inheritdoc/>
-        public void AssignGrade(CourseMember courseMember, Grade grade)
-        {
-            courseMember.Grades.Add(grade);
-            dbContext.SaveChanges();
-        }
-
-        /// <inheritdoc/>
         public bool BelongsTo(string courseMemberId, string personId)
         {
-            return GetMemberByID(courseMemberId).User.Id == personId;
+            return GetMemberWithUser(courseMemberId).User.Id == personId;
         }
 
         ///<inheritdoc/>
@@ -32,24 +25,28 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public CourseMember GetMemberByID(string id)
+        public CourseMember GetMemberWithUser(string id)
         {
-            return dbContext.CourseMembers.Include(cm => cm.User).Include(cm => cm.Grades).Single(cm => cm.Id.ToString() == id);
+            return dbContext.CourseMembers
+                .Include(cm => cm.User)
+                .Single(cm => cm.Id.ToString() == id);
         }
 
         /// <inheritdoc/>
         public CourseMember GetMemberByUserAndCourse(string personId, string courseId)
         {
-            Person user = dbContext.Users.Include(u => u.CourseMemberships).ThenInclude(cm => cm.Course).SingleOrDefault(user => user.Id == personId);
+            Person user = dbContext.Users
+                .Include(user => user.CourseMemberships)
+                .ThenInclude(cm => cm.Course)
+                .SingleOrDefault(user => user.Id == personId);
             return user.CourseMemberships.SingleOrDefault(cm => cm.Course.Id.ToString() == courseId);
         }
 
         /// <inheritdoc/>
         public void RemoveMemberById(string id)
         {
-            CourseMember cm = GetMemberByID(id);
+            CourseMember cm = GetMemberWithUser(id);
             dbContext.CourseMembers.Remove(cm);
-            dbContext.SaveChanges();
         }
     }
 }

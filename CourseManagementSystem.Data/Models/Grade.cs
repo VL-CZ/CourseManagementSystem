@@ -10,12 +10,13 @@ namespace CourseManagementSystem.Data.Models
         {
         }
 
-        public Grade(double percentualValue, string comment, string topic, int weight)
+        public Grade(double percentualValue, string comment, string topic, int weight, CourseMember student)
         {
             PercentualValue = percentualValue;
             Comment = comment;
             Topic = topic;
             Weight = weight;
+            Student = student;
         }
 
         /// <summary>

@@ -20,6 +20,12 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
+        public void AssignGrade(Grade grade)
+        {
+            dbContext.Grades.Add(grade);
+        }
+
+        /// <inheritdoc/>
         public string GetCourseIdOf(string objectId)
         {
             string courseMemberId = dbContext.Grades.GetCourseMemberIdOf(objectId);
