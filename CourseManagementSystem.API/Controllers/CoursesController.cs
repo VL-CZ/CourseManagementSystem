@@ -33,7 +33,10 @@ namespace CourseManagementSystem.API.Controllers
         {
             Person admin = peopleService.GetById(courseVM.AdminId);
             Course createdCourse = new Course(courseVM.Name, admin);
+            
             courseService.AddCourse(createdCourse);
+            
+            courseService.CommitChanges();
         }
 
         /// <summary>
@@ -45,6 +48,7 @@ namespace CourseManagementSystem.API.Controllers
         public void Delete(string id)
         {
             courseService.DeleteById(id);
+            courseService.CommitChanges();
         }
 
         /// <summary>
@@ -55,7 +59,7 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOf(EntityType.Course, "id")]
         public IEnumerable<CourseMemberVM> GetAllMembers(string id)
         {
-            var people = courseService.GetMembers(id);
+            var people = courseService.GetMembersWithUsers(id);
             return people.Select(cm => new CourseMemberVM(cm.Id.ToString(), cm.User.UserName, cm.User.Email));
         }
 

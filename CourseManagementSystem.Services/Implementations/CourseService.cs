@@ -18,7 +18,6 @@ namespace CourseManagementSystem.Services.Implementations
         {
             Course c = GetById(courseId);
             dbContext.Courses.Remove(c);
-            dbContext.SaveChanges();
         }
 
         /// <inheritdoc/>
@@ -27,38 +26,48 @@ namespace CourseManagementSystem.Services.Implementations
             return dbContext.Courses.FindById(courseId);
         }
 
-
         /// <inheritdoc/>
         public void AddCourse(Course course)
         {
             dbContext.Courses.Add(course);
-            dbContext.SaveChanges();
         }
 
         /// <inheritdoc/>
         public ICollection<CourseFile> GetFiles(string courseId)
         {
-            return dbContext.Courses.Include(c => c.Files).Single(c => c.Id.ToString() == courseId).Files;
+            return dbContext.Courses
+                .Include(course => course.Files)
+                .Single(course => course.Id.ToString() == courseId)
+                .Files;
         }
 
         /// <inheritdoc/>
         public ICollection<CourseTest> GetTests(string courseId)
         {
-            return dbContext.Courses.Include(course => course.Tests).Single(course => course.Id.ToString() == courseId).Tests;
+            return dbContext.Courses
+                .Include(course => course.Tests)
+                .Single(course => course.Id.ToString() == courseId)
+                .Tests;
         }
 
         /// <inheritdoc/>
         public ICollection<ForumPost> GetPostsWithAuthors(string courseId)
         {
-            return dbContext.Courses.Include(c => c.ForumPosts).ThenInclude(p => p.Author).SingleOrDefault(course => course.Id.ToString() == courseId).ForumPosts;
+            return dbContext.Courses
+                .Include(course => course.ForumPosts)
+                .ThenInclude(post => post.Author)
+                .SingleOrDefault(course => course.Id.ToString() == courseId)
+                .ForumPosts;
         }
 
         /// <inheritdoc/>
-        public ICollection<CourseMember> GetMembers(string courseId)
+        public ICollection<CourseMember> GetMembersWithUsers(string courseId)
         {
-            var courseWithMembers = dbContext.Courses.Include(course => course.Members).ThenInclude(member => member.User)
-                .Single(course => course.Id.ToString() == courseId);
-            return courseWithMembers.Members;
+            return dbContext.Courses
+                .Include(course => course.Members)
+                .ThenInclude(member => member.User)
+                .Single(course => course.Id.ToString() == courseId)
+                .Members;
         }
     }
 }
