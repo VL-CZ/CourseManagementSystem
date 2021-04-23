@@ -19,6 +19,7 @@ namespace CourseManagementSystem.Data.Models
         {
             Name = name;
             Admin = admin;
+            IsArchived = false;
         }
 
         /// <summary>
@@ -27,6 +28,11 @@ namespace CourseManagementSystem.Data.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public Guid Id { get; set; }
+
+        /// <summary>
+        /// check if this course has been archived
+        /// </summary>
+        public bool IsArchived { get; set; }
 
         /// <summary>
         /// name of the course

@@ -47,7 +47,7 @@ namespace CourseManagementSystem.API.Controllers
         [HttpGet("memberCourses")]
         public IEnumerable<CourseInfoVM> GetMemberCourses()
         {
-            var memberCourses = peopleService.GetMemberCourses(GetCurrentUserId());
+            var memberCourses = peopleService.GetActiveMemberCourses(GetCurrentUserId());
             return memberCourses.Select(course => new CourseInfoVM(course.Id.ToString(), course.Name));
         }
 
@@ -58,7 +58,7 @@ namespace CourseManagementSystem.API.Controllers
         [HttpGet("managedCourses")]
         public IEnumerable<CourseInfoVM> GetManagedCourses()
         {
-            var managedCourses = peopleService.GetManagedCourses(GetCurrentUserId());
+            var managedCourses = peopleService.GetActiveManagedCourses(GetCurrentUserId());
             return managedCourses.Select(course => new CourseInfoVM(course.Id.ToString(), course.Name));
         }
 

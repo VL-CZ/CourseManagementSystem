@@ -14,10 +14,10 @@ namespace CourseManagementSystem.Services.Implementations
         { }
 
         /// <inheritdoc/>
-        public void DeleteById(string courseId)
+        public void ArchiveById(string courseId)
         {
             Course c = GetById(courseId);
-            dbContext.Courses.Remove(c);
+            c.IsArchived = true;
         }
 
         /// <inheritdoc/>

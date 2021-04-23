@@ -47,7 +47,7 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOf(EntityType.Course, "id")]
         public void Delete(string id)
         {
-            courseService.DeleteById(id);
+            courseService.ArchiveById(id);
             courseService.CommitChanges();
         }
 

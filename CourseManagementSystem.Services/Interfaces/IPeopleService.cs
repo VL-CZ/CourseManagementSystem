@@ -20,18 +20,18 @@ namespace CourseManagementSystem.Services.Interfaces
         void EnrollTo(Person person, Course course);
 
         /// <summary>
-        /// get managed courses of the person (e.g. all courses where the person is an admin)
+        /// get all active courses managed by the person (e.g. all courses where the person is an admin)
         /// </summary>
         /// <param name="personId">id of the person</param>
         /// <returns></returns>
-        IEnumerable<Course> GetManagedCourses(string personId);
+        IEnumerable<Course> GetActiveManagedCourses(string personId);
 
         /// <summary>
-        /// get all courses whose member the given person is
+        /// get all active courses whose member the given person is
         /// </summary>
         /// <param name="personId">id of the person</param>
         /// <returns></returns>
-        IEnumerable<Course> GetMemberCourses(string personId);
+        IEnumerable<Course> GetActiveMemberCourses(string personId);
 
         /// <summary>
         /// check if the given person is admin of the course
