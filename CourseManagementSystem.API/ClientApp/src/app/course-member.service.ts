@@ -6,6 +6,7 @@ import {AddGradeVM} from './viewmodels/gradeVM';
 import {GradeDetailsVM} from './viewmodels/gradeVM';
 import {ApiService} from './api.service';
 import {TestSubmissionInfoVM} from './viewmodels/testSubmissionVM';
+import {WrapperVM} from './viewmodels/wrapperVM';
 
 @Injectable({
   providedIn: 'root'
@@ -48,5 +49,13 @@ export class CourseMemberService extends ApiService {
    */
   public getGrades(courseMemberId: string): Observable<GradeDetailsVM[]> {
     return this.httpGet<GradeDetailsVM[]>(`${courseMemberId}/grades`);
+  }
+
+  /**
+   * get average score (from tests and additional grades) of the given course member
+   * @param courseMemberId id of the course member
+   */
+  public getAverageScore(courseMemberId: string): Observable<WrapperVM<number>> {
+    return this.httpGet<WrapperVM<number>>(`${courseMemberId}/averageScore`);
   }
 }
