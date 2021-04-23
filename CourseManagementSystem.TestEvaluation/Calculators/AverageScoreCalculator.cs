@@ -7,23 +7,23 @@ namespace CourseManagementSystem.TestEvaluation.Calculators
     /// <summary>
     /// class responsible for calculating overall score for the submissions
     /// </summary>
-    public class AverageTestScoreCalculator
+    public class AverageScoreCalculator
     {
         /// <summary>
         /// calculate average score
         /// </summary>
-        /// <param name="testScores"></param>
+        /// <param name="scores"></param>
         /// <returns></returns>
-        public static double GetScore(IEnumerable<TestSubmissionScoreDto> testScores)
+        public static double GetScore(IEnumerable<ScoreWithWeightDto> scores)
         {
             // no given scores -> return 0
-            if (!testScores.Any())
+            if (!scores.Any())
             {
                 return 0;
             }
 
-            int weightSum = testScores.Sum(testScore => testScore.TestWeight);
-            double totalScoreSum = testScores.Sum(testScore => testScore.Score * testScore.TestWeight);
+            int weightSum = scores.Sum(testScore => testScore.Weight);
+            double totalScoreSum = scores.Sum(testScore => testScore.Score * testScore.Weight);
 
             return totalScoreSum / weightSum;
         }

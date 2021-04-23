@@ -6,16 +6,16 @@ using Xunit;
 namespace CourseManagementSystem.UnitTests
 {
     /// <summary>
-    /// tests for <see cref="AverageTestScoreCalculator"/> class
+    /// tests for <see cref="AverageScoreCalculator"/> class
     /// </summary>
-    public class AverageTestScoreCalculatorTests
+    public class AverageScoreCalculatorTests
     {
-        private IList<TestSubmissionScoreDto> testScores;
+        private IList<ScoreWithWeightDto> weightedScores;
         private readonly int decimalDigitPrecision = 5;
 
-        public AverageTestScoreCalculatorTests()
+        public AverageScoreCalculatorTests()
         {
-            testScores = new List<TestSubmissionScoreDto>();
+            weightedScores = new List<ScoreWithWeightDto>();
         }
 
         /// <summary>
@@ -24,15 +24,15 @@ namespace CourseManagementSystem.UnitTests
         [Fact]
         public void CalculateScore_Simple()
         {
-            testScores = new List<TestSubmissionScoreDto>
+            weightedScores = new List<ScoreWithWeightDto>
             {
-                new TestSubmissionScoreDto(1,1),
-                new TestSubmissionScoreDto(1,0),
-                new TestSubmissionScoreDto(1,0.5)
+                new ScoreWithWeightDto(1,1),
+                new ScoreWithWeightDto(1,0),
+                new ScoreWithWeightDto(1,0.5)
             };
             double expectedTotalScore = 0.5;
 
-            double totalScore = AverageTestScoreCalculator.GetScore(testScores);
+            double totalScore = AverageScoreCalculator.GetScore(weightedScores);
 
             Assert.Equal(expectedTotalScore, totalScore, decimalDigitPrecision);
         }
@@ -43,17 +43,17 @@ namespace CourseManagementSystem.UnitTests
         [Fact]
         public void GetScore_Complex()
         {
-            testScores = new List<TestSubmissionScoreDto>
+            weightedScores = new List<ScoreWithWeightDto>
             {
-                new TestSubmissionScoreDto(1,1),
-                new TestSubmissionScoreDto(10,0.7),
-                new TestSubmissionScoreDto(3,0.85),
-                new TestSubmissionScoreDto(5,1),
-                new TestSubmissionScoreDto(1,0.4),
+                new ScoreWithWeightDto(1,1),
+                new ScoreWithWeightDto(10,0.7),
+                new ScoreWithWeightDto(3,0.85),
+                new ScoreWithWeightDto(5,1),
+                new ScoreWithWeightDto(1,0.4),
             };
             double expectedTotalScore = (1 + 7 + 2.55 + 5 + 0.4) / (1 + 10 + 3 + 5 + 1);
 
-            double totalScore = AverageTestScoreCalculator.GetScore(testScores);
+            double totalScore = AverageScoreCalculator.GetScore(weightedScores);
 
             Assert.Equal(expectedTotalScore, totalScore, decimalDigitPrecision);
         }
@@ -64,7 +64,7 @@ namespace CourseManagementSystem.UnitTests
         [Fact]
         public void CalculateScore_NoScores()
         {
-            double totalScore = AverageTestScoreCalculator.GetScore(new List<TestSubmissionScoreDto>());
+            double totalScore = AverageScoreCalculator.GetScore(new List<ScoreWithWeightDto>());
             Assert.Equal(0, totalScore, decimalDigitPrecision);
         }
 
@@ -74,12 +74,12 @@ namespace CourseManagementSystem.UnitTests
         [Fact]
         public void CalculateScore_SingleScore()
         {
-            testScores = new List<TestSubmissionScoreDto>
+            weightedScores = new List<ScoreWithWeightDto>
             {
-                new TestSubmissionScoreDto(4,0.75)
+                new ScoreWithWeightDto(4,0.75)
             };
 
-            double totalScore = AverageTestScoreCalculator.GetScore(testScores);
+            double totalScore = AverageScoreCalculator.GetScore(weightedScores);
             Assert.Equal(0.75, totalScore, decimalDigitPrecision);
         }
 
@@ -89,17 +89,17 @@ namespace CourseManagementSystem.UnitTests
         [Fact]
         public void CalculateScore_OneTestOfBigWeight()
         {
-            testScores = new List<TestSubmissionScoreDto>
+            weightedScores = new List<ScoreWithWeightDto>
             {
-                new TestSubmissionScoreDto(10,1)
+                new ScoreWithWeightDto(10,1)
             };
 
             for (int i = 0; i < 10; i++)
             {
-                testScores.Add(new TestSubmissionScoreDto(1, 0));
+                weightedScores.Add(new ScoreWithWeightDto(1, 0));
             }
 
-            double totalScore = AverageTestScoreCalculator.GetScore(testScores);
+            double totalScore = AverageScoreCalculator.GetScore(weightedScores);
             Assert.Equal(0.5, totalScore, decimalDigitPrecision);
         }
 
@@ -109,13 +109,13 @@ namespace CourseManagementSystem.UnitTests
         [Fact]
         public void CalculateScore_Over100Percent()
         {
-            testScores = new List<TestSubmissionScoreDto>
+            weightedScores = new List<ScoreWithWeightDto>
             {
-                new TestSubmissionScoreDto(5,1.1),
-                new TestSubmissionScoreDto(5,1)
+                new ScoreWithWeightDto(5,1.1),
+                new ScoreWithWeightDto(5,1)
             };
 
-            double totalScore = AverageTestScoreCalculator.GetScore(testScores);
+            double totalScore = AverageScoreCalculator.GetScore(weightedScores);
             Assert.Equal(1.05, totalScore, decimalDigitPrecision);
         }
     }

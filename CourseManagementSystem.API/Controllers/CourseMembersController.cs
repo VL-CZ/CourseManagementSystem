@@ -4,6 +4,7 @@ using CourseManagementSystem.API.ViewModels;
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
 using CourseManagementSystem.TestEvaluation.Calculators;
+using CourseManagementSystem.TestEvaluation.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -84,6 +85,28 @@ namespace CourseManagementSystem.API.Controllers
             var grades = courseMemberService.GetGradesOf(id);
             return grades.Select(grade =>
                 new GradeDetailsVM(grade.Id.ToString(), grade.PercentualValue, grade.Topic, grade.Comment, grade.Weight));
+        }
+
+        /// <summary>
+        /// get average score of this <see cref="CourseMember"/>
+        /// </summary>
+        /// <param name="id">ID of the <see cref="CourseMember"/></param>
+        /// <returns>average score from test submissions and grades of this student (0=0%,1=100%)</returns>
+        [HttpGet("{id}/averageScore")]
+        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "id")]
+        public WrapperVM<double> GetAverageScore(string id)
+        {
+            var mappedGrades = courseMemberService.GetGradesOf(id)
+                .Select(grade => new ScoreWithWeightDto(grade.Weight, grade.PercentualValue));
+            var mappedTestSubmissions = testSubmissionService.GetAllSubmissionsOfCourseMember(id)
+                .Select(ts => new ScoreWithWeightDto(ts.Test.Weight, TestScoreCalculator.CalculateScore(ts)));
+            
+            var scoresWithWeights = new List<ScoreWithWeightDto>();
+            scoresWithWeights.AddRange(mappedGrades);
+            scoresWithWeights.AddRange(mappedTestSubmissions);
+
+            double averageScore = AverageScoreCalculator.GetScore(scoresWithWeights);
+            return new WrapperVM<double>(averageScore);
         }
     }
 }
