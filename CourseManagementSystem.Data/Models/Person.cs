@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CourseManagementSystem.Data.Models
 {
@@ -15,6 +12,5 @@ namespace CourseManagementSystem.Data.Models
         /// grades of this student
         /// </summary>
         public ICollection<CourseMember> CourseMemberships { get; set; } = new List<CourseMember>();
-
     }
 }
