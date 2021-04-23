@@ -5,6 +5,7 @@ import {AddCourseTestVM, CourseTestDetailsVM} from './viewmodels/courseTestVM';
 import {Observable, throwError} from 'rxjs';
 import {TestSubmissionWithUserInfoVM} from './viewmodels/testSubmissionVM';
 import {catchError, retry} from 'rxjs/operators';
+import {ErrorsVM} from './viewmodels/errorsVM';
 
 @Injectable({
   providedIn: 'root'
@@ -38,12 +39,7 @@ export class CourseTestService extends ApiService {
    * @param courseId Id of the course
    */
   public addToCourse(testToAdd: AddCourseTestVM, courseId: string): Observable<{}> {
-    return this.http.post(this.controllerUrl + courseId, testToAdd).pipe(retry(1),
-      catchError((response: HttpErrorResponse) => {
-        alert(JSON.stringify(response));
-        return throwError(response);
-      })
-    );
+    return this.httpPost(this.controllerUrl + courseId, testToAdd);
   }
 
   /**
@@ -51,7 +47,7 @@ export class CourseTestService extends ApiService {
    * @param testId id of the test
    */
   public getAllTestSubmissions(testId: string): Observable<TestSubmissionWithUserInfoVM[]> {
-    return this.http.get<TestSubmissionWithUserInfoVM[]>(this.controllerUrl + `${testId}/submissions`);
+    return this.httpGet<TestSubmissionWithUserInfoVM[]>(this.controllerUrl + `${testId}/submissions`);
   }
 
   /**
@@ -60,7 +56,7 @@ export class CourseTestService extends ApiService {
    * @param updatedTest new properties of the test
    */
   public updateTest(testId: string, updatedTest: AddCourseTestVM): Observable<{}> {
-    return this.http.put(this.controllerUrl + testId, updatedTest);
+    return this.httpPut(this.controllerUrl + testId, updatedTest);
   }
 
   /**
@@ -68,6 +64,6 @@ export class CourseTestService extends ApiService {
    * @param testId id of the test to publish
    */
   public publishTest(testId: string): Observable<{}> {
-    return this.http.post(this.controllerUrl + `${testId}/publish`, {});
+    return this.httpPost(this.controllerUrl + `${testId}/publish`, {});
   }
 }
