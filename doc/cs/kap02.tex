@@ -143,6 +143,8 @@ Další možnost by byla použít jako identifikátor číslo (např. typ int), 
 
 Dále jsou v projektu také rozhraní ICourseReferenceObject a ICourseMemberReferenceObject, které slouží k tomu, abychom mohli dále v aplikaci jednotně pracovat s objekty, které mají referenci na entitu Course, resp. CourseMember. Tyto rozhraní implementují pouze nějaké entity.
 
++ zmínit se o mazání entit
+
 V programu je dále třída CMSDbContext, která reprezentuje databázový kontext této aplikace. Každý objekt typu DbSet pak představuje jednu databázovou tabulku. Ve třídě je CMSDbContext tedy kolekce typu DbSet pro každou z entit.
 
 \begin{lstlisting}
@@ -226,6 +228,144 @@ V obou příkazech je potřeba specifikovat cílový a startup projekt. Cílový
 \newpage
 
 \subsection{Services}
+V tomto projektu se nachází pomocné služby pro komunikaci s databází. 
+
+Jako základ pro všechny služby slouží abstraktní třída DbService, která obsahuje referenci na databázový kontext aplikace a jedinou metodu CommitChanges(). Ta slouží k uložení změn provedených v kontextu do databáze. 
+
+To je potřeba, protože k uložení změn do databáze dojde až tehdy, když na databázovém kontextu zavoláme metodu SaveChanges(). Pokud bychom tedy například do databázového kontextu něco uložili (např. takto: dbContext.Grades.Add(new Grade()) a nezavolali metodu dbContext.SaveChanges(), tak by se data neuložila.
+
+\begin{lstlisting}
+/// <summary>
+/// class representing base database service
+/// </summary>
+public abstract class DbService : IDbService
+{
+	/// <summary>
+	/// context of the CMS database
+	/// </summary>
+	protected readonly CMSDbContext dbContext;
+	
+	/// <summary>
+	/// construct a new database service
+	/// </summary>
+	/// <param name="dbContext">CMS database context</param>
+	protected DbService(CMSDbContext dbContext)
+	{
+		this.dbContext = dbContext;
+	}
+	
+	/// <inheritdoc/>
+	public void CommitChanges()
+	{
+		dbContext.SaveChanges();
+	}
+}
+\end{lstlisting}
+
+Tato třída implementuje rozhraní IDbService, které obsahuje pouze metodu CommitChanges().
+
+Dále jsou ve složce Interfaces rozhraní pro další služby, ty jsou rozdělené podle entit (typicky máme pro jednu entitu jednu službu). Všechny tyto rozhraní také implementují rozhraní IDbService. 
+
+Například rozhraní ICourseService (slouží pro práci s kurzy) vypadá takto:
+\begin{lstlisting}
+public interface ICourseService : IDbService
+{
+	/// <summary>
+	/// get course by its id
+	/// </summary>
+	/// <param name="courseId">identifier of the course</param>
+	/// <returns></returns>
+	Course GetById(string courseId);
+	
+	/// <summary>
+	/// archive course by its id
+	/// </summary>
+	/// <param name="courseId">id of the course to delete</param>
+	void ArchiveById(string courseId);
+	
+	/// <summary>
+	/// add the course into the database
+	/// </summary>
+	/// <param name="course">course to add</param>
+	void AddCourse(Course course);
+	...
+\end{lstlisting}
+
+Ve složce Implementations jsou potom implementace těchto rozhraní. Můžeme vidět, že všechny implementace také dědí ze třídy DbService, a zároveň také tranzitivně implementují IDbService.
+
+Třída CourseService, která implementuje rozhraní ICourseService vypadá takto:
+\begin{lstlisting}
+public class CourseService : DbService, ICourseService
+{
+	public CourseService(CMSDbContext dbContext) : base(dbContext)
+	{ }
+	
+	/// <inheritdoc/>
+	public void ArchiveById(string courseId)
+	{
+		Course c = GetById(courseId);
+		c.IsArchived = true;
+	}
+	
+	/// <inheritdoc/>
+	public Course GetById(string courseId)
+	{
+		return dbContext.Courses.FindById(courseId);
+	}
+	
+	/// <inheritdoc/>
+	public void AddCourse(Course course)
+	{
+		dbContext.Courses.Add(course);
+	}
+	...
+\end{lstlisting}
+
+Vidíme, že služby typicky pracují s databázovým kontextem, a pracují s daty (vyhledávání, mazání, apod.).
+Dále si můžeme všimnout, že v žádné metodě se neukládájí změny do databáze (tzn. volání metody CommitChanges()). To je z toho důvodu, že ve vyšších vrstvách aplikace (např. API) v jedné metodě často voláme několik služeb, příp. několik metod z jedné služby. 
+Pokud bychom služby přímo ukládaly změny do databáze (metoda CommitChanges()), pak bychom se mohli lehce dostat to nekonzistentího stavu. To například tak, že při volání několika služeb v rámci jedné metody by 
+mohla některá ze služeb vyhodit výjimku, nicméně všechny služby zavolané předtím by už data uložily.
+
+Takže je na zodpovědnosti volajícího provést uložení změn do databáze, tedy zavolat metodu CommitChanges(), což je typicky poslední příkaz v dané metodě.
+Tím jsme tedy zajistili konzistenci dat - buď se do databáze uloží všechny změny provedené v databázovém kontextu, nebo žádné.
+
+Dále si můžeme všimnout, že ve službách pracujeme s identifikátory typu string, ale v databázi používáme typ Guid. To je z toho důvodu, že ve vyšších vrstvách aplikace se pohodlněji pracuje se stringy (např. často dostáváme ID jako URL parametr). Převod string <-> Guid pak řešíme ve službách.
+
+Ve složce Extensions jsou pak pomocné extension metody pro práci s některými třídami.
+
+Ve třídě DbSetExtensions se nachází extension metody pro třídu DbSet<T>. Vybereme si například metodu GetCourseIdOf, ta slouží k získání ID kurzu, ke kterému daný objekt, jenž má referenci na entitu Course, patří.
+\begin{lstlisting}
+/// <summary>
+/// get id of <see cref="Data.Models.Course"/> that the object belongs to
+/// </summary>
+/// <typeparam name="T">type of items</typeparam>
+/// <param name="dbSet">database set</param>
+/// <param name="objectId">identifier of the object we look for in <paramref name="dbSet"/></param>
+/// <returns></returns>
+public static string GetCourseIdOf<T>(this DbSet<T> dbSet, string objectId) where T : class, ICourseReferenceObject, IGuidIdObject
+{
+	return dbSet.Include(item => item.Course)
+		.Single(item => item.Id.ToString() == objectId)
+		.Course.Id.ToString();
+}
+\end{lstlisting}
+
+Vidíme, že toto je jeden z příkladů použití rozhraní ICourseReferenceObject, které se nachází v projektu Data.
+
+V projektu též máme rozhraní ICourseReferenceService, to implementují všechny služby, jejichž entity logicky patří k nějakému kurzu. Rozhraní obsahuje jedinou metodu GetCourseIdOf(string objectId), která získá ID kurzu, ke kterému daná entita patří. V implementaci této metodu pak typicky používáme extension metodu GetCourseIdOf pro třídu DbSet<T>. Například ve třídě CourseTestService vypadá implementace takto:
+
+\begin{lstlisting}
+public string GetCourseIdOf(string objectId)
+{
+	return dbContext.CourseTests.GetCourseIdOf(objectId);
+}
+\end{lstlisting}
+
+Podobně je v projektu i rozhraní ICourseMemberReferenceService, které používají služby, jejichž enity patří k entitě CourseMember.
+
+Použitím služeb jsme odstranili duplikátní kód (např. hledání kurzu podle ID se používá na několika místech ve vyšších vrstvách), a extrahovali některé složitější dotazy do samostatných metod. To je výhodné hlavně z toho důvodu, že je pak můžeme nezávisle otestovat. Další výhoda je, že vyšší vrstvy jsou odstíněny od použití ORM (a databázového kontextu), pouze volají tyto služby.
+
++ eager loading
 
 - pomocne sluzby pro komunikaci s databazi
 - vsechny dedi DbService + IDbService
@@ -233,6 +373,8 @@ V obou příkazech je potřeba specifikovat cílový a startup projekt. Cílový
 - typicky pro kazdou entitu 1 sluzba
 - extension metody pro praci s databazi
 obsahuje pomocné služby pro komunikaci s databází, 
+
+\newpage
 
 \subsection{API}
 
