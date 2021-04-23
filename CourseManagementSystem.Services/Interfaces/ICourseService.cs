@@ -13,10 +13,10 @@ namespace CourseManagementSystem.Services.Interfaces
         Course GetById(string courseId);
 
         /// <summary>
-        /// delete course by its id
+        /// archive course by its id
         /// </summary>
         /// <param name="courseId">id of the course to delete</param>
-        void DeleteById(string courseId);
+        void ArchiveById(string courseId);
 
         /// <summary>
         /// add the course into the database
