@@ -22,7 +22,7 @@ export class CourseMemberService extends ApiService {
    * @param courseMemberId id of the course member
    */
   public getById(courseMemberId: string): Observable<CourseMemberVM> {
-    return this.httpGet<CourseMemberVM>(this.controllerUrl + courseMemberId);
+    return this.httpGet<CourseMemberVM>(courseMemberId);
   }
 
   /**
@@ -31,7 +31,7 @@ export class CourseMemberService extends ApiService {
    * @param grade created grade (contains id)
    */
   public assignGrade(courseMemberId: string, grade: AddGradeVM): Observable<{}> {
-    return this.httpPost(this.controllerUrl + `${courseMemberId}/assignGrade`, grade);
+    return this.httpPost(`${courseMemberId}/assignGrade`, grade);
   }
 
   /**
@@ -39,7 +39,7 @@ export class CourseMemberService extends ApiService {
    * @param courseMemberId id of the course member
    */
   public getTestSubmissions(courseMemberId: string): Observable<TestSubmissionInfoVM[]> {
-    return this.httpGet<TestSubmissionInfoVM[]>(this.controllerUrl + `${courseMemberId}/submissions`);
+    return this.httpGet<TestSubmissionInfoVM[]>(`${courseMemberId}/submissions`);
   }
 
   /**
@@ -47,6 +47,6 @@ export class CourseMemberService extends ApiService {
    * @param courseMemberId id of the course member
    */
   public getGrades(courseMemberId: string): Observable<GradeDetailsVM[]> {
-    return this.httpGet<GradeDetailsVM[]>(this.controllerUrl + `${courseMemberId}/grades`);
+    return this.httpGet<GradeDetailsVM[]>(`${courseMemberId}/grades`);
   }
 }

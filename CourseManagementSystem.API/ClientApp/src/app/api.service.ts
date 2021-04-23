@@ -2,7 +2,6 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError, retry} from 'rxjs/operators';
 import {ErrorsVM} from './viewmodels/errorsVM';
-import {TestSubmissionWithUserInfoVM} from './viewmodels/testSubmissionVM';
 
 /**
  * base class for all API services
@@ -61,12 +60,12 @@ export abstract class ApiService {
 
   /**
    * execute HTTP GET request to the given URL
-   * @param url The endpoint URL
+   * @param actionUrl URL of the action (will be added to {hostUrl}/{controllerUrl})
    * @protected
    * @returns An Observable of the HTTPResponse, with a response body in the requested type
    */
-  protected httpGet<T>(url: string): Observable<T> {
-    return this.http.get<T>(url, {responseType: 'blob'}).pipe(
+  protected httpGet<T>(actionUrl: string): Observable<T> {
+    return this.http.get<T>(this.controllerUrl + actionUrl).pipe(
       retry(this.retryCount),
       catchError(this.handleError)
     );
@@ -74,13 +73,13 @@ export abstract class ApiService {
 
   /**
    * execute HTTP POST request to the given URL
-   * @param url The endpoint URL
+   * @param actionUrl URL of the action (will be added to {hostUrl}/{controllerUrl})
    * @param body HTTP request body
    * @protected
    * @returns An Observable of the HTTPResponse, with a response body in the requested type
    */
-  protected httpPost<T>(url: string, body: any): Observable<T> {
-    return this.http.post<T>(url, body).pipe(
+  protected httpPost<T>(actionUrl: string, body: any): Observable<T> {
+    return this.http.post<T>(this.controllerUrl + actionUrl, body).pipe(
       retry(this.retryCount),
       catchError(this.handleError)
     );
@@ -88,13 +87,13 @@ export abstract class ApiService {
 
   /**
    * execute HTTP PUT request to the given URL
-   * @param url The endpoint URL
+   * @param actionUrl URL of the action (will be added to {hostUrl}/{controllerUrl})
    * @param body HTTP request body
    * @protected
    * @returns An Observable of the HTTPResponse, with a response body in the requested type
    */
-  protected httpPut<T>(url: string, body: any): Observable<T> {
-    return this.http.put<T>(url, body).pipe(
+  protected httpPut<T>(actionUrl: string, body: any): Observable<T> {
+    return this.http.put<T>(this.controllerUrl + actionUrl, body).pipe(
       retry(this.retryCount),
       catchError(this.handleError)
     );
@@ -102,12 +101,12 @@ export abstract class ApiService {
 
   /**
    * execute HTTP DELETE request to the given URL
-   * @param url The endpoint URL
+   * @param actionUrl URL of the action (will be added to {hostUrl}/{controllerUrl})
    * @protected
    * @returns An Observable of the response, with the response body of type Object
    */
-  protected httpDelete(url: string): Observable<{}> {
-    return this.http.delete(url).pipe(
+  protected httpDelete(actionUrl: string): Observable<{}> {
+    return this.http.delete(this.controllerUrl + actionUrl).pipe(
       retry(this.retryCount),
       catchError(this.handleError)
     );

@@ -18,6 +18,6 @@ export class GradeService extends ApiService {
    * @param gradeId
    */
   public delete(gradeId: string): Observable<{}> {
-    return this.httpDelete(this.controllerUrl + `delete/${gradeId}`);
+    return this.httpDelete(`delete/${gradeId}`);
   }
 }

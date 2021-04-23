@@ -1,11 +1,9 @@
 import {Inject, Injectable} from '@angular/core';
 import {ApiService} from './api.service';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {AddCourseTestVM, CourseTestDetailsVM} from './viewmodels/courseTestVM';
-import {Observable, throwError} from 'rxjs';
+import {Observable} from 'rxjs';
 import {TestSubmissionWithUserInfoVM} from './viewmodels/testSubmissionVM';
-import {catchError, retry} from 'rxjs/operators';
-import {ErrorsVM} from './viewmodels/errorsVM';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +20,7 @@ export class CourseTestService extends ApiService {
    * @param testId
    */
   public getById(testId: string): Observable<CourseTestDetailsVM> {
-    return this.http.get<CourseTestDetailsVM>(this.controllerUrl + testId);
+    return this.http.get<CourseTestDetailsVM>(testId);
   }
 
   /**
@@ -30,7 +28,7 @@ export class CourseTestService extends ApiService {
    * @param testId
    */
   public delete(testId: string): Observable<{}> {
-    return this.http.delete(this.controllerUrl + testId);
+    return this.http.delete(testId);
   }
 
   /**
@@ -39,7 +37,7 @@ export class CourseTestService extends ApiService {
    * @param courseId Id of the course
    */
   public addToCourse(testToAdd: AddCourseTestVM, courseId: string): Observable<{}> {
-    return this.httpPost(this.controllerUrl + courseId, testToAdd);
+    return this.httpPost(courseId, testToAdd);
   }
 
   /**
@@ -47,7 +45,7 @@ export class CourseTestService extends ApiService {
    * @param testId id of the test
    */
   public getAllTestSubmissions(testId: string): Observable<TestSubmissionWithUserInfoVM[]> {
-    return this.httpGet<TestSubmissionWithUserInfoVM[]>(this.controllerUrl + `${testId}/submissions`);
+    return this.httpGet<TestSubmissionWithUserInfoVM[]>(`${testId}/submissions`);
   }
 
   /**
@@ -56,7 +54,7 @@ export class CourseTestService extends ApiService {
    * @param updatedTest new properties of the test
    */
   public updateTest(testId: string, updatedTest: AddCourseTestVM): Observable<{}> {
-    return this.httpPut(this.controllerUrl + testId, updatedTest);
+    return this.httpPut(testId, updatedTest);
   }
 
   /**
@@ -64,6 +62,6 @@ export class CourseTestService extends ApiService {
    * @param testId id of the test to publish
    */
   public publishTest(testId: string): Observable<{}> {
-    return this.httpPost(this.controllerUrl + `${testId}/publish`, {});
+    return this.httpPost(`${testId}/publish`, {});
   }
 }

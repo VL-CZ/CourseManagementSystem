@@ -23,7 +23,7 @@ export class CourseService extends ApiService {
    * @returns created course info
    */
   public create(courseVM: AddCourseVM): Observable<{}> {
-    return this.httpPost(this.controllerUrl + 'create', courseVM);
+    return this.httpPost('create', courseVM);
   }
 
   /**
@@ -31,7 +31,7 @@ export class CourseService extends ApiService {
    * @param id identifier of the course
    */
   public delete(id: string): Observable<{}> {
-    return this.httpDelete(this.controllerUrl + id);
+    return this.httpDelete(id);
   }
 
   /**
@@ -39,7 +39,7 @@ export class CourseService extends ApiService {
    * @param courseId identifier of the course
    */
   public getAllMembers(courseId: string): Observable<CourseMemberVM[]> {
-    return this.httpGet<CourseMemberVM[]>(this.controllerUrl + `${courseId}/members`);
+    return this.httpGet<CourseMemberVM[]>(`${courseId}/members`);
   }
 
   /**
@@ -47,7 +47,7 @@ export class CourseService extends ApiService {
    * @param courseId identifier of the course
    */
   public getAllFiles(courseId: string): Observable<CourseFileVM[]> {
-    return this.httpGet<CourseFileVM[]>(this.controllerUrl + `${courseId}/files`);
+    return this.httpGet<CourseFileVM[]>(`${courseId}/files`);
   }
 
   /**
@@ -55,7 +55,7 @@ export class CourseService extends ApiService {
    * @param courseId identifier of the course
    */
   public getAllTests(courseId: string): Observable<CourseTestDetailsVM[]> {
-    return this.httpGet<CourseTestDetailsVM[]>(this.controllerUrl + `${courseId}/tests`);
+    return this.httpGet<CourseTestDetailsVM[]>(`${courseId}/tests`);
   }
 
   /**
@@ -63,6 +63,6 @@ export class CourseService extends ApiService {
    * @param courseId identifier of the course
    */
   public getAllPosts(courseId: string): Observable<ForumPostVM[]> {
-    return this.httpGet<ForumPostVM[]>(this.controllerUrl + `${courseId}/posts`);
+    return this.httpGet<ForumPostVM[]>(`${courseId}/posts`);
   }
 }

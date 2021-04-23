@@ -22,7 +22,7 @@ export class TestSubmissionService extends ApiService {
    * @param submission test to submit
    */
   public submit(submission: SubmitTestVM): Observable<WrapperVM<string>> {
-    return this.httpPost<WrapperVM<string>>(this.controllerUrl + `${submission.testId}/submit`, submission);
+    return this.httpPost<WrapperVM<string>>(`${submission.testId}/submit`, submission);
   }
 
   /**
@@ -30,7 +30,7 @@ export class TestSubmissionService extends ApiService {
    * @param testId id of the test we submit
    */
   public getEmptySubmission(testId: string): Observable<SubmitTestVM> {
-    return this.httpGet<SubmitTestVM>(this.controllerUrl + `emptyTest/${testId}`);
+    return this.httpGet<SubmitTestVM>(`emptyTest/${testId}`);
   }
 
   /**
@@ -38,7 +38,7 @@ export class TestSubmissionService extends ApiService {
    * @param submissionId id of the test submission
    */
   public getSubmissionById(submissionId: string): Observable<TestWithSubmissionVM> {
-    return this.httpGet<TestWithSubmissionVM>(this.controllerUrl + submissionId);
+    return this.httpGet<TestWithSubmissionVM>(submissionId);
   }
 
   /**
@@ -47,6 +47,6 @@ export class TestSubmissionService extends ApiService {
    * @param evaluatedTestSubmission evaluated and commented test submission
    */
   public updateSubmission(submissionId: string, evaluatedTestSubmission: EvaluatedTestSubmissionVM): Observable<{}> {
-    return this.httpPut(this.controllerUrl + submissionId, evaluatedTestSubmission);
+    return this.httpPut(submissionId, evaluatedTestSubmission);
   }
 }
