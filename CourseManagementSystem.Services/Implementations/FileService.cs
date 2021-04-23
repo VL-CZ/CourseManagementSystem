@@ -11,7 +11,7 @@ namespace CourseManagementSystem.Services.Implementations
 {
     public class FileService : DbService, IFileService
     {
-        public FileService(CMSDbContext dbContext):base(dbContext)
+        public FileService(CMSDbContext dbContext) : base(dbContext)
         {
         }
 
@@ -45,7 +45,7 @@ namespace CourseManagementSystem.Services.Implementations
             }
 
             Course course = dbContext.Courses.FindById(courseId);
-            var fileToAdd = new CourseFile(fileData, file.Name, file.ContentType,course);
+            var fileToAdd = new CourseFile(fileData, file.FileName, file.ContentType, course);
             dbContext.Files.Add(fileToAdd);
         }
     }

@@ -20,7 +20,7 @@ export class CourseTestService extends ApiService {
    * @param testId
    */
   public getById(testId: string): Observable<CourseTestDetailsVM> {
-    return this.http.get<CourseTestDetailsVM>(testId);
+    return this.httpGet<CourseTestDetailsVM>(testId);
   }
 
   /**
@@ -28,7 +28,7 @@ export class CourseTestService extends ApiService {
    * @param testId
    */
   public delete(testId: string): Observable<{}> {
-    return this.http.delete(testId);
+    return this.httpDelete(testId);
   }
 
   /**
