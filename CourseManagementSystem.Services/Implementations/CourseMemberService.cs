@@ -4,6 +4,7 @@ using CourseManagementSystem.Services.Interfaces;
 using CourseManagementSystem.Services.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace CourseManagementSystem.Services.Implementations
 {
@@ -47,6 +48,15 @@ namespace CourseManagementSystem.Services.Implementations
         {
             CourseMember cm = GetMemberWithUser(id);
             dbContext.CourseMembers.Remove(cm);
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<Grade> GetGradesOf(string courseMemberId)
+        {
+            return dbContext.CourseMembers
+                .Include(cm => cm.Grades)
+                .Single(cm => cm.Id.ToString() == courseMemberId)
+                .Grades;
         }
     }
 }

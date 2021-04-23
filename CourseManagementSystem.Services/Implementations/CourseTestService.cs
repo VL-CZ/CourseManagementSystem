@@ -26,6 +26,14 @@ namespace CourseManagementSystem.Services.Implementations
         public void Delete(string testId)
         {
             var testToRemove = GetWithQuestions(testId);
+
+            // remove all questions
+            foreach (var question in testToRemove.Questions)
+            {
+                dbContext.TestQuestions.Remove(question);
+            }
+
+            // remove the test
             dbContext.CourseTests.Remove(testToRemove);
         }
 

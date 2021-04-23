@@ -52,7 +52,7 @@ namespace CourseManagementSystem.API.Controllers
         {
             CourseMember cm = courseMemberService.GetMemberWithUser(id);
             Grade grade = new Grade(gradeVM.PercentualValue, gradeVM.Comment, gradeVM.Topic, gradeVM.Weight, cm);
-            
+
             gradeService.AssignGrade(grade);
 
             gradeService.CommitChanges();
@@ -81,8 +81,8 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "id")]
         public IEnumerable<GradeDetailsVM> GetGrades(string id)
         {
-            var courseMember = courseMemberService.GetMemberWithUser(id);
-            return courseMember.Grades.Select(grade => 
+            var grades = courseMemberService.GetGradesOf(id);
+            return grades.Select(grade =>
                 new GradeDetailsVM(grade.Id.ToString(), grade.PercentualValue, grade.Topic, grade.Comment, grade.Weight));
         }
     }

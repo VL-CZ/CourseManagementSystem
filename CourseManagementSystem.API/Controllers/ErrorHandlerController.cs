@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CourseManagementSystem.API.Controllers
 {
     /// <summary>
-    /// 
+    /// controller for error handling
     /// </summary>
     [ApiExplorerSettings(IgnoreApi = true)]
     public class ErrorHandlerController : ControllerBase

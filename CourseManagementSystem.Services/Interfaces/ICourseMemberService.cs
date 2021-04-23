@@ -1,4 +1,5 @@
 ﻿using CourseManagementSystem.Data.Models;
+using System.Collections.Generic;
 
 namespace CourseManagementSystem.Services.Interfaces
 {
@@ -28,9 +29,16 @@ namespace CourseManagementSystem.Services.Interfaces
         bool BelongsTo(string courseMemberId, string personId);
 
         /// <summary>
-        /// remove person with selected ID
+        /// remove CourseMember with selected ID
         /// </summary>
         /// <param name="id">identifier of the <see cref="CourseMember"/> instance</param>
         void RemoveMemberById(string id);
+
+        /// <summary>
+        /// get all grades of the given CourseMember
+        /// </summary>
+        /// <param name="courseMemberId">identifier of the <see cref="CourseMember"/></param>
+        /// <returns></returns>
+        IEnumerable<Grade> GetGradesOf(string courseMemberId);
     }
 }
