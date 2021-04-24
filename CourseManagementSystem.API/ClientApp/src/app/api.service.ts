@@ -1,7 +1,7 @@
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError, retry} from 'rxjs/operators';
-import {ErrorsVM} from './viewmodels/errorsVM';
+import {ErrorsDictionary, ValidationError} from './viewmodels/errorsVM';
 
 /**
  * base class for all API services
@@ -44,16 +44,16 @@ export abstract class ApiService {
    * @private
    */
   private handleError(response: HttpErrorResponse) {
-    const errorVM: ErrorsVM = response.error;
+    const errorObject: ValidationError = response;
+    const errorMessages: string[] = [];
 
-    const errors: string[] = [];
-
-    for (let key in errorVM.errors) {
-      errors.push(errorVM.errors[key]);
+    const errors = errorObject.error.errors;
+    for (const key of Object.keys(errors)) {
+      errorMessages.push(errors[key]);
     }
 
-    alert(errors);
-    console.log(errors);
+    alert(errorMessages);
+    console.log(errorMessages);
 
     return throwError(response);
   }
