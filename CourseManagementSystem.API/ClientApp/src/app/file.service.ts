@@ -18,8 +18,7 @@ export class FileService extends ApiService {
    * @param fileId
    */
   public download(fileId: string): Observable<Blob> {
-    // window.open(this.controllerUrl + fileId);
-    return this.http.get(this.controllerUrl + fileId, {responseType: 'blob'});
+    return this.httpGetBlob(fileId);
   }
 
   /**
