@@ -8,12 +8,22 @@ TODO: u každé dopodrobna rozepsat co obsahuje, k čemu slouží + ukázky kód
 
 \subsection{Data}
 
-Tento projekt se stará primárně o komunikaci s databází, pro tento účel jsem použil ORM framework Entity Framework Core. 
+Tento projekt se stará primárně o komunikaci s databází, pro tento účel jsme použili ORM framework Entity Framework Core. 
 
-Ve složce Models jsou třídy reprezentující databázové entity. Každá z entit pak v databázi představuje jednu tabulku. V aplikaci jsem použil tyto entity:
+Ve složce Models jsou třídy reprezentující databázové entity. Každá z entit pak v databázi představuje jednu tabulku. V aplikaci jsme použili tyto entity:
+
+\begin{table}[ht]
+	\centering
+	\resizebox{\textwidth}{!}{
+	\begin{tabular}{| l | l |}
+		Entita & reprezentuje \\
+		a & členství uživatele v daném kurzu. K této entitě se pak vážou všechny známky a odeslané testy.
+	\end{tabular}
+}
+\end{table}
 
 \begin{itemize}
-	\item Course - tato entita reprezentuje kurz
+	\item Course -- tato entita reprezentuje kurz
 	\item CourseFile - reprezentuje nějaký soubor sdílený v kurzu
 	\item CourseMember - představuje členství uživatele v daném kurzu. K této entitě se pak vážou všechny známky a odeslané testy.
 	\item CourseTest - představuje jeden test v kurzu
@@ -67,38 +77,13 @@ public class Course : IGuidIdObject
 	[Required]
 	public string Name { get; set; }
 	
-	/// <summary>
-	/// admin of the course
-	/// </summary>
-	[Required]
-	public Person Admin { get; set; }
-	
-	/// <summary>
-	/// members of the course (except admin)
-	/// </summary>
-	public ICollection<CourseMember> Members { get; set; }
-	
-	/// <summary>
-	/// shared files in this course
-	/// </summary>
-	public ICollection<CourseFile> Files { get; set; }
-	
-	/// <summary>
-	/// tests in this course
-	/// </summary>
-	public ICollection<CourseTest> Tests { get; set; }
-	
-	/// <summary>
-	/// posts in the forum of this course
-	/// </summary>
-	public ICollection<ForumPost> ForumPosts { get; set; }
-}
+	...
 \end{lstlisting}
 
-Vidíme, že každá entita obsahuje veřejné vlastnosti (public properties) s gettery a settery. Tyto vlastnosti budou v databázové tabulce reprezentovány jako sloupce. Některé vlastnosti (jako např. Id) obsahují ještě doplňující atributy, ty slouží k upřesnění informací o dané vlastnosti. Například atribut [Key] určuje, že tato vlastnost bude v databázi primární klíč, atribut [Required] určuje, že daný sloupec bude v tabulce u všech záznamů povinný (tedy hodnoty budou NOT NULL).
+Vidíme, že každá entita obsahuje veřejné vlastnosti (public properties) s gettery a settery. Tyto vlastnosti budou v databázové tabulce reprezentovány jako sloupce. Některé z nich (jako např. Id) obsahují ještě doplňující atributy, ty slouží k upřesnění informací o dané vlastnosti. Například atribut [Key] určuje, že tato vlastnost bude v databázi primární klíč, atribut [Required] určuje, že daný sloupec bude v tabulce u všech záznamů povinný (tedy hodnoty budou NOT NULL).
 Dále musí každá entita obsahovat konstruktor bez parametrů.
 
-Vazby mezi entitami jsou reprezentované pomocí tzv. navigačních vlastností. V případě, že chci vytvořit vazbu typu one-to-many mezi entitami A a B, tak stačí do vlastností třídy A přidat kolekci objektů typu B, a naopak do třídy B vlastnost typu A. Framework pak při provádění migrace vytvoří v databázové tabulce entity B vytvoří sloupec s cizím klíčem, který bude obsahovat identifikátor entity A, ke které patří.
+Vazby mezi entitami jsou reprezentované pomocí tzv. navigačních vlastností. V případě, že chceme vytvořit vazbu typu one-to-many mezi entitami A a B, stačí do vlastností třídy A přidat kolekci objektů typu B, a naopak do třídy B vlastnost typu A. Framework pak při provádění migrace vytvoří v databázové tabulce entity B vytvoří sloupec s cizím klíčem, který bude obsahovat identifikátor entity A, ke které patří.
 
 V aplikaci je vazba one-to-many použita mimo jiné mezi entitami Course a CourseTest, a to tak, že každý test je obsažen v právě jednom kurzu, a v daném kurzu může být N testů.
 Kód pak tedy vypadá takto: ve třídě Course je kolekce objektů typu CourseTest
@@ -122,7 +107,7 @@ public Course Course { get; set; }
 
 Po provedení databázové migrace (viz. dále) se v tabulce CourseTest vytvoří sloupec CourseId s cizím klíčem, který odkazuje na identifikátor kurzu (tzn. vlastnost Course.Id).
 
-Také si můžeme všimnout, že všechny entity (kromě entity Person) implementují rozhraní IGuidObject. To je jednoduché rozhraní, které obsahuje pouze jednu vlastnost - Id typu Guid. Tímto jsem si zajistil jednotu identifikátorů, tedy že všechny entity, které toto rozhraní implementují, budou mít identifikátor typu Guid.
+Také si můžeme všimnout, že všechny entity (kromě entity Person) implementují rozhraní IGuidObject. To je jednoduché rozhraní, které obsahuje pouze jednu vlastnost - Id typu Guid. Tímto máme zajištěnou jednotu identifikátorů, tedy že všechny entity, které toto rozhraní implementují, budou mít identifikátor typu Guid.
 
 \begin{lstlisting}
 /// <summary>
@@ -138,12 +123,10 @@ public interface IGuidIdObject
 \end{lstlisting}
 
 
-Pro typ Guid jsem se rozhodl hlavně z toho důvodu, že vestavěné tabulky frameworku (např. Identity) mají také řetězcové identifikátory. Navíc se pak zjednoduší práce ve frontend části (není potřeba parsovat string na int např. v klientské části při práci s URL). Tyto identifikátory generuje databáze, takže je zajištěno, že jsou unikátní.
+Typ Guid jsme zvolili hlavně z toho důvodu, že vestavěné tabulky frameworku (např. Identity) mají také řetězcové identifikátory. Navíc se pak zjednoduší práce ve frontend části (není potřeba parsovat string na int např. v klientské části při práci s URL). Tyto identifikátory generuje databáze, takže je zajištěno, že jsou unikátní.
 Další možnost by byla použít jako identifikátor číslo (např. typ int), ale vzhledem k výše uvedeným argumentům je typ Guid v tomto případě lepší možnost.
 
-Dále jsou v projektu také rozhraní ICourseReferenceObject a ICourseMemberReferenceObject, které slouží k tomu, abychom mohli dále v aplikaci jednotně pracovat s objekty, které mají referenci na entitu Course, resp. CourseMember. Tyto rozhraní implementují pouze nějaké entity.
-
-+ zmínit se o mazání entit
+Dále se v projektu nachází také rozhraní ICourseReferenceObject a ICourseMemberReferenceObject, které slouží k tomu, abychom mohli dále v aplikaci jednotně pracovat s objekty, které mají referenci na entitu Course, resp. CourseMember. Tyto rozhraní implementují pouze nějaké entity.
 
 V programu je dále třída CMSDbContext, která reprezentuje databázový kontext této aplikace. Každý objekt typu DbSet pak představuje jednu databázovou tabulku. Ve třídě je CMSDbContext tedy kolekce typu DbSet pro každou z entit.
 
@@ -152,34 +135,24 @@ public DbSet<Grade> Grades { get; set; }
 
 public DbSet<Course> Courses { get; set; }
 
-public DbSet<CourseMember> CourseMembers { get; set; }
-
-public DbSet<CourseFile> Files { get; set; }
-
-public DbSet<CourseTest> CourseTests { get; set; }
-
-public DbSet<TestQuestion> TestQuestions { get; set; }
-
-public DbSet<TestSubmission> TestSubmissions { get; set; }
-
-public DbSet<TestSubmissionAnswer> TestSubmissionAnswers { get; set; }
-
-public DbSet<ForumPost> Posts { get; set; }
+...
 \end{lstlisting}
 
-Jediná výjimka je entita Person, která dědí z třídy IdentityUser, a jejíž DbSet je nakonfigurovaný ve frameworku. 
+Jediná výjimka je entita Person, která dědí ze třídy IdentityUser, a jejíž DbSet je nakonfigurovaný ve frameworku. 
 
-V programu pak dále používám ke komunikaci s databází pouze třídu CMSDbContext a objekty typu DbSet. Třida DbSet<TEntity> implementuje rozhraní IQueryable<TEntity>, takže na ní lze použít LINQ. Takže pokud bych chtěl například vybrat všechny kurzy, jejiž jméno začíná na písmeno C, tak stačí použít LINQ dotaz
+V programu pak dále používáme ke komunikaci s databází pouze třídu CMSDbContext a objekty typu DbSet. Třida DbSet<TEntity> implementuje rozhraní IQueryable<TEntity>, takže na ní lze použít LINQ. Takže pokud bych chtěl například vybrat všechny kurzy, jejiž jméno začíná na písmeno C, pak stačí použít následující LINQ dotaz
 \begin{lstlisting}
 dbContext.Courses.Where(course => course.Name.StartsWith("C"))
 \end{lstlisting}
 kde proměnná dbContext je instance třídy CMSDbContext.
 
-V programu je dále složka Migrations. Při vývoji jsem používal princip Code first, tedy že v kódu specifikuji entity pomocí klasických tříd. Framework se pak postará o vytvoření databázových tabulek z tohoto kódu.
+Ve třídě CMSDbContext je také metoda ConfigureForeignKeys, která provede konfiguraci cizích klíčů v aplikaci. Všechny políčka s cizími klíči jsou v databázi povinné (tzn. NOT NULL), to je zajištěno pomocí atributu [Required] daných vlastností. Nastavením DeleteBehavior.Restrict u cizích klíčů zajistíme, že databáze zůstane v konzistentním stavu. Pokud bychom tedy chtěli smazat entitu, pak na ní nesmí pomocí cizích klíčů odkazovat jiné entity. V opačném případě program při zavolání metody SaveChanges() na databázovém kontextu vyhodí výjimku.
 
-Pokud jsem tedy nějak změnil některou z entit (to může být např. přidání vlastnosti, změna jména vlastnosti, apod.), tak pomocí ORM mohu vygenerovat soubor popisující tzv. databázovou migraci, která slouží k aplikaci změn z kódu do databáze. Ke každé migraci se vygeneruje jeden soubor, který obsahuje popis změn, které se později provedou v databázi.
+V programu je dále složka Migrations. Při vývoji byl použit princip Code first, tedy že v kódu specifikujeme entity pomocí klasických tříd. Framework se pak postará o vytvoření databázových tabulek z tohoto kódu.
 
-K vytváření migrací jsem použil nástroj CLI tools for Entity Framework Core. https://docs.microsoft.com/cs-cz/ef/core/cli/dotnet. Pro vygenerování migrace ze změn v kódu jsem potom použil příkaz:
+Pokud jsem tedy nějak změníme některou z entit (to může být např. přidání vlastnosti, změna jména vlastnosti, apod.), pak pomocí ORM můžeme vygenerovat soubor popisující tzv. databázovou migraci, která slouží k aplikaci změn z kódu do databáze. Ke každé migraci se vygeneruje jeden soubor, který obsahuje popis změn, které se později provedou v databázi.
+
+K vytváření migrací jsem použijeme nástroj CLI tools for Entity Framework Core. https://docs.microsoft.com/cs-cz/ef/core/cli/dotnet. Pro vygenerování migrace ze změn v kódu použijeme příkaz:
 
 \begin{lstlisting}
 dotnet ef migrations add {migration_name} 
@@ -189,8 +162,8 @@ dotnet ef migrations add {migration_name}
 
 Tímto se vytvoří soubor popisující změny v migraci, ale databáze zatím zůstala beze změny. Tento soubor obsahuje třídu, jenž dědí ze třídy Migration a obsahuje metody Up a Down. V metodě Up je popis změn, které se provedou při aplikaci této migrace, naopak v metodě Down je popis změn, které se provedou v případě odstranění migrace.
 
-Jako příklad jsem si vybral migraci, která obsahuje přidání vlastnosti ScoreWeight k entitě CourseTest (tato vlastnost popisuje váhu testu).
-Vygenerovaný kód migrace pak vypadá takto:
+Jako příklad si můžeme představit migraci, která obsahuje přidání vlastnosti ScoreWeight k entitě CourseTest (tato vlastnost popisuje váhu testu).
+Vygenerovaný kód migrace vypadá takto:
 
 \begin{lstlisting}
 public partial class TestWeight_added : Migration
@@ -213,7 +186,7 @@ public partial class TestWeight_added : Migration
 }
 \end{lstlisting}
 
-Pro promítnutí změn do databáze jsem pak použil příkaz:
+Pro promítnutí změn do databáze následně použijeme příkaz:
 
 \begin{lstlisting}
 dotnet ef database update 
@@ -230,9 +203,13 @@ V obou příkazech je potřeba specifikovat cílový a startup projekt. Cílový
 \subsection{Services}
 V tomto projektu se nachází pomocné služby pro komunikaci s databází. 
 
-Jako základ pro všechny služby slouží abstraktní třída DbService, která obsahuje referenci na databázový kontext aplikace a jedinou metodu CommitChanges(). Ta slouží k uložení změn provedených v kontextu do databáze. 
+Jako základ pro všechny služby slouží abstraktní třída DbService, která obsahuje referenci na databázový kontext aplikace a jedinou metodu CommitChanges(). Ta slouží k uložení změn provedených v databázovém kontextu do databáze. 
 
-To je potřeba, protože k uložení změn do databáze dojde až tehdy, když na databázovém kontextu zavoláme metodu SaveChanges(). Pokud bychom tedy například do databázového kontextu něco uložili (např. takto: dbContext.Grades.Add(new Grade()) a nezavolali metodu dbContext.SaveChanges(), tak by se data neuložila.
+To je potřeba, protože k uložení změn do databáze dojde až tehdy, když na databázovém kontextu zavoláme metodu SaveChanges(). Pokud bychom tedy například do databázového kontextu něco uložili (např. takto: 
+\begin{lstlisting}
+dbContext.Grades.Add(new Grade())
+\end{lstlisting}
+a nezavolali metodu dbContext.SaveChanges(), data by se neuložila.
 
 \begin{lstlisting}
 /// <summary>
@@ -291,9 +268,10 @@ public interface ICourseService : IDbService
 	...
 \end{lstlisting}
 
-Ve složce Implementations jsou potom implementace těchto rozhraní. Můžeme vidět, že všechny implementace také dědí ze třídy DbService, a zároveň také tranzitivně implementují IDbService.
+Ve složce Implementations jsou potom implementace těchto rozhraní. Můžeme vidět, že všechny implementace dědí ze třídy DbService, a zároveň také tranzitivně implementují IDbService.
 
-Třída CourseService, která implementuje rozhraní ICourseService vypadá takto:
+Například třída CourseService, která implementuje rozhraní ICourseService vypadá takto:
+
 \begin{lstlisting}
 public class CourseService : DbService, ICourseService
 {
@@ -321,15 +299,15 @@ public class CourseService : DbService, ICourseService
 	...
 \end{lstlisting}
 
-Vidíme, že služby typicky pracují s databázovým kontextem, a pracují s daty (vyhledávání, mazání, apod.).
+Vidíme, že služby typicky pracují s databázovým kontextem, a s daty (vyhledávání, mazání, apod.).
 Dále si můžeme všimnout, že v žádné metodě se neukládájí změny do databáze (tzn. volání metody CommitChanges()). To je z toho důvodu, že ve vyšších vrstvách aplikace (např. API) v jedné metodě často voláme několik služeb, příp. několik metod z jedné služby. 
-Pokud bychom služby přímo ukládaly změny do databáze (metoda CommitChanges()), pak bychom se mohli lehce dostat to nekonzistentího stavu. To například tak, že při volání několika služeb v rámci jedné metody by 
+Pokud bychom v metodách služeb přímo ukládali změny do databáze (metoda CommitChanges()), pak bychom se mohli lehce dostat to nekonzistentního stavu. To například tak, že při volání několika služeb v rámci jedné metody by 
 mohla některá ze služeb vyhodit výjimku, nicméně všechny služby zavolané předtím by už data uložily.
 
 Takže je na zodpovědnosti volajícího provést uložení změn do databáze, tedy zavolat metodu CommitChanges(), což je typicky poslední příkaz v dané metodě.
 Tím jsme tedy zajistili konzistenci dat - buď se do databáze uloží všechny změny provedené v databázovém kontextu, nebo žádné.
 
-Dále si můžeme všimnout, že ve službách pracujeme s identifikátory typu string, ale v databázi používáme typ Guid. To je z toho důvodu, že ve vyšších vrstvách aplikace se pohodlněji pracuje se stringy (např. často dostáváme ID jako URL parametr). Převod string <-> Guid pak řešíme ve službách.
+Dále si můžeme všimnout, že ve službách pracujeme s identifikátory typu string, ale v databázi používáme typ Guid. To je z toho důvodu, že ve vyšších vrstvách aplikace se pohodlněji pracuje se stringy (např. často dostáváme ID jako URL parametr). Převod mezi typy string a Guid pak řešíme ve službách.
 
 Ve složce Extensions jsou pak pomocné extension metody pro práci s některými třídami.
 
@@ -361,18 +339,11 @@ public string GetCourseIdOf(string objectId)
 }
 \end{lstlisting}
 
-Podobně je v projektu i rozhraní ICourseMemberReferenceService, které používají služby, jejichž enity patří k entitě CourseMember.
+Podobně je v projektu i rozhraní ICourseMemberReferenceService, které používají služby, jejichž entity mají referenci na třídu CourseMember.
 
 Použitím služeb jsme odstranili duplikátní kód (např. hledání kurzu podle ID se používá na několika místech ve vyšších vrstvách), a extrahovali některé složitější dotazy do samostatných metod. To je výhodné hlavně z toho důvodu, že je pak můžeme nezávisle otestovat. Další výhoda je, že vyšší vrstvy jsou odstíněny od použití ORM (a databázového kontextu), pouze volají tyto služby.
 
 + eager loading
-
-- pomocne sluzby pro komunikaci s databazi
-- vsechny dedi DbService + IDbService
-- interface + implementace
-- typicky pro kazdou entitu 1 sluzba
-- extension metody pro praci s databazi
-obsahuje pomocné služby pro komunikaci s databází, 
 
 \newpage
 
