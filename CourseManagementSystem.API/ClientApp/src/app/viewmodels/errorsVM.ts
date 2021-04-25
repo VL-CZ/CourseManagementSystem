@@ -1,4 +1,4 @@
-export interface ErrorsDictionary {
+export class ErrorsDictionary {
   /**
    * errors discovered during validation
    *
@@ -10,6 +10,6 @@ export interface ErrorsDictionary {
 /**
  * class representing error during data validation
  */
-export interface ValidationError {
+export class ValidationError {
   error: ErrorsDictionary;
 }

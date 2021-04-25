@@ -1,7 +1,7 @@
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError, retry} from 'rxjs/operators';
-import {ErrorsDictionary, ValidationError} from './viewmodels/errorsVM';
+import {ValidationError} from './viewmodels/errorsVM';
 
 /**
  * base class for all API services
