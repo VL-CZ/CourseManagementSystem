@@ -45,17 +45,7 @@ export abstract class ApiService {
    */
   private handleError(response: HttpErrorResponse) {
     const errorObject: ApiErrorResponseVM = response;
-    let errorMessages: string[] = [];
-
-    const errors = errorObject.error.errors;
-    for (const key of Object.keys(errors)) {
-      errorMessages = errorMessages.concat(errors[key]);
-    }
-
-    alert(errorMessages);
-    console.log(errorMessages);
-
-    return throwError(response);
+    return throwError(errorObject.error);
   }
 
   /**

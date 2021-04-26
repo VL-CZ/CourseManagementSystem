@@ -2,10 +2,14 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CourseTestService} from '../course-test.service';
 import {AddCourseTestVM, CourseTestDetailsVM} from '../viewmodels/courseTestVM';
-import { TestQuestionVM } from '../viewmodels/testQuestionVM';
-import { ArrayUtils } from '../utils/arrayUtils';
+import {TestQuestionVM} from '../viewmodels/testQuestionVM';
+import {ArrayUtils} from '../utils/arrayUtils';
 import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
 import {TestQuestionNumberSetter} from '../utils/testQuestionNumberSetter';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {ErrorDialogComponent} from '../error-dialog/error-dialog.component';
+import {ErrorsDictionaryVM} from '../viewmodels/apiErrorResponseVM';
+import {throwError} from 'rxjs';
 
 /**
  * component for creating a test
@@ -19,6 +23,8 @@ export class TestCreateComponent implements OnInit {
   private readonly courseId: string;
   private courseTestService: CourseTestService;
   private router: Router;
+  private bsModalRef: BsModalRef;
+  private modalService: BsModalService;
 
   /**
    * test that will be created
@@ -30,10 +36,12 @@ export class TestCreateComponent implements OnInit {
    */
   public questionCount = 0;
 
-  constructor(route: ActivatedRoute, courseTestService: CourseTestService, router: Router) {
+  constructor(route: ActivatedRoute, courseTestService: CourseTestService, router: Router, bsModalService: BsModalService) {
     this.courseId = ActivatedRouteUtils.getIdParam(route);
     this.courseTestService = courseTestService;
     this.router = router;
+    this.modalService = bsModalService;
+
     this.testToCreate = new AddCourseTestVM();
   }
 
@@ -45,8 +53,22 @@ export class TestCreateComponent implements OnInit {
    */
   public createTest(): void {
     this.courseTestService.addToCourse(this.testToCreate, this.courseId).subscribe(() => {
-      this.router.navigate(['/courses', this.courseId]);
-    });
+        this.router.navigate(['/courses', this.courseId]);
+      },
+      error => {
+        const errorVM: ErrorsDictionaryVM = error;
+        let errorMessages: string[] = [];
+
+        for (const key of Object.keys(errorVM.errors)) {
+          errorMessages = errorMessages.concat(errorVM.errors[key]);
+        }
+
+        const initialState = {
+          errors: errorMessages
+        };
+        this.bsModalRef = this.modalService.show(ErrorDialogComponent, {initialState});
+        console.error(error);
+      });
   }
 
   /**
