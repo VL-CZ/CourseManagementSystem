@@ -11,7 +11,7 @@ namespace CourseManagementSystem.API.Controllers
     [ApiExplorerSettings(IgnoreApi = true)]
     public class ErrorHandlerController : ControllerBase
     {
-        private const string generalErrorText = "An error occured while processing the request.";
+        private const string generalErrorText = "An error occurred while processing the request.";
 
         /// <summary>
         /// handle runtime error
