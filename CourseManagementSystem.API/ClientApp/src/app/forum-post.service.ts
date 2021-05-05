@@ -20,7 +20,7 @@ export class ForumPostService extends ApiService {
    * @param postId identifier of the forum post
    */
   public delete(postId: string): Observable<{}> {
-    return this.http.delete(this.controllerUrl + postId);
+    return this.httpDelete(postId);
   }
 
   /**
@@ -29,6 +29,6 @@ export class ForumPostService extends ApiService {
    * @param courseId identifier of the course where to add the post
    */
   public add(postToAdd: WrapperVM<string>, courseId: string): Observable<{}> {
-    return this.http.post<{}>(this.controllerUrl + courseId, postToAdd);
+    return this.httpPost(courseId, postToAdd);
   }
 }

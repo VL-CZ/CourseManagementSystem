@@ -6,6 +6,7 @@ import {AddGradeVM} from './viewmodels/gradeVM';
 import {GradeDetailsVM} from './viewmodels/gradeVM';
 import {ApiService} from './api.service';
 import {TestSubmissionInfoVM} from './viewmodels/testSubmissionVM';
+import {WrapperVM} from './viewmodels/wrapperVM';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class CourseMemberService extends ApiService {
    * @param courseMemberId id of the course member
    */
   public getById(courseMemberId: string): Observable<CourseMemberVM> {
-    return this.http.get<CourseMemberVM>(this.controllerUrl + courseMemberId);
+    return this.httpGet<CourseMemberVM>(courseMemberId);
   }
 
   /**
@@ -31,7 +32,7 @@ export class CourseMemberService extends ApiService {
    * @param grade created grade (contains id)
    */
   public assignGrade(courseMemberId: string, grade: AddGradeVM): Observable<{}> {
-    return this.http.post<{}>(this.controllerUrl + `${courseMemberId}/assignGrade`, grade);
+    return this.httpPost(`${courseMemberId}/assignGrade`, grade);
   }
 
   /**
@@ -39,7 +40,7 @@ export class CourseMemberService extends ApiService {
    * @param courseMemberId id of the course member
    */
   public getTestSubmissions(courseMemberId: string): Observable<TestSubmissionInfoVM[]> {
-    return this.http.get<TestSubmissionInfoVM[]>(this.controllerUrl + `${courseMemberId}/submissions`);
+    return this.httpGet<TestSubmissionInfoVM[]>(`${courseMemberId}/submissions`);
   }
 
   /**
@@ -47,6 +48,14 @@ export class CourseMemberService extends ApiService {
    * @param courseMemberId id of the course member
    */
   public getGrades(courseMemberId: string): Observable<GradeDetailsVM[]> {
-    return this.http.get<GradeDetailsVM[]>(this.controllerUrl + `${courseMemberId}/grades`);
+    return this.httpGet<GradeDetailsVM[]>(`${courseMemberId}/grades`);
+  }
+
+  /**
+   * get average score (from tests and additional grades) of the given course member
+   * @param courseMemberId id of the course member
+   */
+  public getAverageScore(courseMemberId: string): Observable<WrapperVM<number>> {
+    return this.httpGet<WrapperVM<number>>(`${courseMemberId}/averageScore`);
   }
 }

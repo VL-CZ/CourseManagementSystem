@@ -18,8 +18,7 @@ export class FileService extends ApiService {
    * @param fileId
    */
   public download(fileId: string): Observable<Blob> {
-    // window.open(this.controllerUrl + fileId);
-    return this.http.get(this.controllerUrl + fileId, {responseType: 'blob'});
+    return this.httpGetBlob(fileId);
   }
 
   /**
@@ -32,7 +31,7 @@ export class FileService extends ApiService {
     const formData: FormData = new FormData();
     formData.append('file', file);
 
-    return this.http.post<{}>(this.controllerUrl + `upload/${courseId}`, formData);
+    return this.httpPost(`upload/${courseId}`, formData);
   }
 
   /**
@@ -40,6 +39,6 @@ export class FileService extends ApiService {
    * @param fileId
    */
   public delete(fileId: string): Observable<{}> {
-    return this.http.delete(this.controllerUrl + `delete/${fileId}`);
+    return this.httpDelete(`delete/${fileId}`);
   }
 }

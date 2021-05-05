@@ -28,6 +28,8 @@ import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component'
 import {CourseForumComponent} from './course-forum/course-forum.component';
 import {TestEditComponent} from './test-edit/test-edit.component';
 import { CourseEnrollmentComponent } from './course-enrollment/course-enrollment.component';
+import { StudentAverageScoreComponent } from './student-average-score/student-average-score.component';
+import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +53,9 @@ import { CourseEnrollmentComponent } from './course-enrollment/course-enrollment
     ConfirmDialogComponent,
     CourseForumComponent,
     TestEditComponent,
-    CourseEnrollmentComponent
+    CourseEnrollmentComponent,
+    StudentAverageScoreComponent,
+    ErrorDialogComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -75,7 +79,7 @@ import { CourseEnrollmentComponent } from './course-enrollment/course-enrollment
     {provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true}
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ConfirmDialogComponent]
+  entryComponents: [ConfirmDialogComponent, ErrorDialogComponent]
 })
 export class AppModule {
 }

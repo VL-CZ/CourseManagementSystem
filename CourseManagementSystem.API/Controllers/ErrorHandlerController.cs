@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using CourseManagementSystem.API.ViewModels;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace CourseManagementSystem.API.Controllers
 {
@@ -9,8 +11,8 @@ namespace CourseManagementSystem.API.Controllers
     [ApiExplorerSettings(IgnoreApi = true)]
     public class ErrorHandlerController : ControllerBase
     {
-        private const string generalErrorText = "An error occured.";
-        
+        private const string generalErrorText = "An error occurred while processing the request.";
+
         /// <summary>
         /// handle runtime error
         /// </summary>
@@ -21,7 +23,13 @@ namespace CourseManagementSystem.API.Controllers
             var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
             var exception = context.Error; // thrown exception
 
-            return Problem(generalErrorText, statusCode: 400);
+            var errorDescription = new Dictionary<string, string[]>
+            {
+                { "Request failed", new string[] { generalErrorText } }
+            };
+
+            var errorsVM = new ErrorsDictionaryVM(errorDescription);
+            return BadRequest(errorsVM);
         }
     }
 }

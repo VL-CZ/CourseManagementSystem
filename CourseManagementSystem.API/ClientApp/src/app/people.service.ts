@@ -20,21 +20,21 @@ export class PeopleService extends ApiService {
    * @param courseId id of the course to enroll
    */
   public enrollToCourse(courseId: string): Observable<{}> {
-    return this.http.post<{}>(this.controllerUrl + `enroll/${courseId}`, {});
+    return this.httpPost(`enroll/${courseId}`, {});
   }
 
   /**
    * get all courses, whose member the current user is
    */
   public getMemberCourses(): Observable<CourseInfoVM[]> {
-    return this.http.get<CourseInfoVM[]>(this.controllerUrl + 'memberCourses');
+    return this.httpGet<CourseInfoVM[]>('memberCourses');
   }
 
   /**
    * get all courses, whose admin the current user is
    */
   public getManagedCourses(): Observable<CourseInfoVM[]> {
-    return this.http.get<CourseInfoVM[]>(this.controllerUrl + 'managedCourses');
+    return this.httpGet<CourseInfoVM[]>('managedCourses');
   }
 
   /**
@@ -42,6 +42,6 @@ export class PeopleService extends ApiService {
    * @param courseId Id of the selected course
    */
   public getCourseMemberByCourse(courseId: string): Observable<WrapperVM<string>> {
-    return this.http.get<WrapperVM<string>>(this.controllerUrl + `getCourseMember/${courseId}`);
+    return this.httpGet<WrapperVM<string>>(`getCourseMember/${courseId}`);
   }
 }
