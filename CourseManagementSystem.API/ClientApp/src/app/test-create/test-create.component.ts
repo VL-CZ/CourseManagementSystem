@@ -7,9 +7,7 @@ import {ArrayUtils} from '../utils/arrayUtils';
 import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
 import {TestQuestionNumberSetter} from '../utils/testQuestionNumberSetter';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {ErrorDialogComponent} from '../error-dialog/error-dialog.component';
-import {ErrorsDictionaryVM} from '../viewmodels/apiErrorResponseVM';
-import {throwError} from 'rxjs';
+import {ErrorModalManager} from '../utils/errorModalManager';
 
 /**
  * component for creating a test
@@ -25,6 +23,7 @@ export class TestCreateComponent implements OnInit {
   private router: Router;
   private bsModalRef: BsModalRef;
   private modalService: BsModalService;
+  private errorModalManager: ErrorModalManager;
 
   /**
    * test that will be created
@@ -43,6 +42,7 @@ export class TestCreateComponent implements OnInit {
     this.modalService = bsModalService;
 
     this.testToCreate = new AddCourseTestVM();
+    this.errorModalManager = new ErrorModalManager(this.bsModalRef, this.modalService);
   }
 
   ngOnInit() {
@@ -55,20 +55,8 @@ export class TestCreateComponent implements OnInit {
     this.courseTestService.addToCourse(this.testToCreate, this.courseId).subscribe(() => {
         this.router.navigate(['/courses', this.courseId]);
       },
-      error => {
-        const errorVM: ErrorsDictionaryVM = error;
-        let errorMessages: string[] = [];
-
-        for (const key of Object.keys(errorVM.errors)) {
-          errorMessages = errorMessages.concat(errorVM.errors[key]);
-        }
-
-        const initialState = {
-          errors: errorMessages
-        };
-        this.bsModalRef = this.modalService.show(ErrorDialogComponent, {initialState});
-        console.error(error);
-      });
+      err => this.errorModalManager.displayError(err)
+    );
   }
 
   /**
