@@ -1,10 +1,10 @@
-import {TestWithSubmissionVM} from './testWithSubmissionVM';
+import {TestWithSubmissionVM} from './testSubmissionVM';
 
 export class EvaluatedTestSubmissionVM {
-  public testSubmissionId: number;
-  public evaluatedAnswers: EvaluatedAnswerVM[];
+  public testSubmissionId: string;
+  public evaluatedAnswers: EvaluatedAnswerVM[] = [];
 
-  constructor(testSubmissionId: number, evaluatedAnswers: EvaluatedAnswerVM[]) {
+  constructor(testSubmissionId: string, evaluatedAnswers: EvaluatedAnswerVM[]) {
     this.testSubmissionId = testSubmissionId;
     this.evaluatedAnswers = evaluatedAnswers;
   }
@@ -20,7 +20,14 @@ export class EvaluatedTestSubmissionVM {
       evaluatedAnswers.push(evaluatedAnswer);
     }
 
-    return new EvaluatedTestSubmissionVM(testWithSubmission.submissionId, evaluatedAnswers);
+    return new EvaluatedTestSubmissionVM(testWithSubmission.testSubmissionId, evaluatedAnswers);
+  }
+
+  /**
+   * get default instance of this class
+   */
+  public static getDefault(): EvaluatedTestSubmissionVM {
+    return new EvaluatedTestSubmissionVM('', []);
   }
 }
 

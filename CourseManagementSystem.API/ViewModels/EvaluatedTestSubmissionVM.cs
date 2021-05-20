@@ -1,7 +1,5 @@
-﻿using System;
+﻿using CourseManagementSystem.API.Validation.Attributes;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CourseManagementSystem.API.ViewModels
 {
@@ -15,7 +13,7 @@ namespace CourseManagementSystem.API.ViewModels
             EvaluatedAnswers = new List<EvaluatedAnswerVM>();
         }
 
-        public EvaluatedTestSubmissionVM(int testSubmissionId, ICollection<EvaluatedAnswerVM> evaluatedAnswers)
+        public EvaluatedTestSubmissionVM(string testSubmissionId, ICollection<EvaluatedAnswerVM> evaluatedAnswers)
         {
             TestSubmissionId = testSubmissionId;
             EvaluatedAnswers = evaluatedAnswers;
@@ -24,11 +22,13 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// id of the test submission these properties belongs to
         /// </summary>
-        public int TestSubmissionId { get; set; }
+        [RequiredWithDefaultErrorMessage]
+        public string TestSubmissionId { get; set; }
 
         /// <summary>
         /// collection of evaluated answers
         /// </summary>
+        [RequiredWithDefaultErrorMessage]
         public ICollection<EvaluatedAnswerVM> EvaluatedAnswers { get; set; }
     }
 
@@ -50,11 +50,13 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// number of test question that these data belong to
         /// </summary>
+        [PositiveIntValue]
         public int QuestionNumber { get; set; }
 
         /// <summary>
         /// updated points for the answer
         /// </summary>
+        [NonNegativeIntValue]
         public int UpdatedPoints { get; set; }
 
         /// <summary>

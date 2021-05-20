@@ -35,5 +35,101 @@ namespace CourseManagementSystem.Data
         public DbSet<TestSubmission> TestSubmissions { get; set; }
 
         public DbSet<TestSubmissionAnswer> TestSubmissionAnswers { get; set; }
+
+        public DbSet<ForumPost> Posts { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            ConfigureForeignKeys(builder);
+        }
+
+        /// <summary>
+        /// configure foreign keys of the database
+        /// </summary>
+        /// <param name="builder"></param>
+        private void ConfigureForeignKeys(ModelBuilder builder)
+        {
+            // Course
+
+            builder.Entity<Course>()
+                .HasOne(course => course.Admin)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // CourseFile
+
+            builder.Entity<CourseFile>()
+                .HasOne(file => file.Course)
+                .WithMany(course => course.Files)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // CourseMember
+
+            builder.Entity<CourseMember>()
+                .HasOne(cm => cm.User)
+                .WithMany(person => person.CourseMemberships)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<CourseMember>()
+                .HasOne(cm => cm.Course)
+                .WithMany(course => course.Members)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // CourseTest
+
+            builder.Entity<CourseTest>()
+                .HasOne(test => test.Course)
+                .WithMany(course => course.Tests)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // ForumPost
+
+            builder.Entity<ForumPost>()
+                .HasOne(post => post.Course)
+                .WithMany(course => course.ForumPosts)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ForumPost>()
+                .HasOne(post => post.Author)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Grade
+
+            builder.Entity<Grade>()
+                .HasOne(grade => grade.Student)
+                .WithMany(cm => cm.Grades)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // TestQuestion
+
+            builder.Entity<TestQuestion>()
+                .HasOne<CourseTest>()
+                .WithMany(test => test.Questions)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // TestSubmission
+
+            builder.Entity<TestSubmission>()
+                .HasOne(ts => ts.Test)
+                .WithMany(test => test.Submissions)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<TestSubmission>()
+                .HasOne(ts => ts.Student)
+                .WithMany(cm => cm.TestSubmissions)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // TestSubmissionAnswer
+
+            builder.Entity<TestSubmissionAnswer>()
+                .HasOne(answer => answer.Question)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+
+        }
     }
 }

@@ -17,7 +17,7 @@ export class GradeService extends ApiService {
    * delete the grade, whose id equals `gradeId`
    * @param gradeId
    */
-  public delete(gradeId: number): Observable<{}> {
-    return this.http.delete(this.controllerUrl + `delete/${gradeId}`);
+  public delete(gradeId: string): Observable<{}> {
+    return this.httpDelete(`delete/${gradeId}`);
   }
 }

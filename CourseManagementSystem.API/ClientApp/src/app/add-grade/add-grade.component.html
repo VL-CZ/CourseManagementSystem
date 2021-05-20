@@ -1,0 +1,28 @@
+<div class="jumbotron">
+  <h3>Add new grade</h3>
+  <form>
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label for="addGradeForm_Topic">Topic</label>
+        <input type="text" class="form-control" name="topic" id="addGradeForm_Topic" placeholder="Topic" required
+               [(ngModel)]="gradeToAdd.topic">
+      </div>
+      <div class="form-group col-md-2">
+        <label for="addGradeForm_Value">Score in %</label>
+        <input type="number" min="0" class="form-control" name="value" id="addGradeForm_Value" required
+               [(ngModel)]="gradeToAdd.percentualValue">
+      </div>
+      <div class="form-group col-md-2">
+        <label for="addGradeForm_Weight">Weight</label>
+        <input type="number" min="0" class="form-control" name="weight" id="addGradeForm_Weight" required
+               [(ngModel)]="gradeToAdd.weight">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="addGradeForm_Comment">Comment</label>
+        <input type="text" class="form-control" name="comment" id="addGradeForm_Comment" placeholder="Comment"
+               [(ngModel)]="gradeToAdd.comment">
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary" (click)="addGrade()">Add</button>
+  </form>
+</div>

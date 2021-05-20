@@ -1,15 +1,16 @@
 ﻿using CourseManagementSystem.Data.Models;
+using System.Collections.Generic;
 
-namespace CourseManagementSystem.API.Services
+namespace CourseManagementSystem.Services.Interfaces
 {
-    public interface ICourseMemberService
+    public interface ICourseMemberService : ICourseReferenceService, IDbService
     {
         /// <summary>
-        /// get CourseMember by ID
+        /// get CourseMember by its ID including <see cref="CourseMember.User"/>
         /// </summary>
-        /// <param name="id">id of the course member</param>
+        /// <param name="id">identifier of the <see cref="CourseMember"/> instance</param>
         /// <returns>course member with the given id</returns>
-        CourseMember GetMemberByID(int id);
+        CourseMember GetMemberWithUser(string id);
 
         /// <summary>
         /// get CourseMember by PersonId and CourseId
@@ -17,12 +18,27 @@ namespace CourseManagementSystem.API.Services
         /// <param name="userId">Id of the person (user)</param>
         /// <param name="courseId">Id of the course</param>
         /// <returns><see cref="CourseMember"/> instance that belongs to the given user and course, or null</returns>
-        CourseMember GetMemberByUserAndCourse(string userId, int courseId);
+        CourseMember GetMemberByUserAndCourse(string userId, string courseId);
 
         /// <summary>
-        /// remove person with selected ID
+        /// check if the course member belongs to the given person
         /// </summary>
-        /// <param name="id"></param>
-        void RemoveMemberById(int id);
+        /// <param name="courseMemberId">identifier of the course member</param>
+        /// <param name="personId">identifier of the person</param>
+        /// <returns></returns>
+        bool BelongsTo(string courseMemberId, string personId);
+
+        /// <summary>
+        /// remove CourseMember with selected ID
+        /// </summary>
+        /// <param name="id">identifier of the <see cref="CourseMember"/> instance</param>
+        void RemoveMemberById(string id);
+
+        /// <summary>
+        /// get all grades of the given CourseMember
+        /// </summary>
+        /// <param name="courseMemberId">identifier of the <see cref="CourseMember"/></param>
+        /// <returns></returns>
+        IEnumerable<Grade> GetGradesOf(string courseMemberId);
     }
 }

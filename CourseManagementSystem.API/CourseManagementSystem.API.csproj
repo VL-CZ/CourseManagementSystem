@@ -33,6 +33,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CourseManagementSystem.Data\CourseManagementSystem.Data.csproj" />
     <ProjectReference Include="..\CourseManagementSystem.Services\CourseManagementSystem.Services.csproj" />
+    <ProjectReference Include="..\CourseManagementSystem.TestEvaluation\CourseManagementSystem.TestEvaluation.csproj" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

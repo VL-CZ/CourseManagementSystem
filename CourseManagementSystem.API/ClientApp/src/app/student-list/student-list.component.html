@@ -6,7 +6,7 @@
       <th>Email</th>
       <th *ngIf="isAdmin"></th>
     </tr>
-    <tr *ngFor="let person of people">
+    <tr *ngFor="let person of students">
       <td>{{person.name}}</td>
       <td>{{person.email}}</td>
       <td *ngIf="isAdmin"><a class="nav-link" routerLink="/students/{{person.id}}">Details</a></td>

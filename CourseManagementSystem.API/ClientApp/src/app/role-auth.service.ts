@@ -2,8 +2,7 @@ import {Inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {ApiService} from './api.service';
 import {Observable} from 'rxjs';
-import {IsAdminVM} from './viewmodels/isAdminVM';
-import {PersonIdVM} from './viewmodels/student';
+import {WrapperVM} from './viewmodels/wrapperVM';
 
 @Injectable({
   providedIn: 'root'
@@ -18,14 +17,14 @@ export class RoleAuthService extends ApiService {
   /**
    * is the currently logged-in user admin?
    */
-  public isAdmin(): Observable<IsAdminVM> {
-    return this.http.get<IsAdminVM>(this.controllerUrl + 'isAdmin');
+  public isAdmin(): Observable<WrapperVM<boolean>> {
+    return this.httpGet<WrapperVM<boolean>>('isAdmin');
   }
 
   /**
    * get id of currently logged-in user
    */
-  public getCurrentUserId(): Observable<PersonIdVM> {
-    return this.http.get<PersonIdVM>(this.controllerUrl + 'getId');
+  public getCurrentUserId(): Observable<WrapperVM<string>> {
+    return this.httpGet<WrapperVM<string>>('getId');
   }
 }

@@ -1,40 +1,77 @@
 ﻿using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
+using CourseManagementSystem.Services.Extensions;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CourseManagementSystem.Services.Implementations
 {
-    public class CourseTestService : ICourseTestService
+    public class CourseTestService : DbService, ICourseTestService
     {
-        private readonly CMSDbContext dbContext;
-
-        public CourseTestService(CMSDbContext dbContext)
+        public CourseTestService(CMSDbContext dbContext) : base(dbContext)
         {
-            this.dbContext = dbContext;
         }
 
         /// <inheritdoc/>
-        public void AddToCourse(CourseTest test, int courseId)
+        public void AddToCourse(CourseTest test, string courseId)
         {
-            var course = dbContext.Courses.Find(courseId);
+            var course = dbContext.Courses.FindById(courseId);
             course.Tests.Add(test);
-            dbContext.SaveChanges();
         }
 
         /// <inheritdoc/>
-        public void Delete(int testId)
+        public void Delete(string testId)
         {
-            var testToRemove = GetById(testId);
+            var testToRemove = GetWithQuestions(testId);
+
+            // remove all questions
+            foreach (var question in testToRemove.Questions)
+            {
+                dbContext.TestQuestions.Remove(question);
+            }
+
+            // remove the test
             dbContext.CourseTests.Remove(testToRemove);
-            dbContext.SaveChanges();
         }
 
         /// <inheritdoc/>
-        public CourseTest GetById(int testId)
+        public CourseTest GetWithQuestions(string testId)
         {
-            return dbContext.CourseTests.Include(x => x.Course).Include(ct => ct.Questions).SingleOrDefault(ct => ct.Id == testId);
+            return dbContext.CourseTests
+                .Include(test => test.Questions)
+                .SingleOrDefault(ct => ct.Id.ToString() == testId);
+        }
+
+        ///<inheritdoc/>
+        public string GetCourseIdOf(string objectId)
+        {
+            return dbContext.CourseTests.GetCourseIdOf(objectId);
+        }
+
+        /// <inheritdoc/>
+        public void Publish(CourseTest test)
+        {
+            test.Status = TestStatus.Published;
+        }
+
+        /// <inheritdoc/>
+        public void Update(CourseTest test, int updatedWeight, string updatedTopic, DateTime updatedDeadline, ICollection<TestQuestion> updatedQuestions)
+        {
+            test.Weight = updatedWeight;
+            test.Topic = updatedTopic;
+            test.Deadline = updatedDeadline;
+            test.Questions.Clear();
+            test.Questions = updatedQuestions;
+        }
+
+        /// <inheritdoc/>
+        public TestQuestion GetQuestionByNumber(CourseTest test, int questionNumber)
+        {
+            return test.Questions
+                .SingleOrDefault(question => question.Number == questionNumber);
         }
     }
 }

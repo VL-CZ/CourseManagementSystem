@@ -1,33 +1,28 @@
 ﻿using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
+using CourseManagementSystem.Services.Extensions;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CourseManagementSystem.Services.Implementations
 {
-    public class TestSubmissionService : ITestSubmissionService
+    public class TestSubmissionService : DbService, ITestSubmissionService
     {
-        private readonly CMSDbContext dbContext;
+        public TestSubmissionService(CMSDbContext dbContext) : base(dbContext)
+        { }
 
-        public TestSubmissionService(CMSDbContext dbContext)
+        /// <inheritdoc/>
+        public IEnumerable<TestSubmission> GetAllSubmissionsOfCourseMember(string courseMemberId)
         {
-            this.dbContext = dbContext;
+            return GetTestSubmissionsWithTestAndStudent().Where(ts => ts.Student.Id.ToString() == courseMemberId);
         }
 
         /// <inheritdoc/>
-        public IEnumerable<TestSubmission> GetAllSubmissionsOfCourseMember(int courseMemberId)
+        public IEnumerable<TestSubmission> GetAllSubmissionsOfTest(string testId)
         {
-            return GetTestSubmissionsWithTestAndStudent().Where(ts => ts.Student.Id == courseMemberId);
-        }
-
-        /// <inheritdoc/>
-        public IEnumerable<TestSubmission> GetAllSubmissionsOfTest(int testId)
-        {
-            return GetTestSubmissionsWithTestAndStudent().Where(ts => ts.Test.Id == testId);
+            return GetTestSubmissionsWithTestAndStudent().Where(ts => ts.Test.Id.ToString() == testId);
         }
 
         /// <inheritdoc/>
@@ -37,9 +32,45 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public TestSubmission GetSubmissionById(int testSubmissionId)
+        public string GetCourseIdOf(string objectId)
         {
-            return dbContext.TestSubmissions.Include(ts => ts.Answers).ThenInclude(a => a.Question).Include(ts => ts.Test).SingleOrDefault(ts => ts.Id == testSubmissionId);
+            string courseMemberId = GetCourseMemberIdOf(objectId);
+            return dbContext.CourseMembers.GetCourseIdOf(courseMemberId);
+        }
+
+        /// <inheritdoc/>
+        public string GetCourseMemberIdOf(string objectId)
+        {
+            return dbContext.TestSubmissions.GetCourseMemberIdOf(objectId);
+        }
+
+        /// <inheritdoc/>
+        public TestSubmission GetSubmissionWithTestAndQuestions(string testSubmissionId)
+        {
+            return dbContext.TestSubmissions
+                .Include(ts => ts.Answers)
+                .ThenInclude(a => a.Question)
+                .Include(ts => ts.Test)
+                .SingleOrDefault(ts => ts.Id.ToString() == testSubmissionId);
+        }
+
+        /// <inheritdoc/>
+        public void MarkAsReviewed(TestSubmission testSubmission)
+        {
+            testSubmission.IsReviewed = true;
+        }
+
+        /// <inheritdoc/>
+        public void Save(TestSubmission testSubmission)
+        {
+            dbContext.TestSubmissions.Add(testSubmission);
+        }
+
+        /// <inheritdoc/>
+        public void UpdateAnswer(TestSubmissionAnswer answerToEvaluate, int updatedPoints, string updatedComment)
+        {
+            answerToEvaluate.Points = updatedPoints;
+            answerToEvaluate.Comment = updatedComment;
         }
 
         /// <summary>

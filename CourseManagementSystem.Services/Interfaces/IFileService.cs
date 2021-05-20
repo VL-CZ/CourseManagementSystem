@@ -1,31 +1,28 @@
 ﻿using CourseManagementSystem.Data.Models;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CourseManagementSystem.Services.Interfaces
 {
-    public interface IFileService
+    public interface IFileService : ICourseReferenceService, IDbService
     {
         /// <summary>
         /// save the file into the course
         /// </summary>
-        /// <param name="file"></param>
-        /// <returns>saved file</returns>
-        CourseFile SaveTo(int courseId, IFormFile file);
+        /// <param name="courseId">identifier of the course where to save the file</param>
+        /// <param name="file">file to save</param>
+        void SaveTo(string courseId, IFormFile file);
 
         /// <summary>
         /// delete file with selected Id
         /// </summary>
         /// <param name="id"></param>
-        void DeleteFileById(int id);
+        void DeleteFileById(string id);
 
         /// <summary>
         /// get file by its Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        CourseFile GetFileById(int id);
+        CourseFile GetFileById(string id);
     }
 }

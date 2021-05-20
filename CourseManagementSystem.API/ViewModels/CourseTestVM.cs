@@ -1,43 +1,85 @@
-﻿using CourseManagementSystem.Data.Models;
+﻿using CourseManagementSystem.API.Validation.Attributes;
+using CourseManagementSystem.Data.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CourseManagementSystem.API.ViewModels
 {
-    public class CourseTestVM
+    /// <summary>
+    /// base viewmodel for course tests
+    /// </summary>
+    public abstract class BaseCourseTestVM
     {
-        public CourseTestVM()
+        protected BaseCourseTestVM()
         {
         }
 
-        public CourseTestVM(int id, string topic, int scoreWeight, ICollection<TestQuestion> questions)
+        protected BaseCourseTestVM(int weight, string topic, DateTime deadline, IEnumerable<TestQuestionVM> questions)
         {
-            Id = id;
+            Weight = weight;
             Topic = topic;
+            Deadline = deadline;
             Questions = questions;
-            Weight = scoreWeight;
         }
-
-        /// <summary>
-        /// id of the test
-        /// </summary>
-        public int Id { get; set; }
 
         /// <summary>
         /// weight of the score from the test (e.g. test of weight 2 has twice bigger impact on overall score than test of weight 1)
         /// </summary>
+        [PositiveIntValue]
         public int Weight { get; set; }
 
         /// <summary>
         /// topic of the test
         /// </summary>
+        //[MaxLength(ValidationConfig.maxStringLength)]
+        [RequiredWithDefaultErrorMessage]
         public string Topic { get; set; }
+
+        /// <summary>
+        /// deadline of the test
+        /// </summary>
+        public DateTime Deadline { get; set; }
 
         /// <summary>
         /// questions in this test
         /// </summary>
-        public ICollection<TestQuestion> Questions { get; set; }
+        [RequiredWithDefaultErrorMessage]
+        public IEnumerable<TestQuestionVM> Questions { get; set; }
+    }
+
+    /// <summary>
+    /// viewmodel for adding a course test
+    /// </summary>
+    public class AddCourseTestVM : BaseCourseTestVM
+    {
+        public AddCourseTestVM() : base()
+        { }
+    }
+
+    /// <summary>
+    /// viewmodel representing a test in a course
+    /// </summary>
+    public class CourseTestDetailsVM : BaseCourseTestVM
+    {
+        public CourseTestDetailsVM() : base()
+        { }
+
+        public CourseTestDetailsVM(string id, string topic, int scoreWeight, IEnumerable<TestQuestionVM> questions, TestStatus testStatus, DateTime deadline)
+            : base(scoreWeight, topic, deadline, questions)
+        {
+            Id = id;
+            Status = testStatus;
+        }
+
+        /// <summary>
+        /// id of the test
+        /// </summary>
+        [RequiredWithDefaultErrorMessage]
+        public string Id { get; set; }
+
+        /// <summary>
+        /// status of the test see
+        /// </summary>
+        public TestStatus Status { get; set; }
     }
 }

@@ -1,27 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CourseManagementSystem.Data.Models
 {
-    public class Course
+    public class Course : IGuidIdObject
     {
         public Course()
         {
             Members = new List<CourseMember>();
             Files = new List<CourseFile>();
             Tests = new List<CourseTest>();
+            ForumPosts = new List<ForumPost>();
         }
 
         public Course(string name, Person admin) : this()
         {
             Name = name;
             Admin = admin;
+            IsArchived = false;
         }
 
+        /// <summary>
+        /// identifier of the couse
+        /// </summary>
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// check if this course has been archived
+        /// </summary>
+        public bool IsArchived { get; set; }
 
         /// <summary>
         /// name of the course
@@ -49,5 +60,10 @@ namespace CourseManagementSystem.Data.Models
         /// tests in this course
         /// </summary>
         public ICollection<CourseTest> Tests { get; set; }
+
+        /// <summary>
+        /// posts in the forum of this course
+        /// </summary>
+        public ICollection<ForumPost> ForumPosts { get; set; }
     }
 }

@@ -1,25 +1,29 @@
-<h3>My Courses</h3>
-<table class="table table-striped table-responsive">
-  <tr *ngFor="let course of memberCourses">
-    <td>
-      <a routerLink="/courses/{{course.id}}">{{course.name}}</a>
-    </td>
-  </tr>
-</table>
-
-<h3>Managed Courses</h3>
-<table class="table table-striped table-responsive">
-  <tr *ngFor="let course of managedCourses">
-    <td>
-      <a routerLink="/courses/{{course.id}}">{{course.name}}</a>
-    </td>
-    <td>
-      <button class="btn btn-danger" (click)="removeCourse(course.id)">Remove</button>
-    </td>
-  </tr>
-</table>
-
 <div class="jumbotron">
+  <h3>My Courses</h3>
+  <table class="table table-striped table-responsive">
+    <tr *ngFor="let course of memberCourses">
+      <td>
+        <a routerLink="/courses/{{course.id}}">{{course.name}}</a>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div class="jumbotron" *ngIf="isAdmin">
+  <h3>Managed Courses</h3>
+  <table class="table table-striped table-responsive">
+    <tr *ngFor="let course of managedCourses">
+      <td>
+        <a routerLink="/courses/{{course.id}}">{{course.name}}</a>
+      </td>
+      <td>
+        <button class="btn btn-danger" (click)="removeCourse(course.id)">Remove</button>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div class="jumbotron" *ngIf="isAdmin">
   <h3>Add new course</h3>
   <form>
     <div class="form-row">
@@ -32,3 +36,5 @@
     <button type="submit" class="btn btn-primary" (click)="addCourse()">Add</button>
   </form>
 </div>
+
+<app-course-enrollment></app-course-enrollment>

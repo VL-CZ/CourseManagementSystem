@@ -2,7 +2,8 @@ import {Inject, Injectable} from '@angular/core';
 import {ApiService} from './api.service';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {CourseInfoVM} from './viewmodels/courseInfoVM';
+import {CourseInfoVM} from './viewmodels/courseVM';
+import {WrapperVM} from './viewmodels/wrapperVM';
 
 @Injectable({
   providedIn: 'root'
@@ -18,29 +19,29 @@ export class PeopleService extends ApiService {
    * enroll currently logged-in user to the course with given id
    * @param courseId id of the course to enroll
    */
-  public enrollToCourse(courseId: number): Observable<{}> {
-    return this.http.post<{}>(this.controllerUrl + courseId, {});
+  public enrollToCourse(courseId: string): Observable<{}> {
+    return this.httpPost(`enroll/${courseId}`, {});
   }
 
   /**
    * get all courses, whose member the current user is
    */
-  getMemberCourses(): Observable<CourseInfoVM[]> {
-    return this.http.get<CourseInfoVM[]>(this.controllerUrl + 'memberCourses');
+  public getMemberCourses(): Observable<CourseInfoVM[]> {
+    return this.httpGet<CourseInfoVM[]>('memberCourses');
   }
 
   /**
    * get all courses, whose admin the current user is
    */
-  getManagedCourses(): Observable<CourseInfoVM[]> {
-    return this.http.get<CourseInfoVM[]>(this.controllerUrl + 'managedCourses');
+  public getManagedCourses(): Observable<CourseInfoVM[]> {
+    return this.httpGet<CourseInfoVM[]>('managedCourses');
   }
 
   /**
    * get course member Id of current user in selected course
    * @param courseId Id of the selected course
    */
-  getCourseMemberByCourse(courseId: number): Observable<string> {
-    return this.http.get<string>(this.controllerUrl + `getCourseMember/${courseId}`);
+  public getCourseMemberByCourse(courseId: string): Observable<WrapperVM<string>> {
+    return this.httpGet<WrapperVM<string>>(`getCourseMember/${courseId}`);
   }
 }

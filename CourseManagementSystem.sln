@@ -16,7 +16,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseManagementSystem.Data
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseManagementSystem.Services", "CourseManagementSystem.Services\CourseManagementSystem.Services.csproj", "{B943AA5D-41C9-4148-8347-E538BD069C2E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseManagementSystem.UnitTests", "CourseManagementSystem.UnitTests\CourseManagementSystem.UnitTests.csproj", "{A3075B73-A8BD-4380-A677-8BBCE2CA96B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseManagementSystem.TestEvaluation.Tests", "CourseManagementSystem.TestEvaluation.Tests\CourseManagementSystem.TestEvaluation.Tests.csproj", "{A3075B73-A8BD-4380-A677-8BBCE2CA96B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseManagementSystem.TestEvaluation", "CourseManagementSystem.TestEvaluation\CourseManagementSystem.TestEvaluation.csproj", "{4D0475A3-435E-4CA1-A642-7CC68DE2F253}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +42,10 @@ Global
 		{A3075B73-A8BD-4380-A677-8BBCE2CA96B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3075B73-A8BD-4380-A677-8BBCE2CA96B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3075B73-A8BD-4380-A677-8BBCE2CA96B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D0475A3-435E-4CA1-A642-7CC68DE2F253}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D0475A3-435E-4CA1-A642-7CC68DE2F253}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D0475A3-435E-4CA1-A642-7CC68DE2F253}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D0475A3-435E-4CA1-A642-7CC68DE2F253}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

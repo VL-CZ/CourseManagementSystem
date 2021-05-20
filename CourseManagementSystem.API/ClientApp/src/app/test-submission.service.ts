@@ -2,9 +2,10 @@ import {Inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {ApiService} from './api.service';
-import {TestSubmissionVM} from './viewmodels/testSubmissionVM';
-import {TestWithSubmissionVM} from './viewmodels/testWithSubmissionVM';
+import {SubmitTestVM} from './viewmodels/submitTestVM';
+import {TestWithSubmissionVM} from './viewmodels/testSubmissionVM';
 import {EvaluatedTestSubmissionVM} from './viewmodels/evaluatedTestSubmissionVM';
+import {WrapperVM} from './viewmodels/wrapperVM';
 
 @Injectable({
   providedIn: 'root'
@@ -20,16 +21,16 @@ export class TestSubmissionService extends ApiService {
    * submit student's solution
    * @param submission test to submit
    */
-  public submit(submission: TestSubmissionVM): Observable<string> {
-    return this.http.post<string>(this.controllerUrl, submission);
+  public submit(submission: SubmitTestVM): Observable<WrapperVM<string>> {
+    return this.httpPost<WrapperVM<string>>(`${submission.testId}/submit`, submission);
   }
 
   /**
    * get new empty submission for given test
    * @param testId id of the test we submit
    */
-  public getEmptySubmission(testId: string): Observable<TestSubmissionVM> {
-    return this.http.get<TestSubmissionVM>(this.controllerUrl + `emptyTest/${testId}`);
+  public getEmptySubmission(testId: string): Observable<SubmitTestVM> {
+    return this.httpGet<SubmitTestVM>(`emptyTest/${testId}`);
   }
 
   /**
@@ -37,7 +38,7 @@ export class TestSubmissionService extends ApiService {
    * @param submissionId id of the test submission
    */
   public getSubmissionById(submissionId: string): Observable<TestWithSubmissionVM> {
-    return this.http.get<TestWithSubmissionVM>(this.controllerUrl + submissionId);
+    return this.httpGet<TestWithSubmissionVM>(submissionId);
   }
 
   /**
@@ -46,6 +47,6 @@ export class TestSubmissionService extends ApiService {
    * @param evaluatedTestSubmission evaluated and commented test submission
    */
   public updateSubmission(submissionId: string, evaluatedTestSubmission: EvaluatedTestSubmissionVM): Observable<{}> {
-    return this.http.put<{}>(this.controllerUrl + submissionId, evaluatedTestSubmission);
+    return this.httpPut(submissionId, evaluatedTestSubmission);
   }
 }

@@ -1,55 +1,52 @@
 ﻿using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
+using CourseManagementSystem.Services.Extensions;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace CourseManagementSystem.Services.Implementations
 {
-    public class FileService : IFileService
+    public class FileService : DbService, IFileService
     {
-        private readonly CMSDbContext dbContext;
-
-        public FileService(CMSDbContext dbContext)
+        public FileService(CMSDbContext dbContext) : base(dbContext)
         {
-            this.dbContext = dbContext;
         }
 
         /// <inheritdoc/>
-        public void DeleteFileById(int id)
+        public void DeleteFileById(string id)
         {
-            var file = dbContext.Files.Find(id);
+            var file = GetFileById(id);
             dbContext.Files.Remove(file);
-            dbContext.SaveChanges();
         }
 
         /// <inheritdoc/>
-        public CourseFile GetFileById(int id)
+        public CourseFile GetFileById(string id)
         {
-            return dbContext.Files.Find(id);
+            return dbContext.Files.FindById(id);
+        }
+
+        ///<inheritdoc/>
+        public string GetCourseIdOf(string objectId)
+        {
+            return dbContext.Files.GetCourseIdOf(objectId);
         }
 
         /// <inheritdoc/>
-        public CourseFile SaveTo(int courseId, IFormFile file)
+        public void SaveTo(string courseId, IFormFile file)
         {
-            var courseFile = new CourseFile() { Name = file.FileName, ContentType = file.ContentType };
+            byte[] fileData;
             using (var target = new MemoryStream())
             {
                 file.CopyTo(target);
-                courseFile.Data = target.ToArray();
+                fileData = target.ToArray();
             }
 
-            Course c = dbContext.Courses.Include(c => c.Files).Single(c => c.Id == courseId);
-                
-            c.Files.Add(courseFile);
-            dbContext.SaveChanges();
-
-            return courseFile;
+            Course course = dbContext.Courses.FindById(courseId);
+            var fileToAdd = new CourseFile(fileData, file.FileName, file.ContentType, course);
+            dbContext.Files.Add(fileToAdd);
         }
     }
 }

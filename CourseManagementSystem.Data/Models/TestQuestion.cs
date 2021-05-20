@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CourseManagementSystem.Data.Models
 {
-    public class TestQuestion
+    public class TestQuestion : IGuidIdObject
     {
         public TestQuestion() { }
 
@@ -14,22 +16,28 @@ namespace CourseManagementSystem.Data.Models
             Points = points;
         }
 
+        /// <summary>
+        /// identifier of the question
+        /// </summary>
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
-        /// number of question
+        /// number of question in the test
         /// </summary>
         public int Number { get; set; }
 
         /// <summary>
         /// text of the question
         /// </summary>
+        [Required(AllowEmptyStrings = true)]
         public string QuestionText { get; set; }
 
         /// <summary>
         /// correct answer to the question
         /// </summary>
+        [Required(AllowEmptyStrings = true)]
         public string CorrectAnswer { get; set; }
 
         /// <summary>

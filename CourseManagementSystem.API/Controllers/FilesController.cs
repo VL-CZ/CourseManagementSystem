@@ -1,17 +1,16 @@
-﻿using CourseManagementSystem.API.ViewModels;
-using CourseManagementSystem.Data;
+﻿using CourseManagementSystem.API.Auth;
+using CourseManagementSystem.API.Auth.Attributes;
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace CourseManagementSystem.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class FilesController : ControllerBase
     {
         private readonly IFileService fileService;
@@ -27,10 +26,12 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="file"></param>
         /// <returns></returns>
         [HttpPost("upload/{courseId}")]
-        public CourseFileVM Upload(IFormFile file, int courseId)
+        [AuthorizeCourseAdminOf(EntityType.Course, "courseId")]
+        public void Upload(IFormFile file, string courseId)
         {
-            CourseFile courseFile = fileService.SaveTo(courseId, file);
-            return new CourseFileVM() { Id = courseFile.ID, Name = courseFile.Name };
+            fileService.SaveTo(courseId, file);
+
+            fileService.CommitChanges();
         }
 
         /// <summary>
@@ -39,7 +40,8 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public FileContentResult Download(int id)
+        [AuthorizeCourseAdminOrMemberOf(EntityType.CourseFile, "id")]
+        public IActionResult Download(string id)
         {
             CourseFile file = fileService.GetFileById(id);
             return File(file.Data, file.ContentType, file.Name);
@@ -50,10 +52,12 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="id"></param>
         [HttpDelete("delete/{id}")]
-        public void Delete(int id)
+        [AuthorizeCourseAdminOf(EntityType.CourseFile, "id")]
+        public void Delete(string id)
         {
             fileService.DeleteFileById(id);
-        }
 
+            fileService.CommitChanges();
+        }
     }
 }

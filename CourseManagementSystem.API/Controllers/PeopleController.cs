@@ -1,32 +1,28 @@
-﻿using CourseManagementSystem.API.Services;
+﻿using CourseManagementSystem.API.Extensions;
 using CourseManagementSystem.API.ViewModels;
-using CourseManagementSystem.Data;
-using CourseManagementSystem.Data.Models;
+using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using CourseManagementSystem.API.Extensions;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace CourseManagementSystem.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PeopleController : ControllerBase
     {
-        private readonly CMSDbContext dbContext;
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IPeopleService peopleService;
+        private readonly ICourseService courseService;
 
-        public PeopleController(CMSDbContext dbContext, ICourseMemberService personService, UserManager<Person> userManager, IHttpContextAccessor httpContextAccessor)
+        public PeopleController(IHttpContextAccessor httpContextAccessor, IPeopleService peopleService, ICourseService courseService)
         {
-            this.dbContext = dbContext;
             this.httpContextAccessor = httpContextAccessor;
+            this.peopleService = peopleService;
+            this.courseService = courseService;
         }
 
         /// <summary>
@@ -34,14 +30,14 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="courseId"></param>
         [HttpPost("enroll/{courseId}")]
-        public void EnrollTo(int courseId)
+        public void EnrollTo(string courseId)
         {
-            var course = dbContext.Courses.Find(courseId);
-            var user = dbContext.Users.Find(GetCurrentUserId());
+            var course = courseService.GetById(courseId);
+            var currentUser = peopleService.GetById(GetCurrentUserId());
 
-            var cm = new CourseMember() { Course = course, User = user };
-            dbContext.CourseMembers.Add(cm);
-            dbContext.SaveChanges();
+            peopleService.EnrollTo(currentUser, course);
+
+            peopleService.CommitChanges();
         }
 
         /// <summary>
@@ -51,12 +47,8 @@ namespace CourseManagementSystem.API.Controllers
         [HttpGet("memberCourses")]
         public IEnumerable<CourseInfoVM> GetMemberCourses()
         {
-            var courseMembershipIds = dbContext.Users.Include(u => u.CourseMemberships).Single(u => u.Id == GetCurrentUserId()).CourseMemberships.Select(cm => cm.Id);
-            var courseVMs = dbContext.CourseMembers.Include(cm => cm.Course)
-                .Where(cm => courseMembershipIds.Contains(cm.Id))
-                .Select(cm => new CourseInfoVM(cm.Course.Id, cm.Course.Name));
-
-            return courseVMs;
+            var memberCourses = peopleService.GetActiveMemberCourses(GetCurrentUserId());
+            return memberCourses.Select(course => new CourseInfoVM(course.Id.ToString(), course.Name));
         }
 
         /// <summary>
@@ -66,24 +58,23 @@ namespace CourseManagementSystem.API.Controllers
         [HttpGet("managedCourses")]
         public IEnumerable<CourseInfoVM> GetManagedCourses()
         {
-            var managedCourses = dbContext.Courses.Include(c => c.Admin).Where(c => c.Admin.Id == GetCurrentUserId());
-            return managedCourses.Select(c => new CourseInfoVM(c.Id, c.Name));
+            var managedCourses = peopleService.GetActiveManagedCourses(GetCurrentUserId());
+            return managedCourses.Select(course => new CourseInfoVM(course.Id.ToString(), course.Name));
         }
 
         /// <summary>
-        /// get course member object of current user in the selected course
+        /// get course member id of current user in the selected course
         /// </summary>
         /// <param name="courseId">Id of the course</param>
         /// <returns></returns>
         [HttpGet("getCourseMember/{courseId}")]
-        public int GetMemberByCourseId(int courseId)
+        public WrapperVM<string> GetMemberByCourseId(string courseId)
         {
-            var currentUserId = GetCurrentUserId();
-            return dbContext.CourseMembers.Include(cm => cm.Course).Include(cm => cm.User)
-                .Where(cm => cm.User.Id == GetCurrentUserId())
-                .Where(cm => cm.Course.Id == courseId)
-                .Select(cm => cm.Id)
-                .Single();
+            var person = peopleService.GetById(GetCurrentUserId());
+            var course = courseService.GetById(courseId);
+
+            var courseMember = peopleService.GetCourseMembership(person, course);
+            return new WrapperVM<string>(courseMember.Id.ToString());
         }
 
         /// <summary>

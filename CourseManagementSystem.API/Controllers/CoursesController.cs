@@ -1,40 +1,42 @@
-﻿using CourseManagementSystem.API.Services;
+﻿using CourseManagementSystem.API.Auth;
+using CourseManagementSystem.API.Auth.Attributes;
+using CourseManagementSystem.API.Extensions;
 using CourseManagementSystem.API.ViewModels;
-using CourseManagementSystem.Data;
 using CourseManagementSystem.Data.Models;
+using CourseManagementSystem.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 
 namespace CourseManagementSystem.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CoursesController : ControllerBase
     {
-        private readonly CMSDbContext dbContext;
+        private readonly ICourseService courseService;
+        private readonly IPeopleService peopleService;
 
-        public CoursesController(CMSDbContext dbContext)
+        public CoursesController(ICourseService courseService, IPeopleService peopleService)
         {
-            this.dbContext = dbContext;
+            this.courseService = courseService;
+            this.peopleService = peopleService;
         }
 
         /// <summary>
         /// create new course
         /// </summary>
-        /// <returns></returns>
         [HttpPost("create")]
-        public CourseInfoVM Create([FromBody] AddCourseVM courseVM)
+        public void Create([FromBody] AddCourseVM courseVM)
         {
-            Person admin = dbContext.Users.Single(x => x.Id == courseVM.AdminId);
+            Person admin = peopleService.GetById(courseVM.AdminId);
             Course createdCourse = new Course(courseVM.Name, admin);
-
-            dbContext.Courses.Add(createdCourse);
-            dbContext.SaveChanges();
-
-            return new CourseInfoVM(createdCourse.Id, createdCourse.Name);
+            
+            courseService.AddCourse(createdCourse);
+            
+            courseService.CommitChanges();
         }
 
         /// <summary>
@@ -42,11 +44,11 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="id"></param>
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        [AuthorizeCourseAdminOf(EntityType.Course, "id")]
+        public void Delete(string id)
         {
-            Course c = dbContext.Courses.Find(id);
-            dbContext.Courses.Remove(c);
-            dbContext.SaveChanges();
+            courseService.ArchiveById(id);
+            courseService.CommitChanges();
         }
 
         /// <summary>
@@ -54,13 +56,11 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="id">Id of the course</param>
         [HttpGet("{id}/members")]
-        public IEnumerable<PersonVM> GetAllMembers(int id)
+        [AuthorizeCourseAdminOf(EntityType.Course, "id")]
+        public IEnumerable<CourseMemberVM> GetAllMembers(string id)
         {
-            var course = dbContext.Courses.Include(x => x.Members).Single(x => x.Id == id);
-            var courseMemberIDs = course.Members.Select(x => x.Id);
-            var people = dbContext.CourseMembers.Include(x => x.User).Where(cm => courseMemberIDs.Contains(cm.Id));
-
-            return people.Select(cm => new PersonVM() { Id = cm.Id.ToString(), Name = cm.User.UserName, Email = cm.User.Email });
+            var people = courseService.GetMembersWithUsers(id);
+            return people.Select(cm => new CourseMemberVM(cm.Id.ToString(), cm.User.UserName, cm.User.Email));
         }
 
         /// <summary>
@@ -69,9 +69,10 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id">Id of the course</param>
         /// <returns></returns>
         [HttpGet("{id}/files")]
-        public IEnumerable<CourseFileVM> GetAllFiles(int id)
+        [AuthorizeCourseAdminOrMemberOf(EntityType.Course,"id")]
+        public IEnumerable<CourseFileVM> GetAllFiles(string id)
         {
-            return dbContext.Courses.Include(c => c.Files).Single(x => x.Id == id).Files.Select(f => new CourseFileVM { Id = f.ID, Name = f.Name });
+            return courseService.GetFiles(id).Select(file => new CourseFileVM(file.Id.ToString(), file.Name));
         }
 
         /// <summary>
@@ -80,10 +81,24 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id">Id of the course</param>
         /// <returns></returns>
         [HttpGet("{id}/tests")]
-        public IEnumerable<CourseTestVM> GetAllTests(int id)
+        [AuthorizeCourseAdminOrMemberOf(EntityType.Course, "id")]
+        public IEnumerable<CourseTestDetailsVM> GetAllTests(string id)
         {
-            var courseTests = dbContext.Courses.Include(course => course.Tests).Single(x => x.Id == id).Tests;
-            return courseTests.Select(ct => new CourseTestVM(ct.Id, ct.Topic, ct.Weight, ct.Questions));
+            var courseTests = courseService.GetTests(id);
+            return courseTests.Select(test => new CourseTestDetailsVM(test.Id.ToString(), test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status, test.Deadline));
+        }
+
+        /// <summary>
+        /// get all posts in the course with given id
+        /// </summary>
+        /// <param name="id">identifier of the course</param>
+        /// <returns></returns>
+        [HttpGet("{id}/posts")]
+        [AuthorizeCourseAdminOrMemberOf(EntityType.Course, "id")]
+        public IEnumerable<ForumPostVM> GetAllPosts(string id)
+        {
+            var posts = courseService.GetPostsWithAuthors(id);
+            return posts.Select(post => new ForumPostVM(post.Id.ToString(), post.Author.Email, post.Text));
         }
     }
 }

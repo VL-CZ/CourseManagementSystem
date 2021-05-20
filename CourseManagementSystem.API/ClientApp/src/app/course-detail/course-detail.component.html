@@ -2,7 +2,7 @@
   <button class="btn btn-success" routerLink="/students/{{currentCourseMemberId}}">My Grades</button>
 </div>
 
+<app-test-list [courseId]="courseId"></app-test-list>
 <app-file-list [courseId]="courseId"></app-file-list>
 <app-student-list [courseId]="courseId"></app-student-list>
-<app-test-list [courseId]="courseId"></app-test-list>
-
+<app-course-forum [courseId]="courseId"></app-course-forum>

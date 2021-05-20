@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CourseManagementSystem.Data.Models
 {
-    public class CourseMember
+    public class CourseMember : IGuidIdObject, ICourseReferenceObject
     {
         public CourseMember()
         {
@@ -13,17 +13,29 @@ namespace CourseManagementSystem.Data.Models
             TestSubmissions = new List<TestSubmission>();
         }
 
+        public CourseMember(Person user, Course course) : this()
+        {
+            User = user;
+            Course = course;
+        }
+
+        /// <summary>
+        /// identifier of the course member
+        /// </summary>
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// reference to person
         /// </summary>
+        [Required]
         public Person User { get; set; }
 
         /// <summary>
         /// reference to course
         /// </summary>
+        [Required]
         public Course Course { get; set; }
 
         /// <summary>
@@ -35,14 +47,5 @@ namespace CourseManagementSystem.Data.Models
         /// tests submitted by this user
         /// </summary>
         public ICollection<TestSubmission> TestSubmissions { get; set; }
-
-        /// <summary>
-        /// add new grade to this course membership
-        /// </summary>
-        /// <param name="g"></param>
-        public void AssignGrade(Grade g)
-        {
-            Grades.Add(g);
-        }
     }
 }
