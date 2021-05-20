@@ -14,26 +14,24 @@ Ve složce Models jsou třídy reprezentující databázové entity. Každá z e
 
 \begin{table}[ht]
 	\centering
-	\resizebox{\textwidth}{!}{
-	\begin{tabular}{| l | l |}
-		Entita & reprezentuje \\
-		a & členství uživatele v daném kurzu. K této entitě se pak vážou všechny známky a odeslané testy.
+	\begin{tabular}{| l | p{9cm} |}
+		\hline
+		Název entity & reprezentuje \\
+		\hline \hline
+		Course & kurz \\ \hline
+		CourseFile & nějaký soubor sdílený v kurzu \\ \hline
+		CourseMember & členství uživatele v daném kurzu. 
+		K této entitě se pak vážou všechny známky a odeslané testy. \\ \hline
+		CourseTest & test v kurzu \\ \hline
+		ForumPost & příspěvek ve fóru k danému kurzu \\ \hline
+		Grade & známku kterou student obdržel (kromě známek z testů) \\ \hline
+		Person & uživatele aplikace \\ \hline
+		TestQuestion & 1 otázku v testu \\ \hline
+		TestSubmission & test s odpověďmi odeslaný uživatelem \\ \hline
+		TestSubmissionAnswer & odpověď k dané otázce v testu \\
+		\hline
 	\end{tabular}
-}
 \end{table}
-
-\begin{itemize}
-	\item Course -- tato entita reprezentuje kurz
-	\item CourseFile - reprezentuje nějaký soubor sdílený v kurzu
-	\item CourseMember - představuje členství uživatele v daném kurzu. K této entitě se pak vážou všechny známky a odeslané testy.
-	\item CourseTest - představuje jeden test v kurzu
-	\item ForumPost - slouží k reprezentaci příspěvků ve fóru k danému kurzu
-	\item Grade - reprezentuje známku kterou student obdržel (kromě známek z testů)
-	\item Person - reprezentuje uživatele aplikace
-	\item TestQuestion - reprezentuje 1 otázku v testu
-	\item TestSubmission - reprezentuje test s odpověďmi odeslaný uživatelem
-	\item TestSubmissionAnswer - představuje odpověď k dané otázce v testu
-\end{itemize}
 
 \newpage
 
@@ -154,6 +152,8 @@ Pokud jsem tedy nějak změníme některou z entit (to může být např. přid�
 
 K vytváření migrací jsem použijeme nástroj CLI tools for Entity Framework Core. https://docs.microsoft.com/cs-cz/ef/core/cli/dotnet. Pro vygenerování migrace ze změn v kódu použijeme příkaz:
 
+TO-Do: přesunout přesný příkaz jinam
+
 \begin{lstlisting}
 dotnet ef migrations add {migration_name} 
 --project CourseManagementSystem.Data 
@@ -185,6 +185,8 @@ public partial class TestWeight_added : Migration
 	}
 }
 \end{lstlisting}
+
+TO-DO: přesunout syntaxi příkaz jinam
 
 Pro promítnutí změn do databáze následně použijeme příkaz:
 
@@ -343,7 +345,14 @@ Podobně je v projektu i rozhraní ICourseMemberReferenceService, které použí
 
 Použitím služeb jsme odstranili duplikátní kód (např. hledání kurzu podle ID se používá na několika místech ve vyšších vrstvách), a extrahovali některé složitější dotazy do samostatných metod. To je výhodné hlavně z toho důvodu, že je pak můžeme nezávisle otestovat. Další výhoda je, že vyšší vrstvy jsou odstíněny od použití ORM (a databázového kontextu), pouze volají tyto služby.
 
-+ eager loading
+Dále si můžeme všimnout, že ve službách používáme při komunikaci s databázovým kontextem tzv. Eager loading (pomocí metod Include()). To znamená, že data databázových entit které daná entita referencuje, se při výchozím chování nenačtou (pokud nepoužijeme metodu Include), tzn. budou mít hodnotu NULL.
+
+Například pro získání testu s otázkami můžeme použít tento příkaz:
+\begin{lstlisting}
+dbContext.CourseTests
+	.Include(test => test.Questions)
+\end{lstlisting}
+Pokud bych volání metody Include() vynechal, tak by se data otázek nenačetla.
 
 \newpage
 
