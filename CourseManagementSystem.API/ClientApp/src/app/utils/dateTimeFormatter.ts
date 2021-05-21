@@ -7,6 +7,6 @@ export class DateTimeFormatter {
    * @param dateTimeString date in string
    */
   public formatToLocal(dateTimeString: string): string {
-    return dateTimeString;
+    return new Date(dateTimeString).toLocaleString();
   }
 }
