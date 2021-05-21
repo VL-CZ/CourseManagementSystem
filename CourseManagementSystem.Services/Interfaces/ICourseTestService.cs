@@ -47,5 +47,13 @@ namespace CourseManagementSystem.Services.Interfaces
         /// <param name="questionNumber">number of the question</param>
         /// <returns></returns>
         TestQuestion GetQuestionByNumber(CourseTest test, int questionNumber);
+
+        /// <summary>
+        /// check if the course member has already submitted the test
+        /// </summary>
+        /// <param name="testId">identifier of the test</param>
+        /// <param name="courseMemberId">identifier of the courseMember</param>
+        /// <returns></returns>
+        bool IsAlreadySubmittedBy(string testId, string courseMemberId);
     }
 }

@@ -8,6 +8,7 @@ using CourseManagementSystem.TestEvaluation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 
 namespace CourseManagementSystem.API.Controllers
@@ -48,6 +49,12 @@ namespace CourseManagementSystem.API.Controllers
 
             string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
             var courseMember = courseMemberService.GetMemberByUserAndCourse(currentUserId, courseId);
+
+            if (courseTestService.IsAlreadySubmittedBy(testId, courseMember.Id.ToString()))
+            {
+                throw new ApplicationException("The test has already been submitted by this CourseMember");
+            }
+
             var submittedAnswers = testSubmissionVM.Answers.Select(
                 answer => new TestSubmissionAnswer(courseTestService.GetQuestionByNumber(test, answer.QuestionNumber), answer.AnswerText));
 

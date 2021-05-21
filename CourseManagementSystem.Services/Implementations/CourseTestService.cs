@@ -73,5 +73,17 @@ namespace CourseManagementSystem.Services.Implementations
             return test.Questions
                 .SingleOrDefault(question => question.Number == questionNumber);
         }
+
+        /// <inheritdoc/>
+        public bool IsAlreadySubmittedBy(string testId, string courseMemberId)
+        {
+            var courseMemberWithSubmittedTests = dbContext.CourseMembers
+                .Include(cm => cm.TestSubmissions)
+                .ThenInclude(ts => ts.Test)
+                .SingleOrDefault(cm => cm.Id.ToString() == courseMemberId);
+
+            return courseMemberWithSubmittedTests.TestSubmissions
+                .Any(ts => ts.Test.Id.ToString() == testId);
+        }
     }
 }
