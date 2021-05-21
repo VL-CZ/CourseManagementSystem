@@ -12,7 +12,7 @@ abstract class BaseTestSubmissionVM {
   /**
    * datetime when this test was submitted
    */
-  public submittedDateTime: Date;
+  public submittedDateTime: string;
 
   /**
    * has this test submission already been reviewed?

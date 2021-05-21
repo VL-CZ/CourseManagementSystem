@@ -19,7 +19,7 @@
         {{submission.testWeight}}
       </td>
       <td>
-        {{submission.submittedDateTime}}
+        {{dateTimeFormatter.formatToLocal(submission.submittedDateTime)}}
       </td>
       <td>
         {{submission.isReviewed ? 'YES' : 'NO'}}

@@ -9,6 +9,7 @@ import {RoleAuthService} from '../role-auth.service';
 import {EvaluatedAnswerVM, EvaluatedTestSubmissionVM} from '../viewmodels/evaluatedTestSubmissionVM';
 import {RouterUtils} from '../utils/routerUtils';
 import {SubmissionAnswerWithCorrectAnswerVM} from '../viewmodels/testSubmissionAnswerVM';
+import {DateTimeFormatter} from '../utils/dateTimeFormatter';
 
 /**
  * component representing detail of the submitted test solution
@@ -28,6 +29,11 @@ export class TestSubmissionReviewComponent implements OnInit {
    * test solution with updates (manually evaluated answers)
    */
   public evaluatedTestSubmission: EvaluatedTestSubmissionVM = EvaluatedTestSubmissionVM.getDefault();
+
+  /**
+   * formatter of date-time
+   */
+  public dateTimeFormatter: DateTimeFormatter = new DateTimeFormatter();
 
   /**
    * is the current user admin?

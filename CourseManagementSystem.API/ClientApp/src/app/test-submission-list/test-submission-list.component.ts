@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {CourseTestService} from '../course-test.service';
 import {TestSubmissionWithUserInfoVM} from '../viewmodels/testSubmissionVM';
 import {PercentStringFormatter} from '../utils/percentStringFormatter';
+import {DateTimeFormatter} from '../utils/dateTimeFormatter';
 
 /**
  * component representing submitted solutions of the test
@@ -25,6 +26,11 @@ export class TestSubmissionListComponent implements OnInit {
    * formatter of percent strings
    */
   public percentStringFormatter: PercentStringFormatter = new PercentStringFormatter();
+
+  /**
+   * formatter of date-time
+   */
+  public dateTimeFormatter: DateTimeFormatter = new DateTimeFormatter();
 
   private courseTestService: CourseTestService;
 
