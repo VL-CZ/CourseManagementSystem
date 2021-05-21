@@ -10,7 +10,7 @@
     </tr>
     <tr *ngFor="let grade of grades">
       <td>{{grade.topic}}</td>
-      <td><b>{{getPercentString(grade.percentualValue)}}</b></td>
+      <td><b>{{percentStringFormatter.format(grade.percentualValue)}}</b></td>
       <td>{{grade.weight}}</td>
       <td>{{grade.comment}}</td>
       <td *ngIf="isAdmin">
