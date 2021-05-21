@@ -90,15 +90,27 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
-        /// get all tests in the course with given id
+        /// get all tests in the given course that haven't been published yet
         /// </summary>
         /// <param name="id">Id of the course</param>
         /// <returns></returns>
-        [HttpGet("{id}/tests")]
+        [HttpGet("{id}/nonPublishedTests")]
         [AuthorizeCourseAdminOf(EntityType.Course, "id")]
-        public IEnumerable<CourseTestDetailsVM> GetAllTests(string id)
+        public IEnumerable<CourseTestDetailsVM> GetNonPublishedTests(string id)
         {
-            return GetAndFilterTests(id, tests => tests);
+            return GetAndFilterTests(id, tests => courseTestService.FilterNonPublishedTests(tests));
+        }
+
+        /// <summary>
+        /// get all tests in the given course that are after deadline
+        /// </summary>
+        /// <param name="id">Id of the course</param>
+        /// <returns></returns>
+        [HttpGet("{id}/testsAfterDeadline")]
+        [AuthorizeCourseAdminOf(EntityType.Course, "id")]
+        public IEnumerable<CourseTestDetailsVM> GetTestsAfterDeadline(string id)
+        {
+            return GetAndFilterTests(id, tests => courseTestService.FilterTestsAfterDeadline(tests));
         }
 
         /// <summary>

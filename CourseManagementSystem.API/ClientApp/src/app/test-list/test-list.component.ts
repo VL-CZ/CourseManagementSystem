@@ -21,9 +21,19 @@ export class TestListComponent implements OnInit {
   public courseId: string;
 
   /**
-   * list of test in this course
+   * active tests in this course
    */
-  public tests: CourseTestDetailsVM[] = [];
+  public activeTests: CourseTestDetailsVM[] = [];
+
+  /**
+   * tests that haven't been published yet in this course
+   */
+  public nonPublishedTests: CourseTestDetailsVM[] = [];
+
+  /**
+   * tests after deadline in this course
+   */
+  public testsAfterDeadline: CourseTestDetailsVM[] = [];
 
   /**
    * is the current user admin?
@@ -80,13 +90,21 @@ export class TestListComponent implements OnInit {
    * @private
    */
   private reloadTests(): void {
+
+    // get active tests
+    this.courseService.getActiveTests(this.courseId).subscribe(tests => {
+      this.activeTests = tests;
+    });
+
     if (this.isAdmin) {
-      this.courseService.getAllTests(this.courseId).subscribe(tests => {
-        this.tests = tests;
+      // get non-published tests
+      this.courseService.getNonPublishedTests(this.courseId).subscribe(tests => {
+        this.nonPublishedTests = tests;
       });
-    } else {
-      this.courseService.getAllActiveTests(this.courseId).subscribe(tests => {
-        this.tests = tests;
+
+      // get tests after deadline
+      this.courseService.getTestsAfterDeadline(this.courseId).subscribe(tests => {
+        this.testsAfterDeadline = tests;
       });
     }
   }

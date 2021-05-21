@@ -1,22 +1,48 @@
 <div class="jumbotron">
   <h3>Tests</h3>
-  <table class="table table-striped table-responsive">
-    <tr *ngFor="let test of this.tests">
-      <td>
-        <a *ngIf="isAdmin" routerLink="/tests/{{test.id}}">{{test.topic}}</a>
-        <a *ngIf="!isAdmin" routerLink="/tests/submit/{{test.id}}">{{test.topic}}</a>
-      </td>
-      <td>
-        <b>Deadline: {{test.deadline.toLocaleString()}}</b>
-      </td>
-      <td *ngIf="isAdmin && !isPublished(test)">
-        <button class="btn btn-info" (click)="publishTest(test)">Publish</button>
-      </td>
-      <td *ngIf="isAdmin && !isPublished(test)">
-        <button class="btn btn-danger" (click)="deleteTest(test)">Remove</button>
-      </td>
-    </tr>
-  </table>
+  <div *ngIf="isAdmin && nonPublishedTests.length > 0">
+    <b>Not published</b>
+    <table class="table table-striped table-responsive">
+      <tr *ngFor="let test of this.nonPublishedTests">
+        <td>
+          <a routerLink="/tests/{{test.id}}">{{test.topic}}</a>
+        </td>
+        <td>
+          <b>Deadline: {{test.deadline.toLocaleString()}}</b>
+        </td>
+        <td>
+          <button class="btn btn-info" (click)="publishTest(test)">Publish</button>
+        </td>
+        <td>
+          <button class="btn btn-danger" (click)="deleteTest(test)">Remove</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div *ngIf="activeTests.length > 0">
+    <b>Active</b>
+    <table class="table table-striped table-responsive">
+      <tr *ngFor="let test of this.activeTests">
+        <td>
+          <a *ngIf="isAdmin" routerLink="/tests/{{test.id}}">{{test.topic}}</a>
+          <a *ngIf="!isAdmin" routerLink="/tests/submit/{{test.id}}">{{test.topic}}</a>
+        </td>
+        <td>
+          <b>Deadline: {{test.deadline.toLocaleString()}}</b>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div *ngIf="isAdmin && testsAfterDeadline.length > 0">
+    <b>After deadline</b>
+    <table class="table table-striped table-responsive">
+      <tr *ngFor="let test of this.testsAfterDeadline">
+        <td>
+          <a routerLink="/tests/{{test.id}}">{{test.topic}}</a>
+        </td>
+      </tr>
+    </table>
+  </div>
   <div class="my-3">
     <button *ngIf="isAdmin" class="btn btn-success" routerLink="/tests/create/{{this.courseId}}">
       Create new test

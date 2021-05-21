@@ -32,11 +32,7 @@ namespace CourseManagementSystem.Services.Implementations
                 throw new ApplicationException("Cannot remove already published test");
             }
 
-            // remove all questions
-            foreach (var question in testToRemove.Questions)
-            {
-                dbContext.TestQuestions.Remove(question);
-            }
+            RemoveAllQuestions(testToRemove);
 
             // remove the test
             dbContext.CourseTests.Remove(testToRemove);
@@ -63,8 +59,10 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public void Update(CourseTest test, int updatedWeight, string updatedTopic, DateTime updatedDeadline, ICollection<TestQuestion> updatedQuestions)
+        public void Update(string testId, int updatedWeight, string updatedTopic, DateTime updatedDeadline, ICollection<TestQuestion> updatedQuestions)
         {
+            var test = GetWithQuestions(testId);
+
             if (IsPublished(test))
             {
                 throw new ApplicationException("Cannot update already published test");
@@ -73,7 +71,8 @@ namespace CourseManagementSystem.Services.Implementations
             test.Weight = updatedWeight;
             test.Topic = updatedTopic;
             test.Deadline = updatedDeadline;
-            test.Questions.Clear();
+
+            RemoveAllQuestions(test);
             test.Questions = updatedQuestions;
         }
 
@@ -100,8 +99,22 @@ namespace CourseManagementSystem.Services.Implementations
         public IEnumerable<CourseTest> FilterActiveTests(IEnumerable<CourseTest> tests)
         {
             return tests
-                .Where(test => test.Status == TestStatus.Published)
+                .Where(test => IsPublished(test))
                 .Where(test => test.Deadline > DateTime.Now);
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<CourseTest> FilterNonPublishedTests(IEnumerable<CourseTest> tests)
+        {
+            return tests
+                .Where(test => !IsPublished(test));
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<CourseTest> FilterTestsAfterDeadline(IEnumerable<CourseTest> tests)
+        {
+            return tests
+                .Where(test => test.Deadline < DateTime.Now);
         }
 
         /// <summary>
@@ -112,6 +125,18 @@ namespace CourseManagementSystem.Services.Implementations
         private bool IsPublished(CourseTest test)
         {
             return test.Status == TestStatus.Published;
+        }
+
+        /// <summary>
+        /// remove all questions of the test
+        /// </summary>
+        /// <param name="test"></param>
+        private void RemoveAllQuestions(CourseTest test)
+        {
+            foreach (var question in test.Questions)
+            {
+                dbContext.TestQuestions.Remove(question);
+            }
         }
     }
 }

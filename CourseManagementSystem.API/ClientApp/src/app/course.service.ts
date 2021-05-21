@@ -54,16 +54,24 @@ export class CourseService extends ApiService {
    * get all active tests in this course
    * @param courseId identifier of the course
    */
-  public getAllActiveTests(courseId: string): Observable<CourseTestDetailsVM[]> {
+  public getActiveTests(courseId: string): Observable<CourseTestDetailsVM[]> {
     return this.httpGet<CourseTestDetailsVM[]>(`${courseId}/activeTests`);
   }
 
   /**
-   * get all tests in this course
+   * get all non-published tests in this course
    * @param courseId identifier of the course
    */
-  public getAllTests(courseId: string): Observable<CourseTestDetailsVM[]> {
-    return this.httpGet<CourseTestDetailsVM[]>(`${courseId}/tests`);
+  public getNonPublishedTests(courseId: string): Observable<CourseTestDetailsVM[]> {
+    return this.httpGet<CourseTestDetailsVM[]>(`${courseId}/nonPublishedTests`);
+  }
+
+  /**
+   * get all tests after deadline in this course
+   * @param courseId identifier of the course
+   */
+  public getTestsAfterDeadline(courseId: string): Observable<CourseTestDetailsVM[]> {
+    return this.httpGet<CourseTestDetailsVM[]>(`${courseId}/testsAfterDeadline`);
   }
 
   /**

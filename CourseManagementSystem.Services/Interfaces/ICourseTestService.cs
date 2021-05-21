@@ -27,12 +27,12 @@ namespace CourseManagementSystem.Services.Interfaces
         /// <summary>
         /// update properties of the <paramref name="test"/>
         /// </summary>
-        /// <param name="test">test to update</param>
+        /// <param name="testId">identifier of the test to update</param>
         /// <param name="updatedWeight">updated value of weight</param>
         /// <param name="updatedTopic">updated value of topic</param>
         /// <param name="updatedDeadline">updated value of deadline</param>
         /// <param name="updatedQuestions">updated questions</param>
-        void Update(CourseTest test, int updatedWeight, string updatedTopic, DateTime updatedDeadline, ICollection<TestQuestion> updatedQuestions);
+        void Update(string testId, int updatedWeight, string updatedTopic, DateTime updatedDeadline, ICollection<TestQuestion> updatedQuestions);
 
         /// <summary>
         /// publish the test (set <see cref="CourseTest.Status"/> to <see cref="TestStatus.Published"/>)
@@ -64,5 +64,19 @@ namespace CourseManagementSystem.Services.Interfaces
         /// <param name="tests">tests to filter</param>
         /// <returns></returns>
         IEnumerable<CourseTest> FilterActiveTests(IEnumerable<CourseTest> tests);
+
+        /// <summary>
+        /// filter tests that haven't been published yet from <paramref name="tests"/>
+        /// </summary>
+        /// <param name="tests">tests to filter</param>
+        /// <returns></returns>
+        IEnumerable<CourseTest> FilterNonPublishedTests(IEnumerable<CourseTest> tests);
+
+        /// <summary>
+        /// filter tests that are after deadline from <paramref name="tests"/>
+        /// </summary>
+        /// <param name="tests">tests to filter</param>
+        /// <returns></returns>
+        IEnumerable<CourseTest> FilterTestsAfterDeadline(IEnumerable<CourseTest> tests);
     }
 }
