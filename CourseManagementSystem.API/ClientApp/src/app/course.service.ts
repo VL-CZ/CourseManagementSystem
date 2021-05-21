@@ -51,6 +51,14 @@ export class CourseService extends ApiService {
   }
 
   /**
+   * get all active tests in this course
+   * @param courseId identifier of the course
+   */
+  public getAllActiveTests(courseId: string): Observable<CourseTestDetailsVM[]> {
+    return this.httpGet<CourseTestDetailsVM[]>(`${courseId}/activeTests`);
+  }
+
+  /**
    * get all tests in this course
    * @param courseId identifier of the course
    */

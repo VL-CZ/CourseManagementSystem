@@ -32,18 +32,19 @@ export class TestListComponent implements OnInit {
 
   private courseService: CourseService;
   private courseTestService: CourseTestService;
+  private roleAuthService: RoleAuthService;
 
   constructor(courseService: CourseService, roleAuthService: RoleAuthService, courseTestService: CourseTestService) {
     this.courseService = courseService;
     this.courseTestService = courseTestService;
-
-    roleAuthService.isAdmin().subscribe(result => {
-      this.isAdmin = result.value;
-    });
+    this.roleAuthService = roleAuthService;
   }
 
   ngOnInit() {
-    this.reloadTests();
+    this.roleAuthService.isAdmin().subscribe(result => {
+      this.isAdmin = result.value;
+      this.reloadTests();
+    });
   }
 
   /**
@@ -79,8 +80,14 @@ export class TestListComponent implements OnInit {
    * @private
    */
   private reloadTests(): void {
-    this.courseService.getAllTests(this.courseId).subscribe(tests => {
-      this.tests = tests;
-    });
+    if (this.isAdmin) {
+      this.courseService.getAllTests(this.courseId).subscribe(tests => {
+        this.tests = tests;
+      });
+    } else {
+      this.courseService.getAllActiveTests(this.courseId).subscribe(tests => {
+        this.tests = tests;
+      });
+    }
   }
 }

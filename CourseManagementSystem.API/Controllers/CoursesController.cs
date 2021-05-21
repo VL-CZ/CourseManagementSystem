@@ -78,17 +78,27 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
-        /// get all active tests in the course with given id
+        /// get all ACTIVE tests in the course with given id
+        /// </summary>
+        /// <param name="id">Id of the course</param>
+        /// <returns></returns>
+        [HttpGet("{id}/activeTests")]
+        [AuthorizeCourseAdminOrMemberOf(EntityType.Course, "id")]
+        public IEnumerable<CourseTestDetailsVM> GetActiveTests(string id)
+        {
+            return GetAndFilterTests(id, tests => courseTestService.FilterActiveTests(tests));
+        }
+
+        /// <summary>
+        /// get all tests in the course with given id
         /// </summary>
         /// <param name="id">Id of the course</param>
         /// <returns></returns>
         [HttpGet("{id}/tests")]
-        [AuthorizeCourseAdminOrMemberOf(EntityType.Course, "id")]
-        public IEnumerable<CourseTestDetailsVM> GetActiveTests(string id)
+        [AuthorizeCourseAdminOf(EntityType.Course, "id")]
+        public IEnumerable<CourseTestDetailsVM> GetAllTests(string id)
         {
-            var courseTests = courseService.GetTests(id);
-            var activeTests = courseTestService.FilterActiveTests(courseTests);
-            return activeTests.Select(test => new CourseTestDetailsVM(test.Id.ToString(), test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status, test.Deadline));
+            return GetAndFilterTests(id, tests => tests);
         }
 
         /// <summary>
@@ -103,5 +113,25 @@ namespace CourseManagementSystem.API.Controllers
             var posts = courseService.GetPostsWithAuthors(id);
             return posts.Select(post => new ForumPostVM(post.Id.ToString(), post.Author.Email, post.Text));
         }
+
+        /// <summary>
+        /// get and filter the tests in the course
+        /// </summary>
+        /// <param name="courseId">identifier of the course that contains these tests</param>
+        /// <param name="filter">function to filter the tests</param>
+        /// <returns></returns>
+        private IEnumerable<CourseTestDetailsVM> GetAndFilterTests(string courseId, TestFilter filter)
+        {
+            var courseTests = courseService.GetTests(courseId);
+            var filteredTests = filter(courseTests);
+            return filteredTests.Select(test => new CourseTestDetailsVM(test.Id.ToString(), test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status, test.Deadline));
+        }
+
+        /// <summary>
+        /// delegate for filtering tests
+        /// </summary>
+        /// <param name="tests">tests to filter</param>
+        /// <returns></returns>
+        private delegate IEnumerable<CourseTest> TestFilter(IEnumerable<CourseTest> tests);
     }
 }
