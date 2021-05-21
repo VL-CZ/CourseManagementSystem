@@ -62,7 +62,7 @@ namespace CourseManagementSystem.API.Controllers
                 submittedAnswers.ToList());
 
             testSubmissionEvaluator.Evaluate(testSubmission);
-            testSubmissionService.Save(testSubmission);
+            testSubmissionService.TryToSave(testSubmission);
 
             testSubmissionService.CommitChanges();
 

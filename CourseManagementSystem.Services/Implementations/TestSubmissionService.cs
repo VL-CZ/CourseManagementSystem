@@ -3,6 +3,7 @@ using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Extensions;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -61,9 +62,19 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public void Save(TestSubmission testSubmission)
+        public void TryToSave(TestSubmission testSubmission)
         {
-            dbContext.TestSubmissions.Add(testSubmission);
+            DateTime deadline = testSubmission.Test.Deadline;
+
+            // submitted before deadline -> pass
+            if (testSubmission.SubmittedDateTime <= deadline)
+            {
+                dbContext.TestSubmissions.Add(testSubmission);
+            }
+            else
+            {
+                throw new ApplicationException("Cannot submit a test after deadline");
+            }
         }
 
         /// <inheritdoc/>

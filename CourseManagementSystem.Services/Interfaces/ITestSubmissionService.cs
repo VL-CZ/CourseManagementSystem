@@ -36,9 +36,12 @@ namespace CourseManagementSystem.Services.Interfaces
 
         /// <summary>
         /// save a test submission
+        /// <br/>
+        /// if submitted after deadline, throw <see cref="System.ApplicationException"/>
         /// </summary>
         /// <param name="testSubmission">test submission to save</param>
-        void Save(TestSubmission testSubmission);
+        /// <exception cref="System.ApplicationException">if submitted after deadline</exception>
+        void TryToSave(TestSubmission testSubmission);
 
         /// <summary>
         /// update properties of the answer
