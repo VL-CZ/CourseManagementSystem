@@ -27,6 +27,11 @@ namespace CourseManagementSystem.Services.Implementations
         {
             var testToRemove = GetWithQuestions(testId);
 
+            if (IsPublished(testToRemove))
+            {
+                throw new ApplicationException("Cannot remove already published test");
+            }
+
             // remove all questions
             foreach (var question in testToRemove.Questions)
             {
@@ -60,6 +65,11 @@ namespace CourseManagementSystem.Services.Implementations
         /// <inheritdoc/>
         public void Update(CourseTest test, int updatedWeight, string updatedTopic, DateTime updatedDeadline, ICollection<TestQuestion> updatedQuestions)
         {
+            if (IsPublished(test))
+            {
+                throw new ApplicationException("Cannot update already published test");
+            }
+
             test.Weight = updatedWeight;
             test.Topic = updatedTopic;
             test.Deadline = updatedDeadline;
@@ -92,6 +102,16 @@ namespace CourseManagementSystem.Services.Implementations
             return tests
                 .Where(test => test.Status == TestStatus.Published)
                 .Where(test => test.Deadline > DateTime.Now);
+        }
+
+        /// <summary>
+        /// check if the test is published
+        /// </summary>
+        /// <param name="test">test to check</param>
+        /// <returns></returns>
+        private bool IsPublished(CourseTest test)
+        {
+            return test.Status == TestStatus.Published;
         }
     }
 }
