@@ -1,10 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {PercentCalculator} from '../utils/percentCalculator';
 import {GradeService} from '../grade.service';
 import {GradeDetailsVM} from '../viewmodels/gradeVM';
 import {CourseMemberService} from '../course-member.service';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
+import {PercentStringFormatter} from '../utils/percentStringFormatter';
 
 /**
  * component with list of student's grades
@@ -33,6 +33,11 @@ export class StudentGradeListComponent implements OnInit {
    * list of student's grades
    */
   public grades: GradeDetailsVM[] = [];
+
+  /**
+   * formatter of percent strings
+   */
+  public percentStringFormatter: PercentStringFormatter = new PercentStringFormatter();
 
   private gradeService: GradeService;
   private courseMemberService: CourseMemberService;
@@ -67,14 +72,6 @@ export class StudentGradeListComponent implements OnInit {
       }
     };
     this.bsModalRef = this.modalService.show(ConfirmDialogComponent, {initialState});
-  }
-
-  /**
-   * get percentual string from a double value
-   * @param doubleValue percentual value in double format (0->0%, 1->100%)
-   */
-  public getPercentString(doubleValue: number): string {
-    return PercentCalculator.doubleToPercent(doubleValue, 2).toString() + '%';
   }
 
   /**

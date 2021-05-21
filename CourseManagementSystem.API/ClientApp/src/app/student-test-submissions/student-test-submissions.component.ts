@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {TestSubmissionInfoVM} from '../viewmodels/testSubmissionVM';
 import {CourseMemberService} from '../course-member.service';
-import {PercentCalculator} from '../utils/percentCalculator';
+import {PercentStringFormatter} from '../utils/percentStringFormatter';
 
 /**
  * component representing student's test submissions
@@ -21,6 +21,11 @@ export class StudentTestSubmissionsComponent implements OnInit {
    */
   public testSubmissions: TestSubmissionInfoVM[] = [];
 
+  /**
+   * formatter of percent strings
+   */
+  public percentStringFormatter: PercentStringFormatter = new PercentStringFormatter();
+
   private courseMemberService: CourseMemberService;
 
   constructor(courseMemberService: CourseMemberService) {
@@ -31,13 +36,5 @@ export class StudentTestSubmissionsComponent implements OnInit {
     this.courseMemberService.getTestSubmissions(this.courseMemberId).subscribe(submissions => {
       this.testSubmissions = submissions;
     });
-  }
-
-  /**
-   * get percentual string from a double value
-   * @param doubleValue percentual value in double format (0->0%, 1->100%)
-   */
-  public getPercentString(doubleValue: number): string {
-    return PercentCalculator.doubleToPercent(doubleValue, 2).toString() + '%';
   }
 }
