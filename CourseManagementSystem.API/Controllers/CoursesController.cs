@@ -18,11 +18,13 @@ namespace CourseManagementSystem.API.Controllers
     {
         private readonly ICourseService courseService;
         private readonly IPeopleService peopleService;
+        private readonly ICourseTestService courseTestService;
 
-        public CoursesController(ICourseService courseService, IPeopleService peopleService)
+        public CoursesController(ICourseService courseService, IPeopleService peopleService, ICourseTestService courseTestService)
         {
             this.courseService = courseService;
             this.peopleService = peopleService;
+            this.courseTestService = courseTestService;
         }
 
         /// <summary>
@@ -33,9 +35,9 @@ namespace CourseManagementSystem.API.Controllers
         {
             Person admin = peopleService.GetById(courseVM.AdminId);
             Course createdCourse = new Course(courseVM.Name, admin);
-            
+
             courseService.AddCourse(createdCourse);
-            
+
             courseService.CommitChanges();
         }
 
@@ -69,23 +71,24 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id">Id of the course</param>
         /// <returns></returns>
         [HttpGet("{id}/files")]
-        [AuthorizeCourseAdminOrMemberOf(EntityType.Course,"id")]
+        [AuthorizeCourseAdminOrMemberOf(EntityType.Course, "id")]
         public IEnumerable<CourseFileVM> GetAllFiles(string id)
         {
             return courseService.GetFiles(id).Select(file => new CourseFileVM(file.Id.ToString(), file.Name));
         }
 
         /// <summary>
-        /// get all tests in the course with given id
+        /// get all active tests in the course with given id
         /// </summary>
         /// <param name="id">Id of the course</param>
         /// <returns></returns>
         [HttpGet("{id}/tests")]
         [AuthorizeCourseAdminOrMemberOf(EntityType.Course, "id")]
-        public IEnumerable<CourseTestDetailsVM> GetAllTests(string id)
+        public IEnumerable<CourseTestDetailsVM> GetActiveTests(string id)
         {
             var courseTests = courseService.GetTests(id);
-            return courseTests.Select(test => new CourseTestDetailsVM(test.Id.ToString(), test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status, test.Deadline));
+            var activeTests = courseTestService.FilterActiveTests(courseTests);
+            return activeTests.Select(test => new CourseTestDetailsVM(test.Id.ToString(), test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status, test.Deadline));
         }
 
         /// <summary>

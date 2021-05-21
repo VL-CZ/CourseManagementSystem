@@ -55,5 +55,14 @@ namespace CourseManagementSystem.Services.Interfaces
         /// <param name="courseMemberId">identifier of the courseMember</param>
         /// <returns></returns>
         bool IsAlreadySubmittedBy(string testId, string courseMemberId);
+
+        /// <summary>
+        /// filter active tests from <paramref name="tests"/>
+        /// <br/>
+        /// a test is active if it's published and before deadline
+        /// </summary>
+        /// <param name="tests">tests to filter</param>
+        /// <returns></returns>
+        IEnumerable<CourseTest> FilterActiveTests(IEnumerable<CourseTest> tests);
     }
 }

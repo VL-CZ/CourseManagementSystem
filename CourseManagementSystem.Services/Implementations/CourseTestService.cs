@@ -85,5 +85,13 @@ namespace CourseManagementSystem.Services.Implementations
             return courseMemberWithSubmittedTests.TestSubmissions
                 .Any(ts => ts.Test.Id.ToString() == testId);
         }
+
+        /// <inheritdoc/>
+        public IEnumerable<CourseTest> FilterActiveTests(IEnumerable<CourseTest> tests)
+        {
+            return tests
+                .Where(test => test.Status == TestStatus.Published)
+                .Where(test => test.Deadline > DateTime.Now);
+        }
     }
 }
