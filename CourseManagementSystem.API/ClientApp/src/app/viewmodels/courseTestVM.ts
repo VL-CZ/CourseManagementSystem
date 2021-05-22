@@ -17,7 +17,7 @@ abstract class BaseCourseTestVM {
   /**
    * deadline of the test
    */
-  public deadline: Date;
+  public deadline: string;
 
   /**
    * questions contained in this test

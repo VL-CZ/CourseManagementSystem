@@ -3,6 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {CourseTestDetailsVM} from '../viewmodels/courseTestVM';
 import {CourseTestService} from '../course-test.service';
 import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
+import {DateTimeFormatter} from '../utils/dateTimeFormatter';
 
 /**
  * component representing detail of the test
@@ -22,6 +23,11 @@ export class TestDetailComponent implements OnInit {
    * id of the test
    */
   public testId: string;
+
+  /**
+   * formatter of date-time
+   */
+  public dateTimeFormatter: DateTimeFormatter = new DateTimeFormatter();
 
   constructor(route: ActivatedRoute, courseTestService: CourseTestService) {
     this.testId = ActivatedRouteUtils.getIdParam(route);

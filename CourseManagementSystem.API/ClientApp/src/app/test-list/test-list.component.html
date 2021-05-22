@@ -7,7 +7,7 @@
         <a *ngIf="!isAdmin" routerLink="/tests/submit/{{test.id}}">{{test.topic}}</a>
       </td>
       <td>
-        <b>Deadline: {{test.deadline.toLocaleString()}}</b>
+        <b>Deadline: {{dateTimeFormatter.formatToLocal(test.deadline)}}</b>
       </td>
       <td *ngIf="isAdmin && !isPublished(test)">
         <button class="btn btn-info" (click)="publishTest(test)">Publish</button>

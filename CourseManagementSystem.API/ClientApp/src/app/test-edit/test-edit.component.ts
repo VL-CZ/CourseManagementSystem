@@ -5,6 +5,8 @@ import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
 import {AddCourseTestVM, CourseTestDetailsVM} from '../viewmodels/courseTestVM';
 import {TestQuestionVM} from '../viewmodels/testQuestionVM';
 import {TestQuestionNumberSetter} from '../utils/testQuestionNumberSetter';
+import {DateTimeBinder} from '../utils/dateTimeBinder';
+import {DateTimeFormatter} from '../utils/dateTimeFormatter';
 
 /**
  * component for editing a test
@@ -25,6 +27,16 @@ export class TestEditComponent implements OnInit {
    * id of the test
    */
   public testId: string;
+
+  /**
+   * class for binding date-time values
+   */
+  public dateTimeBinder = new DateTimeBinder();
+
+  /**
+   * formatter of date-time
+   */
+  public dateTimeFormatter = new DateTimeFormatter();
 
   private router: Router;
   private courseTestService: CourseTestService;
@@ -61,6 +73,9 @@ export class TestEditComponent implements OnInit {
    * save changes to the test
    */
   public saveChanges(): void {
+    if (!this.dateTimeBinder.isEmpty()) {
+      this.testToUpdate.deadline = this.dateTimeBinder.toString();
+    }
     const updatedTest = AddCourseTestVM.getFrom(this.testToUpdate);
     TestQuestionNumberSetter.setQuestionNumbers(updatedTest.questions);
 
