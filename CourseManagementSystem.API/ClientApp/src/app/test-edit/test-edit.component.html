@@ -11,7 +11,8 @@
     <input type="number" min="0" class="form-control" id="testWeight" [(ngModel)]="testToUpdate.weight" name="testWeight">
   </div>
   <div class="form-group">
-    <label for="testDeadlineDate">Deadline</label>
+    <div>Old deadline: {{dateTimeFormatter.formatToLocal(testToUpdate.deadline)}}</div>
+    <label for="testDeadlineDate">Set new deadline</label>
     <input type="date" class="form-control" id="testDeadlineDate" [(ngModel)]="dateTimeBinder.date"
            name="testDeadlineDate">
     <input type="time" class="form-control" id="testDeadlineTime" [(ngModel)]="dateTimeBinder.time"
