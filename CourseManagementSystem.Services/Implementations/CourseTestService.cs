@@ -100,7 +100,7 @@ namespace CourseManagementSystem.Services.Implementations
         {
             return tests
                 .Where(test => IsPublished(test))
-                .Where(test => test.Deadline > DateTime.Now);
+                .Where(test => test.Deadline > DateTime.UtcNow);
         }
 
         /// <inheritdoc/>
@@ -114,7 +114,7 @@ namespace CourseManagementSystem.Services.Implementations
         public IEnumerable<CourseTest> FilterTestsAfterDeadline(IEnumerable<CourseTest> tests)
         {
             return tests
-                .Where(test => test.Deadline < DateTime.Now);
+                .Where(test => test.Deadline < DateTime.UtcNow);
         }
 
         /// <summary>
