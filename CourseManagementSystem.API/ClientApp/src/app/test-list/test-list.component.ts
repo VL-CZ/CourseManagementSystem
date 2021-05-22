@@ -3,6 +3,7 @@ import {CourseTestDetailsVM, TestStatus} from '../viewmodels/courseTestVM';
 import {CourseService} from '../course.service';
 import {RoleAuthService} from '../role-auth.service';
 import {CourseTestService} from '../course-test.service';
+import {DateTimeFormatter} from '../utils/dateTimeFormatter';
 
 /**
  * component representing list of tests in a course
@@ -34,6 +35,11 @@ export class TestListComponent implements OnInit {
    * tests after deadline in this course
    */
   public testsAfterDeadline: CourseTestDetailsVM[] = [];
+
+  /**
+   * formatter of date-time
+   */
+  public dateTimeFormatter: DateTimeFormatter = new DateTimeFormatter();
 
   /**
    * is the current user admin?

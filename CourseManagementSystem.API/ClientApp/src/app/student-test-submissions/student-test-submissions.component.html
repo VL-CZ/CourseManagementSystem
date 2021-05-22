@@ -13,13 +13,13 @@
         <a routerLink="/submissions/{{submission.testSubmissionId}}">{{submission.testTopic}}</a>
       </td>
       <td>
-        <b>{{getPercentString(submission.percentualScore)}}</b>
+        <b>{{percentStringFormatter.format(submission.percentualScore)}}</b>
       </td>
       <td>
         {{submission.testWeight}}
       </td>
       <td>
-        {{submission.submittedDateTime}}
+        {{dateTimeFormatter.formatToLocal(submission.submittedDateTime)}}
       </td>
       <td>
         {{submission.isReviewed ? 'YES' : 'NO'}}

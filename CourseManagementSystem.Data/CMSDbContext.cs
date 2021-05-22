@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Policy;
 using System.Threading.Tasks;
 
@@ -43,6 +44,7 @@ namespace CourseManagementSystem.Data
             base.OnModelCreating(builder);
 
             ConfigureForeignKeys(builder);
+            ConfigureUtcDateTimes(builder);
         }
 
         /// <summary>
@@ -129,7 +131,29 @@ namespace CourseManagementSystem.Data
                 .HasOne(answer => answer.Question)
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
+        }
 
+        /// <summary>
+        /// configure that datetimes in database are in UTC format
+        /// </summary>
+        /// <param name="builder"></param>
+        private void ConfigureUtcDateTimes(ModelBuilder builder)
+        {
+            Expression<Func<DateTime, DateTime>> convertToUtcLambda = dateTime => new DateTime(dateTime.Ticks, DateTimeKind.Utc);
+
+            builder.Entity<CourseTest>()
+                .Property(test => test.Deadline)
+                .HasConversion(
+                    convertFromProviderExpression: convertToUtcLambda,
+                    convertToProviderExpression: convertToUtcLambda
+                 );
+
+            builder.Entity<TestSubmission>()
+                .Property(ts => ts.SubmittedDateTime)
+                .HasConversion(
+                    convertFromProviderExpression: convertToUtcLambda,
+                    convertToProviderExpression: convertToUtcLambda
+                 );
         }
     }
 }
