@@ -35,38 +35,37 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
-        /// submit a solution to the given test
+        /// submit a solution
         /// </summary>
-        /// <param name="testSubmissionVM">solution to submit</param>
-        /// <returns>Id of the test submission</returns>
-        [HttpPost("{testId}/submit")]
-        [AuthorizeCourseAdminOrMemberOf(EntityType.CourseTest, "testId")]
-        public WrapperVM<string> Submit(string testId, SubmitTestVM testSubmissionVM)
+        /// <param name="testSubmissionId">identifier of the <see cref="TestSubmission"/> to submit</param>
+        [HttpPost("{testSubmissionId}/submit")]
+        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseTest, "testSubmissionId")]
+        public void Submit(string testSubmissionId)
         {
-            var test = courseTestService.GetWithQuestions(testId);
+            var testSubmission = testSubmissionService.GetSubmissionWithTestAndQuestions(testSubmissionId);
 
-            string courseId = courseTestService.GetCourseIdOf(testId);
-
-            string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
-            var courseMember = courseMemberService.GetMemberByUserAndCourse(currentUserId, courseId);
-
-            if (courseTestService.IsAlreadySubmittedBy(testId, courseMember.Id.ToString()))
-            {
-                throw new ApplicationException("The test has already been submitted by this CourseMember");
-            }
-
-            var submittedAnswers = testSubmissionVM.Answers.Select(
-                answer => new TestSubmissionAnswer(courseTestService.GetQuestionByNumber(test, answer.QuestionNumber), answer.AnswerText));
-
-            var testSubmission = new TestSubmission(test, courseMember,
-                submittedAnswers.ToList());
-
+            testSubmissionService.MarkAsSubmitted(testSubmission);
             testSubmissionEvaluator.Evaluate(testSubmission);
-            testSubmissionService.TryToSave(testSubmission);
 
             testSubmissionService.CommitChanges();
+        }
 
-            return new WrapperVM<string>(testSubmission.Id.ToString());
+        /// <summary>
+        /// save a test submission
+        /// </summary>
+        /// <param name="testSubmissionId">identifier of the <see cref="TestSubmission"/> to save</param>
+        [HttpPut("{testSubmissionId}/save")]
+        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseTest, "testSubmissionId")]
+        public void SaveSubmission(string testSubmissionId, SubmitTestVM updatedTest)
+        {
+            var testSubmission = testSubmissionService.GetSubmissionWithTestAndQuestions(testSubmissionId);
+
+            foreach (var answer in updatedTest.Answers)
+            {
+                testSubmissionService.UpdateAnswerText(testSubmission, answer.QuestionNumber, answer.AnswerText);
+            }
+
+            testSubmissionService.CommitChanges();
         }
 
         /// <summary>
@@ -76,12 +75,23 @@ namespace CourseManagementSystem.API.Controllers
         /// <returns></returns>
         [HttpGet("emptyTest/{testId}")]
         [AuthorizeCourseAdminOrMemberOf(EntityType.CourseTest, "testId")]
-        public SubmitTestVM GetEmptySubmission(string testId)
+        public SubmitTestVM LoadSubmission(string testId)
         {
             var test = courseTestService.GetWithQuestions(testId);
-            var submissionAnswers = test.Questions.Select(question => new SubmissionAnswerVM(question.Number, question.QuestionText, string.Empty));
+            string courseId = courseTestService.GetCourseIdOf(testId);
 
-            return new SubmitTestVM(test.Id.ToString(), test.Topic, submissionAnswers);
+            string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
+            var courseMember = courseMemberService.GetMemberByUserAndCourse(currentUserId, courseId);
+
+            // check if the user hasn't saved it yet 
+
+            var emptySubmission = testSubmissionService.CreateEmptySubmission(test, courseMember);
+
+            var answersVM = emptySubmission.Answers.Select(answer => new SubmissionAnswerVM(answer.Question.Number, answer.Question.QuestionText, answer.Text));
+
+            testSubmissionService.TryToSave(emptySubmission);
+
+            return new SubmitTestVM(emptySubmission.Id.ToString(), test.Topic, answersVM);
         }
 
         /// <summary>

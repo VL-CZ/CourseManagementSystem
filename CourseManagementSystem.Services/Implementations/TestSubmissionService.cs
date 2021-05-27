@@ -15,6 +15,16 @@ namespace CourseManagementSystem.Services.Implementations
         { }
 
         /// <inheritdoc/>
+        public TestSubmission CreateEmptySubmission(CourseTest testWithQuestions, CourseMember courseMember)
+        {
+            var emptyAnswers = testWithQuestions.Questions.Select(
+                question => new TestSubmissionAnswer(question, string.Empty));
+
+            return new TestSubmission(testWithQuestions, courseMember,
+                emptyAnswers.ToList());
+        }
+
+        /// <inheritdoc/>
         public IEnumerable<TestSubmission> GetAllSubmissionsOfCourseMember(string courseMemberId)
         {
             return GetTestSubmissionsWithTestAndStudent().Where(ts => ts.Student.Id.ToString() == courseMemberId);
@@ -62,6 +72,12 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
+        public void MarkAsSubmitted(TestSubmission testSubmission)
+        {
+            //testSubmission.IsSubmitted = true;
+        }
+
+        /// <inheritdoc/>
         public void TryToSave(TestSubmission testSubmission)
         {
             DateTime deadline = testSubmission.Test.Deadline;
@@ -82,6 +98,13 @@ namespace CourseManagementSystem.Services.Implementations
         {
             answerToEvaluate.Points = updatedPoints;
             answerToEvaluate.Comment = updatedComment;
+        }
+
+        /// <inheritdoc/>
+        public void UpdateAnswerText(TestSubmission testSubmission, int questionNumber, string updatedAnswerText)
+        {
+            var answer = GetAnswerByQuestionNumber(testSubmission, questionNumber);
+            answer.Text = updatedAnswerText;
         }
 
         /// <summary>

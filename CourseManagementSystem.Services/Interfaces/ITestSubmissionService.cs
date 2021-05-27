@@ -56,5 +56,27 @@ namespace CourseManagementSystem.Services.Interfaces
         /// </summary>
         /// <param name="testSubmission">reviewed test submission</param>
         void MarkAsReviewed(TestSubmission testSubmission);
+
+        /// <summary>
+        /// mark the test submission as submitted
+        /// </summary>
+        /// <param name="testSubmission">test submission to submit</param>
+        void MarkAsSubmitted(TestSubmission testSubmission);
+
+        /// <summary>
+        /// create a new empty <see cref="TestSubmission"/> related to <paramref name="courseMember"/> and <paramref name="courseMember"/>
+        /// </summary>
+        /// <param name="testWithQuestions">CourseTest that the created TestSubmission belongs to</param>
+        /// <param name="courseMember">CourseMember that the created TestSubmission belongs to</param>
+        /// <returns></returns>
+        TestSubmission CreateEmptySubmission(CourseTest testWithQuestions, CourseMember courseMember);
+
+        /// <summary>
+        /// update answer text
+        /// </summary>
+        /// <param name="testSubmission">test submission that this answer belongs to</param>
+        /// <param name="questionNumber">number of question that this answer belongs to</param>
+        /// <param name="updatedAnswerText">contents of the answer</param>
+        void UpdateAnswerText(TestSubmission testSubmission, int questionNumber, string updatedAnswerText);
     }
 }
