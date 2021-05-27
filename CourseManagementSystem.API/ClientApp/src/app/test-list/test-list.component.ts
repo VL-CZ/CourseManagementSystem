@@ -22,9 +22,19 @@ export class TestListComponent implements OnInit {
   public courseId: string;
 
   /**
-   * list of test in this course
+   * active tests in this course
    */
-  public tests: CourseTestDetailsVM[] = [];
+  public activeTests: CourseTestDetailsVM[] = [];
+
+  /**
+   * tests that haven't been published yet in this course
+   */
+  public nonPublishedTests: CourseTestDetailsVM[] = [];
+
+  /**
+   * tests after deadline in this course
+   */
+  public testsAfterDeadline: CourseTestDetailsVM[] = [];
 
   /**
    * formatter of date-time
@@ -38,18 +48,19 @@ export class TestListComponent implements OnInit {
 
   private courseService: CourseService;
   private courseTestService: CourseTestService;
+  private roleAuthService: RoleAuthService;
 
   constructor(courseService: CourseService, roleAuthService: RoleAuthService, courseTestService: CourseTestService) {
     this.courseService = courseService;
     this.courseTestService = courseTestService;
-
-    roleAuthService.isAdmin().subscribe(result => {
-      this.isAdmin = result.value;
-    });
+    this.roleAuthService = roleAuthService;
   }
 
   ngOnInit() {
-    this.reloadTests();
+    this.roleAuthService.isAdmin().subscribe(result => {
+      this.isAdmin = result.value;
+      this.reloadTests();
+    });
   }
 
   /**
@@ -85,8 +96,22 @@ export class TestListComponent implements OnInit {
    * @private
    */
   private reloadTests(): void {
-    this.courseService.getAllTests(this.courseId).subscribe(tests => {
-      this.tests = tests;
+
+    // get active tests
+    this.courseService.getActiveTests(this.courseId).subscribe(tests => {
+      this.activeTests = tests;
     });
+
+    if (this.isAdmin) {
+      // get non-published tests
+      this.courseService.getNonPublishedTests(this.courseId).subscribe(tests => {
+        this.nonPublishedTests = tests;
+      });
+
+      // get tests after deadline
+      this.courseService.getTestsAfterDeadline(this.courseId).subscribe(tests => {
+        this.testsAfterDeadline = tests;
+      });
+    }
   }
 }

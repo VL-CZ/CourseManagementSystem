@@ -10,4 +10,7 @@
            [(ngModel)]="answer.answerText" name="answerText{{answer.questionNumber}}">
   </div>
 </div>
-<button type="button" class="btn btn-success" (click)="submit()">Submit</button>
+<div>
+  <button type="button" class="btn btn-info" (click)="saveAnswers()">Save answers</button>
+  <button type="button" class="btn btn-success" (click)="submit()">Submit</button>
+</div>

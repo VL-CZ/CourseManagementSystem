@@ -4,12 +4,12 @@
     <tr>
       <th>Name</th>
       <th>Email</th>
-      <th *ngIf="isAdmin"></th>
+      <th></th>
     </tr>
     <tr *ngFor="let person of students">
       <td>{{person.name}}</td>
       <td>{{person.email}}</td>
-      <td *ngIf="isAdmin"><a class="nav-link" routerLink="/students/{{person.id}}">Details</a></td>
+      <td><a class="nav-link" routerLink="/students/{{person.id}}">Details</a></td>
     </tr>
   </table>
 </div>

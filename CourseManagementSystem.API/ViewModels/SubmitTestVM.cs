@@ -12,24 +12,30 @@ namespace CourseManagementSystem.API.ViewModels
         {
         }
 
-        public SubmitTestVM(string testId, string testTopic, IEnumerable<SubmissionAnswerVM> answers)
+        public SubmitTestVM(string testId, string testTopic, bool isSubmitted, IEnumerable<SubmissionAnswerVM> answers)
         {
-            TestId = testId;
+            TestSubmissionId = testId;
             TestTopic = testTopic;
             Answers = answers;
+            IsSubmitted = isSubmitted;
         }
 
         /// <summary>
-        /// id of the test
+        /// id of the test submission
         /// </summary>
         [RequiredWithDefaultErrorMessage]
-        public string TestId { get; set; }
+        public string TestSubmissionId { get; set; }
 
         /// <summary>
         /// topic of the test
         /// </summary>
         [RequiredWithDefaultErrorMessage]
         public string TestTopic { get; set; }
+
+        /// <summary>
+        /// check if the test has already been submitted
+        /// </summary>
+        public bool IsSubmitted { get; set; }
 
         /// <summary>
         /// answers submitted by student

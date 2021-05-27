@@ -27,11 +27,12 @@ namespace CourseManagementSystem.Services.Implementations
         {
             var testToRemove = GetWithQuestions(testId);
 
-            // remove all questions
-            foreach (var question in testToRemove.Questions)
+            if (IsPublished(testToRemove))
             {
-                dbContext.TestQuestions.Remove(question);
+                throw new ApplicationException("Cannot remove already published test");
             }
+
+            RemoveAllQuestions(testToRemove);
 
             // remove the test
             dbContext.CourseTests.Remove(testToRemove);
@@ -58,12 +59,20 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public void Update(CourseTest test, int updatedWeight, string updatedTopic, DateTime updatedDeadline, ICollection<TestQuestion> updatedQuestions)
+        public void Update(string testId, int updatedWeight, string updatedTopic, DateTime updatedDeadline, ICollection<TestQuestion> updatedQuestions)
         {
+            var test = GetWithQuestions(testId);
+
+            if (IsPublished(test))
+            {
+                throw new ApplicationException("Cannot update already published test");
+            }
+
             test.Weight = updatedWeight;
             test.Topic = updatedTopic;
             test.Deadline = updatedDeadline;
-            test.Questions.Clear();
+
+            RemoveAllQuestions(test);
             test.Questions = updatedQuestions;
         }
 
@@ -72,6 +81,62 @@ namespace CourseManagementSystem.Services.Implementations
         {
             return test.Questions
                 .SingleOrDefault(question => question.Number == questionNumber);
+        }
+
+        /// <inheritdoc/>
+        public bool IsAlreadySubmittedBy(string testId, string courseMemberId)
+        {
+            var courseMemberWithSubmittedTests = dbContext.CourseMembers
+                .Include(cm => cm.TestSubmissions)
+                .ThenInclude(ts => ts.Test)
+                .SingleOrDefault(cm => cm.Id.ToString() == courseMemberId);
+
+            return courseMemberWithSubmittedTests.TestSubmissions
+                .Any(ts => ts.Test.Id.ToString() == testId);
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<CourseTest> FilterActiveTests(IEnumerable<CourseTest> tests)
+        {
+            return tests
+                .Where(test => IsPublished(test))
+                .Where(test => test.Deadline > DateTime.UtcNow);
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<CourseTest> FilterNonPublishedTests(IEnumerable<CourseTest> tests)
+        {
+            return tests
+                .Where(test => !IsPublished(test));
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<CourseTest> FilterTestsAfterDeadline(IEnumerable<CourseTest> tests)
+        {
+            return tests
+                .Where(test => test.Deadline < DateTime.UtcNow);
+        }
+
+        /// <summary>
+        /// check if the test is published
+        /// </summary>
+        /// <param name="test">test to check</param>
+        /// <returns></returns>
+        private bool IsPublished(CourseTest test)
+        {
+            return test.Status == TestStatus.Published;
+        }
+
+        /// <summary>
+        /// remove all questions of the test
+        /// </summary>
+        /// <param name="test"></param>
+        private void RemoveAllQuestions(CourseTest test)
+        {
+            foreach (var question in test.Questions)
+            {
+                dbContext.TestQuestions.Remove(question);
+            }
         }
     }
 }

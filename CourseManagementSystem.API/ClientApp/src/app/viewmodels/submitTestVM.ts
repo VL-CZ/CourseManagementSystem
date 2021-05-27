@@ -5,14 +5,19 @@ import {SubmissionAnswerVM} from './testSubmissionAnswerVM';
  */
 export class SubmitTestVM {
   /**
-   * id of the test
+   * id of the test submission
    */
-  public testId: string;
+  public testSubmissionId: string;
 
   /**
    * topic of the test
    */
   public testTopic: string;
+
+  /**
+   * check if the test has already been submitted
+   */
+  public isSubmitted: boolean;
 
   /**
    * answers to the test

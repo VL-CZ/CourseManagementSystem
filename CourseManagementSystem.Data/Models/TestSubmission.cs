@@ -20,8 +20,8 @@ namespace CourseManagementSystem.Data.Models
             Test = test;
             Student = student;
             Answers = submittedAnswers;
-            SubmittedDateTime = DateTime.UtcNow;
             IsReviewed = false;
+            IsSubmitted = false;
         }
 
         /// <summary>
@@ -52,6 +52,11 @@ namespace CourseManagementSystem.Data.Models
         /// has this test already been reviewed?
         /// </summary>
         public bool IsReviewed { get; set; }
+
+        /// <summary>
+        /// has this test been submitted?
+        /// </summary>
+        public bool IsSubmitted { get; set; }
 
         /// <summary>
         /// submitted answers

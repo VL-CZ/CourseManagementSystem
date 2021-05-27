@@ -5,7 +5,7 @@ import {ApiService} from './api.service';
 import {SubmitTestVM} from './viewmodels/submitTestVM';
 import {TestWithSubmissionVM} from './viewmodels/testSubmissionVM';
 import {EvaluatedTestSubmissionVM} from './viewmodels/evaluatedTestSubmissionVM';
-import {WrapperVM} from './viewmodels/wrapperVM';
+import {SubmissionAnswerVM} from './viewmodels/testSubmissionAnswerVM';
 
 @Injectable({
   providedIn: 'root'
@@ -21,16 +21,25 @@ export class TestSubmissionService extends ApiService {
    * submit student's solution
    * @param submission test to submit
    */
-  public submit(submission: SubmitTestVM): Observable<WrapperVM<string>> {
-    return this.httpPost<WrapperVM<string>>(`${submission.testId}/submit`, submission);
+  public submit(submission: SubmitTestVM): Observable<{}> {
+    return this.httpPost(`${submission.testSubmissionId}/submit`, submission);
+  }
+
+  /**
+   * save answers to the test submission
+   * @param testSubmissionId identifier of the test submission
+   * @param updatedAnswers updated text of the answers
+   */
+  public saveAnswers(testSubmissionId: string, updatedAnswers: SubmissionAnswerVM[]): Observable<{}> {
+    return this.httpPut(`${testSubmissionId}/save`, updatedAnswers);
   }
 
   /**
    * get new empty submission for given test
    * @param testId id of the test we submit
    */
-  public getEmptySubmission(testId: string): Observable<SubmitTestVM> {
-    return this.httpGet<SubmitTestVM>(`emptyTest/${testId}`);
+  public loadSubmission(testId: string): Observable<SubmitTestVM> {
+    return this.httpPost<SubmitTestVM>(`load/${testId}`, {});
   }
 
   /**

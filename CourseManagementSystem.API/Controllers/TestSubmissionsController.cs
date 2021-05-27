@@ -8,6 +8,9 @@ using CourseManagementSystem.TestEvaluation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CourseManagementSystem.API.Controllers
@@ -34,47 +37,62 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
-        /// submit a solution to the given test
+        /// submit a solution
         /// </summary>
-        /// <param name="testSubmissionVM">solution to submit</param>
-        /// <returns>Id of the test submission</returns>
-        [HttpPost("{testId}/submit")]
+        /// <param name="testSubmissionId">identifier of the <see cref="TestSubmission"/> to submit</param>
+        [HttpPost("{testSubmissionId}/submit")]
+        [AuthorizeCourseAdminOrOwnerOf(EntityType.TestSubmission, "testSubmissionId")]
+        public void Submit(string testSubmissionId)
+        {
+            var testSubmission = testSubmissionService.GetSubmissionWithTestAndQuestions(testSubmissionId);
+
+            testSubmissionService.Submit(testSubmission);
+            testSubmissionEvaluator.Evaluate(testSubmission);
+
+            testSubmissionService.CommitChanges();
+        }
+
+        /// <summary>
+        /// save answers to a test submission
+        /// </summary>
+        /// <param name="testSubmissionId">identifier of the <see cref="TestSubmission"/> to save</param>
+        /// <param name="updatedAnswers">updated contents of the answers</param>
+        [HttpPut("{testSubmissionId}/save")]
+        [AuthorizeCourseAdminOrOwnerOf(EntityType.TestSubmission, "testSubmissionId")]
+        public void SaveAnswers(string testSubmissionId, IEnumerable<SubmissionAnswerVM> updatedAnswers)
+        {
+            var testSubmission = testSubmissionService.GetSubmissionWithTestAndQuestions(testSubmissionId);
+
+            foreach (var answer in updatedAnswers)
+            {
+                testSubmissionService.UpdateAnswerText(testSubmission, answer.QuestionNumber, answer.AnswerText);
+            }
+
+            testSubmissionService.CommitChanges();
+        }
+
+        /// <summary>
+        /// load existing test submission
+        /// if it doesn't exist get new empty submission
+        /// </summary>
+        /// <param name="testId"></param>
+        /// <returns></returns>
+        [HttpPost("load/{testId}")]
         [AuthorizeCourseAdminOrMemberOf(EntityType.CourseTest, "testId")]
-        public WrapperVM<string> Submit(string testId, SubmitTestVM testSubmissionVM)
+        public SubmitTestVM LoadTestSubmission(string testId)
         {
             var test = courseTestService.GetWithQuestions(testId);
-
             string courseId = courseTestService.GetCourseIdOf(testId);
 
             string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
             var courseMember = courseMemberService.GetMemberByUserAndCourse(currentUserId, courseId);
-            var submittedAnswers = testSubmissionVM.Answers.Select(
-                answer => new TestSubmissionAnswer(courseTestService.GetQuestionByNumber(test, answer.QuestionNumber), answer.AnswerText));
 
-            var testSubmission = new TestSubmission(test, courseMember,
-                submittedAnswers.ToList());
+            var foundTestSubmission = testSubmissionService.LoadOrCreateSubmission(test, courseMember);
 
-            testSubmissionEvaluator.Evaluate(testSubmission);
-            testSubmissionService.Save(testSubmission);
+            var answersVM = foundTestSubmission.Answers.Select(answer => new SubmissionAnswerVM(answer.Question.Number, answer.Question.QuestionText, answer.Text));
 
             testSubmissionService.CommitChanges();
-
-            return new WrapperVM<string>(testSubmission.Id.ToString());
-        }
-
-        /// <summary>
-        /// get new empty test submission
-        /// </summary>
-        /// <param name="testId"></param>
-        /// <returns></returns>
-        [HttpGet("emptyTest/{testId}")]
-        [AuthorizeCourseAdminOrMemberOf(EntityType.CourseTest, "testId")]
-        public SubmitTestVM GetEmptySubmission(string testId)
-        {
-            var test = courseTestService.GetWithQuestions(testId);
-            var submissionAnswers = test.Questions.Select(question => new SubmissionAnswerVM(question.Number, question.QuestionText, string.Empty));
-
-            return new SubmitTestVM(test.Id.ToString(), test.Topic, submissionAnswers);
+            return new SubmitTestVM(foundTestSubmission.Id.ToString(), test.Topic, foundTestSubmission.IsSubmitted, answersVM);
         }
 
         /// <summary>
@@ -106,7 +124,7 @@ namespace CourseManagementSystem.API.Controllers
             foreach (var evaluatedAnswer in evaluatedTestSubmission.EvaluatedAnswers)
             {
                 var answer = testSubmissionService.GetAnswerByQuestionNumber(submission, evaluatedAnswer.QuestionNumber);
-                testSubmissionService.UpdateAnswer(answer, evaluatedAnswer.UpdatedPoints, evaluatedAnswer.UpdatedComment);
+                testSubmissionService.UpdateAnswerProperties(answer, evaluatedAnswer.UpdatedPoints, evaluatedAnswer.UpdatedComment);
             }
 
             testSubmissionService.MarkAsReviewed(submission);

@@ -77,10 +77,9 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOf(EntityType.CourseTest, "testId")]
         public void Update(string testId, AddCourseTestVM updatedTest)
         {
-            var test = courseTestService.GetWithQuestions(testId);
             var updatedQuestions = updatedTest.Questions.ToModels();
             
-            courseTestService.Update(test, updatedTest.Weight, updatedTest.Topic, updatedTest.Deadline, updatedQuestions.ToList());
+            courseTestService.Update(testId, updatedTest.Weight, updatedTest.Topic, updatedTest.Deadline, updatedQuestions.ToList());
 
             courseTestService.CommitChanges();
         }
