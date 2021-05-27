@@ -15,13 +15,15 @@ namespace CourseManagementSystem.Services.Implementations
         { }
 
         /// <inheritdoc/>
-        public TestSubmission CreateEmptySubmission(CourseTest testWithQuestions, CourseMember courseMember)
+        public TestSubmission LoadOrCreateSubmission(CourseTest testWithQuestions, CourseMember courseMember)
         {
-            var emptyAnswers = testWithQuestions.Questions.Select(
-                question => new TestSubmissionAnswer(question, string.Empty));
+            var foundSubmission = TryGetSubmissionByCourseMemberAndTest(courseMember, testWithQuestions);
 
-            return new TestSubmission(testWithQuestions, courseMember,
-                emptyAnswers.ToList());
+            // submission not found -> create empty
+            if (foundSubmission == null)
+                return CreateEmptySubmission(courseMember, testWithQuestions);
+            else
+                return foundSubmission;
         }
 
         /// <inheritdoc/>
@@ -72,20 +74,16 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public void MarkAsSubmitted(TestSubmission testSubmission)
+        public void Submit(TestSubmission testSubmission)
         {
-            testSubmission.IsSubmitted = true;
-        }
-
-        /// <inheritdoc/>
-        public void TryToSave(TestSubmission testSubmission)
-        {
-            DateTime deadline = testSubmission.Test.Deadline;
+            DateTime testDeadline = testSubmission.Test.Deadline;
+            DateTime currentDateTime = DateTime.UtcNow;
 
             // submitted before deadline -> pass
-            if (testSubmission.SubmittedDateTime <= deadline)
+            if (currentDateTime <= testDeadline)
             {
-                dbContext.TestSubmissions.Add(testSubmission);
+                testSubmission.SubmittedDateTime = currentDateTime;
+                testSubmission.IsSubmitted = true;
             }
             else
             {
@@ -116,6 +114,36 @@ namespace CourseManagementSystem.Services.Implementations
             return dbContext.TestSubmissions.Include(ts => ts.Test)
                 .Include(ts => ts.Student).ThenInclude(stud => stud.User)
                 .Include(ts => ts.Answers).ThenInclude(ans => ans.Question);
+        }
+
+        /// <summary>
+        /// try to get <see cref="TestSubmission"/> that belongs to the given <see cref="CourseMember"/> and <see cref="CourseTest"/>
+        /// </summary>
+        /// <param name="courseMember">given <see cref="CourseMember"/> of the test submission</param>
+        /// <param name="courseTest">given <see cref="CourseTest"/> of the test submission</param>
+        /// <returns><see cref="TestSubmission"/> if exists, otherwise NULL</returns>
+        private TestSubmission TryGetSubmissionByCourseMemberAndTest(CourseMember courseMember, CourseTest courseTest)
+        {
+            return GetAllSubmissionsOfCourseMember(courseMember.Id.ToString())
+                .SingleOrDefault(ts => ts.Test.Id == courseTest.Id);
+        }
+
+        /// <summary>
+        /// create new empty <see cref="TestSubmission"/>
+        /// </summary>
+        /// <param name="courseMember"><see cref="CourseMember"/> of the test submission</param>
+        /// <param name="testWithQuestions">given <see cref="CourseTest"/> of the test submission</param>
+        /// <returns>empty <see cref="TestSubmission"/></returns>
+        private TestSubmission CreateEmptySubmission(CourseMember courseMember, CourseTest testWithQuestions)
+        {
+            var emptyAnswers = testWithQuestions.Questions.Select(
+                question => new TestSubmissionAnswer(question, string.Empty));
+
+            var emptyTestSubmission = new TestSubmission(testWithQuestions, courseMember,
+                emptyAnswers.ToList());
+            dbContext.TestSubmissions.Add(emptyTestSubmission);
+
+            return emptyTestSubmission;
         }
     }
 }

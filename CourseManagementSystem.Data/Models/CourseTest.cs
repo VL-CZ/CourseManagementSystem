@@ -46,7 +46,7 @@ namespace CourseManagementSystem.Data.Models
         public TestStatus Status { get; set; }
 
         /// <summary>
-        /// deadline of the test (day and exact time)
+        /// deadline of the test in UTC
         /// </summary>
         public DateTime Deadline { get; set; }
 

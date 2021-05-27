@@ -20,7 +20,6 @@ namespace CourseManagementSystem.Data.Models
             Test = test;
             Student = student;
             Answers = submittedAnswers;
-            SubmittedDateTime = DateTime.UtcNow;
             IsReviewed = false;
             IsSubmitted = false;
         }

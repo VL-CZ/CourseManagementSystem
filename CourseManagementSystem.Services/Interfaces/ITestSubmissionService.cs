@@ -35,15 +35,6 @@ namespace CourseManagementSystem.Services.Interfaces
         TestSubmissionAnswer GetAnswerByQuestionNumber(TestSubmission testSubmission, int questionNumber);
 
         /// <summary>
-        /// save a test submission
-        /// <br/>
-        /// if submitted after deadline, throw <see cref="System.ApplicationException"/>
-        /// </summary>
-        /// <param name="testSubmission">test submission to save</param>
-        /// <exception cref="System.ApplicationException">if submitted after deadline</exception>
-        void TryToSave(TestSubmission testSubmission);
-
-        /// <summary>
         /// update properties of the answer
         /// </summary>
         /// <param name="answer">answer to update</param>
@@ -58,18 +49,23 @@ namespace CourseManagementSystem.Services.Interfaces
         void MarkAsReviewed(TestSubmission testSubmission);
 
         /// <summary>
-        /// mark the test submission as submitted
+        /// submit a <see cref="TestSubmission"/>
+        /// <br/>
+        /// if submitted after deadline, throw <see cref="System.ApplicationException"/>
         /// </summary>
         /// <param name="testSubmission">test submission to submit</param>
-        void MarkAsSubmitted(TestSubmission testSubmission);
+        /// <exception cref="System.ApplicationException">if submitted after deadline</exception>
+        void Submit(TestSubmission testSubmission);
 
         /// <summary>
-        /// create a new empty <see cref="TestSubmission"/> related to <paramref name="courseMember"/> and <paramref name="courseMember"/>
+        /// load a test submission related to the given <paramref name="courseMember"/> and <paramref name="courseMember"/>
+        /// <br/>
+        /// if not present, create a new empty <see cref="TestSubmission"/> 
         /// </summary>
-        /// <param name="testWithQuestions">CourseTest that the created TestSubmission belongs to</param>
-        /// <param name="courseMember">CourseMember that the created TestSubmission belongs to</param>
+        /// <param name="testWithQuestions">CourseTest that the TestSubmission belongs to</param>
+        /// <param name="courseMember">CourseMember that the TestSubmission belongs to</param>
         /// <returns></returns>
-        TestSubmission CreateEmptySubmission(CourseTest testWithQuestions, CourseMember courseMember);
+        TestSubmission LoadOrCreateSubmission(CourseTest testWithQuestions, CourseMember courseMember);
 
         /// <summary>
         /// update answer text
