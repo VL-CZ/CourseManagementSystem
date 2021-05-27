@@ -74,7 +74,7 @@ namespace CourseManagementSystem.Services.Implementations
         /// <inheritdoc/>
         public void MarkAsSubmitted(TestSubmission testSubmission)
         {
-            //testSubmission.IsSubmitted = true;
+            testSubmission.IsSubmitted = true;
         }
 
         /// <inheritdoc/>
