@@ -76,6 +76,8 @@ namespace CourseManagementSystem.Services.Implementations
         /// <inheritdoc/>
         public void Submit(TestSubmission testSubmission)
         {
+            CheckIfNotSubmitted(testSubmission);
+
             DateTime testDeadline = testSubmission.Test.Deadline;
             DateTime currentDateTime = DateTime.UtcNow;
 
@@ -92,7 +94,7 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public void UpdateAnswer(TestSubmissionAnswer answerToEvaluate, int updatedPoints, string updatedComment)
+        public void UpdateAnswerProperties(TestSubmissionAnswer answerToEvaluate, int updatedPoints, string updatedComment)
         {
             answerToEvaluate.Points = updatedPoints;
             answerToEvaluate.Comment = updatedComment;
@@ -101,6 +103,8 @@ namespace CourseManagementSystem.Services.Implementations
         /// <inheritdoc/>
         public void UpdateAnswerText(TestSubmission testSubmission, int questionNumber, string updatedAnswerText)
         {
+            CheckIfNotSubmitted(testSubmission);
+
             var answer = GetAnswerByQuestionNumber(testSubmission, questionNumber);
             answer.Text = updatedAnswerText;
         }
@@ -144,6 +148,21 @@ namespace CourseManagementSystem.Services.Implementations
             dbContext.TestSubmissions.Add(emptyTestSubmission);
 
             return emptyTestSubmission;
+        }
+
+        /// <summary>
+        /// check whether the test submission hasn't been submitted yet
+        /// <br/>
+        /// throws exception if already submitted
+        /// </summary>
+        /// <param name="testSubmission">test submission to check</param>
+        /// <exception cref="ApplicationException">if already submitted</exception>
+        private void CheckIfNotSubmitted(TestSubmission testSubmission)
+        {
+            if (testSubmission.IsSubmitted)
+            {
+                throw new ApplicationException("The test is already submitted");
+            }
         }
     }
 }
