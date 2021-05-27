@@ -41,7 +41,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="testSubmissionId">identifier of the <see cref="TestSubmission"/> to submit</param>
         [HttpPost("{testSubmissionId}/submit")]
-        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseTest, "testSubmissionId")]
+        [AuthorizeCourseAdminOrOwnerOf(EntityType.TestSubmission, "testSubmissionId")]
         public void Submit(string testSubmissionId)
         {
             var testSubmission = testSubmissionService.GetSubmissionWithTestAndQuestions(testSubmissionId);
@@ -58,7 +58,7 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="testSubmissionId">identifier of the <see cref="TestSubmission"/> to save</param>
         /// <param name="updatedAnswers">updated contents of the answers</param>
         [HttpPut("{testSubmissionId}/save")]
-        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseTest, "testSubmissionId")]
+        [AuthorizeCourseAdminOrOwnerOf(EntityType.TestSubmission, "testSubmissionId")]
         public void SaveAnswers(string testSubmissionId, IEnumerable<SubmissionAnswerVM> updatedAnswers)
         {
             var testSubmission = testSubmissionService.GetSubmissionWithTestAndQuestions(testSubmissionId);
@@ -124,7 +124,7 @@ namespace CourseManagementSystem.API.Controllers
             foreach (var evaluatedAnswer in evaluatedTestSubmission.EvaluatedAnswers)
             {
                 var answer = testSubmissionService.GetAnswerByQuestionNumber(submission, evaluatedAnswer.QuestionNumber);
-                testSubmissionService.UpdateAnswer(answer, evaluatedAnswer.UpdatedPoints, evaluatedAnswer.UpdatedComment);
+                testSubmissionService.UpdateAnswerProperties(answer, evaluatedAnswer.UpdatedPoints, evaluatedAnswer.UpdatedComment);
             }
 
             testSubmissionService.MarkAsReviewed(submission);
