@@ -30,6 +30,9 @@ export class TestSubmitComponent implements OnInit {
 
     testSubmitService.loadSubmission(testId).subscribe(submission => {
       this.testSubmission = submission;
+      if (submission.isSubmitted) {
+        this.navigateToSubmissionDetail();
+      }
     });
   }
 
@@ -55,9 +58,16 @@ export class TestSubmitComponent implements OnInit {
         // submit the test
         this.testSubmitService.submit(this.testSubmission).subscribe(
           // navigate
-          () => this.router.navigate(['/submissions', this.testSubmission.testSubmissionId]));
-      }
-    );
+          () => this.navigateToSubmissionDetail()
+        );
+      });
+  }
 
+  /**
+   * navigate to submission detail page
+   * @private
+   */
+  private navigateToSubmissionDetail(): void {
+    this.router.navigate(['/submissions', this.testSubmission.testSubmissionId]);
   }
 }

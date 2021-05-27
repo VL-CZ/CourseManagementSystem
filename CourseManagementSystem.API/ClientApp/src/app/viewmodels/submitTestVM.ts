@@ -15,6 +15,11 @@ export class SubmitTestVM {
   public testTopic: string;
 
   /**
+   * check if the test has already been submitted
+   */
+  public isSubmitted: boolean;
+
+  /**
    * answers to the test
    */
   public answers: SubmissionAnswerVM[] = [];

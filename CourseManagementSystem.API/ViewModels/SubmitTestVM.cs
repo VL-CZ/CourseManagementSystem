@@ -12,11 +12,12 @@ namespace CourseManagementSystem.API.ViewModels
         {
         }
 
-        public SubmitTestVM(string testId, string testTopic, IEnumerable<SubmissionAnswerVM> answers)
+        public SubmitTestVM(string testId, string testTopic, bool isSubmitted, IEnumerable<SubmissionAnswerVM> answers)
         {
             TestSubmissionId = testId;
             TestTopic = testTopic;
             Answers = answers;
+            IsSubmitted = isSubmitted;
         }
 
         /// <summary>
@@ -30,6 +31,11 @@ namespace CourseManagementSystem.API.ViewModels
         /// </summary>
         [RequiredWithDefaultErrorMessage]
         public string TestTopic { get; set; }
+
+        /// <summary>
+        /// check if the test has already been submitted
+        /// </summary>
+        public bool IsSubmitted { get; set; }
 
         /// <summary>
         /// answers submitted by student

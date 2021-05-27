@@ -62,7 +62,7 @@ namespace CourseManagementSystem.API.Controllers
         public void SaveAnswers(string testSubmissionId, IEnumerable<SubmissionAnswerVM> updatedAnswers)
         {
             var testSubmission = testSubmissionService.GetSubmissionWithTestAndQuestions(testSubmissionId);
-            
+
             foreach (var answer in updatedAnswers)
             {
                 testSubmissionService.UpdateAnswerText(testSubmission, answer.QuestionNumber, answer.AnswerText);
@@ -92,7 +92,7 @@ namespace CourseManagementSystem.API.Controllers
             var answersVM = foundTestSubmission.Answers.Select(answer => new SubmissionAnswerVM(answer.Question.Number, answer.Question.QuestionText, answer.Text));
 
             testSubmissionService.CommitChanges();
-            return new SubmitTestVM(foundTestSubmission.Id.ToString(), test.Topic, answersVM);
+            return new SubmitTestVM(foundTestSubmission.Id.ToString(), test.Topic, foundTestSubmission.IsSubmitted, answersVM);
         }
 
         /// <summary>
