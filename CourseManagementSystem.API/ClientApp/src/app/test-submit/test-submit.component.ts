@@ -28,7 +28,7 @@ export class TestSubmitComponent implements OnInit {
     this.testSubmitService = testSubmitService;
     this.router = router;
 
-    testSubmitService.getEmptySubmission(testId).subscribe(submission => {
+    testSubmitService.loadSubmission(testId).subscribe(submission => {
       this.testSubmission = submission;
     });
   }
@@ -37,10 +37,27 @@ export class TestSubmitComponent implements OnInit {
   }
 
   /**
+   * save current answer contents
+   */
+  public saveAnswers(): void {
+    this.testSubmitService.saveAnswers(this.testSubmission.testSubmissionId, this.testSubmission.answers).subscribe(
+      () => {
+      }
+    );
+  }
+
+  /**
    * submit the test
    */
   public submit(): void {
-    this.testSubmitService.submit(this.testSubmission).subscribe(
-      testSubmissionId => this.router.navigate(['/submissions', testSubmissionId.value]));
+    // save answers
+    this.testSubmitService.saveAnswers(this.testSubmission.testSubmissionId, this.testSubmission.answers).subscribe(() => {
+        // submit the test
+        this.testSubmitService.submit(this.testSubmission).subscribe(
+          // navigate
+          () => this.router.navigate(['/submissions', this.testSubmission.testSubmissionId]));
+      }
+    );
+
   }
 }
