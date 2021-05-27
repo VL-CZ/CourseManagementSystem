@@ -41,6 +41,9 @@ namespace CourseManagementSystem.API.ViewModels
     /// </summary>
     public class SubmissionAnswerWithCorrectAnswerVM : SubmissionAnswerVM
     {
+        public SubmissionAnswerWithCorrectAnswerVM() : base()
+        { }
+
         public SubmissionAnswerWithCorrectAnswerVM(int questionNumber, string questionText, string answerText, string correctAnswer, int receivedPoints, int maximalPoints, string comment)
             : base(questionNumber, questionText, answerText)
         {
