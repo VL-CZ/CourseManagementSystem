@@ -4,5 +4,5 @@
 
 <app-test-list [courseId]="courseId"></app-test-list>
 <app-file-list [courseId]="courseId"></app-file-list>
-<app-student-list [courseId]="courseId"></app-student-list>
+<app-student-list *ngIf="isAdmin" [courseId]="courseId"></app-student-list>
 <app-course-forum [courseId]="courseId"></app-course-forum>
