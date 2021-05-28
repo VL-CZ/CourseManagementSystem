@@ -108,11 +108,12 @@ namespace CourseManagementSystem.API.ViewModels
         { }
 
         public TestWithSubmissionVM(string testId, string testTopic, string testSubmissionId, IEnumerable<SubmissionAnswerWithCorrectAnswerVM> answers,
-            DateTime submittedDateTime, bool isReviewed) : base(testSubmissionId, submittedDateTime, isReviewed)
+            DateTime submittedDateTime, bool isReviewed, bool isTestGraded) : base(testSubmissionId, submittedDateTime, isReviewed)
         {
             TestId = testId;
             TestTopic = testTopic;
             Answers = answers;
+            IsTestGraded = isTestGraded;
         }
 
         /// <summary>
@@ -126,6 +127,11 @@ namespace CourseManagementSystem.API.ViewModels
         /// </summary>
         [RequiredWithDefaultErrorMessage]
         public string TestTopic { get; set; }
+
+        /// <summary>
+        /// is this test graded?
+        /// </summary>
+        public bool IsTestGraded { get; set; }
 
         /// <summary>
         /// submitted and correct answers
