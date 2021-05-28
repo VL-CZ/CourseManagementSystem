@@ -1,6 +1,7 @@
 ﻿using CourseManagementSystem.API.Auth;
 using CourseManagementSystem.API.Auth.Attributes;
 using CourseManagementSystem.API.Extensions;
+using CourseManagementSystem.API.Tools;
 using CourseManagementSystem.API.ViewModels;
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
@@ -19,12 +20,14 @@ namespace CourseManagementSystem.API.Controllers
         private readonly ICourseService courseService;
         private readonly IPeopleService peopleService;
         private readonly ICourseTestService courseTestService;
+        private CourseTestFilter courseTestFilter;
 
         public CoursesController(ICourseService courseService, IPeopleService peopleService, ICourseTestService courseTestService)
         {
             this.courseService = courseService;
             this.peopleService = peopleService;
             this.courseTestService = courseTestService;
+            courseTestFilter = new CourseTestFilter();
         }
 
         /// <summary>
@@ -86,7 +89,7 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOrMemberOf(EntityType.Course, "id")]
         public IEnumerable<CourseTestDetailsVM> GetActiveTests(string id)
         {
-            return GetAndFilterTests(id, tests => courseTestService.FilterActiveTests(tests));
+            return GetAndFilterTests(id, courseTestFilter.FilterActive);
         }
 
         /// <summary>
@@ -98,7 +101,7 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOf(EntityType.Course, "id")]
         public IEnumerable<CourseTestDetailsVM> GetNonPublishedTests(string id)
         {
-            return GetAndFilterTests(id, tests => courseTestService.FilterNonPublishedTests(tests));
+            return GetAndFilterTests(id, courseTestFilter.FilterNonPublished);
         }
 
         /// <summary>
@@ -110,7 +113,7 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOf(EntityType.Course, "id")]
         public IEnumerable<CourseTestDetailsVM> GetTestsAfterDeadline(string id)
         {
-            return GetAndFilterTests(id, tests => courseTestService.FilterTestsAfterDeadline(tests));
+            return GetAndFilterTests(id, courseTestFilter.FilterAfterDeadline);
         }
 
         /// <summary>
@@ -132,11 +135,12 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="courseId">identifier of the course that contains these tests</param>
         /// <param name="filter">function to filter the tests</param>
         /// <returns></returns>
-        private IEnumerable<CourseTestDetailsVM> GetAndFilterTests(string courseId, TestFilter filter)
+        private IEnumerable<CourseTestDetailsVM> GetAndFilterTests(string courseId, TestFilterDelegate filter)
         {
             var courseTests = courseService.GetTests(courseId);
             var filteredTests = filter(courseTests);
-            return filteredTests.Select(test => new CourseTestDetailsVM(test.Id.ToString(), test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status, test.Deadline));
+            return filteredTests.Select(test =>
+                new CourseTestDetailsVM(test.Id.ToString(), test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status, test.Deadline, test.IsGraded));
         }
 
         /// <summary>
@@ -144,6 +148,6 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="tests">tests to filter</param>
         /// <returns></returns>
-        private delegate IEnumerable<CourseTest> TestFilter(IEnumerable<CourseTest> tests);
+        public delegate IEnumerable<CourseTest> TestFilterDelegate(IEnumerable<CourseTest> tests);
     }
 }

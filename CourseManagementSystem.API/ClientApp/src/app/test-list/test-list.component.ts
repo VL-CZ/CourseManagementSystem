@@ -4,6 +4,7 @@ import {CourseService} from '../course.service';
 import {RoleAuthService} from '../role-auth.service';
 import {CourseTestService} from '../course-test.service';
 import {DateTimeFormatter} from '../utils/dateTimeFormatter';
+import {CourseTestUtils} from '../utils/courseTestUtils';
 
 /**
  * component representing list of tests in a course
@@ -45,6 +46,8 @@ export class TestListComponent implements OnInit {
    * is the current user admin?
    */
   public isAdmin: boolean;
+
+  public courseTestUtils: CourseTestUtils = new CourseTestUtils();
 
   private courseService: CourseService;
   private courseTestService: CourseTestService;

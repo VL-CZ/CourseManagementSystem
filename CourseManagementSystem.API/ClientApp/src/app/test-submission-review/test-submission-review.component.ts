@@ -10,6 +10,7 @@ import {EvaluatedAnswerVM, EvaluatedTestSubmissionVM} from '../viewmodels/evalua
 import {RouterUtils} from '../utils/routerUtils';
 import {SubmissionAnswerWithCorrectAnswerVM} from '../viewmodels/testSubmissionAnswerVM';
 import {DateTimeFormatter} from '../utils/dateTimeFormatter';
+import {CourseTestUtils} from '../utils/courseTestUtils';
 
 /**
  * component representing detail of the submitted test solution
@@ -39,6 +40,8 @@ export class TestSubmissionReviewComponent implements OnInit {
    * is the current user admin?
    */
   public isAdmin: boolean;
+
+  public courseTestUtils: CourseTestUtils = new CourseTestUtils();
 
   private testSubmissionService: TestSubmissionService;
   private readonly router: Router;

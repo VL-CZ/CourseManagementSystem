@@ -15,6 +15,11 @@ export class SubmitTestVM {
   public testTopic: string;
 
   /**
+   * is this test graded?
+   */
+  public isTestGraded: boolean;
+
+  /**
    * check if the test has already been submitted
    */
   public isSubmitted: boolean;

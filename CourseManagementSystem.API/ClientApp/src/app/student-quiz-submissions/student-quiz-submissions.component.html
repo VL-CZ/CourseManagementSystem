@@ -1,0 +1,10 @@
+<div class="jumbotron">
+  <h3>Quizzes</h3>
+  <table class="table table-striped table-responsive">
+    <tr *ngFor="let submission of quizSubmissions">
+      <td>
+        <a routerLink="/submissions/{{submission.testSubmissionId}}">{{submission.testTopic}}</a>
+      </td>
+    </tr>
+  </table>
+</div>

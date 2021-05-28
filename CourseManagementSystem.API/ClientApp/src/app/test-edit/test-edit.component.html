@@ -7,6 +7,22 @@
     <input type="text" min="0" class="form-control" id="testTopic" [(ngModel)]="testToUpdate.topic" name="testTopic">
   </div>
   <div class="form-group">
+    <div>Is this test graded?</div>
+
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="testIsGraded" id="testIsGradedTrue" [(ngModel)]="testToUpdate.isGraded" [value]="true">
+      <label class="form-check-label" for="testIsGradedTrue">
+        Yes
+      </label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="testIsGraded" id="testIsGradedFalse" [(ngModel)]="testToUpdate.isGraded" [value]="false">
+      <label class="form-check-label" for="testIsGradedFalse">
+        No
+      </label>
+    </div>
+  </div>
+  <div class="form-group">
     <label for="testWeight">Test weight</label>
     <input type="number" min="0" class="form-control" id="testWeight" [(ngModel)]="testToUpdate.weight" name="testWeight">
   </div>

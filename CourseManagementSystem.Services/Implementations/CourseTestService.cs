@@ -59,7 +59,7 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public void Update(string testId, int updatedWeight, string updatedTopic, DateTime updatedDeadline, ICollection<TestQuestion> updatedQuestions)
+        public void Update(string testId, int updatedWeight, string updatedTopic, DateTime updatedDeadline, ICollection<TestQuestion> updatedQuestions, bool updatedIsGraded)
         {
             var test = GetWithQuestions(testId);
 
@@ -71,31 +71,10 @@ namespace CourseManagementSystem.Services.Implementations
             test.Weight = updatedWeight;
             test.Topic = updatedTopic;
             test.Deadline = updatedDeadline;
+            test.IsGraded = updatedIsGraded;
 
             RemoveAllQuestions(test);
             test.Questions = updatedQuestions;
-        }
-
-        /// <inheritdoc/>
-        public IEnumerable<CourseTest> FilterActiveTests(IEnumerable<CourseTest> tests)
-        {
-            return tests
-                .Where(test => IsPublished(test))
-                .Where(test => test.Deadline > DateTime.UtcNow);
-        }
-
-        /// <inheritdoc/>
-        public IEnumerable<CourseTest> FilterNonPublishedTests(IEnumerable<CourseTest> tests)
-        {
-            return tests
-                .Where(test => !IsPublished(test));
-        }
-
-        /// <inheritdoc/>
-        public IEnumerable<CourseTest> FilterTestsAfterDeadline(IEnumerable<CourseTest> tests)
-        {
-            return tests
-                .Where(test => test.Deadline < DateTime.UtcNow);
         }
 
         /// <summary>

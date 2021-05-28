@@ -27,9 +27,15 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public IEnumerable<TestSubmission> GetAllSubmissionsOfCourseMember(string courseMemberId)
+        public IEnumerable<TestSubmission> GetAllGraded(string courseMemberId)
         {
-            return GetAllSubmittedWithTestAndStudent().Where(ts => ts.Student.Id.ToString() == courseMemberId);
+            return GetAllAssignmentsOf(AssignmentType.Test, courseMemberId);
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<TestSubmission> GetAllQuizzes(string courseMemberId)
+        {
+            return GetAllAssignmentsOf(AssignmentType.Quiz, courseMemberId);
         }
 
         /// <inheritdoc/>
@@ -177,6 +183,27 @@ namespace CourseManagementSystem.Services.Implementations
             {
                 throw new ApplicationException("The test is already submitted");
             }
+        }
+
+        /// <summary>
+        /// enum representing type of the assignment
+        /// </summary>
+        private enum AssignmentType { Test, Quiz };
+
+        /// <summary>
+        /// get all submitted assignments of the <see cref="CourseMember"/>
+        /// </summary>
+        /// <param name="assignmentType">type of the assingments to obtain</param>
+        /// <param name="courseMemberId">identifier of the <see cref="CourseMember"/></param>
+        /// <returns></returns>
+        private IEnumerable<TestSubmission> GetAllAssignmentsOf(AssignmentType assignmentType, string courseMemberId)
+        {
+            var allAssignmentsOfCourseMember = GetAllSubmittedWithTestAndStudent()
+                .Where(ts => ts.Student.Id.ToString() == courseMemberId);
+
+            return assignmentType == AssignmentType.Test
+                ? allAssignmentsOfCourseMember.Where(ts => ts.Test.IsGraded)
+                : allAssignmentsOfCourseMember.Where(ts => !ts.Test.IsGraded);
         }
     }
 }

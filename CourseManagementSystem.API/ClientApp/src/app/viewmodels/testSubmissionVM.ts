@@ -71,6 +71,11 @@ export class TestWithSubmissionVM extends BaseTestSubmissionVM {
   public testTopic: string;
 
   /**
+   * is this test graded?
+   */
+  public isTestGraded: boolean;
+
+  /**
    * answers in the submission
    */
   public answers: SubmissionAnswerWithCorrectAnswerVM[] = [];

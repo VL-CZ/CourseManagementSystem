@@ -12,12 +12,13 @@ namespace CourseManagementSystem.API.ViewModels
         {
         }
 
-        public SubmitTestVM(string testId, string testTopic, bool isSubmitted, IEnumerable<SubmissionAnswerVM> answers)
+        public SubmitTestVM(string testId, string testTopic, bool isSubmitted, IEnumerable<SubmissionAnswerVM> answers, bool isTestGraded)
         {
             TestSubmissionId = testId;
             TestTopic = testTopic;
             Answers = answers;
             IsSubmitted = isSubmitted;
+            IsTestGraded = isTestGraded;
         }
 
         /// <summary>
@@ -36,6 +37,11 @@ namespace CourseManagementSystem.API.ViewModels
         /// check if the test has already been submitted
         /// </summary>
         public bool IsSubmitted { get; set; }
+
+        /// <summary>
+        /// is the test graded?
+        /// </summary>
+        public bool IsTestGraded { get; set; }
 
         /// <summary>
         /// answers submitted by student

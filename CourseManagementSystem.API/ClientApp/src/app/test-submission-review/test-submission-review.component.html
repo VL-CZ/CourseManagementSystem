@@ -1,5 +1,6 @@
 <div class="jumbotron">
   <h2>{{submission.testTopic}}</h2>
+  <b>{{courseTestUtils.isGradedToString(submission.isTestGraded)}}</b>
   <div>
     Submitted at: {{dateTimeFormatter.formatToLocal(submission.submittedDateTime)}}
   </div>
