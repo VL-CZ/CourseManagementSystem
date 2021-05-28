@@ -11,7 +11,7 @@
           <b>Deadline: {{dateTimeFormatter.formatToLocal(test.deadline)}}</b>
         </td>
         <td>
-          <b>{{courseTestUtils.isGradedToString(test)}}</b>
+          <b>{{courseTestUtils.isGradedToString(test.isGraded)}}</b>
         </td>
         <td>
           <button class="btn btn-info" (click)="publishTest(test)">Publish</button>
@@ -34,7 +34,7 @@
           <b>Deadline: {{dateTimeFormatter.formatToLocal(test.deadline)}}</b>
         </td>
         <td>
-          <b>{{courseTestUtils.isGradedToString(test)}}</b>
+          <b>{{courseTestUtils.isGradedToString(test.isGraded)}}</b>
         </td>
       </tr>
     </table>
@@ -47,7 +47,7 @@
           <a routerLink="/tests/{{test.id}}">{{test.topic}}</a>
         </td>
         <td>
-          <b>{{courseTestUtils.isGradedToString(test)}}</b>
+          <b>{{courseTestUtils.isGradedToString(test.isGraded)}}</b>
         </td>
       </tr>
     </table>

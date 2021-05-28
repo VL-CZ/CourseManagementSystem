@@ -1,7 +1,7 @@
 <div class="jumbotron">
   <h2>{{courseTest.topic}}</h2>
   <div>Weight: {{courseTest.weight}}</div>
-  <div>{{courseTestUtils.isGradedToString(courseTest)}}</div>
+  <div>{{courseTestUtils.isGradedToString(courseTest.isGraded)}}</div>
   <div>Deadline: {{dateTimeFormatter.formatToLocal(courseTest.deadline)}}</div>
 </div>
 <div class="jumbotron" *ngFor="let question of courseTest.questions">

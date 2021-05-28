@@ -3,7 +3,7 @@ import {TestQuestionVM} from './testQuestionVM';
 /**
  * base viewmodel for course test
  */
-export abstract class BaseCourseTestVM {
+abstract class BaseCourseTestVM {
   /**
    * topic of the test
    */
