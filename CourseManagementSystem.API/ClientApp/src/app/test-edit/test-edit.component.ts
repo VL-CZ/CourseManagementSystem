@@ -7,6 +7,7 @@ import {TestQuestionVM} from '../viewmodels/testQuestionVM';
 import {TestQuestionNumberSetter} from '../utils/testQuestionNumberSetter';
 import {DateTimeBinder} from '../utils/dateTimeBinder';
 import {DateTimeFormatter} from '../utils/dateTimeFormatter';
+import {CourseTestUtils} from '../utils/courseTestUtils';
 
 /**
  * component for editing a test
@@ -37,6 +38,8 @@ export class TestEditComponent implements OnInit {
    * formatter of date-time
    */
   public dateTimeFormatter = new DateTimeFormatter();
+
+  public courseTestUtils: CourseTestUtils = new CourseTestUtils();
 
   private router: Router;
   private courseTestService: CourseTestService;
