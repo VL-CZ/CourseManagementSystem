@@ -14,12 +14,13 @@ namespace CourseManagementSystem.Data.Models
             Status = TestStatus.New;
         }
 
-        public CourseTest(string topic, ICollection<TestQuestion> questions, int weight, DateTime deadline) : this()
+        public CourseTest(string topic, ICollection<TestQuestion> questions, int weight, DateTime deadline, bool isGraded) : this()
         {
             Topic = topic;
             Questions = questions;
             Weight = weight;
             Deadline = deadline;
+            IsGraded = isGraded;
         }
 
         /// <summary>
@@ -39,6 +40,13 @@ namespace CourseManagementSystem.Data.Models
         /// weight of the score from the test (e.g. test of weight 2 has twice bigger impact on overall score than test of weight 1)
         /// </summary>
         public int Weight { get; set; }
+
+        /// <summary>
+        /// is this test graded?
+        /// <br/>
+        /// if not -> it's a quiz
+        /// </summary>
+        public bool IsGraded { get; set; }
 
         /// <summary>
         /// status of the test
