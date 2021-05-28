@@ -13,6 +13,13 @@ namespace CourseManagementSystem.Services.Interfaces
         IEnumerable<TestSubmission> GetAllGraded(string courseMemberId);
 
         /// <summary>
+        /// get all quizzes (non-graded assignments) submitted by the given <see cref="CourseMember"/>
+        /// </summary>
+        /// <param name="courseMemberId">id of the <see cref="CourseMember"/></param>
+        /// <returns>all test submissions of the <see cref="CourseMember"/></returns>
+        IEnumerable<TestSubmission> GetAllQuizzes(string courseMemberId);
+
+        /// <summary>
         /// get all submitted test submissions that belong to given test
         /// </summary>
         /// <param name="testId">ID of the test</param>

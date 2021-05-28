@@ -60,7 +60,7 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
-        /// get all test submissions of this <see cref="CourseMember"/>
+        /// get all graded test submissions of this <see cref="CourseMember"/>
         /// </summary>
         /// <param name="id">ID of the <see cref="CourseMember"/></param>
         /// <returns>all test submissions of the course member</returns>
@@ -71,6 +71,19 @@ namespace CourseManagementSystem.API.Controllers
             var userSubmissions = testSubmissionService.GetAllGraded(id);
             return userSubmissions.Select(ts => new TestSubmissionInfoVM(ts.Id.ToString(), ts.Test.Topic, ts.Test.Weight,
                 TestScoreCalculator.CalculateScore(ts), ts.SubmittedDateTime, ts.IsReviewed));
+        }
+
+        /// <summary>
+        /// get all quizzes (non-graded test submissions) of the <see cref="CourseMember"/>
+        /// </summary>
+        /// <param name="id">ID of the <see cref="CourseMember"/></param>
+        /// <returns>all test submissions of the course member</returns>
+        [HttpGet("{id}/quizSubmissions")]
+        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "id")]
+        public IEnumerable<QuizSubmissionInfoVM> GetQuizzes(string id)
+        {
+            var userSubmissions = testSubmissionService.GetAllQuizzes(id);
+            return userSubmissions.Select(quiz => new QuizSubmissionInfoVM(quiz.Id.ToString(), quiz.Test.Topic));
         }
 
         /// <summary>
@@ -100,7 +113,7 @@ namespace CourseManagementSystem.API.Controllers
                 .Select(grade => new ScoreWithWeightDto(grade.Weight, grade.PercentualValue));
             var mappedTestSubmissions = testSubmissionService.GetAllGraded(id)
                 .Select(ts => new ScoreWithWeightDto(ts.Test.Weight, TestScoreCalculator.CalculateScore(ts)));
-            
+
             var scoresWithWeights = new List<ScoreWithWeightDto>();
             scoresWithWeights.AddRange(mappedGrades);
             scoresWithWeights.AddRange(mappedTestSubmissions);
