@@ -4,6 +4,7 @@ import {CourseTestService} from '../course-test.service';
 import {SubmitTestVM} from '../viewmodels/submitTestVM';
 import {TestSubmissionService} from '../test-submission.service';
 import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
+import {CourseTestUtils} from '../utils/courseTestUtils';
 
 /**
  * component for submitting a test
@@ -19,6 +20,8 @@ export class TestSubmitComponent implements OnInit {
    * test to submit
    */
   public testSubmission: SubmitTestVM = new SubmitTestVM();
+
+  public courseTestUtils: CourseTestUtils = new CourseTestUtils();
 
   private router: Router;
   private testSubmitService: TestSubmissionService;

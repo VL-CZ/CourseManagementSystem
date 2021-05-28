@@ -1,5 +1,6 @@
 <div class="jumbotron">
   <h2>{{this.testSubmission.testTopic}}</h2>
+  <b>{{courseTestUtils.isGradedToString(this.testSubmission.isTestGraded)}}</b>
 </div>
 <div class="jumbotron" *ngFor="let answer of this.testSubmission.answers">
   <h3>Question {{answer.questionNumber}}</h3>
