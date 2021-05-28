@@ -41,22 +41,6 @@ namespace CourseManagementSystem.Services.Interfaces
         void Publish(CourseTest test);
 
         /// <summary>
-        /// get question in the test by its number
-        /// </summary>
-        /// <param name="test">given test</param>
-        /// <param name="questionNumber">number of the question</param>
-        /// <returns></returns>
-        TestQuestion GetQuestionByNumber(CourseTest test, int questionNumber);
-
-        /// <summary>
-        /// check if the course member has already submitted the test
-        /// </summary>
-        /// <param name="testId">identifier of the test</param>
-        /// <param name="courseMemberId">identifier of the courseMember</param>
-        /// <returns></returns>
-        bool IsAlreadySubmittedBy(string testId, string courseMemberId);
-
-        /// <summary>
         /// filter active tests from <paramref name="tests"/>
         /// <br/>
         /// a test is active if it's published and before deadline

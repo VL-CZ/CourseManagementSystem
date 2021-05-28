@@ -29,13 +29,13 @@ namespace CourseManagementSystem.Services.Implementations
         /// <inheritdoc/>
         public IEnumerable<TestSubmission> GetAllSubmissionsOfCourseMember(string courseMemberId)
         {
-            return GetTestSubmissionsWithTestAndStudent().Where(ts => ts.Student.Id.ToString() == courseMemberId);
+            return GetAllSubmittedWithTestAndStudent().Where(ts => ts.Student.Id.ToString() == courseMemberId);
         }
 
         /// <inheritdoc/>
         public IEnumerable<TestSubmission> GetAllSubmissionsOfTest(string testId)
         {
-            return GetTestSubmissionsWithTestAndStudent().Where(ts => ts.Test.Id.ToString() == testId);
+            return GetAllSubmittedWithTestAndStudent().Where(ts => ts.Test.Id.ToString() == testId);
         }
 
         /// <inheritdoc/>
@@ -110,14 +110,25 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <summary>
-        /// get all test submissions with test, student, user, answer and question loaded
+        /// get all submitted test submissions with test, student, user, answer and question loaded
         /// </summary>
+        /// <param name="includeNotSubmitted">include also non-submitted objects?</param>
         /// <returns>test submissions with test, student, user, answer and question included</returns>
-        private IEnumerable<TestSubmission> GetTestSubmissionsWithTestAndStudent()
+        private IEnumerable<TestSubmission> GetAllSubmittedWithTestAndStudent(bool includeNotSubmitted = false)
         {
-            return dbContext.TestSubmissions.Include(ts => ts.Test)
+            var allTestSubmissions = dbContext.TestSubmissions
+                .Include(ts => ts.Test)
                 .Include(ts => ts.Student).ThenInclude(stud => stud.User)
                 .Include(ts => ts.Answers).ThenInclude(ans => ans.Question);
+
+            if (includeNotSubmitted)
+            {
+                return allTestSubmissions;
+            }
+            else
+            {
+                return allTestSubmissions.Where(ts => ts.IsSubmitted);
+            }
         }
 
         /// <summary>
@@ -128,7 +139,10 @@ namespace CourseManagementSystem.Services.Implementations
         /// <returns><see cref="TestSubmission"/> if exists, otherwise NULL</returns>
         private TestSubmission TryGetSubmissionByCourseMemberAndTest(CourseMember courseMember, CourseTest courseTest)
         {
-            return GetAllSubmissionsOfCourseMember(courseMember.Id.ToString())
+            var courseMemberSubmission = GetAllSubmittedWithTestAndStudent(true)
+                .Where(ts => ts.Student.Id == courseMember.Id);
+
+            return courseMemberSubmission
                 .SingleOrDefault(ts => ts.Test.Id == courseTest.Id);
         }
 
