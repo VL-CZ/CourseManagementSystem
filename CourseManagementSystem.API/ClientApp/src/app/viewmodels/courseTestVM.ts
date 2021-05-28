@@ -3,7 +3,7 @@ import {TestQuestionVM} from './testQuestionVM';
 /**
  * base viewmodel for course test
  */
-abstract class BaseCourseTestVM {
+export abstract class BaseCourseTestVM {
   /**
    * topic of the test
    */
@@ -18,6 +18,11 @@ abstract class BaseCourseTestVM {
    * deadline of the test
    */
   public deadline: string;
+
+  /**
+   * is this test graded?
+   */
+  public isGraded: boolean;
 
   /**
    * questions contained in this test
@@ -41,6 +46,7 @@ export class AddCourseTestVM extends BaseCourseTestVM {
     testToAdd.deadline = courseTest.deadline;
     testToAdd.questions = courseTest.questions;
     testToAdd.topic = courseTest.topic;
+    testToAdd.isGraded = courseTest.isGraded;
 
     return testToAdd;
   }
