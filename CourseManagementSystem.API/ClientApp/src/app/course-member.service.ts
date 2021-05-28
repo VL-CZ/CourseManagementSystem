@@ -7,6 +7,7 @@ import {GradeDetailsVM} from './viewmodels/gradeVM';
 import {ApiService} from './api.service';
 import {TestSubmissionInfoVM} from './viewmodels/testSubmissionVM';
 import {WrapperVM} from './viewmodels/wrapperVM';
+import {QuizSubmissionInfoVM} from './viewmodels/quizSubmissionInfoVM';
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +42,14 @@ export class CourseMemberService extends ApiService {
    */
   public getTestSubmissions(courseMemberId: string): Observable<TestSubmissionInfoVM[]> {
     return this.httpGet<TestSubmissionInfoVM[]>(`${courseMemberId}/submissions`);
+  }
+
+  /**
+   * get all quiz submissions of the given course member
+   * @param courseMemberId id of the course member
+   */
+  public getQuizSubmissions(courseMemberId: string): Observable<QuizSubmissionInfoVM[]> {
+    return this.httpGet<QuizSubmissionInfoVM[]>(`${courseMemberId}/quizSubmissions`);
   }
 
   /**
