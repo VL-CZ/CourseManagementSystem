@@ -68,7 +68,7 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "id")]
         public IEnumerable<TestSubmissionInfoVM> GetTestSubmissions(string id)
         {
-            var userSubmissions = testSubmissionService.GetAllSubmissionsOfCourseMember(id);
+            var userSubmissions = testSubmissionService.GetAllGraded(id);
             return userSubmissions.Select(ts => new TestSubmissionInfoVM(ts.Id.ToString(), ts.Test.Topic, ts.Test.Weight,
                 TestScoreCalculator.CalculateScore(ts), ts.SubmittedDateTime, ts.IsReviewed));
         }
@@ -98,7 +98,7 @@ namespace CourseManagementSystem.API.Controllers
         {
             var mappedGrades = courseMemberService.GetGradesOf(id)
                 .Select(grade => new ScoreWithWeightDto(grade.Weight, grade.PercentualValue));
-            var mappedTestSubmissions = testSubmissionService.GetAllSubmissionsOfCourseMember(id)
+            var mappedTestSubmissions = testSubmissionService.GetAllGraded(id)
                 .Select(ts => new ScoreWithWeightDto(ts.Test.Weight, TestScoreCalculator.CalculateScore(ts)));
             
             var scoresWithWeights = new List<ScoreWithWeightDto>();

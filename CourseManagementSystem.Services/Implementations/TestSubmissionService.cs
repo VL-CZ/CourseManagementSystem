@@ -27,9 +27,11 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public IEnumerable<TestSubmission> GetAllSubmissionsOfCourseMember(string courseMemberId)
+        public IEnumerable<TestSubmission> GetAllGraded(string courseMemberId)
         {
-            return GetAllSubmittedWithTestAndStudent().Where(ts => ts.Student.Id.ToString() == courseMemberId);
+            return GetAllSubmittedWithTestAndStudent()
+                .Where(ts => ts.Student.Id.ToString() == courseMemberId)
+                .Where(ts => ts.Test.IsGraded);
         }
 
         /// <inheritdoc/>
