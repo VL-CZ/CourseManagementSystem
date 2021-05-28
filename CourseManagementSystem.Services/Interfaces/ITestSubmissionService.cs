@@ -6,11 +6,11 @@ namespace CourseManagementSystem.Services.Interfaces
     public interface ITestSubmissionService : ICourseReferenceService, ICourseMemberReferenceService, IDbService
     {
         /// <summary>
-        /// get all submitted submissions of the given <see cref="CourseMember"/>
+        /// get all graded submitted submissions of the given <see cref="CourseMember"/>
         /// </summary>
         /// <param name="courseMemberId">id of the <see cref="CourseMember"/></param>
         /// <returns>all test submissions of the <see cref="CourseMember"/></returns>
-        IEnumerable<TestSubmission> GetAllSubmissionsOfCourseMember(string courseMemberId);
+        IEnumerable<TestSubmission> GetAllGraded(string courseMemberId);
 
         /// <summary>
         /// get all submitted test submissions that belong to given test
