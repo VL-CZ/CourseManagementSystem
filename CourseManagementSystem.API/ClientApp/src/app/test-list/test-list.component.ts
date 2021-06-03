@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {CourseTestDetailsVM, TestStatus} from '../viewmodels/courseTestVM';
 import {CourseService} from '../course.service';
 import {RoleAuthService} from '../role-auth.service';
@@ -14,7 +14,7 @@ import {CourseTestUtils} from '../utils/courseTestUtils';
   templateUrl: './test-list.component.html',
   styleUrls: ['./test-list.component.css']
 })
-export class TestListComponent implements OnInit {
+export class TestListComponent implements OnInit, OnChanges {
 
   /**
    * id of the course
@@ -62,6 +62,10 @@ export class TestListComponent implements OnInit {
 
   ngOnInit() {
       this.reloadTests();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.reloadTests();
   }
 
   /**
