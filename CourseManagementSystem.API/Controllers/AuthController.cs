@@ -14,11 +14,16 @@ namespace CourseManagementSystem.API.Controllers
     {
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IPeopleService peopleService;
+        private readonly ICourseMemberService courseMemberService;
+        private readonly ICourseTestService courseTestService;
 
-        public AuthController(IHttpContextAccessor httpContextAccessor, IPeopleService peopleService)
+        public AuthController(IHttpContextAccessor httpContextAccessor, 
+            IPeopleService peopleService, ICourseMemberService courseMemberService, ICourseTestService courseTestService)
         {
             this.httpContextAccessor = httpContextAccessor;
             this.peopleService = peopleService;
+            this.courseMemberService = courseMemberService;
+            this.courseTestService = courseTestService;
         }
 
         /// <summary>
@@ -30,18 +35,6 @@ namespace CourseManagementSystem.API.Controllers
         {
             string userId = GetCurrentUserId();
             return new WrapperVM<string>(userId);
-        }
-
-        /// <summary>
-        /// determine if current user is admin
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("isAdmin")]
-        public WrapperVM<bool> IsAdmin()
-        {
-            // TO-DO: add roles
-            bool isAdmin = GetCurrentUserId() == "b7a6f405-c226-4f5a-a0cb-2ba4c47582a3";
-            return new WrapperVM<bool>(isAdmin);
         }
 
         /// <summary>
@@ -62,7 +55,7 @@ namespace CourseManagementSystem.API.Controllers
         [HttpGet("isCourseMemberAdmin/{courseMemberId}")]
         public WrapperVM<bool> IsCourseMemberAdmin(string courseMemberId)
         {
-
+            string courseId = courseMemberService.GetCourseIdOf(courseMemberId);
             bool isCourseAdmin = peopleService.IsAdminOfCourse(GetCurrentUserId(), courseId);
             return new WrapperVM<bool>(isCourseAdmin);
         }
@@ -72,9 +65,9 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("isCourseTestAdmin/{testId}")]
-        public WrapperVM<bool> IsCourseTestAdmin(string test)
+        public WrapperVM<bool> IsCourseTestAdmin(string testId)
         {
-
+            string courseId = courseTestService.GetCourseIdOf(testId);
             bool isCourseAdmin = peopleService.IsAdminOfCourse(GetCurrentUserId(), courseId);
             return new WrapperVM<bool>(isCourseAdmin);
         }
