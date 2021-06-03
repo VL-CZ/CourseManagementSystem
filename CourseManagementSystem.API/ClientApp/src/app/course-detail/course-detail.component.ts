@@ -22,7 +22,7 @@ export class CourseDetailComponent implements OnInit {
   /**
    * is the currently logged course member admin of the course?
    */
-  public isAdmin: boolean;
+  public isCourseAdmin: boolean;
 
   /**
    * id of the course
@@ -35,10 +35,10 @@ export class CourseDetailComponent implements OnInit {
     this.courseId = ActivatedRouteUtils.getIdParam(route);
     this.courseService = courseService;
 
-    roleAuthService.isAdmin().subscribe(result => {
-      this.isAdmin = result.value;
+    roleAuthService.isCourseAdmin(this.courseId).subscribe(result => {
+      this.isCourseAdmin = result.value;
 
-      if (!this.isAdmin) {
+      if (!this.isCourseAdmin) {
         peopleService.getCourseMemberByCourse(this.courseId).subscribe(res => {
           this.currentCourseMemberId = res.value;
         });

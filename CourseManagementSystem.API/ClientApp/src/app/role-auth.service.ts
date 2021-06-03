@@ -22,6 +22,14 @@ export class RoleAuthService extends ApiService {
   }
 
   /**
+   * is the currently logged-in user admin of the selected course?
+   * @param courseId identifier of the course
+   */
+  public isCourseAdmin(courseId: string): Observable<WrapperVM<boolean>> {
+    return this.httpGet<WrapperVM<boolean>>(`isCourseAdmin/${courseId}`);
+  }
+
+  /**
    * get id of currently logged-in user
    */
   public getCurrentUserId(): Observable<WrapperVM<string>> {
