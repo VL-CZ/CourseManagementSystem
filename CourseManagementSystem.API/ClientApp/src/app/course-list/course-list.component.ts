@@ -30,11 +30,6 @@ export class CourseListComponent implements OnInit {
    */
   public managedCourses: CourseInfoVM[];
 
-  /**
-   * is the current user admin?
-   */
-  public isAdmin: boolean;
-
   private readonly courseService: CourseService;
   private readonly peopleService: PeopleService;
   private currentUserId: string;
@@ -46,10 +41,6 @@ export class CourseListComponent implements OnInit {
     this.memberCourses = [];
     this.courseService = courseService;
     this.peopleService = peopleService;
-
-    roleAuthService.isAdmin().subscribe(result => {
-      this.isAdmin = result.value;
-    });
 
     roleAuthService.getCurrentUserId().subscribe(result => {
       this.currentUserId = result.value;
