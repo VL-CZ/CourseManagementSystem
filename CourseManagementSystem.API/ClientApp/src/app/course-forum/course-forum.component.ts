@@ -12,8 +12,18 @@ import {WrapperVM} from '../viewmodels/wrapperVM';
 })
 export class CourseForumComponent implements OnInit {
 
+  /**
+   * identifier of the course that this forum belongs to
+   * @private
+   */
   @Input()
   private courseId: string;
+
+  /**
+   * is the current user admin of the course?
+   */
+  @Input()
+  public isCourseAdmin: boolean;
 
   /**
    * posts in this forum
@@ -25,21 +35,12 @@ export class CourseForumComponent implements OnInit {
    */
   public postToAdd: WrapperVM<string> = new WrapperVM<string>();
 
-  /**
-   * is the current user admin?
-   */
-  public isAdmin: boolean;
-
   private courseService: CourseService;
   private forumPostService: ForumPostService;
 
   constructor(courseService: CourseService, forumPostService: ForumPostService, roleAuthService: RoleAuthService) {
     this.courseService = courseService;
     this.forumPostService = forumPostService;
-
-    roleAuthService.isAdmin().subscribe(res => {
-      this.isAdmin = res.value;
-    });
   }
 
   ngOnInit() {

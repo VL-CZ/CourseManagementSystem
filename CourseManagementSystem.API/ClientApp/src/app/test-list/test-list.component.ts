@@ -23,6 +23,12 @@ export class TestListComponent implements OnInit {
   public courseId: string;
 
   /**
+   * is the current user admin of the course?
+   */
+  @Input()
+  public isCourseAdmin: boolean;
+
+  /**
    * active tests in this course
    */
   public activeTests: CourseTestDetailsVM[] = [];
@@ -42,11 +48,6 @@ export class TestListComponent implements OnInit {
    */
   public dateTimeFormatter: DateTimeFormatter = new DateTimeFormatter();
 
-  /**
-   * is the current user admin?
-   */
-  public isAdmin: boolean;
-
   public courseTestUtils: CourseTestUtils = new CourseTestUtils();
 
   private courseService: CourseService;
@@ -60,10 +61,7 @@ export class TestListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.roleAuthService.isAdmin().subscribe(result => {
-      this.isAdmin = result.value;
       this.reloadTests();
-    });
   }
 
   /**
@@ -105,7 +103,7 @@ export class TestListComponent implements OnInit {
       this.activeTests = tests;
     });
 
-    if (this.isAdmin) {
+    if (this.isCourseAdmin) {
       // get non-published tests
       this.courseService.getNonPublishedTests(this.courseId).subscribe(tests => {
         this.nonPublishedTests = tests;

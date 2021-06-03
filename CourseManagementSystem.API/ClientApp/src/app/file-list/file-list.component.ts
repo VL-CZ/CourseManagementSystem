@@ -28,7 +28,8 @@ export class FileListComponent implements OnInit {
   /**
    * is the current user admin of the course?
    */
-  public isAdmin: boolean;
+  @Input()
+  public isCourseAdmin: boolean;
 
   /**
    * file that will be uploaded
@@ -43,10 +44,6 @@ export class FileListComponent implements OnInit {
   constructor(roleAuthService: RoleAuthService, fileService: FileService, courseService: CourseService) {
     this.fileService = fileService;
     this.courseService = courseService;
-
-    roleAuthService.isAdmin().subscribe(result => {
-      this.isAdmin = result.value;
-    });
   }
 
   ngOnInit() {

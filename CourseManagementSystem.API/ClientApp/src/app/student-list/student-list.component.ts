@@ -21,19 +21,10 @@ export class StudentListComponent implements OnInit {
    */
   public students: CourseMemberVM[] = [];
 
-  /**
-   * is the current user admin?
-   */
-  public isAdmin: boolean;
-
   private readonly courseService: CourseService;
 
   constructor(roleAuthService: RoleAuthService, courseService: CourseService) {
     this.courseService = courseService;
-
-    roleAuthService.isAdmin().subscribe(result => {
-      this.isAdmin = result.value;
-    });
   }
 
   ngOnInit() {
