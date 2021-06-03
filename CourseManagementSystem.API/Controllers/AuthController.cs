@@ -45,12 +45,36 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
-        /// determine if current user is admin
+        /// determine if current user is admin of the selected course
         /// </summary>
         /// <returns></returns>
         [HttpGet("isCourseAdmin/{courseId}")]
         public WrapperVM<bool> IsCourseAdmin(string courseId)
         {
+            bool isCourseAdmin = peopleService.IsAdminOfCourse(GetCurrentUserId(), courseId);
+            return new WrapperVM<bool>(isCourseAdmin);
+        }
+
+        /// <summary>
+        /// determine if current user is admin of the course that contains selected <see cref="Data.Models.CourseMember"/>
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("isCourseMemberAdmin/{courseMemberId}")]
+        public WrapperVM<bool> IsCourseMemberAdmin(string courseMemberId)
+        {
+
+            bool isCourseAdmin = peopleService.IsAdminOfCourse(GetCurrentUserId(), courseId);
+            return new WrapperVM<bool>(isCourseAdmin);
+        }
+
+        /// <summary>
+        /// determine if current user is admin of the course that contains selected <see cref="Data.Models.CourseTest"/>
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("isCourseTestAdmin/{testId}")]
+        public WrapperVM<bool> IsCourseTestAdmin(string test)
+        {
+
             bool isCourseAdmin = peopleService.IsAdminOfCourse(GetCurrentUserId(), courseId);
             return new WrapperVM<bool>(isCourseAdmin);
         }

@@ -37,7 +37,7 @@ export class TestSubmissionReviewComponent implements OnInit {
   public dateTimeFormatter: DateTimeFormatter = new DateTimeFormatter();
 
   /**
-   * is the current user admin?
+   * is the current user admin of the course that contains this test?
    */
   public isAdmin: boolean;
 
@@ -55,13 +55,13 @@ export class TestSubmissionReviewComponent implements OnInit {
 
     const submissionId = ActivatedRouteUtils.getIdParam(activatedRoute);
 
-    roleAuthService.isAdmin().subscribe(result => {
-      this.isAdmin = result.value;
-    });
-
     testSubmissionService.getSubmissionById(submissionId).subscribe(submission => {
       this.submission = submission;
       this.evaluatedTestSubmission = EvaluatedTestSubmissionVM.createFrom(submission);
+
+      roleAuthService.isCourseTestAdmin(this.submission.testId).subscribe(result => {
+        this.isAdmin = result.value;
+      });
     });
   }
 
