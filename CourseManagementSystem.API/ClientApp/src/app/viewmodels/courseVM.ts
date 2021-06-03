@@ -22,10 +22,4 @@ export class CourseInfoVM extends BaseCourseVM {
  * viewmodel for adding a course
  */
 export class AddCourseVM extends BaseCourseVM {
-
-  /**
-   * id of the course admin
-   */
-  public adminId: string;
-
 }

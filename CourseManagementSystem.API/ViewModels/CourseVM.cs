@@ -52,15 +52,8 @@ namespace CourseManagementSystem.API.ViewModels
         {
         }
 
-        public AddCourseVM(string name, string adminId) : base(name)
+        public AddCourseVM(string name) : base(name)
         {
-            AdminId = adminId;
         }
-
-        /// <summary>
-        /// id of the admin
-        /// </summary>
-        [RequiredWithDefaultErrorMessage]
-        public string AdminId { get; set; }
     }
 }
