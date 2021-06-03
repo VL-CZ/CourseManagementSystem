@@ -17,9 +17,9 @@ export class StudentDetailComponent implements OnInit {
   public readonly courseMemberId: string;
 
   /**
-   * is the current course member admin?
+   * is the current user admin of the course?
    */
-  public isAdmin: boolean;
+  public isCourseAdmin: boolean;
 
   /**
    * current course member
@@ -32,8 +32,8 @@ export class StudentDetailComponent implements OnInit {
       this.courseMember = cm;
     });
 
-    roleAuthService.isAdmin().subscribe(result => {
-      this.isAdmin = result.value;
+    roleAuthService.isCourseMemberAdmin(this.courseMemberId).subscribe(result => {
+      this.isCourseAdmin = result.value;
     });
   }
 

@@ -4,10 +4,10 @@
 
 <app-student-test-submissions [courseMemberId]="courseMemberId"></app-student-test-submissions>
 
-<app-student-grade-list [courseMemberId]="courseMemberId" [isAdmin]="isAdmin"></app-student-grade-list>
+<app-student-grade-list [courseMemberId]="courseMemberId" [isAdmin]="isCourseAdmin"></app-student-grade-list>
 
 <app-student-average-score [courseMemberId]="courseMemberId"></app-student-average-score>
 
-<app-add-grade *ngIf="isAdmin" [courseMemberId]="courseMemberId"></app-add-grade>
+<app-add-grade *ngIf="isCourseAdmin" [courseMemberId]="courseMemberId"></app-add-grade>
 
 <app-student-quiz-submissions [courseMemberId]="courseMemberId"></app-student-quiz-submissions>

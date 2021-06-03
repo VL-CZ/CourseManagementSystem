@@ -6,6 +6,7 @@ using CourseManagementSystem.API.ViewModels;
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,16 +18,16 @@ namespace CourseManagementSystem.API.Controllers
     [Authorize]
     public class CoursesController : ControllerBase
     {
+        private readonly IHttpContextAccessor httpContextAccessor;
         private readonly ICourseService courseService;
         private readonly IPeopleService peopleService;
-        private readonly ICourseTestService courseTestService;
         private CourseTestFilter courseTestFilter;
 
-        public CoursesController(ICourseService courseService, IPeopleService peopleService, ICourseTestService courseTestService)
+        public CoursesController(IHttpContextAccessor httpContextAccessor, ICourseService courseService, IPeopleService peopleService)
         {
+            this.httpContextAccessor = httpContextAccessor;
             this.courseService = courseService;
             this.peopleService = peopleService;
-            this.courseTestService = courseTestService;
             courseTestFilter = new CourseTestFilter();
         }
 
@@ -34,9 +35,10 @@ namespace CourseManagementSystem.API.Controllers
         /// create new course
         /// </summary>
         [HttpPost("create")]
-        public void Create([FromBody] AddCourseVM courseVM)
+        public void Create(AddCourseVM courseVM)
         {
-            Person admin = peopleService.GetById(courseVM.AdminId);
+            string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
+            Person admin = peopleService.GetById(currentUserId);
             Course createdCourse = new Course(courseVM.Name, admin);
 
             courseService.AddCourse(createdCourse);

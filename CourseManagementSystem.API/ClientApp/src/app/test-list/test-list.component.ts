@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {CourseTestDetailsVM, TestStatus} from '../viewmodels/courseTestVM';
 import {CourseService} from '../course.service';
 import {RoleAuthService} from '../role-auth.service';
@@ -14,13 +14,19 @@ import {CourseTestUtils} from '../utils/courseTestUtils';
   templateUrl: './test-list.component.html',
   styleUrls: ['./test-list.component.css']
 })
-export class TestListComponent implements OnInit {
+export class TestListComponent implements OnInit, OnChanges {
 
   /**
    * id of the course
    */
   @Input()
   public courseId: string;
+
+  /**
+   * is the current user admin of the course?
+   */
+  @Input()
+  public isCourseAdmin: boolean;
 
   /**
    * active tests in this course
@@ -42,11 +48,6 @@ export class TestListComponent implements OnInit {
    */
   public dateTimeFormatter: DateTimeFormatter = new DateTimeFormatter();
 
-  /**
-   * is the current user admin?
-   */
-  public isAdmin: boolean;
-
   public courseTestUtils: CourseTestUtils = new CourseTestUtils();
 
   private courseService: CourseService;
@@ -60,10 +61,11 @@ export class TestListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.roleAuthService.isAdmin().subscribe(result => {
-      this.isAdmin = result.value;
       this.reloadTests();
-    });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.reloadTests();
   }
 
   /**
@@ -105,7 +107,7 @@ export class TestListComponent implements OnInit {
       this.activeTests = tests;
     });
 
-    if (this.isAdmin) {
+    if (this.isCourseAdmin) {
       // get non-published tests
       this.courseService.getNonPublishedTests(this.courseId).subscribe(tests => {
         this.nonPublishedTests = tests;
