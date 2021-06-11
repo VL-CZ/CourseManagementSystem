@@ -13,13 +13,6 @@ namespace CourseManagementSystem.Services.Interfaces
         Person GetById(string personId);
 
         /// <summary>
-        /// add admin to a course
-        /// </summary>
-        /// <param name="admin">person that we add as an admin</param>
-        /// <param name="course">course where to add</param>
-        void AddAdmin(Person admin, Course course);
-
-        /// <summary>
         /// get all active courses managed by the person (e.g. all courses where the person is an admin)
         /// </summary>
         /// <param name="personId">id of the person</param>

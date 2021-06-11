@@ -21,6 +21,14 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
+        public void AddAdmin(Person admin, string courseId)
+        {
+            var course = GetById(courseId);
+            var courseAdmin = new CourseAdmin(admin, course);
+            dbContext.CourseAdmins.Add(courseAdmin);
+        }
+
+        /// <inheritdoc/>
         public void Enroll(Person person, string courseId)
         {
             var course = GetById(courseId);

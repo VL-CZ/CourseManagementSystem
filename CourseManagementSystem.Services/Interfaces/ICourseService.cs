@@ -19,6 +19,13 @@ namespace CourseManagementSystem.Services.Interfaces
         void ArchiveById(string courseId);
 
         /// <summary>
+        /// add admin to a course
+        /// </summary>
+        /// <param name="admin">person that we add as an admin</param>
+        /// <param name="courseId">id of the course where to add</param>
+        void AddAdmin(Person admin, string courseId);
+
+        /// <summary>
         /// add the course into the database
         /// </summary>
         /// <param name="course">course to add</param>

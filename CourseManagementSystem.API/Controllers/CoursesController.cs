@@ -59,6 +59,19 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
+        /// addAdmin to a course with selected Id
+        /// </summary>
+        /// <param name="courseId"></param>
+        [HttpPost("{courseId}/addAdmin")]
+        [AuthorizeCourseAdminOf(EntityType.Course, "courseId")]
+        public void AddAdminTo(string courseId, WrapperVM<string> adminId)
+        {
+            var newAdmin = peopleService.GetById(adminId.Value);
+            courseService.AddAdmin(newAdmin, courseId);
+            courseService.CommitChanges();
+        }
+
+        /// <summary>
         /// enroll current user to a course with selected Id
         /// </summary>
         /// <param name="courseId"></param>
