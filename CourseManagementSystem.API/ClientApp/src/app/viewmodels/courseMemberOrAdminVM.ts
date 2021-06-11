@@ -1,7 +1,7 @@
 /**
- * viewmodel representing member of a course
+ * viewmodel representing member/admin of a course
  */
-export class CourseMemberVM {
+export class CourseMemberOrAdminVM {
   /**
    * identifier of the person
    */
@@ -13,7 +13,7 @@ export class CourseMemberVM {
   public name: string;
 
   /**
-   * user's email
+   * person's email
    */
   public email: string;
 }

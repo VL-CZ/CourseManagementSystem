@@ -3,10 +3,11 @@ import {ApiService} from './api.service';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {AddCourseVM} from './viewmodels/courseVM';
-import {CourseMemberVM} from './viewmodels/courseMemberVM';
+import {CourseMemberOrAdminVM} from './viewmodels/courseMemberOrAdminVM';
 import {CourseFileVM} from './viewmodels/courseFileVM';
 import {CourseTestDetailsVM} from './viewmodels/courseTestVM';
 import {ForumPostVM} from './viewmodels/forumPostVM';
+import {WrapperVM} from './viewmodels/wrapperVM';
 
 @Injectable({
   providedIn: 'root'
@@ -43,11 +44,28 @@ export class CourseService extends ApiService {
   }
 
   /**
+   * add new admin to the course with given id
+   * @param courseId id of the course to enroll
+   * @param adminId id of the administrator to add
+   */
+  public addAdmin(courseId: string, adminId: WrapperVM<string>): Observable<{}> {
+    return this.httpPost(`${courseId}/addAdmin`, adminId);
+  }
+
+  /**
    * get all members of this course
    * @param courseId identifier of the course
    */
-  public getAllMembers(courseId: string): Observable<CourseMemberVM[]> {
-    return this.httpGet<CourseMemberVM[]>(`${courseId}/members`);
+  public getAllMembers(courseId: string): Observable<CourseMemberOrAdminVM[]> {
+    return this.httpGet<CourseMemberOrAdminVM[]>(`${courseId}/members`);
+  }
+
+  /**
+   * get all admins of this course
+   * @param courseId identifier of the course
+   */
+  public getAllAdmins(courseId: string): Observable<CourseMemberOrAdminVM[]> {
+    return this.httpGet<CourseMemberOrAdminVM[]>(`${courseId}/admins`);
   }
 
   /**

@@ -3,7 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {CourseMemberService} from '../course-member.service';
 import {RoleAuthService} from '../role-auth.service';
 import {ActivatedRouteUtils} from '../utils/activatedRouteUtils';
-import {CourseMemberVM} from '../viewmodels/courseMemberVM';
+import {CourseMemberOrAdminVM} from '../viewmodels/courseMemberOrAdminVM';
 
 @Component({
   selector: 'app-student-detail',
@@ -24,7 +24,7 @@ export class StudentDetailComponent implements OnInit {
   /**
    * current course member
    */
-  public courseMember: CourseMemberVM = new CourseMemberVM();
+  public courseMember: CourseMemberOrAdminVM = new CourseMemberOrAdminVM();
 
   constructor(route: ActivatedRoute, courseMemberService: CourseMemberService, roleAuthService: RoleAuthService) {
     this.courseMemberId = ActivatedRouteUtils.getIdParam(route);
