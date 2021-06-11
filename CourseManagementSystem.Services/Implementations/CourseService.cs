@@ -21,6 +21,16 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
+        public ICollection<CourseAdmin> GetAdminsWithUsers(string courseId)
+        {
+            return dbContext.Courses
+                .Include(course => course.Admins)
+                .ThenInclude(member => member.User)
+                .Single(course => course.Id.ToString() == courseId)
+                .Admins;
+        }
+
+        /// <inheritdoc/>
         public Course GetById(string courseId)
         {
             return dbContext.Courses.FindById(courseId);

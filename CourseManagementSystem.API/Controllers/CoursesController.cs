@@ -64,10 +64,22 @@ namespace CourseManagementSystem.API.Controllers
         /// <param name="id">Id of the course</param>
         [HttpGet("{id}/members")]
         [AuthorizeCourseAdminOf(EntityType.Course, "id")]
-        public IEnumerable<CourseMemberVM> GetAllMembers(string id)
+        public IEnumerable<CourseMemberOrAdminVM> GetAllMembers(string id)
         {
             var people = courseService.GetMembersWithUsers(id);
-            return people.Select(cm => new CourseMemberVM(cm.Id.ToString(), cm.User.UserName, cm.User.Email));
+            return people.Select(cm => new CourseMemberOrAdminVM(cm.Id.ToString(), cm.User.UserName, cm.User.Email));
+        }
+
+        /// <summary>
+        /// get all course admins
+        /// </summary>
+        /// <param name="id">Id of the course</param>
+        [HttpGet("{id}/admins")]
+        [AuthorizeCourseAdminOf(EntityType.Course, "id")]
+        public IEnumerable<CourseMemberOrAdminVM> GetAllAdmins(string id)
+        {
+            var admins = courseService.GetAdminsWithUsers(id);
+            return admins.Select(admin => new CourseMemberOrAdminVM(admin.Id.ToString(), admin.User.UserName, admin.User.Email));
         }
 
         /// <summary>

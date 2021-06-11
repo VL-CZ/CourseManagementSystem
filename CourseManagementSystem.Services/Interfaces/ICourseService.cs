@@ -51,5 +51,12 @@ namespace CourseManagementSystem.Services.Interfaces
         /// <param name="courseId">identifier of the course</param>
         /// <returns></returns>
         ICollection<CourseMember> GetMembersWithUsers(string courseId);
+
+        /// <summary>
+        /// get all admins of the course including <see cref="CourseMember.User"/> object
+        /// </summary>
+        /// <param name="courseId">identifier of the course</param>
+        /// <returns></returns>
+        ICollection<CourseAdmin> GetAdminsWithUsers(string courseId);
     }
 }

@@ -4,15 +4,15 @@ using System.ComponentModel.DataAnnotations;
 namespace CourseManagementSystem.API.ViewModels
 {
     /// <summary>
-    /// viewmodel representing member of a course
+    /// viewmodel representing member or admin of a course
     /// </summary>
-    public class CourseMemberVM
+    public class CourseMemberOrAdminVM
     {
-        public CourseMemberVM()
+        public CourseMemberOrAdminVM()
         {
         }
 
-        public CourseMemberVM(string id, string name, string email)
+        public CourseMemberOrAdminVM(string id, string name, string email)
         {
             Id = id;
             Name = name;
