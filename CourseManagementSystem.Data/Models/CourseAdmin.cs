@@ -7,7 +7,7 @@ namespace CourseManagementSystem.Data.Models
     /// <summary>
     /// class representing admin of a course relation
     /// </summary>
-    public class CourseAdmin : IGuidIdObject
+    public class CourseAdmin : IGuidIdObject, ICourseReferenceObject
     {
         public CourseAdmin()
         { }
