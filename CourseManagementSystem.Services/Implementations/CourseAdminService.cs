@@ -22,17 +22,10 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public void Remove(string courseAdminId)
+        public void RemoveById(string courseAdminId)
         {
-            dbContext.CourseAdmins.Remove(GetMemberWithUser(courseAdminId));
-        }
-
-        /// <inheritdoc/>
-        public CourseAdmin GetMemberWithUser(string id)
-        {
-            return dbContext.CourseAdmins
-                .Include(cm => cm.User)
-                .Single(cm => cm.Id.ToString() == id);
+            var adminToRemove = dbContext.CourseAdmins.FindById(courseAdminId);
+            dbContext.CourseAdmins.Remove(adminToRemove);
         }
     }
 }
