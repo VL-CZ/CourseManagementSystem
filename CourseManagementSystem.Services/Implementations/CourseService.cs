@@ -21,6 +21,14 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
+        public void Enroll(Person person, string courseId)
+        {
+            var course = GetById(courseId);
+            var cm = new CourseMember(person, course);
+            dbContext.CourseMembers.Add(cm);
+        }
+
+        /// <inheritdoc/>
         public ICollection<CourseAdmin> GetAdminsWithUsers(string courseId)
         {
             return dbContext.Courses

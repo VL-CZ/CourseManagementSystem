@@ -22,13 +22,6 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public void EnrollTo(Person person, Course course)
-        {
-            var cm = new CourseMember(person, course);
-            dbContext.CourseMembers.Add(cm);
-        }
-
-        /// <inheritdoc/>
         public IEnumerable<Course> GetActiveManagedCourses(string personId)
         {
             return GetManagedCourses(personId).FilterActive();
