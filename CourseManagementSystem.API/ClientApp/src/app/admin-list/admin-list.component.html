@@ -9,7 +9,9 @@
     <tr *ngFor="let admin of admins">
       <td>{{admin.name}}</td>
       <td>{{admin.email}}</td>
-      <td>Remove</td>
+      <td>
+        <button class="btn btn-danger" (click)="removeAdmin(admin.id)">Remove</button>
+      </td>
     </tr>
   </table>
 
