@@ -16,14 +16,6 @@ export class PeopleService extends ApiService {
   }
 
   /**
-   * enroll currently logged-in user to the course with given id
-   * @param courseId id of the course to enroll
-   */
-  public enrollToCourse(courseId: string): Observable<{}> {
-    return this.httpPost(`enroll/${courseId}`, {});
-  }
-
-  /**
    * get all courses, whose member the current user is
    */
   public getMemberCourses(): Observable<CourseInfoVM[]> {

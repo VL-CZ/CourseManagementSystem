@@ -35,6 +35,14 @@ export class CourseService extends ApiService {
   }
 
   /**
+   * enroll currently logged-in user to the course with given id
+   * @param courseId id of the course to enroll
+   */
+  public enrollTo(courseId: string): Observable<{}> {
+    return this.httpPost(`${courseId}/enroll`, {});
+  }
+
+  /**
    * get all members of this course
    * @param courseId identifier of the course
    */
