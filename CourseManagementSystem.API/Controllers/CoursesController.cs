@@ -59,7 +59,7 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
-        /// addAdmin to a course with selected Id
+        /// add another admin to a course with selected Id
         /// </summary>
         /// <param name="courseId"></param>
         [HttpPost("{courseId}/addAdmin")]

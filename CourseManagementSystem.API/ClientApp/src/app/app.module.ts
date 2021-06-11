@@ -32,7 +32,6 @@ import { StudentAverageScoreComponent } from './student-average-score/student-av
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import { StudentQuizSubmissionsComponent } from './student-quiz-submissions/student-quiz-submissions.component';
 import { AdminListComponent } from './admin-list/admin-list.component';
-import { AddAdminComponent } from './add-admin/add-admin.component';
 
 @NgModule({
   declarations: [
