@@ -67,9 +67,11 @@ namespace CourseManagementSystem.Services.Implementations
         /// <returns></returns>
         private IEnumerable<Course> GetManagedCourses(string personId)
         {
-            return dbContext.Courses
-                .Include(course => course.Admin)
-                .Where(course => course.Admin.Id == personId);
+            return dbContext.CourseAdmins
+                .Include(admin => admin.User)
+                .Include(admin => admin.Course)
+                .Where(admin => admin.User.Id == personId)
+                .Select(admin => admin.Course);
         }
 
         /// <summary>
