@@ -25,6 +25,8 @@ namespace CourseManagementSystem.Data
 
         public DbSet<Course> Courses { get; set; }
 
+        public DbSet<CourseAdmin> CourseAdmins { get; set; }
+
         public DbSet<CourseMember> CourseMembers { get; set; }
 
         public DbSet<CourseFile> Files { get; set; }
@@ -53,11 +55,16 @@ namespace CourseManagementSystem.Data
         /// <param name="builder"></param>
         private void ConfigureForeignKeys(ModelBuilder builder)
         {
-            // Course
+            // CourseAdmin
 
-            builder.Entity<Course>()
-                .HasOne(course => course.Admin)
-                .WithMany()
+            builder.Entity<CourseAdmin>()
+                .HasOne(admin => admin.Course)
+                .WithMany(course => course.Admins)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<CourseAdmin>()
+                .HasOne(admin => admin.User)
+                .WithMany(person => person.AdminMemberships)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // CourseFile

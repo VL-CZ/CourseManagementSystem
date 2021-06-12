@@ -13,12 +13,13 @@ namespace CourseManagementSystem.Data.Models
             Files = new List<CourseFile>();
             Tests = new List<CourseTest>();
             ForumPosts = new List<ForumPost>();
+            Admins = new List<CourseAdmin>();
         }
 
         public Course(string name, Person admin) : this()
         {
             Name = name;
-            Admin = admin;
+            Admins = new List<CourseAdmin>() { new CourseAdmin(admin, this) };
             IsArchived = false;
         }
 
@@ -43,8 +44,7 @@ namespace CourseManagementSystem.Data.Models
         /// <summary>
         /// admin of the course
         /// </summary>
-        [Required]
-        public Person Admin { get; set; }
+        public ICollection<CourseAdmin> Admins { get; set; }
 
         /// <summary>
         /// members of the course (except admin)

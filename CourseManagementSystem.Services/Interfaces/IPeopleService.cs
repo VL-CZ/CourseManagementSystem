@@ -13,13 +13,6 @@ namespace CourseManagementSystem.Services.Interfaces
         Person GetById(string personId);
 
         /// <summary>
-        /// enroll person to a course
-        /// </summary>
-        /// <param name="person">person that we enroll to a course</param>
-        /// <param name="course">course where to enroll</param>
-        void EnrollTo(Person person, Course course);
-
-        /// <summary>
         /// get all active courses managed by the person (e.g. all courses where the person is an admin)
         /// </summary>
         /// <param name="personId">id of the person</param>

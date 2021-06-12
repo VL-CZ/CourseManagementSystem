@@ -39,13 +39,14 @@ namespace CourseManagementSystem.API.Auth.Factories
         /// </summary>
         private readonly IReadOnlyDictionary<EntityType, ICourseReferenceService> dataServices;
 
-        public CourseReferenceServiceFactory(ICourseMemberService courseMemberService, ICourseTestService courseTestService,
+        public CourseReferenceServiceFactory(ICourseAdminService courseAdminService, ICourseMemberService courseMemberService, ICourseTestService courseTestService,
             IFileService fileService, IForumPostService forumPostService, IGradeService gradeService, ITestSubmissionService testSubmissionService)
         {
             dataServices = new Dictionary<EntityType, ICourseReferenceService>
             {
                 [EntityType.Course] = new DummyCourseService(),
                 [EntityType.CourseMember] = courseMemberService,
+                [EntityType.CourseAdmin] = courseAdminService,
                 [EntityType.CourseTest] = courseTestService,
                 [EntityType.CourseFile] = fileService,
                 [EntityType.ForumPost] = forumPostService,

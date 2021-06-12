@@ -5,4 +5,5 @@
 <app-test-list [courseId]="courseId" [isCourseAdmin]="isCourseAdmin"></app-test-list>
 <app-file-list [courseId]="courseId" [isCourseAdmin]="isCourseAdmin"></app-file-list>
 <app-student-list *ngIf="isCourseAdmin" [courseId]="courseId"></app-student-list>
+<app-admin-list *ngIf="isCourseAdmin" [courseId]="courseId"></app-admin-list>
 <app-course-forum [courseId]="courseId" [isCourseAdmin]="isCourseAdmin"></app-course-forum>

@@ -52,6 +52,7 @@ namespace CourseManagementSystem.API
             });
 
             // add dependendies to IoC container
+            services.AddTransient<ICourseAdminService, CourseAdminService>();
             services.AddTransient<ICourseMemberService, CourseMemberService>();
             services.AddTransient<IFileService, FileService>();
             services.AddTransient<ICourseTestService, CourseTestService>();

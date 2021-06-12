@@ -19,10 +19,24 @@ namespace CourseManagementSystem.Services.Interfaces
         void ArchiveById(string courseId);
 
         /// <summary>
+        /// add admin to a course
+        /// </summary>
+        /// <param name="admin">person that we add as an admin</param>
+        /// <param name="courseId">id of the course where to add</param>
+        void AddAdmin(Person admin, string courseId);
+
+        /// <summary>
         /// add the course into the database
         /// </summary>
         /// <param name="course">course to add</param>
         void AddCourse(Course course);
+
+        /// <summary>
+        /// enroll person to a course
+        /// </summary>
+        /// <param name="person">person that we enroll to a course</param>
+        /// <param name="courseId">id of the course to enroll</param>
+        void Enroll(Person person, string courseId);
 
         /// <summary>
         /// get all files in the course with the given id
@@ -51,5 +65,12 @@ namespace CourseManagementSystem.Services.Interfaces
         /// <param name="courseId">identifier of the course</param>
         /// <returns></returns>
         ICollection<CourseMember> GetMembersWithUsers(string courseId);
+
+        /// <summary>
+        /// get all admins of the course including <see cref="CourseMember.User"/> object
+        /// </summary>
+        /// <param name="courseId">identifier of the course</param>
+        /// <returns></returns>
+        ICollection<CourseAdmin> GetAdminsWithUsers(string courseId);
     }
 }

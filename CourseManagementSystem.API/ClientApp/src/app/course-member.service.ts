@@ -1,5 +1,5 @@
 import {Inject, Injectable} from '@angular/core';
-import {CourseMemberVM} from './viewmodels/courseMemberVM';
+import {CourseMemberOrAdminVM} from './viewmodels/courseMemberOrAdminVM';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {AddGradeVM} from './viewmodels/gradeVM';
@@ -23,8 +23,8 @@ export class CourseMemberService extends ApiService {
    * get course member by its id
    * @param courseMemberId id of the course member
    */
-  public getById(courseMemberId: string): Observable<CourseMemberVM> {
-    return this.httpGet<CourseMemberVM>(courseMemberId);
+  public getById(courseMemberId: string): Observable<CourseMemberOrAdminVM> {
+    return this.httpGet<CourseMemberOrAdminVM>(courseMemberId);
   }
 
   /**

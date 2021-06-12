@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {PeopleService} from '../people.service';
+import {CourseService} from '../course.service';
 
 /**
  * component with enrollment to course
@@ -16,10 +17,10 @@ export class CourseEnrollmentComponent implements OnInit {
    */
   public courseToEnrollId: string;
 
-  private readonly peopleService: PeopleService;
+  private readonly courseService: CourseService;
 
-  constructor(peopleService: PeopleService) {
-    this.peopleService = peopleService;
+  constructor(courseService: CourseService) {
+    this.courseService = courseService;
   }
 
   ngOnInit() {
@@ -29,7 +30,7 @@ export class CourseEnrollmentComponent implements OnInit {
    * enroll to a course
    */
   public enroll(): void {
-    this.peopleService.enrollToCourse(this.courseToEnrollId).subscribe(() => {
+    this.courseService.enrollTo(this.courseToEnrollId).subscribe(() => {
       console.log('Enrolled!\n');
     });
   }

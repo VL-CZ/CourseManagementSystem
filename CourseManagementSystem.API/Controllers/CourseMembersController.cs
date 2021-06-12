@@ -35,10 +35,10 @@ namespace CourseManagementSystem.API.Controllers
         /// <returns></returns>
         [HttpGet("{id}")]
         [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "id")]
-        public CourseMemberVM Get(string id)
+        public CourseMemberOrAdminVM Get(string id)
         {
             CourseMember cm = courseMemberService.GetMemberWithUser(id);
-            return new CourseMemberVM(cm.User.Id, cm.User.UserName, cm.User.Email);
+            return new CourseMemberOrAdminVM(cm.User.Id, cm.User.UserName, cm.User.Email);
         }
 
         /// <summary>

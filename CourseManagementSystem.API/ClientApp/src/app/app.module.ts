@@ -31,6 +31,7 @@ import { CourseEnrollmentComponent } from './course-enrollment/course-enrollment
 import { StudentAverageScoreComponent } from './student-average-score/student-average-score.component';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import { StudentQuizSubmissionsComponent } from './student-quiz-submissions/student-quiz-submissions.component';
+import { AdminListComponent } from './admin-list/admin-list.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { StudentQuizSubmissionsComponent } from './student-quiz-submissions/stud
     CourseEnrollmentComponent,
     StudentAverageScoreComponent,
     ErrorDialogComponent,
-    StudentQuizSubmissionsComponent
+    StudentQuizSubmissionsComponent,
+    AdminListComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),

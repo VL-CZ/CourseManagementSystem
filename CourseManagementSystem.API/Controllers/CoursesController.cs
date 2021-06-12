@@ -8,6 +8,7 @@ using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -59,15 +60,60 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
+        /// add another admin to a course with selected Id
+        /// </summary>
+        /// <param name="courseId"></param>
+        [HttpPost("{courseId}/addAdmin")]
+        [AuthorizeCourseAdminOf(EntityType.Course, "courseId")]
+        public void AddAdminTo(string courseId, WrapperVM<string> adminId)
+        {
+            if (peopleService.IsAdminOfCourse(adminId.Value, courseId))
+            {
+                throw new ApplicationException("This user is already admin of the course");
+            }
+
+            var newAdmin = peopleService.GetById(adminId.Value);
+            courseService.AddAdmin(newAdmin, courseId);
+            courseService.CommitChanges();
+        }
+
+        /// <summary>
+        /// enroll current user to a course with selected Id
+        /// </summary>
+        /// <param name="courseId"></param>
+        [HttpPost("{courseId}/enroll")]
+        public void EnrollTo(string courseId)
+        {
+            string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
+            var currentUser = peopleService.GetById(currentUserId);
+
+            courseService.Enroll(currentUser, courseId);
+
+            courseService.CommitChanges();
+        }
+
+        /// <summary>
         /// get all course members
         /// </summary>
         /// <param name="id">Id of the course</param>
         [HttpGet("{id}/members")]
         [AuthorizeCourseAdminOf(EntityType.Course, "id")]
-        public IEnumerable<CourseMemberVM> GetAllMembers(string id)
+        public IEnumerable<CourseMemberOrAdminVM> GetAllMembers(string id)
         {
             var people = courseService.GetMembersWithUsers(id);
-            return people.Select(cm => new CourseMemberVM(cm.Id.ToString(), cm.User.UserName, cm.User.Email));
+            return people.Select(cm => new CourseMemberOrAdminVM(cm.Id.ToString(), cm.User.UserName, cm.User.Email));
+        }
+
+        /// <summary>
+        /// get all course admins
+        /// </summary>
+        /// <param name="id">Id of the course</param>
+        [HttpGet("{id}/admins")]
+        [AuthorizeCourseAdminOf(EntityType.Course, "id")]
+        public IEnumerable<CourseMemberOrAdminVM> GetAllAdmins(string id)
+        {
+            var admins = courseService.GetAdminsWithUsers(id);
+            return admins.Select(admin => new CourseMemberOrAdminVM(admin.Id.ToString(), admin.User.UserName, admin.User.Email));
         }
 
         /// <summary>

@@ -21,6 +21,32 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
+        public void AddAdmin(Person admin, string courseId)
+        {
+            var course = GetById(courseId);
+            var courseAdmin = new CourseAdmin(admin, course);
+            dbContext.CourseAdmins.Add(courseAdmin);
+        }
+
+        /// <inheritdoc/>
+        public void Enroll(Person person, string courseId)
+        {
+            var course = GetById(courseId);
+            var cm = new CourseMember(person, course);
+            dbContext.CourseMembers.Add(cm);
+        }
+
+        /// <inheritdoc/>
+        public ICollection<CourseAdmin> GetAdminsWithUsers(string courseId)
+        {
+            return dbContext.Courses
+                .Include(course => course.Admins)
+                .ThenInclude(member => member.User)
+                .Single(course => course.Id.ToString() == courseId)
+                .Admins;
+        }
+
+        /// <inheritdoc/>
         public Course GetById(string courseId)
         {
             return dbContext.Courses.FindById(courseId);
