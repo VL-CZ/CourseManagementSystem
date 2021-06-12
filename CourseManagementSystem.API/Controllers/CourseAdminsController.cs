@@ -1,8 +1,11 @@
 ﻿using CourseManagementSystem.API.Auth;
 using CourseManagementSystem.API.Auth.Attributes;
+using CourseManagementSystem.API.Extensions;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace CourseManagementSystem.API.Controllers
 {
@@ -12,10 +15,12 @@ namespace CourseManagementSystem.API.Controllers
     public class CourseAdminsController : ControllerBase
     {
         private readonly ICourseAdminService courseAdminService;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public CourseAdminsController(ICourseAdminService courseAdminService)
+        public CourseAdminsController(ICourseAdminService courseAdminService, IHttpContextAccessor httpContextAccessor)
         {
             this.courseAdminService = courseAdminService;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         /// <summary>
@@ -26,6 +31,12 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOf(EntityType.CourseAdmin, "adminId")]
         public void Delete(string adminId)
         {
+            // we cannot remove ourselves
+            if (adminId == httpContextAccessor.HttpContext.GetCurrentUserId())
+            {
+                throw new ApplicationException("Cannot remove own admin membership");
+            }
+
             courseAdminService.RemoveById(adminId);
             courseAdminService.CommitChanges();
         }

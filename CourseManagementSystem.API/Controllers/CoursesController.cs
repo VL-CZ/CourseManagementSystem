@@ -8,6 +8,7 @@ using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -66,6 +67,11 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOf(EntityType.Course, "courseId")]
         public void AddAdminTo(string courseId, WrapperVM<string> adminId)
         {
+            if (peopleService.IsAdminOfCourse(adminId.Value, courseId))
+            {
+                throw new ApplicationException("This user is already admin of the course");
+            }
+
             var newAdmin = peopleService.GetById(adminId.Value);
             courseService.AddAdmin(newAdmin, courseId);
             courseService.CommitChanges();
