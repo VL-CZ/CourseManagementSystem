@@ -358,7 +358,109 @@ Pokud bych volání metody Include() vynechal, tak by se data otázek nenačetla
 
 \subsection{API}
 
+Controller
+
+ViewModel
+
+Viewmodels reprezentují objekty pro komunikaci mezi frontend a backend částí.
+
+Příklad:
+\begin{lstlisting}
+/// <summary>
+/// viewmodel for submitting a test
+/// </summary>
+public class SubmitTestVM
+{
+	public SubmitTestVM()
+	{
+	}
+	
+	public SubmitTestVM(string testId, string testTopic, bool isSubmitted, IEnumerable<SubmissionAnswerVM> answers, bool isTestGraded)
+	{
+		TestSubmissionId = testId;
+		TestTopic = testTopic;
+		Answers = answers;
+		IsSubmitted = isSubmitted;
+		IsTestGraded = isTestGraded;
+	}
+	
+	/// <summary>
+	/// id of the test submission
+	/// </summary>
+	[RequiredWithDefaultErrorMessage]
+	public string TestSubmissionId { get; set; }
+	
+	/// <summary>
+	/// topic of the test
+	/// </summary>
+	[RequiredWithDefaultErrorMessage]
+	public string TestTopic { get; set; }
+	
+	/// <summary>
+	/// check if the test has already been submitted
+	/// </summary>
+	public bool IsSubmitted { get; set; }
+	...
+\end{lstlisting}
+
+Tento viewmodel reprezentuje data odevzdávaného testu. Vidíme, že ViewModely jsou typicky veřejné třídy s veřejnými vlastnostmi. Dále vidíme, že ViewModel má veřejný bezparametrový konstuktor, ten je volán při deserializaci dat.
+
+Také si můžeme všimnout, že u některé vlastnosti ještě obsahují doplňující atributy (např. atribut [RequiredWithDefaultErrorMessage] u vlastnosti TestTopic ). Tyto atributy slouží primárně k validaci dat.
+
+Atribut je klasická C\# třída, která dědí ze třídy System.Attribute. Její název obvykle končí suffixem "Attribute".
+
+Příklady atributů určených k validaci dat:
+\begin{lstlisting}
+/// <summary>
+/// Validation attribute that marks this value as required
+/// <br/>
+/// if validation fails <see cref="defaultErrorMessage"/> is displayed
+/// </summary>
+public class RequiredWithDefaultErrorMessageAttribute : RequiredAttribute
+{
+	/// <summary>
+	/// default error message displayed ({0} is replaced by the field name that this attribute belongs to)
+	/// </summary>
+	public const string defaultErrorMessage = "The field {0} is required";
+	
+	public RequiredWithDefaultErrorMessageAttribute()
+	{
+		ErrorMessage = defaultErrorMessage;
+	}
+}
+
+/// <summary>
+/// Validation attribute that validates if the double value is non-negative (e.g. >=0)
+/// <br/>
+/// if validation fails <see cref="defaultErrorMessage"/> is displayed
+/// </summary>
+public class NonNegativeDoubleValueAttribute : RangeAttribute
+{
+	/// <summary>
+	/// default error message displayed ({0} is replaced by the field name that this attribute belongs to)
+	/// </summary>
+	public const string defaultErrorMessage = "The field {0} must be non-negative";
+	
+	public NonNegativeDoubleValueAttribute() : base(0, double.MaxValue)
+	{
+		ErrorMessage = defaultErrorMessage;
+	}
+}
+\end{lstlisting}
+
+NonNegativeDoubleValueAttribute - Tento atribut validuje, že vlastnost typu double, ke které patří, je nezáporné číslo. V případě, že tomu tak není, nastavíme výchozí chybovou hlášku "The field \{0\} must be non-negative", kde \{0\} je název vlastnosti, ke které atribut patří.
+
+RequiredWithDefaultErrorMessageAttribute - Tento atribut dědí z atributu RequiredAttribute. Pokud má příslušná vlastnost hodnotu null, nebo se jedná o řetězec, který je prázdný, nebo složený pouze z bílých znaků, tak validace selže. Atribut RequiredWithDefaultErrorMessage pak slouží jen k přidání výchozí chybové hlášky "The field \{0\} is required", v případě, že validace selže.
+
+Dále jsem v aplikaci použil atributy NonNegativeIntValueAttribute a PositiveIntValueAttribute.
+
+Autorizace
+
+error handling
+
 obsahuje Controllery, ViewModels, komunikace s klientskou částí
+
+\newpage
 
 \subsection{Tests}
 
