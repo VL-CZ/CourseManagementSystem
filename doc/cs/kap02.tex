@@ -358,11 +358,38 @@ Pokud bych volání metody Include() vynechal, tak by se data otázek nenačetla
 
 \subsection{API}
 
-Controller
+Controllers
 
-ViewModel
+\begin{lstlisting}
+[HttpGet("{id}/members")]
+[AuthorizeCourseAdminOf(EntityType.Course, "id")]
+public IEnumerable<CourseMemberOrAdminVM> GetAllMembers(string id)
+{
+	var people = courseService.GetMembersWithUsers(id);
+	return people.Select(cm => new CourseMemberOrAdminVM(cm.Id.ToString(), cm.User.UserName, cm.User.Email));
+}
+\end{lstlisting}
 
-Viewmodels reprezentují objekty pro komunikaci mezi frontend a backend částí.
+\begin{lstlisting}
+/// <summary>
+/// create new course
+/// </summary>
+[HttpPost("create")]
+public void Create(AddCourseVM courseVM)
+{
+	string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
+	Person admin = peopleService.GetById(currentUserId);
+	Course createdCourse = new Course(courseVM.Name, admin);
+	
+	courseService.AddCourse(createdCourse);
+	
+	courseService.CommitChanges();
+}
+\end{lstlisting}
+
+\subsubsection*{ViewModels}
+
+ViewModels reprezentují objekty pro komunikaci mezi Frontend a Backend částí (konkrétně mezi Frontend službami a API). Tedy např. při GET dotazu vrací API objekt (příp. objekty) typu ViewModel. Stejně tak při POST dotazu posílá klient v těle požadavku objekt typu ViewModel.
 
 Příklad:
 \begin{lstlisting}
@@ -403,13 +430,92 @@ public class SubmitTestVM
 	...
 \end{lstlisting}
 
-Tento viewmodel reprezentuje data odevzdávaného testu. Vidíme, že ViewModely jsou typicky veřejné třídy s veřejnými vlastnostmi. Dále vidíme, že ViewModel má veřejný bezparametrový konstuktor, ten je volán při deserializaci dat.
+Tento ViewModel reprezentuje data odevzdávaného testu. Vidíme, že ViewModely jsou typicky veřejné třídy s veřejnými vlastnostmi. Dále vidíme, že ViewModel má veřejný bezparametrový konstuktor, ten je volán při deserializaci dat.
 
-Také si můžeme všimnout, že u některé vlastnosti ještě obsahují doplňující atributy (např. atribut [RequiredWithDefaultErrorMessage] u vlastnosti TestTopic ). Tyto atributy slouží primárně k validaci dat.
+Také si můžeme všimnout, že u některé vlastnosti ještě obsahují doplňující atributy (např. atribut [RequiredWithDefaultErrorMessage] u vlastnosti TestTopic). Tyto atributy slouží primárně k validaci dat.
 
+Ve ViewModelech poměrně často používáme dědičnost, podobně jako v tomto příkladu.
+\begin{lstlisting}
+/// <summary>
+/// base viewmodel for course tests
+/// </summary>
+public abstract class BaseCourseTestVM
+{
+	protected BaseCourseTestVM()
+	{
+	}
+	
+	protected BaseCourseTestVM(int weight, string topic, ...)
+	{
+		...
+	}
+	
+	/// <summary>
+	/// weight of the score from the test (e.g. test of weight 2 has twice bigger impact on overall score than test of weight 1)
+	/// </summary>
+	[PositiveIntValue]
+	public int Weight { get; set; }
+	
+	/// <summary>
+	/// topic of the test
+	/// </summary>
+	[RequiredWithDefaultErrorMessage]
+	public string Topic { get; set; }
+
+	...
+}
+
+/// <summary>
+/// viewmodel for adding a course test
+/// </summary>
+public class AddCourseTestVM : BaseCourseTestVM
+{
+	public AddCourseTestVM() : base()
+	{ }
+}
+
+/// <summary>
+/// viewmodel representing a test in a course
+/// </summary>
+public class CourseTestDetailsVM : BaseCourseTestVM
+{
+	public CourseTestDetailsVM() : base()
+	{ }
+	
+	public CourseTestDetailsVM(string id, string topic, int scoreWeight, ...)
+	: base(scoreWeight, topic, ...)
+	{
+		Id = id;
+		Status = testStatus;
+	}
+	
+	/// <summary>
+	/// id of the test
+	/// </summary>
+	[RequiredWithDefaultErrorMessage]
+	public string Id { get; set; }
+	
+	/// <summary>
+	/// status of the test see
+	/// </summary>
+	public TestStatus Status { get; set; }
+}
+\end{lstlisting}
+Chceme vytvořit alespoň dva ViewModely, jejichž struktura je velmi podobná a liší se jen přítomností několika málo doplňujících vlastností. Řešením je vytvořit Base třídu, která obsahuje všechny společné vlastnosti. Pro konkrétní ViewModely poté můžeme vytvořit třídy, které dědí z této rodičovské třídy, a obsahují již pouze doplňující vlastnosti.
+
+Ve výše uvedeném příkladu máme tedy třídu BaseCourseTestVM, a od ní dědí třídy AddCourseTestVM a CourseTestDetailsVM. Tyto ViewModely slouží k přidání nového testu, resp. získání informací o daném testu.
+
+Vidíme, že vlastnosti Id a Status se nachází pouze ve třídě CourseTestDetailsVM. Toto dává smysl, jelikož při vytváření testu ještě neznáme jeho identifikátor (objekt ještě není uložený v databázi).
+Podobně je to i se stavem (vlastnost Status), jelikož ten bude při vytváření vždy nastaven na New.
+
+Bylo by samozřejmě možné oba ViewModely sloučit do jedné třídy se všemi vlastnostmi. Toto řešení je ale podle mého názoru velmi matoucí a částečně proti principům objektově orientovaného programování.
+
+\subsubsection*{Atributy určené k validaci}
+
+V programu používáme několik vlastních atributů, určených k validaci dat, ty se nachází ve složce Validation/Attributes.
 Atribut je klasická C\# třída, která dědí ze třídy System.Attribute. Její název obvykle končí suffixem "Attribute".
 
-Příklady atributů určených k validaci dat:
+Příklady:
 \begin{lstlisting}
 /// <summary>
 /// Validation attribute that marks this value as required
@@ -454,11 +560,87 @@ RequiredWithDefaultErrorMessageAttribute - Tento atribut dědí z atributu Requi
 
 Dále jsem v aplikaci použil atributy NonNegativeIntValueAttribute a PositiveIntValueAttribute.
 
-Autorizace
 
-error handling
+\subsubsection*{Error Handling}
 
-obsahuje Controllery, ViewModels, komunikace s klientskou částí
+V případě, že nastane chyba při deserializaci dat (např. klient pošle v těle POST dotazu nevalidní data), tak framework vyhodí výjimku a vrátí objekt, který popisuje chybu. \url{https://docs.microsoft.com/en-us/aspnet/core/web-api/?view=aspnetcore-5.0#automatic-http-400-responses}
+
+V případě, že nastane chyba při obsluze dotazu (např. klient se pomocí GET dotazu pokusí získat informace o nějaké již smazané entitě), pak v programu vyhodíme výjimku. Všechny výjimky jsou pak zachyceny třídou ErrorHandlerController, která funguje jako obecný Error handler.
+Toto je nakonfigurováno v metodě Configure(), jenž se nachází ve třídě Startup.
+\begin{lstlisting}
+/// <summary>
+/// controller for error handling
+/// </summary>
+[ApiExplorerSettings(IgnoreApi = true)]
+public class ErrorHandlerController : ControllerBase
+{
+	private const string generalErrorText = "An error occurred while processing the request.";
+	
+	/// <summary>
+	/// handle runtime error
+	/// </summary>
+	/// <returns></returns>
+	[Route("errorHandler")]
+	public IActionResult ErrorHandler()
+	{
+		var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
+		var exception = context.Error; // thrown exception
+		
+		var errorDescription = new Dictionary<string, string[]>
+		{
+			{ "Request failed", new string[] { generalErrorText } }
+		};
+		
+		var errorsVM = new ErrorsDictionaryVM(errorDescription);
+		return BadRequest(errorsVM);
+	}
+}
+\end{lstlisting}
+Metoda ErrorHandler tedy nastaví kód odpovědi na 400 Bad Request, a vrátí objekt typu ErrorsDictionaryVM.
+Ten v tomto případě obsahuje obecnou hlášku "An error occurred while processing the request."
+
+\subsubsection*{Autorizace}
+
+\begin{lstlisting}
+/// <summary>
+/// factory for <see cref="ICourseReferenceService"/>
+/// </summary>
+public class CourseReferenceServiceFactory : ICourseReferenceServiceFactory
+{
+	...
+	
+	/// <summary>
+	/// dictionary of data services where the key is <see cref="EntityType"/>
+	/// </summary>
+	private readonly IReadOnlyDictionary<EntityType, ICourseReferenceService> dataServices;
+	
+	public CourseReferenceServiceFactory(ICourseAdminService courseAdminService, ICourseMemberService courseMemberService, ...)
+	{
+		dataServices = new Dictionary<EntityType, ICourseReferenceService>
+		{
+			[EntityType.Course] = new DummyCourseService(),
+			[EntityType.CourseMember] = courseMemberService,
+			[EntityType.CourseAdmin] = courseAdminService,
+			...
+		};
+	}
+
+	/// <inheritdoc/>
+	public ICourseReferenceService GetByEntityType(EntityType entityType)
+	{
+		return dataServices[entityType];
+	}
+}
+\end{lstlisting}
+
+\subsubsection*{Dependency Injection}
+
+\begin{lstlisting}
+// add dependendies to IoC container
+services.AddTransient<ICourseAdminService, CourseAdminService>();
+services.AddTransient<ICourseMemberService, CourseMemberService>();
+services.AddTransient<IFileService, FileService>();
+\end{lstlisting}
 
 \newpage
 
