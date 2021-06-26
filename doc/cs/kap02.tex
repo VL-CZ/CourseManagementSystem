@@ -357,10 +357,40 @@ Pokud bych volání metody Include() vynechal, tak by se data otázek nenačetla
 \newpage
 
 \subsection{API}
+V tomto projektu se nachází API, které slouží pro komunikaci klientské části se serverovou.
 
-Controllers
+\subsubsection*{Controllers}
+Controllery slouží primárně ke zpracování HTTP požadavků. Vidíme, že Controller je klasická C\# třída, jenž dědí ze třídy ControllerBase. Ve většině případů obsahuje reference na služby (jako privátní položky).
 
 \begin{lstlisting}
+[Route("api/[controller]")]
+[ApiController]
+[Authorize]
+public class CoursesController : ControllerBase
+{
+	private readonly IHttpContextAccessor httpContextAccessor;
+	private readonly ICourseService courseService;
+	private readonly IPeopleService peopleService;
+	private CourseTestFilter courseTestFilter;
+	
+	public CoursesController(IHttpContextAccessor httpContextAccessor, ICourseService courseService, IPeopleService peopleService)
+	{
+		this.httpContextAccessor = httpContextAccessor;
+		this.courseService = courseService;
+		this.peopleService = peopleService;
+		courseTestFilter = new CourseTestFilter();
+	}
+	...
+\end{lstlisting}
+
+Jednotlivé Controllery pak obsahují veřejné metody, jenž odpovídají HTTP endpointům.
+
+Například následující metoda slouží k získaní všech členů daného kurzu.
+\begin{lstlisting}
+/// <summary>
+/// get all course members
+/// </summary>
+/// <param name="id">Id of the course</param>
 [HttpGet("{id}/members")]
 [AuthorizeCourseAdminOf(EntityType.Course, "id")]
 public IEnumerable<CourseMemberOrAdminVM> GetAllMembers(string id)
@@ -370,6 +400,17 @@ public IEnumerable<CourseMemberOrAdminVM> GetAllMembers(string id)
 }
 \end{lstlisting}
 
+Vidíme, že je tedy označená atributem HttpGet, který zároveň obsahuje URL, přes kterou lze tuto metodu zavolat. V tomto případě je URL suffix "\{id\}/members". Položka Id označuje parametr, jenž má stejnou hodnotu jako proměnná id (parametr metody). Tento suffix se připojí za URL daného Controlleru, a tím získáme celou URL k zavolání této metody. V našem případě dostaneme
+\newline
+"http://host/api/courses/course-id/members", kde course-id je identifikátor příslušného kurzu a host označuje URL serveru, na kterém aplikace běží. Pokud máme aplikaci spuštěnou lokálně, pak by hodnota měla být localhost:5001. Při HTTP GET dotazu na tuto URL by tedy aplikace zavolala tuto metodu, a vrátila data.
+
+Metoda dále obsahuje atribut určený k autorizaci, pomocí něhož ověříme, že klient má dostatečná práva. V tomto případě povolíme zavolat metodu pouze administrátorům daného kurzu.
+
+V těle metody pak zavoláme konkrétní službu, která typicky pracuje s databází. Tato služba nám vrátí data (v tomto případě všechny členy daného kurzu), které potom namapujeme na objekty typu ViewModel, a ty vrátíme.
+
+\vspace{\baselineskip}
+
+V dalším příkladu máme metodu, která slouží k vytvoření nového kurzu.
 \begin{lstlisting}
 /// <summary>
 /// create new course
@@ -386,10 +427,15 @@ public void Create(AddCourseVM courseVM)
 	courseService.CommitChanges();
 }
 \end{lstlisting}
+Tato metoda je označena atributem HttpPost, který opět obsahuje URL suffix. Pokud bychom tedy chtěli zavolat tuto metodu, pak je potřeba provést HTTP POST požadavek na URL
+\newline
+"http://host/api/courses/create", který v těle obsahuje JSON objekt typu AddCourseVM. Framework pak provede deserializaci objektu, a objekt (instanci třídy AddCourseVM) předá jako parametr do této metody.
+
+V těle metody následně vytvoříme nový objekt kurzu, a pomocí příslušné služby (v tomto případě CourseService) jej přidáme k existujícím kurzům. Můžeme si všimnout, že na konci metody voláme metodu CommitChanges(), která změny zapíše do databáze.
 
 \subsubsection*{ViewModels}
 
-ViewModels reprezentují objekty pro komunikaci mezi Frontend a Backend částí (konkrétně mezi Frontend službami a API). Tedy např. při GET dotazu vrací API objekt (příp. objekty) typu ViewModel. Stejně tak při POST dotazu posílá klient v těle požadavku objekt typu ViewModel.
+ViewModels reprezentují objekty pro komunikaci mezi Frontend a Backend částí (konkrétně mezi Frontend službami a API). Tedy např. při GET dotazu vrací příslušný Controller objekt (příp. objekty) typu ViewModel. Stejně tak při POST dotazu posílá klient v těle požadavku objekt typu ViewModel.
 
 Příklad:
 \begin{lstlisting}
@@ -508,7 +554,7 @@ Ve výše uvedeném příkladu máme tedy třídu BaseCourseTestVM, a od ní dě
 Vidíme, že vlastnosti Id a Status se nachází pouze ve třídě CourseTestDetailsVM. Toto dává smysl, jelikož při vytváření testu ještě neznáme jeho identifikátor (objekt ještě není uložený v databázi).
 Podobně je to i se stavem (vlastnost Status), jelikož ten bude při vytváření vždy nastaven na New.
 
-Bylo by samozřejmě možné oba ViewModely sloučit do jedné třídy se všemi vlastnostmi. Toto řešení je ale podle mého názoru velmi matoucí a částečně proti principům objektově orientovaného programování.
+Bylo by samozřejmě možné oba ViewModely sloučit do jedné třídy se všemi vlastnostmi. Toto řešení je ale podle mého názoru velmi matoucí, jelikož vlastnosti Id a Status jsou při vytváření testu zbytečné.
 
 \subsubsection*{Atributy určené k validaci}
 
@@ -558,14 +604,14 @@ NonNegativeDoubleValueAttribute - Tento atribut validuje, že vlastnost typu dou
 
 RequiredWithDefaultErrorMessageAttribute - Tento atribut dědí z atributu RequiredAttribute. Pokud má příslušná vlastnost hodnotu null, nebo se jedná o řetězec, který je prázdný, nebo složený pouze z bílých znaků, tak validace selže. Atribut RequiredWithDefaultErrorMessage pak slouží jen k přidání výchozí chybové hlášky "The field \{0\} is required", v případě, že validace selže.
 
-Dále jsem v aplikaci použil atributy NonNegativeIntValueAttribute a PositiveIntValueAttribute.
+Dále jsou v aplikaci ještě použité atributy NonNegativeIntValueAttribute a PositiveIntValueAttribute.
 
 
 \subsubsection*{Error Handling}
 
 V případě, že nastane chyba při deserializaci dat (např. klient pošle v těle POST dotazu nevalidní data), tak framework vyhodí výjimku a vrátí objekt, který popisuje chybu. \url{https://docs.microsoft.com/en-us/aspnet/core/web-api/?view=aspnetcore-5.0#automatic-http-400-responses}
 
-V případě, že nastane chyba při obsluze dotazu (např. klient se pomocí GET dotazu pokusí získat informace o nějaké již smazané entitě), pak v programu vyhodíme výjimku. Všechny výjimky jsou pak zachyceny třídou ErrorHandlerController, která funguje jako obecný Error handler.
+Pokud nastane chyba při obsluze dotazu (např. klient se pomocí GET dotazu pokusí získat informace o nějaké již smazané entitě), pak v programu vyhodíme výjimku. Všechny výjimky jsou pak zachyceny třídou ErrorHandlerController, která funguje jako obecný Error handler.
 Toto je nakonfigurováno v metodě Configure(), jenž se nachází ve třídě Startup.
 \begin{lstlisting}
 /// <summary>
