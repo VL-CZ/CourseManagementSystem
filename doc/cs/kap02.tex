@@ -630,7 +630,7 @@ public class ErrorHandlerController : ControllerBase
 	/// </summary>
 	/// <returns></returns>
 	[Route("errorHandler")]
-	public IActionResult ErrorHandler()
+	public IActionResult HandleError()
 	{
 		var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
 		var exception = context.Error; // thrown exception
@@ -645,7 +645,7 @@ public class ErrorHandlerController : ControllerBase
 	}
 }
 \end{lstlisting}
-Metoda ErrorHandler tedy nastaví kód odpovědi na 400 Bad Request, a vrátí objekt typu ErrorsDictionaryVM.
+Metoda HandleError tedy nastaví kód odpovědi na 400 Bad Request, a vrátí objekt typu ErrorsDictionaryVM.
 Ten v tomto případě obsahuje obecnou hlášku "An error occurred while processing the request."
 
 \subsubsection*{Autorizace}
@@ -814,10 +814,10 @@ services.AddTransient<IFileService, FileService>();
 \begin{lstlisting}
 public CoursesController(IHttpContextAccessor httpContextAccessor, ICourseService courseService, IPeopleService peopleService)
 {
-this.httpContextAccessor = httpContextAccessor;
-this.courseService = courseService;
-this.peopleService = peopleService;
-courseTestFilter = new CourseTestFilter();
+	this.httpContextAccessor = httpContextAccessor;
+	this.courseService = courseService;
+	this.peopleService = peopleService;
+	courseTestFilter = new CourseTestFilter();	
 }
 \end{lstlisting}
 

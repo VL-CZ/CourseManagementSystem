@@ -18,7 +18,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <returns></returns>
         [Route("errorHandler")]
-        public IActionResult ErrorHandler()
+        public IActionResult HandleError()
         {
             var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
             var exception = context.Error; // thrown exception
