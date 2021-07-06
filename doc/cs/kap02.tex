@@ -716,9 +716,9 @@ Dále zjistíme, jestli má uživatel dostatečná práva. K tomuto účelu slou
 Jedná se o využití návrhového vzoru Template method, kdy implementaci této metody necháme na třídách, které dědí z CourseBasedAuthorizeFilter. 
 Společné kroky autorizace nicméně implementujeme v této (rodičovské) třídě.
 
-Pokud zjistíme, že uživatel nemá dostatečná práva, pak pouze vrátíme UnauthorizedResult, a příslušná akce se neprovede.
+Pokud zjistíme, že uživatel nemá dostatečná práva, pak pouze vrátíme UnauthorizedResult, a požadovaná akce se neprovede.
 
-Dále ještě potřebujeme v aplikaci mechanismus, který nám podle enumu EntityType vrátí příslušnou službu. K tomuto účelu používáme třídu CourseReferenceServiceFactory. 
+Dále ještě potřebujeme v aplikaci mechanismus, který nám podle enumu EntityType vrátí příslušnou službu. K tomuto účelu používáme třídu CourseReferenceServiceFactory.
 \begin{lstlisting}
 /// <summary>
 /// factory for <see cref="ICourseReferenceService"/>
@@ -801,15 +801,21 @@ Tímto způsobem tedy zaručíme, že k této metodě mají přístup pouze admi
 
 \subsubsection*{Dependency Injection}
 
-K předávání závislostí v aplikaci používáme mechanismus Dependency injection. Konfigurace IoC kontejneru se nachází ve třídě Startup.
+K předávání závislostí v aplikaci používáme mechanismus Dependency injection. 
 
+Používáme vestavěný IoC kontejner ve frameworku ASP .NET Core, konfigurace se nachází ve třídě Startup v metodě ConfigureServices.
+U každé závislosti uvedeme její rozhraní a implementaci. 
+Závislosti vkládáme do kontejneru ve většině případů pomocí metody AddTransient. To znamená, že při každém dotazu na danou službu v kontejneru se vytvoří nová instance.
 \begin{lstlisting}
-// add dependendies to IoC container
-services.AddTransient<ICourseAdminService, CourseAdminService>();
-services.AddTransient<ICourseMemberService, CourseMemberService>();
-services.AddTransient<IFileService, FileService>();
+// add dependencies to IoC container
+services.AddTransient<ICourseService, CourseService>();
+services.AddTransient<IPeopleService, PeopleService>();
+services.AddTransient<IGradeService, GradeService>();
 ...
 \end{lstlisting}
+Pokud by naše konfigurace vypadala takto, tak bychom do kontejneru vložili 3 závislosti. První z nich má rozhraní ICourseService a implementaci CourseService, u ostatních závislostí je to obdobně.
+
+Pokud tedy chceme, aby do nějaké třídy, jejíž instance jsou vytvářeny frameworkem, byly dosazeny příslušné závislosti (dependencies), použijeme Constructor injection. V konstruktoru dané třídy vytvoříme pro každou požadovanou závislost 1 parametr, který bude mít stejný typ jako rozhraní dané závislosti. Framework se pak postará o dosazení parametrů podle konfigurace IoC kontejneru.
 
 \begin{lstlisting}
 public CoursesController(IHttpContextAccessor httpContextAccessor, ICourseService courseService, IPeopleService peopleService)
@@ -817,21 +823,25 @@ public CoursesController(IHttpContextAccessor httpContextAccessor, ICourseServic
 	this.httpContextAccessor = httpContextAccessor;
 	this.courseService = courseService;
 	this.peopleService = peopleService;
-	courseTestFilter = new CourseTestFilter();	
+	...
 }
 \end{lstlisting}
+V tomto případě tedy framework ví, že třída má 3 závislosti, které je potřeba vyhledat v kontejneru.
+Podle konfigurace poté například do parametru courseService dosadí novou instanci třídy CourseService. 
+
+Dependency injection používáme primárně v Controllerech.
+Nevytváříme tedy přímo instance služeb (pomocí operátoru new), naopak si služby vyžádáme přes parametry konstruktoru, a framework se postará o jejich správné dosazení.
+
+Řešení pomocí Dependency injection je flexibilnější, jelikož Controller nezávisí na implementaci dané služby, ale pouze na jejím rozhraní.
 
 \newpage
 
 \subsection{Tests}
 
 obsahuje testy služeb
+TODO: dopsat
 
 \section{Klientská část}
-
-\subsection{Components}
-
-slouží k zobrazování dat, každá komponenta má 2 části: šablonu a backend
 
 \subsection{Services}
 
@@ -840,6 +850,10 @@ slouží ke komunikaci klienta se server části
 \subsection{ViewModels}
 
 reprezentují objekty, které se používají v komunikaci s API
+
+\subsection{Components}
+
+slouží k zobrazování dat, každá komponenta má 2 části: šablonu a backend
 
 \section{Zajímavé problémy}
 
