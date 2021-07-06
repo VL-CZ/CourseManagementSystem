@@ -542,7 +542,7 @@ public class CourseTestDetailsVM : BaseCourseTestVM
 	public string Id { get; set; }
 	
 	/// <summary>
-	/// status of the test see
+	/// status of the test
 	/// </summary>
 	public TestStatus Status { get; set; }
 }
@@ -600,9 +600,12 @@ public class NonNegativeDoubleValueAttribute : RangeAttribute
 }
 \end{lstlisting}
 
-NonNegativeDoubleValueAttribute - Tento atribut validuje, že vlastnost typu double, ke které patří, je nezáporné číslo. V případě, že tomu tak není, nastavíme výchozí chybovou hlášku "The field \{0\} must be non-negative", kde \{0\} je název vlastnosti, ke které atribut patří.
+\begin{itemize}
+\item NonNegativeDoubleValueAttribute - Tento atribut validuje, že vlastnost typu double, ke které patří, je nezáporné číslo. V případě, že tomu tak není, nastavíme výchozí chybovou hlášku "The field \{0\} must be non-negative", kde \{0\} je název vlastnosti, ke které atribut patří.
 
-RequiredWithDefaultErrorMessageAttribute - Tento atribut dědí z atributu RequiredAttribute. Pokud má příslušná vlastnost hodnotu null, nebo se jedná o řetězec, který je prázdný, nebo složený pouze z bílých znaků, tak validace selže. Atribut RequiredWithDefaultErrorMessage pak slouží jen k přidání výchozí chybové hlášky "The field \{0\} is required", v případě, že validace selže.
+\item RequiredWithDefaultErrorMessageAttribute - Tento atribut dědí z atributu RequiredAttribute. Pokud má příslušná vlastnost hodnotu null, nebo se jedná o řetězec, který je prázdný, nebo složený pouze z bílých znaků, tak validace selže. Atribut RequiredWithDefaultErrorMessage pak slouží jen k přidání výchozí chybové hlášky "The field \{0\} is required", v případě, že validace selže.
+
+\end{itemize}
 
 Dále jsou v aplikaci ještě použité atributy NonNegativeIntValueAttribute a PositiveIntValueAttribute.
 
@@ -650,7 +653,7 @@ Ten v tomto případě obsahuje obecnou hlášku "An error occurred while proces
 V programu máme také server-side autorizaci. Ta slouží k ověření toho, jestli je uživatel oprávněný provést danou akci. Základní entitou pro autorizaci je kurz (entita Course). V aplikaci tedy vždy ověřujeme, jestli je aktuální uživatel administrátor (příp. člen) kurzu, ke kterému se vztahuje daná entita (např. CourseTest).
 
 K tomuto účelu používáme autorizační atributy, které se nachází ve složce Auth/Attributes. 
-Abstraktní třída CourseBasedAuthorizeFilter slouží jako rodičovská třída pro všechny atributy, založené na autorizaci pomocí kurzů.
+Abstraktní třída CourseBasedAuthorizeFilter slouží jako rodičovská třída pro všechny filtry, založené na autorizaci pomocí kurzů.
 
 \begin{lstlisting}
 /// <summary>
@@ -679,9 +682,11 @@ public abstract class CourseBasedAuthorizeFilter : IAuthorizationFilter
 		if (context.HttpContext.User.Identity.IsAuthenticated)
 		{
 			string currentUserId = context.HttpContext.GetCurrentUserId();
-			string objectId = context.HttpContext.Request.RouteValues[entityIdFieldName].ToString();
+			string objectId = context.HttpContext.Request
+				.RouteValues[entityIdFieldName].ToString();
 			
-			var service = courseReferenceServiceFactory.GetByEntityType(entityType);
+			var service = courseReferenceServiceFactory
+				.GetByEntityType(entityType);
 			string courseId = service.GetCourseIdOf(objectId);
 			
 			if (IsAuthorized(currentUserId, courseId, entityType, objectId))
@@ -703,19 +708,58 @@ public abstract class CourseBasedAuthorizeFilter : IAuthorizationFilter
 }
 \end{lstlisting}
 
-Vidíme, že tato třída obsahuje typ entity (proměnná entityType), pomocí které provádíme autorizaci. Dále také název proměnné v URL, která obsahuje identifikátor této entity. Metoda OnAuthorization se automaticky zavolá při autorizaci. V této metodě nejprve zkontrolujeme, že uživatel je přihlášený, poté získáme jeho ID (přes HttpContext) a ID dané entity. 
+Vidíme, že tato třída obsahuje typ entity (proměnná entityType), pomocí které provádíme autorizaci. Dále také název proměnné v URL, která obsahuje identifikátor této entity. 
 
-Poté získáme identifikátor kurzu, ke kterému daná entita logicky patří. Zde využíváme toho, že všechny služby implementují rozhraní ICourseReferenceService. 
-Dále zjistíme, jestli má uživatel dostatečná práva. K tomuto účelu slouží abstraktní metoda IsAuthorized. Jedná se o využití návrhového vzoru Template method, kdy implementaci této metody necháme na třídách, které dědí z CourseBasedAuthorizeFilter. 
-Společné kroky autorizace nicméně implementujme v této (rodičovské) třídě.
+Metoda OnAuthorization se automaticky zavolá při autorizaci. V této metodě nejprve zkontrolujeme, že uživatel je přihlášený, poté získáme jeho ID (přes HttpContext) a ID dané entity. Poté získáme identifikátor kurzu, ke kterému daná entita logicky patří. Zde využíváme toho, že všechny služby implementují rozhraní ICourseReferenceService. 
+Dále zjistíme, jestli má uživatel dostatečná práva. K tomuto účelu slouží abstraktní metoda IsAuthorized. 
 
-V aplikaci používáme tyto typy autorizační filtry:
+Jedná se o využití návrhového vzoru Template method, kdy implementaci této metody necháme na třídách, které dědí z CourseBasedAuthorizeFilter. 
+Společné kroky autorizace nicméně implementujeme v této (rodičovské) třídě.
+
+Pokud zjistíme, že uživatel nemá dostatečná práva, pak pouze vrátíme UnauthorizedResult, a příslušná akce se neprovede.
+
+Dále ještě potřebujeme v aplikaci mechanismus, který nám podle enumu EntityType vrátí příslušnou službu. K tomuto účelu používáme třídu CourseReferenceServiceFactory. 
+\begin{lstlisting}
+/// <summary>
+/// factory for <see cref="ICourseReferenceService"/>
+/// </summary>
+public class CourseReferenceServiceFactory : ICourseReferenceServiceFactory
+{
+	...
+	
+	private readonly IReadOnlyDictionary<EntityType, ICourseReferenceService> dataServices;
+	
+	public CourseReferenceServiceFactory(ICourseAdminService courseAdminService, ICourseMemberService courseMemberService, ...)
+	{
+		dataServices = new Dictionary<EntityType, ICourseReferenceService>
+		{
+			[EntityType.CourseMember] = courseMemberService,
+			[EntityType.CourseAdmin] = courseAdminService,
+			[EntityType.CourseTest] = courseTestService,
+			...
+		};
+	}
+	
+	/// <inheritdoc/>
+	public ICourseReferenceService GetByEntityType(EntityType entityType)
+	{
+		return dataServices[entityType];
+	}
+}
+\end{lstlisting}
+
+Tato třída obsahuje slovník dataServices, ve kterém je pod daným klíčem typu EntityType uložená příslušná služba.
+V metodě GetByEntityType pak jen vrátíme položku ze slovníku.
+Opět využíváme toho, že všechny služby implementují rozhraní ICourseReferenceService.
+
+V aplikaci používáme tyto autorizační filtry (všechny dědí ze třídyCourseBasedAuthorizeFilter).
 \begin{itemize}
-	\item CourseAdminAuthorizeFilter - ověřuje, jestli je aktuální uživatel administrátor kurzu, ke kterému patří daná entita. Používáme v akcích, které může provádět pouze admin daného kurzu (jako např. vytváření nebo opravení testu).
+	\item CourseAdminAuthorizeFilter - ověřuje, jestli je aktuální uživatel administrátor kurzu, ke kterému patří daná entita. Používáme v akcích, které může provádět pouze admin daného kurzu (jako např. vytváření nových testů).
 	\item CourseAdminOrMemberAuthorizeFilter - ověřuje, zda je aktuální uživatel administrátor nebo člen kurzu, ke kterému patří daná entita. Tento filtr používáme např. v metodě pro získání všech souborů v daném kurzu.
 	\item CourseAdminOrOwnerAuthorizeFilter - podobně jako 1. filtr slouží k ověření toho, jestli je aktuální uživatel administrátor kurzu, k němuž patří daná entita. Zároveň ale akci povolíme provést, pokud je uživatel vlastníkem dané entity. To znamená, že příslušná entita (např. odevzdaný test - entita TestSubmission) se váže k danému uživateli. Toto ověření používáme například v metodě pro získání opraveného testu.
 \end{itemize}
 
+Například třída CourseAdminOrMemberAuthorizeFilter vypadá takto:
 \begin{lstlisting}
 public class CourseAdminOrMemberAuthorizeFilter : CourseBasedAuthorizeFilter
 {
@@ -730,45 +774,51 @@ public class CourseAdminOrMemberAuthorizeFilter : CourseBasedAuthorizeFilter
 }
 \end{lstlisting}
 
+Ke každému autorizačnímu filtru se pak vztahuje atribut.
 \begin{lstlisting}
-/// <summary>
-/// factory for <see cref="ICourseReferenceService"/>
-/// </summary>
-public class CourseReferenceServiceFactory : ICourseReferenceServiceFactory
+public class AuthorizeCourseAdminOrMemberOfAttribute : TypeFilterAttribute
 {
-	...
-	
-	/// <summary>
-	/// dictionary of data services where the key is <see cref="EntityType"/>
-	/// </summary>
-	private readonly IReadOnlyDictionary<EntityType, ICourseReferenceService> dataServices;
-	
-	public CourseReferenceServiceFactory(ICourseAdminService courseAdminService, ICourseMemberService courseMemberService, ...)
+	public AuthorizeCourseAdminOrMemberOfAttribute(EntityType entityType, string entityIdFieldName) : base(typeof(CourseAdminOrMemberAuthorizeFilter))
 	{
-		dataServices = new Dictionary<EntityType, ICourseReferenceService>
-		{
-			[EntityType.Course] = new DummyCourseService(),
-			[EntityType.CourseMember] = courseMemberService,
-			[EntityType.CourseAdmin] = courseAdminService,
-			...
-		};
-	}
-
-	/// <inheritdoc/>
-	public ICourseReferenceService GetByEntityType(EntityType entityType)
-	{
-		return dataServices[entityType];
+		Arguments = new object[] { entityType, entityIdFieldName };
 	}
 }
 \end{lstlisting}
 
+Vidíme, že tento atribut má konstruktor se 2 parametry, které následně předá autorizačnímu filtru. 
+
+Atributy se poté používají následujícím způsobem (v příkladu je atribut použitý na metodě Controlleru, která slouží ke stažení souboru podle daného id).
+\begin{lstlisting}
+[HttpGet("{id}")]
+[AuthorizeCourseAdminOrMemberOf(EntityType.CourseFile, "id")]
+public IActionResult Download(string id)
+{
+	...
+}
+\end{lstlisting}
+
+Tímto způsobem tedy zaručíme, že k této metodě mají přístup pouze administrátoři a členové daného kurzu, ve kterém je tento soubor sdílen. Pomocí parametrů atributu popíšeme, že entita je soubor, a její identifikátor se nachází v proměnné s názvem id (což je parametr metody).
+
 \subsubsection*{Dependency Injection}
+
+K předávání závislostí v aplikaci používáme mechanismus Dependency injection. Konfigurace IoC kontejneru se nachází ve třídě Startup.
 
 \begin{lstlisting}
 // add dependendies to IoC container
 services.AddTransient<ICourseAdminService, CourseAdminService>();
 services.AddTransient<ICourseMemberService, CourseMemberService>();
 services.AddTransient<IFileService, FileService>();
+...
+\end{lstlisting}
+
+\begin{lstlisting}
+public CoursesController(IHttpContextAccessor httpContextAccessor, ICourseService courseService, IPeopleService peopleService)
+{
+this.httpContextAccessor = httpContextAccessor;
+this.courseService = courseService;
+this.peopleService = peopleService;
+courseTestFilter = new CourseTestFilter();
+}
 \end{lstlisting}
 
 \newpage
@@ -793,10 +843,6 @@ reprezentují objekty, které se používají v komunikaci s API
 
 \section{Zajímavé problémy}
 
-\subsection{Použití Dependency injection}
-
-TODO: popsat použití + ukázat příklad
-
 \subsection{ViewModels x DB entity}
 
 Použil jsem různé objekty pro databázové entity a view-modely.
@@ -808,9 +854,3 @@ TODO: pořádně rozepsat + vysvětlit + ukázka kódu
 view-modely jsou v serverové i klientské části aplikace
 
 TODO: pořádně rozepsat + vysvětlit + ukázka kódu
-
-\subsection{Uživatelské role}
-
-V systému je několik rolí, serverová část provádí autorizaci.
-
-TODO: pořádně rozepsat typy rolí + autorizaci

@@ -86,7 +86,7 @@ namespace CourseManagementSystem.API.ViewModels
         public string Id { get; set; }
 
         /// <summary>
-        /// status of the test see
+        /// status of the test
         /// </summary>
         public TestStatus Status { get; set; }
     }
