@@ -8,6 +8,7 @@ import {CourseFileVM} from '../viewmodels/courseFileVM';
 import {CourseTestDetailsVM} from '../viewmodels/courseTestVM';
 import {ForumPostVM} from '../viewmodels/forumPostVM';
 import {WrapperVM} from '../viewmodels/wrapperVM';
+import {EnrollmentRequestVM} from '../viewmodels/enrollmentRequestVM';
 
 @Injectable({
   providedIn: 'root'
@@ -106,5 +107,13 @@ export class CourseService extends ApiService {
    */
   public getAllPosts(courseId: string): Observable<ForumPostVM[]> {
     return this.httpGet<ForumPostVM[]>(`${courseId}/posts`);
+  }
+
+  /**
+   * get all requests for enrollment to the course
+   * @param courseId identifier of the course
+   */
+  public getEnrollmentRequests(courseId: string): Observable<EnrollmentRequestVM[]> {
+    return this.httpGet<EnrollmentRequestVM[]>(`${courseId}/enrollmentRequests`);
   }
 }

@@ -1,0 +1,19 @@
+<div class="jumbotron">
+  <h3>Enrollment requests</h3>
+  <table class="table table-striped table-responsive">
+    <tr *ngFor="let request of enrollmentRequests">
+      <td>{{request.personName}}</td>
+      <td>{{request.personEmail}}</td>
+      <td>
+        <button class="btn btn-success" (click)="approve(request)">
+          Approve
+        </button>
+      </td>
+      <td>
+        <button class="btn btn-danger" (click)="decline(request)">
+          Decline
+        </button>
+      </td>
+    </tr>
+  </table>
+</div>
