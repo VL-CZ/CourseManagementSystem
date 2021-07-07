@@ -433,6 +433,7 @@ Tato metoda je označena atributem HttpPost, který opět obsahuje URL suffix. P
 V těle metody následně vytvoříme nový objekt kurzu, a pomocí příslušné služby (v tomto případě CourseService) jej přidáme k existujícím kurzům. Můžeme si všimnout, že na konci metody voláme metodu CommitChanges(), která změny zapíše do databáze.
 
 \subsubsection*{ViewModels}
+\label{serverVM}
 
 ViewModels reprezentují objekty pro komunikaci mezi Frontend a Backend částí (konkrétně mezi Frontend službami a API). Tedy např. při GET dotazu vrací příslušný Controller objekt (příp. objekty) typu ViewModel. Stejně tak při POST dotazu posílá klient v těle požadavku objekt typu ViewModel.
 
@@ -970,7 +971,8 @@ Můžeme si všimnout, že v tomto případě voláme metodu httpPost bez generi
 
 Vidíme, že tělo metod je typicky velmi krátké, ve většině případů se jedná pouze o HTTP dotaz na danou adresu.
 
-Služby fungují asynchronně, tedy nevrací přímo dané objekty, ale generický typ Observable<T>. Zavoláním metody subscribe() na tomto typu se pak počká na vrácení dat, a klient s nimi může pak dále pracovat.
+Služby fungují asynchronně, tedy nevrací přímo dané objekty, ale generický typ Observable<T>. Zavoláním metody subscribe na tomto typu se pak počká na vrácení dat, a klient s nimi může pak dále pracovat.
+Volání metody subscribe v našem programu typicky probíhá až v komponentách.
 
 \newpage
 
@@ -978,7 +980,7 @@ Služby fungují asynchronně, tedy nevrací přímo dané objekty, ale generick
 
 V klientské části se také nacházejí ViewModely, které slouží ke komunikaci s API. Tyto objekty přesně odpovídají ViewModelům ze serverové části (tzn. obsahují stejné položky stejných typů).
 
-Na příkladu vidíme ViewModel, který reprezentuje odeslaný test ()
+Na příkladu vidíme ViewModel, který reprezentuje odeslaný test (vidíme, že odpovídá ViewModelu ze serverové části -- viz. sekce \ref{serverVM})
 \begin{lstlisting}
 /**
 * viewmodel for submitting a test
@@ -1003,11 +1005,13 @@ export class SubmitTestVM {
 }
 \end{lstlisting}
 
-Pro HTTP GET frontend služby typicky vrací objekty typu ViewModel. Stejně tak při POST dotazu je do těla požadavku vložen objekt typu ViewModel.
+Pro HTTP GET požadavky frontend služby typicky vrací objekty typu ViewModel, se kterými dále pracujeme v komponentách. Stejně tak například při HTTP POST dotazu je do těla požadavku vložena instance nějakého ViewModelu.
 
 \newpage
 
 \subsection{Components}
+
+Komponenty představují UI aplikace a slouží k zobrazování dat. Každá komponenta má 2 části: šablonu a backend. Šablona je typicky napsaná v HTML, zatímco backend komponenty je v jazyce Typescript. 
 
 \begin{lstlisting}
 <div class="jumbotron">
@@ -1021,7 +1025,9 @@ Pro HTTP GET frontend služby typicky vrací objekty typu ViewModel. Stejně tak
 		<tr *ngFor="let person of students">
 			<td>{{person.name}}</td>
 			<td>{{person.email}}</td>
-			<td><a class="nav-link" routerLink="/students/{{person.id}}">Details</a></td>
+			<td>
+				<a class="nav-link" routerLink="/students/{{person.id}}">Details</a>
+			</td>
 		</tr>
 	</table>
 </div>
@@ -1029,9 +1035,9 @@ Pro HTTP GET frontend služby typicky vrací objekty typu ViewModel. Stejně tak
 
 \begin{lstlisting}
 @Component({
-selector: 'app-student-list',
-templateUrl: './student-list.component.html',
-styleUrls: ['./student-list.component.css']
+	selector: 'app-student-list',
+	templateUrl: './student-list.component.html',
+	styleUrls: ['./student-list.component.css']
 })
 export class StudentListComponent implements OnInit {
 	
@@ -1078,8 +1084,6 @@ RouterModule.forRoot([
 	{path: 'courses/:id', component: CourseDetailComponent},
 	...
 \end{lstlisting}
-
-slouží k zobrazování dat, každá komponenta má 2 části: šablonu a backend
 
 \newpage
 
