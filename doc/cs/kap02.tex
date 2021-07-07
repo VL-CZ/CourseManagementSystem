@@ -834,6 +834,20 @@ Nevytváříme tedy přímo instance služeb (pomocí operátoru new), naopak si
 
 Řešení pomocí Dependency injection je flexibilnější, jelikož Controller nezávisí na implementaci dané služby, ale pouze na jejím rozhraní.
 
+\subsubsection*{Ostatní}
+
+V souboru appsettings.json se nachází konfigurace aplikace ve formátu JSON. Její součástí je i Connection string k databázi. 
+\begin{lstlisting}
+"ConnectionStrings": {
+	"DefaultConnection": "Server=.;Database=CMS;
+		Trusted_Connection=True;
+		MultipleActiveResultSets=true" 
+}
+...
+\end{lstlisting}
+
+Ve výchozím nastavení tedy používáme databázi se jménem "CMS" na lokálním SQL Serveru (znak "." symbolizuje lokální server).
+
 \newpage
 
 \subsection{Tests}
@@ -1011,8 +1025,12 @@ Pro HTTP GET požadavky frontend služby typicky vrací objekty typu ViewModel, 
 
 \subsection{Components}
 
-Komponenty představují UI aplikace a slouží k zobrazování dat. Každá komponenta má 2 části: šablonu a backend. Šablona je typicky napsaná v HTML, zatímco backend komponenty je v jazyce Typescript. 
+Komponenty představují UI aplikace a slouží k zobrazování dat. Každá komponenta má 2 části: šablonu a backend. V některých případech pak komponenta obsahuje i vlastní CSS soubor se styly. 
 
+Šablona je typicky napsaná v HTML, zatímco backend komponenty je v jazyce Typescript. 
+
+Šablona může vypadat například takto:
+\lstset{style=html}
 \begin{lstlisting}
 <div class="jumbotron">
 	<h3>Students</h3>
@@ -1033,6 +1051,10 @@ Komponenty představují UI aplikace a slouží k zobrazování dat. Každá kom
 </div>
 \end{lstlisting}
 
+Toto je šablona sloužící k zobrazení členů kurzu. Vidíme, že se jedná o klasické HTML s interleaving.
+
+
+\lstset{style=typescript}
 \begin{lstlisting}
 @Component({
 	selector: 'app-student-list',
@@ -1056,13 +1078,17 @@ export class StudentListComponent implements OnInit {
 	}
 	
 	ngOnInit() {
-		this.courseService.getAllMembers(this.courseId).subscribe(result => {
+		this.courseService.getAllMembers(this.courseId)
+		.subscribe(result => {
 			this.students = result;
 		});
 	}
 }
 \end{lstlisting} 
 
+Vidíme, že backend komponenty typicky používá služby k získání dat z API. Poté je třeba zavolat na metodě dané služby metodu subscribe, která vrátí data. 
+
+\lstset{style=html}
 \begin{lstlisting}
 <div *ngIf="!isCourseAdmin">
 	<button class="btn btn-success" routerLink="/students/{{currentCourseMemberId}}">My Grades</button>
@@ -1075,7 +1101,10 @@ export class StudentListComponent implements OnInit {
 <app-course-forum [courseId]="courseId" [isCourseAdmin]="isCourseAdmin"></app-course-forum>
 \end{lstlisting}
 
-Routing
+\subsubsection*{Routing}
+
+
+\lstset{style=typescript}
 \begin{lstlisting}
 RouterModule.forRoot([
 	{path: '', component: HomeComponent, pathMatch: 'full'},
