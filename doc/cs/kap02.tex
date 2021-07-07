@@ -1104,16 +1104,21 @@ Vidíme, že backend komponenty typicky používá služby k získání dat z AP
 
 \subsubsection*{Routing}
 
+Frontend část aplikace má také na starost routing. Samotný router je součástí frameworku, nicméně potřebujeme nějak nakonfigurovat, jaká komponenta se zobrazí při dotazu na danou URL.
 
+Tato konfigurace se nachází v souboru app.module.ts.
 \lstset{style=typescript}
 \begin{lstlisting}
 RouterModule.forRoot([
 	{path: '', component: HomeComponent, pathMatch: 'full'},
 	{path: 'students/:id', component: StudentDetailComponent},
 	{path: 'courses', component: CourseListComponent},
-	{path: 'courses/:id', component: CourseDetailComponent},
 	...
 \end{lstlisting}
+
+Konfigurace nám říká, že na výchozí stránce se zobrazí komponenta HomeComponent. Druhý řádek nám říká, že při zadání URL "http://host/students/id", kde id je parametr, se zobrazí komponenta StudentDetailComponent. K parametru id se poté můžeme dostat v komponentě.
+
+Poslední řádek definuje, že na stránce "http://host/courses" se zobrazí CourseListComponent.
 
 \newpage
 
