@@ -2,9 +2,8 @@
 
 \section{Serverová část}
 
-Rozdělení do projektů:
-
-TODO: u každé dopodrobna rozepsat co obsahuje, k čemu slouží + ukázky kódu
+Serverová část aplikace je naprogramovaná v jazyce C\# s použitím 
+frameworku ASP .NET Core. Je rozdělena do těchto projektů:
 
 \subsection{Data}
 
@@ -601,9 +600,9 @@ public class NonNegativeDoubleValueAttribute : RangeAttribute
 \end{lstlisting}
 
 \begin{itemize}
-\item NonNegativeDoubleValueAttribute - Tento atribut validuje, že vlastnost typu double, ke které patří, je nezáporné číslo. V případě, že tomu tak není, nastavíme výchozí chybovou hlášku "The field \{0\} must be non-negative", kde \{0\} je název vlastnosti, ke které atribut patří.
+\item NonNegativeDoubleValueAttribute -- Tento atribut validuje, že vlastnost typu double, ke které patří, je nezáporné číslo. V případě, že tomu tak není, nastavíme výchozí chybovou hlášku "The field \{0\} must be non-negative", kde \{0\} je název vlastnosti, ke které atribut patří.
 
-\item RequiredWithDefaultErrorMessageAttribute - Tento atribut dědí z atributu RequiredAttribute. Pokud má příslušná vlastnost hodnotu null, nebo se jedná o řetězec, který je prázdný, nebo složený pouze z bílých znaků, tak validace selže. Atribut RequiredWithDefaultErrorMessage pak slouží jen k přidání výchozí chybové hlášky "The field \{0\} is required", v případě, že validace selže.
+\item RequiredWithDefaultErrorMessageAttribute -- Tento atribut dědí z atributu RequiredAttribute. Pokud má příslušná vlastnost hodnotu null, nebo se jedná o řetězec, který je prázdný, nebo složený pouze z bílých znaků, tak validace selže. Atribut RequiredWithDefaultErrorMessage pak slouží jen k přidání výchozí chybové hlášky "The field \{0\} is required", v případě, že validace selže.
 
 \end{itemize}
 
@@ -754,9 +753,9 @@ Opět využíváme toho, že všechny služby implementují rozhraní ICourseRef
 
 V aplikaci používáme tyto autorizační filtry (všechny dědí ze třídyCourseBasedAuthorizeFilter).
 \begin{itemize}
-	\item CourseAdminAuthorizeFilter - ověřuje, jestli je aktuální uživatel administrátor kurzu, ke kterému patří daná entita. Používáme v akcích, které může provádět pouze admin daného kurzu (jako např. vytváření nových testů).
-	\item CourseAdminOrMemberAuthorizeFilter - ověřuje, zda je aktuální uživatel administrátor nebo člen kurzu, ke kterému patří daná entita. Tento filtr používáme např. v metodě pro získání všech souborů v daném kurzu.
-	\item CourseAdminOrOwnerAuthorizeFilter - podobně jako 1. filtr slouží k ověření toho, jestli je aktuální uživatel administrátor kurzu, k němuž patří daná entita. Zároveň ale akci povolíme provést, pokud je uživatel vlastníkem dané entity. To znamená, že příslušná entita (např. odevzdaný test - entita TestSubmission) se váže k danému uživateli. Toto ověření používáme například v metodě pro získání opraveného testu.
+	\item CourseAdminAuthorizeFilter -- ověřuje, jestli je aktuální uživatel administrátor kurzu, ke kterému patří daná entita. Používáme v akcích, které může provádět pouze admin daného kurzu (jako např. vytváření nových testů).
+	\item CourseAdminOrMemberAuthorizeFilter -- ověřuje, zda je aktuální uživatel administrátor nebo člen kurzu, ke kterému patří daná entita. Tento filtr používáme např. v metodě pro získání všech souborů v daném kurzu.
+	\item CourseAdminOrOwnerAuthorizeFilter -- podobně jako 1. filtr slouží k ověření toho, jestli je aktuální uživatel administrátor kurzu, k němuž patří daná entita. Zároveň ale akci povolíme provést, pokud je uživatel vlastníkem dané entity. To znamená, že příslušná entita (např. odevzdaný test - entita TestSubmission) se váže k danému uživateli. Toto ověření používáme například v metodě pro získání opraveného testu.
 \end{itemize}
 
 Například třída CourseAdminOrMemberAuthorizeFilter vypadá takto:
@@ -841,19 +840,248 @@ Nevytváříme tedy přímo instance služeb (pomocí operátoru new), naopak si
 obsahuje testy služeb
 TODO: dopsat
 
+\newpage
+
 \section{Klientská část}
+
+\lstset{style=typescript}
+
+Klientská část aplikace se nachází ve složce API/ClientApp, a je napsaná v jazyce Typescript s použitím frameworku Angular.
+TODO: dopsat
 
 \subsection{Services}
 
-slouží ke komunikaci klienta se server části
+Služby slouží ke komunikaci frontend části s API. Jedna služba typicky odpovídá jednomu Controlleru a jednotlivé metody služby pak slouží k volání metod API. 
+
+Všechny služby dědí z abstraktní třídy ApiService. 
+
+\begin{lstlisting}
+/**
+* base class for all API services
+*/
+export abstract class ApiService {
+
+	/**
+	* HTTP client
+	* @protected
+	*/
+	protected readonly http: HttpClient;
+	
+	/**
+	* url of the controller to fetch data (ends with /)
+	* @protected
+	*/
+	protected readonly controllerUrl: string;
+	
+	/**
+	* describes how many times to repeat unsuccessful API request
+	* @private
+	*/
+	private readonly retryCount: number = 1;
+	
+	/**
+	* create new ApiService
+	* @param http http client
+	* @param baseUrl base url of the app
+	* @param controllerName name of controller that the service fetches data from
+	* @protected
+	*/
+	protected constructor(http: HttpClient, baseUrl: string, controllerName: string) {
+		this.controllerUrl = baseUrl + `api/${controllerName}/`;
+		this.http = http;
+	}
+	
+	/**
+	* handle failed HTTP response
+	* @param response HTTP error response object
+	* @private
+	*/
+	private handleError(response: HttpErrorResponse) {
+		const errorObject: ApiErrorResponseVM = response;
+		return throwError(errorObject.error);
+	}
+	
+	/**
+	* process HTTP response
+	*
+	* if it succeeds, return it, otherwise retry {@link retryCount}-times, then throw an error
+	* @param response observable of the response
+	* @private
+	*/
+	private processResponse<T>(response: Observable<T>): Observable<T> {
+		return response.pipe(
+			retry(this.retryCount),
+			catchError(this.handleError)
+		);
+	}
+	
+	/**
+	* execute HTTP GET request to the given URL
+	* @param actionUrl URL of the action (will be added to {@link controllerUrl})
+	* @protected
+	* @returns An Observable of the HTTPResponse, with a response body in the requested type
+	*/
+	protected httpGet<T>(actionUrl: string): Observable<T> {
+		return this.processResponse(this.http.get<T>(this.controllerUrl + actionUrl));
+	}
+	...
+}
+\end{lstlisting}
+
+Vidíme, že třída obsahuje URL daného Controlleru, a také pomocné metody pro komunikaci s API. Metoda processResponse slouží ke zpracování odpovědi, v případě neúspěchu se pokusí dotaz opakovat. Pokud dotaz opět skončí neúspěchem, pak zavolá metodu pro obsluhu chyb (handleError).
+
+Metodu processResponse pak využíváme například v metodě httpGet, která poté slouží k volání metod API pomocí HTTP GET dotazů. Obdobně třída obsahuje i metody pro jiné typy HTTP požadavků (POST, PUT, DELETE).
+
+Konkrétní služby dědí ze třídy ApiService, a obsahují metody, které typicky slouží k jednomu dotazu na API.
+
+\begin{lstlisting}
+export class CourseTestService extends ApiService {
+	private static controllerName = 'courseTests';
+	
+	constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
+		super(http, baseUrl, CourseTestService.controllerName);
+	}
+	
+	/**
+	* get test by Id
+	* @param testId
+	*/
+	public getById(testId: string): Observable<CourseTestDetailsVM> {
+		return this.httpGet<CourseTestDetailsVM>(testId);
+	}
+	
+	/**
+	* add new test to the given course
+	* @param testToAdd test to add
+	* @param courseId Id of the course
+	*/
+	public addToCourse(testToAdd: AddCourseTestVM, courseId: string): Observable<{}> {
+		return this.httpPost(courseId, testToAdd);
+	}
+	
+	...
+}
+\end{lstlisting}
+
+Na příkladu vidíme, že služba obsahuje pevně dané URL Controlleru, který volá; a dále několik metod, které volají metody tohoto API Controlleru.
+Například metoda getById slouží k získání testu podle jeho identifikátoru. V těle pouze provedeme HTTP GET dotaz, pomocí generického parametru specifikujeme, že vrácený objekt má být typu CourseTestDetailsVM. 
+Obdobně je to u metodu addToCourse, která se používá k přidání nového testu do kurzu. Oproti předchozí metodě obsahuje ještě jeden parametr -- testToAdd, který reprezentuje test, jenž bude vytvořen. Tento objekt pak vloží do těla HTTP požadavku, a odešle. 
+Můžeme si všimnout, že v tomto případě voláme metodu httpPost bez generického parametru. To je z toho důvodu, že odpověď je prázdná (tzn. neobsahuje žádný ViewModel).
+
+Vidíme, že tělo metod je typicky velmi krátké, ve většině případů se jedná pouze o HTTP dotaz na danou adresu.
+
+Služby fungují asynchronně, tedy nevrací přímo dané objekty, ale generický typ Observable<T>. Zavoláním metody subscribe() na tomto typu se pak počká na vrácení dat, a klient s nimi může pak dále pracovat.
+
+\newpage
 
 \subsection{ViewModels}
 
-reprezentují objekty, které se používají v komunikaci s API
+V klientské části se také nacházejí ViewModely, které slouží ke komunikaci s API. Tyto objekty přesně odpovídají ViewModelům ze serverové části (tzn. obsahují stejné položky stejných typů).
+
+Na příkladu vidíme ViewModel, který reprezentuje odeslaný test ()
+\begin{lstlisting}
+/**
+* viewmodel for submitting a test
+*/
+export class SubmitTestVM {
+	/**
+	* id of the test submission
+	*/
+	public testSubmissionId: string;
+	
+	/**
+	* topic of the test
+	*/
+	public testTopic: string;
+	
+	/**
+	* check if the test has already been submitted
+	*/
+	public isSubmitted: boolean;
+	
+	...
+}
+\end{lstlisting}
+
+Pro HTTP GET frontend služby typicky vrací objekty typu ViewModel. Stejně tak při POST dotazu je do těla požadavku vložen objekt typu ViewModel.
+
+\newpage
 
 \subsection{Components}
 
+\begin{lstlisting}
+<div class="jumbotron">
+	<h3>Students</h3>
+	<table class="table table-striped table-responsive">
+		<tr>
+			<th>Name</th>
+			<th>Email</th>
+			<th></th>
+		</tr>
+		<tr *ngFor="let person of students">
+			<td>{{person.name}}</td>
+			<td>{{person.email}}</td>
+			<td><a class="nav-link" routerLink="/students/{{person.id}}">Details</a></td>
+		</tr>
+	</table>
+</div>
+\end{lstlisting}
+
+\begin{lstlisting}
+@Component({
+selector: 'app-student-list',
+templateUrl: './student-list.component.html',
+styleUrls: ['./student-list.component.css']
+})
+export class StudentListComponent implements OnInit {
+	
+	@Input()
+	private courseId: string;
+	
+	/**
+	* list of students
+	*/
+	public students: CourseMemberOrAdminVM[] = [];
+	
+	private readonly courseService: CourseService;
+	
+	constructor(roleAuthService: RoleAuthService, courseService: CourseService) {
+		this.courseService = courseService;
+	}
+	
+	ngOnInit() {
+		this.courseService.getAllMembers(this.courseId).subscribe(result => {
+			this.students = result;
+		});
+	}
+}
+\end{lstlisting} 
+
+\begin{lstlisting}
+<div *ngIf="!isCourseAdmin">
+	<button class="btn btn-success" routerLink="/students/{{currentCourseMemberId}}">My Grades</button>
+</div>
+
+<app-test-list [courseId]="courseId" [isCourseAdmin]="isCourseAdmin"></app-test-list>
+<app-file-list [courseId]="courseId" [isCourseAdmin]="isCourseAdmin"></app-file-list>
+<app-student-list *ngIf="isCourseAdmin" [courseId]="courseId"></app-student-list>
+<app-admin-list *ngIf="isCourseAdmin" [courseId]="courseId"></app-admin-list>
+<app-course-forum [courseId]="courseId" [isCourseAdmin]="isCourseAdmin"></app-course-forum>
+\end{lstlisting}
+
+Routing
+\begin{lstlisting}
+RouterModule.forRoot([
+	{path: '', component: HomeComponent, pathMatch: 'full'},
+	{path: 'students/:id', component: StudentDetailComponent},
+	{path: 'courses', component: CourseListComponent},
+	{path: 'courses/:id', component: CourseDetailComponent},
+	...
+\end{lstlisting}
+
 slouží k zobrazování dat, každá komponenta má 2 části: šablonu a backend
+
+\newpage
 
 \section{Zajímavé problémy}
 
