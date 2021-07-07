@@ -178,6 +178,18 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
+        /// get all requests for enrollments to this course
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}/enrollmentRequests")]
+        public IEnumerable<EnrollmentRequestVM> GetEnrollmentRequests(string id)
+        {
+            var requests = courseService.GetEnrollmentRequestsWithPeople(id);
+            return requests.Select(req => new EnrollmentRequestVM(req.Id.ToString(), req.Person.UserName, req.Person.Email));
+        }
+
+        /// <summary>
         /// get and filter the tests in the course
         /// </summary>
         /// <param name="courseId">identifier of the course that contains these tests</param>
