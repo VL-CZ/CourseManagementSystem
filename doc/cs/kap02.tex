@@ -1,4 +1,4 @@
-\chapter{Návrh a architektura aplikace}
+\chapter{Architektura a implementace aplikace}
 
 \section{Serverová část}
 
@@ -15,7 +15,7 @@ Ve složce Models jsou třídy reprezentující databázové entity. Každá z e
 	\centering
 	\begin{tabular}{| l | p{9cm} |}
 		\hline
-		Název entity & reprezentuje \\
+		Název entity & reprezentovaný objekt \\
 		\hline \hline
 		Course & kurz \\ \hline
 		CourseFile & nějaký soubor sdílený v kurzu \\ \hline
@@ -42,7 +42,7 @@ Ve složce Models jsou třídy reprezentující databázové entity. Každá z e
 
 \newpage
 
-např. kód třídy Course vypadá takto:
+Pro ilustraci uvedeme kód třídy Course:
 
 \begin{lstlisting}
 public class Course : IGuidIdObject
@@ -83,7 +83,7 @@ Dále musí každá entita obsahovat konstruktor bez parametrů.
 Vazby mezi entitami jsou reprezentované pomocí tzv. navigačních vlastností. V případě, že chceme vytvořit vazbu typu one-to-many mezi entitami A a B, stačí do vlastností třídy A přidat kolekci objektů typu B, a naopak do třídy B vlastnost typu A. Framework pak při provádění migrace vytvoří v databázové tabulce entity B vytvoří sloupec s cizím klíčem, který bude obsahovat identifikátor entity A, ke které patří.
 
 V aplikaci je vazba one-to-many použita mimo jiné mezi entitami Course a CourseTest, a to tak, že každý test je obsažen v právě jednom kurzu, a v daném kurzu může být N testů.
-Kód pak tedy vypadá takto: ve třídě Course je kolekce objektů typu CourseTest
+Kód pak tedy vypadá takto: Ve třídě Course je kolekce objektů typu CourseTest
 
 \begin{lstlisting}
 /// <summary>
@@ -92,7 +92,7 @@ Kód pak tedy vypadá takto: ve třídě Course je kolekce objektů typu CourseT
 public ICollection<CourseTest> Tests { get; set; }
 \end{lstlisting}
 
-a ve třídě CourseTest je pak vlastnost typu Course
+Ve třídě CourseTest je pak vlastnost typu Course
 
 \begin{lstlisting}
 /// <summary>
@@ -104,7 +104,7 @@ public Course Course { get; set; }
 
 Po provedení databázové migrace (viz. dále) se v tabulce CourseTest vytvoří sloupec CourseId s cizím klíčem, který odkazuje na identifikátor kurzu (tzn. vlastnost Course.Id).
 
-Také si můžeme všimnout, že všechny entity (kromě entity Person) implementují rozhraní IGuidObject. To je jednoduché rozhraní, které obsahuje pouze jednu vlastnost - Id typu Guid. Tímto máme zajištěnou jednotu identifikátorů, tedy že všechny entity, které toto rozhraní implementují, budou mít identifikátor typu Guid.
+Také si můžeme všimnout, že všechny entity (kromě entity Person) implementují rozhraní IGuidObject. To je jednoduché rozhraní, které obsahuje pouze jednu vlastnost -- Id typu Guid. Tímto máme zajištěnou jednotu identifikátorů, tedy že všechny entity, které toto rozhraní implementují, budou mít identifikátor typu Guid.
 
 \begin{lstlisting}
 /// <summary>
@@ -123,9 +123,9 @@ public interface IGuidIdObject
 Typ Guid jsme zvolili hlavně z toho důvodu, že vestavěné tabulky frameworku (např. Identity) mají také řetězcové identifikátory. Navíc se pak zjednoduší práce ve frontend části (není potřeba parsovat string na int např. v klientské části při práci s URL). Tyto identifikátory generuje databáze, takže je zajištěno, že jsou unikátní.
 Další možnost by byla použít jako identifikátor číslo (např. typ int), ale vzhledem k výše uvedeným argumentům je typ Guid v tomto případě lepší možnost.
 
-Dále se v projektu nachází také rozhraní ICourseReferenceObject a ICourseMemberReferenceObject, které slouží k tomu, abychom mohli dále v aplikaci jednotně pracovat s objekty, které mají referenci na entitu Course, resp. CourseMember. Tyto rozhraní implementují pouze nějaké entity.
+Dále se v projektu nacházejí také rozhraní ICourseReferenceObject a ICourseMemberReferenceObject, která slouží k tomu, abychom mohli dále v aplikaci jednotně pracovat s objekty, které mají referenci na entitu Course, resp. CourseMember. Tato rozhraní implementují pouze nějaké entity.
 
-V programu je dále třída CMSDbContext, která reprezentuje databázový kontext této aplikace. Každý objekt typu DbSet pak představuje jednu databázovou tabulku. Ve třídě je CMSDbContext tedy kolekce typu DbSet pro každou z entit.
+Třída CMSDbContext reprezentuje databázový kontext této aplikace. Každý objekt typu DbSet pak představuje jednu databázovou tabulku. Ve třídě je CMSDbContext tedy kolekce typu DbSet pro každou z entit.
 
 \begin{lstlisting}
 public DbSet<Grade> Grades { get; set; }
@@ -137,17 +137,17 @@ public DbSet<Course> Courses { get; set; }
 
 Jediná výjimka je entita Person, která dědí ze třídy IdentityUser, a jejíž DbSet je nakonfigurovaný ve frameworku. 
 
-V programu pak dále používáme ke komunikaci s databází pouze třídu CMSDbContext a objekty typu DbSet. Třida DbSet<TEntity> implementuje rozhraní IQueryable<TEntity>, takže na ní lze použít LINQ. Takže pokud bych chtěl například vybrat všechny kurzy, jejiž jméno začíná na písmeno C, pak stačí použít následující LINQ dotaz
+V programu pak dále používáme ke komunikaci s databází pouze třídu CMSDbContext a objekty typu DbSet. Třída DbSet<TEntity> implementuje rozhraní IQueryable<TEntity>, takže na ni lze použít LINQ. Takže pokud bychom chtěli například vybrat všechny kurzy, jejiž jméno začíná na písmeno C, pak stačí použít následující LINQ dotaz
 \begin{lstlisting}
 dbContext.Courses.Where(course => course.Name.StartsWith("C"))
 \end{lstlisting}
 kde proměnná dbContext je instance třídy CMSDbContext.
 
-Ve třídě CMSDbContext je také metoda ConfigureForeignKeys, která provede konfiguraci cizích klíčů v aplikaci. Všechny políčka s cizími klíči jsou v databázi povinné (tzn. NOT NULL), to je zajištěno pomocí atributu [Required] daných vlastností. Nastavením DeleteBehavior.Restrict u cizích klíčů zajistíme, že databáze zůstane v konzistentním stavu. Pokud bychom tedy chtěli smazat entitu, pak na ní nesmí pomocí cizích klíčů odkazovat jiné entity. V opačném případě program při zavolání metody SaveChanges() na databázovém kontextu vyhodí výjimku.
+Ve třídě CMSDbContext je také metoda ConfigureForeignKeys, která provede konfiguraci cizích klíčů v aplikaci. Všechny políčka s cizími klíči jsou v databázi povinné (tzn. NOT NULL), to je zajištěno pomocí atributu [Required] daných vlastností. Nastavením DeleteBehavior.Restrict u cizích klíčů zajistíme, že databáze zůstane v konzistentním stavu. Pokud bychom tedy chtěli smazat entitu, pak na ni nesmí pomocí cizích klíčů odkazovat jiné entity. V opačném případě program při zavolání metody SaveChanges() na databázovém kontextu vyhodí výjimku.
 
 V programu je dále složka Migrations. Při vývoji byl použit princip Code first, tedy že v kódu specifikujeme entity pomocí klasických tříd. Framework se pak postará o vytvoření databázových tabulek z tohoto kódu.
 
-Pokud jsem tedy nějak změníme některou z entit (to může být např. přidání vlastnosti, změna jména vlastnosti, apod.), pak pomocí ORM můžeme vygenerovat soubor popisující tzv. databázovou migraci, která slouží k aplikaci změn z kódu do databáze. Ke každé migraci se vygeneruje jeden soubor, který obsahuje popis změn, které se později provedou v databázi.
+Pokud tedy nějak změníme některou z entit (to může být např. přidání vlastnosti, změna jména vlastnosti, apod.), pak pomocí ORM můžeme vygenerovat soubor popisující tzv. databázovou migraci, která slouží k aplikaci změn z kódu do databáze. Ke každé migraci se vygeneruje jeden soubor, který obsahuje popis změn, které se později provedou v databázi.
 
 K vytváření migrací jsem použijeme nástroj CLI tools for Entity Framework Core. https://docs.microsoft.com/cs-cz/ef/core/cli/dotnet. Pro vygenerování migrace ze změn v kódu použijeme příkaz:
 
@@ -209,7 +209,7 @@ Jako základ pro všechny služby slouží abstraktní třída DbService, která
 To je potřeba, protože k uložení změn do databáze dojde až tehdy, když na databázovém kontextu zavoláme metodu SaveChanges(). Pokud bychom tedy například do databázového kontextu něco uložili (např. takto: 
 \begin{lstlisting}
 dbContext.Grades.Add(new Grade())
-\end{lstlisting}
+\end{lstlisting})
 a nezavolali metodu dbContext.SaveChanges(), data by se neuložila.
 
 \begin{lstlisting}
@@ -300,17 +300,17 @@ public class CourseService : DbService, ICourseService
 	...
 \end{lstlisting}
 
-Vidíme, že služby typicky pracují s databázovým kontextem, a s daty (vyhledávání, mazání, apod.).
+Vidíme, že služby typicky pracují s databázovým kontextem a s daty (vyhledávání, mazání, apod.).
 Dále si můžeme všimnout, že v žádné metodě se neukládájí změny do databáze (tzn. volání metody CommitChanges()). To je z toho důvodu, že ve vyšších vrstvách aplikace (např. API) v jedné metodě často voláme několik služeb, příp. několik metod z jedné služby. 
 Pokud bychom v metodách služeb přímo ukládali změny do databáze (metoda CommitChanges()), pak bychom se mohli lehce dostat to nekonzistentního stavu. To například tak, že při volání několika služeb v rámci jedné metody by 
 mohla některá ze služeb vyhodit výjimku, nicméně všechny služby zavolané předtím by už data uložily.
 
-Takže je na zodpovědnosti volajícího provést uložení změn do databáze, tedy zavolat metodu CommitChanges(), což je typicky poslední příkaz v dané metodě.
+Je na zodpovědnosti volajícího provést uložení změn do databáze, tedy zavolat metodu CommitChanges(), což je typicky poslední příkaz v dané metodě.
 Tím jsme tedy zajistili konzistenci dat - buď se do databáze uloží všechny změny provedené v databázovém kontextu, nebo žádné.
 
 Dále si můžeme všimnout, že ve službách pracujeme s identifikátory typu string, ale v databázi používáme typ Guid. To je z toho důvodu, že ve vyšších vrstvách aplikace se pohodlněji pracuje se stringy (např. často dostáváme ID jako URL parametr). Převod mezi typy string a Guid pak řešíme ve službách.
 
-Ve složce Extensions jsou pak pomocné extension metody pro práci s některými třídami.
+Ve složce Extensions jsou pak pomocné metody pro práci s některými třídami.
 
 Ve třídě DbSetExtensions se nachází extension metody pro třídu DbSet<T>. Vybereme si například metodu GetCourseIdOf, ta slouží k získání ID kurzu, ke kterému daný objekt, jenž má referenci na entitu Course, patří.
 \begin{lstlisting}
@@ -351,15 +351,15 @@ Například pro získání testu s otázkami můžeme použít tento příkaz:
 dbContext.CourseTests
 	.Include(test => test.Questions)
 \end{lstlisting}
-Pokud bych volání metody Include() vynechal, tak by se data otázek nenačetla.
+Pokud bychom volání metody Include() vynechali, tak by se data otázek nenačetla.
 
 \newpage
 
 \subsection{API}
-V tomto projektu se nachází API, které slouží pro komunikaci klientské části se serverovou.
+V této části se nachází popis projektu API, které slouží pro komunikaci klientské části se serverovou.
 
 \subsubsection*{Controllers}
-Controllery slouží primárně ke zpracování HTTP požadavků. Vidíme, že Controller je klasická C\# třída, jenž dědí ze třídy ControllerBase. Ve většině případů obsahuje reference na služby (jako privátní položky).
+Controllery slouží primárně ke zpracování HTTP požadavků. Vidíme, že Controller je klasická C\# třída, jež dědí ze třídy ControllerBase. Ve většině případů obsahuje reference na služby (jako privátní položky).
 
 \begin{lstlisting}
 [Route("api/[controller]")]
@@ -382,7 +382,7 @@ public class CoursesController : ControllerBase
 	...
 \end{lstlisting}
 
-Jednotlivé Controllery pak obsahují veřejné metody, jenž odpovídají HTTP endpointům.
+Jednotlivé Controllery pak obsahují veřejné metody, jež odpovídají HTTP endpointům.
 
 Například následující metoda slouží k získaní všech členů daného kurzu.
 \begin{lstlisting}
@@ -610,7 +610,7 @@ public class NonNegativeDoubleValueAttribute : RangeAttribute
 Dále jsou v aplikaci ještě použité atributy NonNegativeIntValueAttribute a PositiveIntValueAttribute.
 
 
-\subsubsection*{Error Handling}
+\subsubsection*{Obsluha chyb}
 
 V případě, že nastane chyba při deserializaci dat (např. klient pošle v těle POST dotazu nevalidní data), tak framework vyhodí výjimku a vrátí objekt, který popisuje chybu. \url{https://docs.microsoft.com/en-us/aspnet/core/web-api/?view=aspnetcore-5.0#automatic-http-400-responses}
 
@@ -756,7 +756,7 @@ V aplikaci používáme tyto autorizační filtry (všechny dědí ze třídyCou
 \begin{itemize}
 	\item CourseAdminAuthorizeFilter -- ověřuje, jestli je aktuální uživatel administrátor kurzu, ke kterému patří daná entita. Používáme v akcích, které může provádět pouze admin daného kurzu (jako např. vytváření nových testů).
 	\item CourseAdminOrMemberAuthorizeFilter -- ověřuje, zda je aktuální uživatel administrátor nebo člen kurzu, ke kterému patří daná entita. Tento filtr používáme např. v metodě pro získání všech souborů v daném kurzu.
-	\item CourseAdminOrOwnerAuthorizeFilter -- podobně jako 1. filtr slouží k ověření toho, jestli je aktuální uživatel administrátor kurzu, k němuž patří daná entita. Zároveň ale akci povolíme provést, pokud je uživatel vlastníkem dané entity. To znamená, že příslušná entita (např. odevzdaný test - entita TestSubmission) se váže k danému uživateli. Toto ověření používáme například v metodě pro získání opraveného testu.
+	\item CourseAdminOrOwnerAuthorizeFilter -- podobně jako první filtr slouží k ověření toho, jestli je aktuální uživatel administrátor kurzu, k němuž patří daná entita. Zároveň ale akci povolíme provést, pokud je uživatel vlastníkem dané entity. To znamená, že příslušná entita (např. odevzdaný test - entita TestSubmission) se váže k danému uživateli. Toto ověření používáme například v metodě pro získání opraveného testu.
 \end{itemize}
 
 Například třída CourseAdminOrMemberAuthorizeFilter vypadá takto:
@@ -785,7 +785,7 @@ public class AuthorizeCourseAdminOrMemberOfAttribute : TypeFilterAttribute
 }
 \end{lstlisting}
 
-Vidíme, že tento atribut má konstruktor se 2 parametry, které následně předá autorizačnímu filtru. 
+Vidíme, že tento atribut má konstruktor se dvěma parametry, které následně předá autorizačnímu filtru. 
 
 Atributy se poté používají následujícím způsobem (v příkladu je atribut použitý na metodě Controlleru, která slouží ke stažení souboru podle daného id).
 \begin{lstlisting}
@@ -813,9 +813,9 @@ services.AddTransient<IPeopleService, PeopleService>();
 services.AddTransient<IGradeService, GradeService>();
 ...
 \end{lstlisting}
-Pokud by naše konfigurace vypadala takto, tak bychom do kontejneru vložili 3 závislosti. První z nich má rozhraní ICourseService a implementaci CourseService, u ostatních závislostí je to obdobně.
+Pokud by naše konfigurace vypadala takto, tak bychom do kontejneru vložili tři závislosti. První z nich má rozhraní ICourseService a implementaci CourseService, u ostatních závislostí je to obdobně.
 
-Pokud tedy chceme, aby do nějaké třídy, jejíž instance jsou vytvářeny frameworkem, byly dosazeny příslušné závislosti (dependencies), použijeme Constructor injection. V konstruktoru dané třídy vytvoříme pro každou požadovanou závislost 1 parametr, který bude mít stejný typ jako rozhraní dané závislosti. Framework se pak postará o dosazení parametrů podle konfigurace IoC kontejneru.
+Pokud tedy chceme, aby do nějaké třídy, jejíž instance jsou vytvářeny frameworkem, byly dosazeny příslušné závislosti (dependencies), použijeme Constructor injection. V konstruktoru dané třídy vytvoříme pro každou požadovanou závislost jeden parametr, který bude mít stejný typ jako rozhraní dané závislosti. Framework se pak postará o dosazení parametrů podle konfigurace IoC kontejneru.
 
 \begin{lstlisting}
 public CoursesController(IHttpContextAccessor httpContextAccessor, ICourseService courseService, IPeopleService peopleService)
@@ -826,7 +826,7 @@ public CoursesController(IHttpContextAccessor httpContextAccessor, ICourseServic
 	...
 }
 \end{lstlisting}
-V tomto případě tedy framework ví, že třída má 3 závislosti, které je potřeba vyhledat v kontejneru.
+V tomto případě tedy framework ví, že třída má tři závislosti, které je potřeba vyhledat v kontejneru.
 Podle konfigurace poté například do parametru courseService dosadí novou instanci třídy CourseService. 
 
 Dependency injection používáme primárně v Controllerech.
@@ -858,11 +858,11 @@ TODO: dopsat
 \newpage
 
 \section{Klientská část}
-
 \lstset{style=typescript}
 
-Klientská část aplikace se nachází ve složce API/ClientApp, a je napsaná v jazyce Typescript s použitím frameworku Angular.
-TODO: dopsat
+Klientská část aplikace se nachází ve složce API/ClientApp, a je napsaná v jazyce Typescript s použitím frameworku Angular. 
+
+Ve složce src/api-authorization se nachází modul pro přihlášení a registraci uživatele. Tato část aplikace je vygenerovaná frameworkem. Hlavní část aplikace je v adresáři src/app.
 
 \subsection{Services}
 
@@ -937,7 +937,8 @@ export abstract class ApiService {
 	* @returns An Observable of the HTTPResponse, with a response body in the requested type
 	*/
 	protected httpGet<T>(actionUrl: string): Observable<T> {
-		return this.processResponse(this.http.get<T>(this.controllerUrl + actionUrl));
+		return this.processResponse(
+			this.http.get<T>(this.controllerUrl + actionUrl));
 	}
 	...
 }
