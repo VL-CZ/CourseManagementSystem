@@ -1,4 +1,6 @@
-﻿using CourseManagementSystem.Services.Interfaces;
+﻿using CourseManagementSystem.API.Auth;
+using CourseManagementSystem.API.Auth.Attributes;
+using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +23,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="requestId">identifier of the enrollment request to approve</param>
         [HttpPost("approve/{requestId}")]
+        [AuthorizeCourseAdminOf(EntityType.EnrollmentRequest, "requestId")]
         public void Approve(string requestId)
         {
             enrollmentRequestService.Approve(requestId);
@@ -32,6 +35,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="requestId">identifier of the enrollment request to decline</param>
         [HttpPost("decline/{requestId}")]
+        [AuthorizeCourseAdminOf(EntityType.EnrollmentRequest, "requestId")]
         public void Decline(string requestId)
         {
             enrollmentRequestService.Decline(requestId);

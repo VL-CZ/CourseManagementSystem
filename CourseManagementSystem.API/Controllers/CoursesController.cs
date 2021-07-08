@@ -78,16 +78,16 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
-        /// enroll current user to a course with selected Id
+        /// request enrollment of current user to a course with selected Id
         /// </summary>
         /// <param name="courseId"></param>
         [HttpPost("{courseId}/enroll")]
-        public void EnrollTo(string courseId)
+        public void RequestEnrollment(string courseId)
         {
             string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
             var currentUser = peopleService.GetById(currentUserId);
 
-            courseService.Enroll(currentUser, courseId);
+            courseService.RequestEnrollment(currentUser, courseId);
 
             courseService.CommitChanges();
         }

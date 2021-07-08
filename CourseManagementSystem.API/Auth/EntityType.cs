@@ -43,6 +43,11 @@
         /// <summary>
         /// <see cref="Data.Models.TestSubmission"/> entity type
         /// </summary>
-        TestSubmission
+        TestSubmission,
+
+        /// <summary>
+        /// <see cref="Data.Models.EnrollmentRequest"/> entity type
+        /// </summary>
+        EnrollmentRequest
     }
 }
