@@ -29,11 +29,11 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public void Enroll(Person person, string courseId)
+        public void RequestEnrollment(Person person, string courseId)
         {
             var course = GetById(courseId);
-            var cm = new CourseMember(person, course);
-            dbContext.CourseMembers.Add(cm);
+            var newEnrollmentRequest = new EnrollmentRequest(course, person);
+            dbContext.EnrollmentRequests.Add(newEnrollmentRequest);
         }
 
         /// <inheritdoc/>
@@ -94,6 +94,16 @@ namespace CourseManagementSystem.Services.Implementations
                 .ThenInclude(member => member.User)
                 .Single(course => course.Id.ToString() == courseId)
                 .Members;
+        }
+
+        /// <inheritdoc/>
+        public ICollection<EnrollmentRequest> GetEnrollmentRequestsWithPeople(string courseId)
+        {
+            return dbContext.Courses
+                .Include(course => course.EnrollmentRequests)
+                .ThenInclude(er => er.Person)
+                .Single(course => course.Id.ToString() == courseId)
+                .EnrollmentRequests;
         }
     }
 }

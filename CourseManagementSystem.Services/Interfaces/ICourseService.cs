@@ -32,11 +32,11 @@ namespace CourseManagementSystem.Services.Interfaces
         void AddCourse(Course course);
 
         /// <summary>
-        /// enroll person to a course
+        /// request enrollment of the person to the given course
         /// </summary>
         /// <param name="person">person that we enroll to a course</param>
         /// <param name="courseId">id of the course to enroll</param>
-        void Enroll(Person person, string courseId);
+        void RequestEnrollment(Person person, string courseId);
 
         /// <summary>
         /// get all files in the course with the given id
@@ -72,5 +72,12 @@ namespace CourseManagementSystem.Services.Interfaces
         /// <param name="courseId">identifier of the course</param>
         /// <returns></returns>
         ICollection<CourseAdmin> GetAdminsWithUsers(string courseId);
+
+        /// <summary>
+        /// get all enrollment requests to this course with the corresponding people data
+        /// </summary>
+        /// <param name="courseId">identifier of the course</param>
+        /// <returns></returns>
+        ICollection<EnrollmentRequest> GetEnrollmentRequestsWithPeople(string courseId);
     }
 }

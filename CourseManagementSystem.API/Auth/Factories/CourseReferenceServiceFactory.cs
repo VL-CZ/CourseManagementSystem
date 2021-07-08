@@ -40,7 +40,7 @@ namespace CourseManagementSystem.API.Auth.Factories
         private readonly IReadOnlyDictionary<EntityType, ICourseReferenceService> dataServices;
 
         public CourseReferenceServiceFactory(ICourseAdminService courseAdminService, ICourseMemberService courseMemberService, ICourseTestService courseTestService,
-            IFileService fileService, IForumPostService forumPostService, IGradeService gradeService, ITestSubmissionService testSubmissionService)
+            IFileService fileService, IForumPostService forumPostService, IGradeService gradeService, ITestSubmissionService testSubmissionService, IEnrollmentRequestService enrollmentRequestService)
         {
             dataServices = new Dictionary<EntityType, ICourseReferenceService>
             {
@@ -51,7 +51,8 @@ namespace CourseManagementSystem.API.Auth.Factories
                 [EntityType.CourseFile] = fileService,
                 [EntityType.ForumPost] = forumPostService,
                 [EntityType.Grade] = gradeService,
-                [EntityType.TestSubmission] = testSubmissionService
+                [EntityType.TestSubmission] = testSubmissionService,
+                [EntityType.EnrollmentRequest] = enrollmentRequestService
             };
         }
 

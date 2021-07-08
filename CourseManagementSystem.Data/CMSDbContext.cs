@@ -41,6 +41,8 @@ namespace CourseManagementSystem.Data
 
         public DbSet<ForumPost> Posts { get; set; }
 
+        public DbSet<EnrollmentRequest> EnrollmentRequests { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -91,6 +93,18 @@ namespace CourseManagementSystem.Data
             builder.Entity<CourseTest>()
                 .HasOne(test => test.Course)
                 .WithMany(course => course.Tests)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // EnrollmentRequest
+
+            builder.Entity<EnrollmentRequest>()
+                .HasOne(er => er.Course)
+                .WithMany(course => course.EnrollmentRequests)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<EnrollmentRequest>()
+                .HasOne(er => er.Person)
+                .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
 
             // ForumPost
