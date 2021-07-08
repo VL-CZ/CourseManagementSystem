@@ -60,6 +60,19 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
+        /// archive course member by its id
+        /// </summary>
+        /// <param name="id">identifier of the course member</param>
+        /// <returns></returns>
+        [HttpDelete("{id}")]
+        [AuthorizeCourseAdminOf(EntityType.CourseMember, "id")]
+        public void Archive(string id)
+        {
+            courseMemberService.ArchiveMemberById(id);
+            courseMemberService.CommitChanges();
+        }
+
+        /// <summary>
         /// get all graded test submissions of this <see cref="CourseMember"/>
         /// </summary>
         /// <param name="id">ID of the <see cref="CourseMember"/></param>

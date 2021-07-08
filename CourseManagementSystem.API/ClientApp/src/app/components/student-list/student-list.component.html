@@ -10,6 +10,9 @@
       <td>{{person.name}}</td>
       <td>{{person.email}}</td>
       <td><a class="nav-link" routerLink="/students/{{person.id}}">Details</a></td>
+      <td>
+        <button class="btn btn-danger" (click)="removeMember(person)">Remove</button>
+      </td>
     </tr>
   </table>
 </div>

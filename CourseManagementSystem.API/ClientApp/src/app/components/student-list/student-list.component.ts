@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {CourseMemberOrAdminVM} from '../../viewmodels/courseMemberOrAdminVM';
 import {RoleAuthService} from '../../services/role-auth.service';
 import {CourseService} from '../../services/course.service';
+import {CourseMemberService} from '../../services/course-member.service';
 
 /**
  * component representing list of students
@@ -22,14 +23,35 @@ export class StudentListComponent implements OnInit {
   public students: CourseMemberOrAdminVM[] = [];
 
   private readonly courseService: CourseService;
+  private readonly courseMemberService: CourseMemberService;
 
-  constructor(roleAuthService: RoleAuthService, courseService: CourseService) {
+  constructor(roleAuthService: RoleAuthService, courseService: CourseService, courseMemberService: CourseMemberService) {
     this.courseService = courseService;
+    this.courseMemberService = courseMemberService;
   }
 
   ngOnInit() {
+    this.reloadData();
+  }
+
+  /**
+   * remove the selected course member
+   * @param courseMember course member to remove
+   */
+  public removeMember(courseMember: CourseMemberOrAdminVM) {
+    this.courseMemberService.removeById(courseMember.id).subscribe(() => {
+      this.reloadData();
+    });
+  }
+
+  /**
+   * reload student list
+   * @private
+   */
+  private reloadData(): void {
     this.courseService.getAllMembers(this.courseId).subscribe(result => {
       this.students = result;
     });
   }
+
 }
