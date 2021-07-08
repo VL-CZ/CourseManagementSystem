@@ -14,6 +14,7 @@ namespace CourseManagementSystem.Data.Models
             Tests = new List<CourseTest>();
             ForumPosts = new List<ForumPost>();
             Admins = new List<CourseAdmin>();
+            EnrollmentRequests = new List<EnrollmentRequest>();
         }
 
         public Course(string name, Person admin) : this()
@@ -65,5 +66,10 @@ namespace CourseManagementSystem.Data.Models
         /// posts in the forum of this course
         /// </summary>
         public ICollection<ForumPost> ForumPosts { get; set; }
+
+        /// <summary>
+        /// enrollment requests to this course
+        /// </summary>
+        public ICollection<EnrollmentRequest> EnrollmentRequests { get; set; }
     }
 }
