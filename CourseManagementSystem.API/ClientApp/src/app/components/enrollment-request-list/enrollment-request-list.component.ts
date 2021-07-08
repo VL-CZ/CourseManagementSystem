@@ -46,7 +46,7 @@ export class EnrollmentRequestListComponent implements OnInit {
    * @param request enrollment request to decline
    */
   public decline(request: EnrollmentRequestVM): void {
-    this.enrollmentRequestService.approve(request.id).subscribe(() => {
+    this.enrollmentRequestService.decline(request.id).subscribe(() => {
       this.reload();
     });
   }

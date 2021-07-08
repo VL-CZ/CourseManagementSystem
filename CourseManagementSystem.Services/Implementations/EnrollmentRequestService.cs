@@ -2,6 +2,8 @@
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Extensions;
 using CourseManagementSystem.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace CourseManagementSystem.Services.Implementations
 {
@@ -15,8 +17,11 @@ namespace CourseManagementSystem.Services.Implementations
         public void Approve(string requestId)
         {
             // select request and add new course member
-            var er = GetById(requestId);
-            dbContext.CourseMembers.Add(new CourseMember(er.Person, er.Course));
+            var request = dbContext.EnrollmentRequests
+                        .Include(er => er.Course)
+                        .Include(er => er.Person)
+                        .Single(er => er.Id.ToString() == requestId);
+            dbContext.CourseMembers.Add(new CourseMember(request.Person, request.Course));
 
             DeleteById(requestId);
         }
@@ -39,17 +44,8 @@ namespace CourseManagementSystem.Services.Implementations
         /// <param name="requestId">identifier of enrollment request to delete</param>
         private void DeleteById(string requestId)
         {
-            var enrollmentRequest = GetById(requestId);
+            var enrollmentRequest = dbContext.EnrollmentRequests.FindById(requestId);
             dbContext.EnrollmentRequests.Remove(enrollmentRequest);
-        }
-
-        /// <summary>
-        /// get enrollment request by its id
-        /// </summary>
-        /// <param name="requestId">identifier of enrollment request to get</param>
-        private EnrollmentRequest GetById(string requestId)
-        {
-            return dbContext.EnrollmentRequests.FindById(requestId);
         }
     }
 }
