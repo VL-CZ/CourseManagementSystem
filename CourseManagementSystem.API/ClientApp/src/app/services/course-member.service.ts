@@ -28,6 +28,14 @@ export class CourseMemberService extends ApiService {
   }
 
   /**
+   * remove course member by its id
+   * @param courseMemberId id of the course member
+   */
+  public removeById(courseMemberId: string): Observable<{}> {
+    return this.httpDelete(courseMemberId);
+  }
+
+  /**
    * assign the `grade` to the person whose id equals `courseMemberId`
    * @param courseMemberId
    * @param grade created grade (contains id)

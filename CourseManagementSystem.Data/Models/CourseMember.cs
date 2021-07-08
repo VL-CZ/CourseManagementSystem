@@ -17,6 +17,7 @@ namespace CourseManagementSystem.Data.Models
         {
             User = user;
             Course = course;
+            IsArchived = false;
         }
 
         /// <summary>
@@ -37,6 +38,11 @@ namespace CourseManagementSystem.Data.Models
         /// </summary>
         [Required]
         public Course Course { get; set; }
+
+        /// <summary>
+        /// check if this course member has been archived
+        /// </summary>
+        public bool IsArchived { get; set; }
 
         /// <summary>
         /// list of grades

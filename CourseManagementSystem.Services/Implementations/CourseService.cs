@@ -93,7 +93,8 @@ namespace CourseManagementSystem.Services.Implementations
                 .Include(course => course.Members)
                 .ThenInclude(member => member.User)
                 .Single(course => course.Id.ToString() == courseId)
-                .Members;
+                .Members.Where(cm => !cm.IsArchived)
+                .ToList();
         }
 
         /// <inheritdoc/>

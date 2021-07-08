@@ -38,6 +38,7 @@ namespace CourseManagementSystem.Services.Implementations
             return dbContext.CourseMembers.Include(cm => cm.Course).Include(cm => cm.User)
                 .Where(cm => cm.User.Id == person.Id)
                 .Where(cm => cm.Course.Id == course.Id)
+                .Where(cm => !cm.IsArchived)
                 .SingleOrDefault();
         }
 
@@ -78,6 +79,7 @@ namespace CourseManagementSystem.Services.Implementations
                 .Include(cm => cm.Course)
                 .Include(cm => cm.User)
                 .Where(cm => cm.User.Id == personId)
+                .Where(cm => !cm.IsArchived)
                 .Select(cm => cm.Course);
         }
     }

@@ -31,8 +31,10 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOf(EntityType.CourseAdmin, "adminId")]
         public void Delete(string adminId)
         {
+            var adminPersonId = courseAdminService.GetPersonId(adminId);
+            
             // we cannot remove ourselves
-            if (adminId == httpContextAccessor.HttpContext.GetCurrentUserId())
+            if (adminPersonId == httpContextAccessor.HttpContext.GetCurrentUserId())
             {
                 throw new ApplicationException("Cannot remove own admin membership");
             }
