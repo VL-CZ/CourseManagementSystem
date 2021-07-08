@@ -143,6 +143,44 @@ Abstract.
 	basicstyle=\small\ttfamily,
 	tabsize=4
 }
+
+\lstdefinelanguage{Typescript}{
+	keywords={break, case, catch, continue, debugger, default, delete, do, else, finally, for, function, if, in, instanceof, new, return, switch, this, throw, try, typeof, var, void, while, with, private, protected, public, abstract, let, const, readonly, constructor, class, export, boolean, string, number, throw, implements, import, this, super, static},
+	identifierstyle=\color{black},
+	comment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	morestring=[b]',
+	morestring=[b]",
+	morestring=[b]`
+}
+
+\lstdefinestyle{typescript}{language=Typescript,
+	showspaces=false,
+	showtabs=false,
+	breaklines=true,
+	showstringspaces=false,
+	breakatwhitespace=true,
+	escapeinside={(*@}{@*)},
+	commentstyle=\color{greencomments},
+	keywordstyle=\color{bluekeywords}\bfseries,
+	stringstyle=\color{redstrings},
+	basicstyle=\small\ttfamily,
+	tabsize=4
+}
+
+\lstdefinestyle{html}{language=HTML,
+	showspaces=false,
+	showtabs=false,
+	breaklines=true,
+	showstringspaces=false,
+	breakatwhitespace=true,
+	commentstyle=\color{greencomments},
+	keywordstyle=\color{bluekeywords}\bfseries,
+	stringstyle=\color{redstrings},
+	basicstyle=\small\ttfamily,
+	tabsize=4
+}
+
 \lstset{style=sharpc}
 
 %% Titulní strana a různé povinné informační strany

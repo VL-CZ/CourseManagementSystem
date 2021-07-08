@@ -1,6 +1,6 @@
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {ErrorsDictionaryVM} from '../viewmodels/apiErrorResponseVM';
-import {ErrorDialogComponent} from '../error-dialog/error-dialog.component';
+import {ErrorDialogComponent} from '../components/error-dialog/error-dialog.component';
 
 /**
  * class for displaying error modals
