@@ -78,16 +78,22 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
-        /// enroll current user to a course with selected Id
+        /// request enrollment of current user to a course with selected Id
         /// </summary>
         /// <param name="courseId"></param>
         [HttpPost("{courseId}/enroll")]
-        public void EnrollTo(string courseId)
+        public void RequestEnrollment(string courseId)
         {
             string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
+
+            if (peopleService.IsAdminOfCourse(currentUserId, courseId) || peopleService.IsMemberOfCourse(currentUserId,courseId))
+            {
+                throw new ArgumentException("Cannot enroll to the selected course. Ee are already admin/member of this course.");
+            }
+
             var currentUser = peopleService.GetById(currentUserId);
 
-            courseService.Enroll(currentUser, courseId);
+            courseService.RequestEnrollment(currentUser, courseId);
 
             courseService.CommitChanges();
         }
@@ -175,6 +181,18 @@ namespace CourseManagementSystem.API.Controllers
         {
             var posts = courseService.GetPostsWithAuthors(id);
             return posts.Select(post => new ForumPostVM(post.Id.ToString(), post.Author.Email, post.Text));
+        }
+
+        /// <summary>
+        /// get all requests for enrollments to this course
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}/enrollmentRequests")]
+        public IEnumerable<EnrollmentRequestVM> GetEnrollmentRequests(string id)
+        {
+            var requests = courseService.GetEnrollmentRequestsWithPeople(id);
+            return requests.Select(req => new EnrollmentRequestVM(req.Id.ToString(), req.Person.UserName, req.Person.Email));
         }
 
         /// <summary>

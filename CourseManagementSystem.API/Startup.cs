@@ -61,6 +61,7 @@ namespace CourseManagementSystem.API
             services.AddTransient<ICourseService, CourseService>();
             services.AddTransient<IPeopleService, PeopleService>();
             services.AddTransient<IGradeService, GradeService>();
+            services.AddTransient<IEnrollmentRequestService, EnrollmentRequestService>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

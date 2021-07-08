@@ -32,6 +32,7 @@ import { StudentAverageScoreComponent } from './components/student-average-score
 import { ErrorDialogComponent } from './components/error-dialog/error-dialog.component';
 import { StudentQuizSubmissionsComponent } from './components/student-quiz-submissions/student-quiz-submissions.component';
 import { AdminListComponent } from './components/admin-list/admin-list.component';
+import { EnrollmentRequestListComponent } from './components/enrollment-request-list/enrollment-request-list.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { AdminListComponent } from './components/admin-list/admin-list.component
     StudentAverageScoreComponent,
     ErrorDialogComponent,
     StudentQuizSubmissionsComponent,
-    AdminListComponent
+    AdminListComponent,
+    EnrollmentRequestListComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -71,6 +73,7 @@ import { AdminListComponent } from './components/admin-list/admin-list.component
       {path: 'students/:id', component: StudentDetailComponent},
       {path: 'courses', component: CourseListComponent},
       {path: 'courses/:id', component: CourseDetailComponent},
+      {path: 'courses/:id/enrollmentRequests', component: EnrollmentRequestListComponent},
       {path: 'tests/:id', component: TestDetailComponent},
       {path: 'tests/edit/:id', component: TestEditComponent},
       {path: 'tests/create/:id', component: TestCreateComponent},

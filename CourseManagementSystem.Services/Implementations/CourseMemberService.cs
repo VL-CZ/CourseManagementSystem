@@ -44,10 +44,10 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public void RemoveMemberById(string id)
+        public void ArchiveMemberById(string id)
         {
             CourseMember cm = GetMemberWithUser(id);
-            dbContext.CourseMembers.Remove(cm);
+            cm.IsArchived = true;
         }
 
         /// <inheritdoc/>

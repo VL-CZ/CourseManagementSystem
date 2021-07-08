@@ -7,3 +7,7 @@
 <app-student-list *ngIf="isCourseAdmin" [courseId]="courseId"></app-student-list>
 <app-admin-list *ngIf="isCourseAdmin" [courseId]="courseId"></app-admin-list>
 <app-course-forum [courseId]="courseId" [isCourseAdmin]="isCourseAdmin"></app-course-forum>
+
+<div *ngIf="isCourseAdmin">
+  <button class="btn btn-info" routerLink="/courses/{{courseId}}/enrollmentRequests">Enrollment requests</button>
+</div>

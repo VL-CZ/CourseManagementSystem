@@ -22,6 +22,16 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
+        public string GetPersonId(string courseAdminId)
+        {
+            var courseAdmin = dbContext.CourseAdmins
+                .Include(admin => admin.User)
+                .Single(admin => admin.Id.ToString() == courseAdminId);
+
+            return courseAdmin.User.Id;
+        }
+
+        /// <inheritdoc/>
         public void RemoveById(string courseAdminId)
         {
             var adminToRemove = dbContext.CourseAdmins.FindById(courseAdminId);
