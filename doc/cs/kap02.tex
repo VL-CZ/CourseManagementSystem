@@ -1024,13 +1024,66 @@ Pro HTTP GET požadavky frontend služby typicky vrací objekty typu ViewModel, 
 
 \newpage
 
-\subsection{Components}
+\subsection{Komponenty}
 
-Komponenty představují UI aplikace a slouží k zobrazování dat. Každá komponenta má 2 části: šablonu a backend. V některých případech pak komponenta obsahuje i vlastní CSS soubor se styly. 
+Komponenty představují UI aplikace a slouží k zobrazování dat. Nachází se ve složce src/app/components. Každá komponenta je uložená ve vlastním adresáři, který obsahuje minimálně dva soubory: šablonu a backend dané komponenty. V některých případech je ve složce i soubor s CSS styly.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{components_example.PNG}
+	\caption{Příklad UI s využitím komponent}
+\end{figure}
+
+Na obrázku vidíme část UI s využitím několika komponent. Každá komponenta reprezentuje jeden logický celek uživatelského rozhraní. Konkrétně ve výše uvedeném příkladu máme tyto komponenty
+
+\begin{itemize}
+	\item Komponenta se seznamem souborů + formulářem pro přidání souboru
+	\item Seznam studentů
+	\item Seznam administrátorů
+\end{itemize}
 
 Šablona je typicky napsaná v HTML, zatímco backend komponenty je v jazyce Typescript. 
 
-Šablona může vypadat například takto:
+\lstset{style=typescript}
+\begin{lstlisting}
+@Component({
+	selector: 'app-student-list',
+	templateUrl: './student-list.component.html',
+	styleUrls: ['./student-list.component.css']
+})
+export class StudentListComponent implements OnInit {
+
+	@Input()
+	private courseId: string;
+	
+	/**
+	* list of students
+	*/
+	public students: CourseMemberOrAdminVM[] = [];
+	
+	private readonly courseService: CourseService;
+	
+	constructor(courseService: CourseService) {
+		this.courseService = courseService;
+	}
+	
+	ngOnInit() {
+		this.courseService.getAllMembers(this.courseId)
+		.subscribe(result => {
+				this.students = result;
+		});
+	}
+}
+\end{lstlisting}
+
+Na výše uvedeném příkladu vidíme, že backend komponenty je klasická Typescript třída označená anotací @Component. U anotace je zároveň uvedený selektor, což je jméno HTML elementu, který slouží k vykreslení komponenty, a umístění souboru se šablonou a CSS styly.
+
+Komponenty typicky používají služby k získání dat z API, podobně jako v příkladu. Můžeme si všimnout, že právě zde probíhá volání metody subscribe, pomocí které v tomto případě data uložíme do proměnné students.
+
+Veřejné položky (například pole students) jsou pak dostupné v HTML šabloně. Některé položky (například courseId) jsou označené anotací @Input, která označuje parametry šablony.
+
+Pro ilustraci uvedeme také šablonu komponenty:
+
 \lstset{style=html}
 \begin{lstlisting}
 <div class="jumbotron">
@@ -1052,59 +1105,102 @@ Komponenty představují UI aplikace a slouží k zobrazování dat. Každá kom
 </div>
 \end{lstlisting}
 
-Toto je šablona sloužící k zobrazení členů kurzu. Vidíme, že se jedná o klasické HTML s interleaving.
+Toto je šablona, která přísluší komponentě StudentListComponent, jenž slouží k zobrazení členů kurzu. Vidíme, že se jedná o klasické HTML, do kterého můžeme vkládat proměnné z backend části komponenty.
+Mezi složené závorky vložíme proměnnou, jež chceme vypsat, a framework Angular se sám postará o dosazení příslušné hodnoty.
 
+Můžeme si všimnout atributu *ngFor u elementu <tr>. Takto definujeme, že v tabulce bude pro každého studenta samostatný řádek.
+Na každém řádku následně vypíšeme jméno, email a odkaz na detail studenta.
+
+\vspace{\baselineskip}
+
+V šablonách komponent můžeme také vykreslovat jiné šablony.
+
+\begin{lstlisting}
+<app-test-list [courseId]="courseId" [isCourseAdmin]="isCourseAdmin"></app-test-list>
+<app-file-list [courseId]="courseId" [isCourseAdmin]="isCourseAdmin"></app-file-list>
+<app-student-list *ngIf="isCourseAdmin" [courseId]="courseId"></app-student-list>
+...
+\end{lstlisting}
+
+Na tomto příkladu vidíme kus kódu ze šablony komponenty CourseDetailsComponent, která slouží k zobrazení informací o daném kurzu. Šablona tedy na daném místě vykreslí příslušné šablony (v tomto případě komponenty se seznamy testů, souborů a studentů).
+
+Při volání šablon můžeme také uvést parametry (například parametr courseId v šabloně dané selektorem app-test-list). Tato hodnota se pak uloží do příslušné položky, která je označená anotací @Input, v dané komponentě. To znamená, že komponenta se selektorem app-test-list má položku courseId, která je označená anotací @Input. Pro lepší představu ještě uvedeme kód třídy s komponentou:
 
 \lstset{style=typescript}
 \begin{lstlisting}
 @Component({
-	selector: 'app-student-list',
-	templateUrl: './student-list.component.html',
-	styleUrls: ['./student-list.component.css']
+	selector: 'app-test-list',
+	templateUrl: './test-list.component.html',
+	styleUrls: ['./test-list.component.css']
 })
-export class StudentListComponent implements OnInit {
-	
-	@Input()
-	private courseId: string;
-	
-	/**
-	* list of students
-	*/
-	public students: CourseMemberOrAdminVM[] = [];
-	
-	private readonly courseService: CourseService;
-	
-	constructor(roleAuthService: RoleAuthService, courseService: CourseService) {
-		this.courseService = courseService;
-	}
-	
-	ngOnInit() {
-		this.courseService.getAllMembers(this.courseId)
-		.subscribe(result => {
-			this.students = result;
-		});
-	}
-}
-\end{lstlisting} 
+export class TestListComponent implements OnInit, OnChanges {
 
-Vidíme, že backend komponenty typicky používá služby k získání dat z API. Poté je třeba zavolat na metodě dané služby metodu subscribe, která vrátí data. 
+	@Input()
+	public courseId: string;
+	...
+\end{lstlisting}
+
+\vspace{\baselineskip}
+
+Vzhled stránky se u některých komponent liší podle toho, v jaké je uživateli roli. Můžeme tedy mít komponenty nebo kusy HTML kódu, které se zobrazují například pouze administrátorům daného kurzu.
+Toto ve většině případů zajistíme pomocí proměnné, podle které poznáme, jestli je aktuální uživatel administrátor.
+Pomocí atributu *ngIf pak zajistíme, že daná část kódu se zobrazí pouze vybraným uživatelům.
+
+\begin{lstlisting}
+<app-student-list *ngIf="isCourseAdmin" [courseId]="courseId"></app-student-list>
+\end{lstlisting}
+
+V tomto příkladu používáme proměnnou isCourseAdmin, a pomocí atributu *ngIf zajistíme, že komponenta určená selektorem app-student-list se zobrazí pouze administrátorům daného kurzu. 
+
+\vspace{\baselineskip}
+
+V komponentách také poměrně často využíváme obousměrný data binding, který je součástí frameworku Angular. Jedná se o techniku, která umožňuje synchronizaci dat mezi HTML a Typescript objekty.
+
+Pokud tedy změníme data v HTML (například pole formuláře), framework se postará o změnu dat příslušné proměnné v backendu komponenty. Naopak, pokud dojde ke změně hodnoty dané proměnné, pak se framework postará o změnu HTML (například upraví text v poli formuláře).
+
+Obousměrný data binding používáme typicky ve formulářích, podobně jako v následujícím příkladu.
+
+\lstset{style=typescript}
+\begin{lstlisting}
+export class AddGradeComponent implements OnInit {
+	/**
+	* grade that we will add to the student
+	*/
+	public gradeToAdd: AddGradeVM;
+	...
+}
+\end{lstlisting}
+
+Toto je komponenta, která slouží k přidávání známek. 
 
 \lstset{style=html}
 \begin{lstlisting}
-<div *ngIf="!isCourseAdmin">
-	<button class="btn btn-success" routerLink="/students/{{currentCourseMemberId}}">My Grades</button>
+...
+<div class="form-group col-md-2">
+	<label for="addGradeForm_Value">Score in %</label>
+	<input type="number" min="0" class="form-control" name="value" id="addGradeForm_Value" required
+	[(ngModel)]="gradeToAdd.percentualValue">
 </div>
-
-<app-test-list [courseId]="courseId" [isCourseAdmin]="isCourseAdmin"></app-test-list>
-<app-file-list [courseId]="courseId" [isCourseAdmin]="isCourseAdmin"></app-file-list>
-<app-student-list *ngIf="isCourseAdmin" [courseId]="courseId"></app-student-list>
-<app-admin-list *ngIf="isCourseAdmin" [courseId]="courseId"></app-admin-list>
-<app-course-forum [courseId]="courseId" [isCourseAdmin]="isCourseAdmin"></app-course-forum>
+<div class="form-group col-md-2">
+	<label for="addGradeForm_Weight">Weight</label>
+	<input type="number" min="0" class="form-control" name="weight" id="addGradeForm_Weight" required
+	[(ngModel)]="gradeToAdd.weight">
+</div>
+...
 \end{lstlisting}
 
-\subsubsection*{Routing}
+V šabloně pak máme (mimo jiné) políčka formuláře pro procentuální hodnotu a váhu známky.
+Pomocí atributu [(ngModel)] nastavíme proměnnou pro data binding. 
 
-Frontend část aplikace má také na starost routing. Samotný router je součástí frameworku, nicméně potřebujeme nějak nakonfigurovat, jaká komponenta se zobrazí při dotazu na danou URL.
+Pokud tedy například změníme ve formuláři váhu známky, dojde automaticky ke změně hodnoty gradeToAdd.weight. Podobně, pokud dojde v kódu ke změně hodnoty proměnné gradeToAdd.weight, framework automaticky upraví hodnotu ve formuláři.
+
+Ke stylování elementů používáme framework Bootstrap. 
+
+\newpage
+
+\subsection{Routing}
+
+Frontend část aplikace mimo jiné provádí také routing. Samotný router je součástí frameworku Angular, nicméně potřebujeme nějak nakonfigurovat, jaká komponenta se zobrazí při dotazu na danou URL.
 
 Tato konfigurace se nachází v souboru app.module.ts.
 \lstset{style=typescript}
@@ -1116,8 +1212,9 @@ RouterModule.forRoot([
 	...
 \end{lstlisting}
 
-Konfigurace nám říká, že na výchozí stránce se zobrazí komponenta HomeComponent. Druhý řádek nám říká, že při zadání URL "http://host/students/id", kde id je parametr, se zobrazí komponenta StudentDetailComponent. K parametru id se poté můžeme dostat v komponentě.
-
+V konfiguraci máme vždy uvedenou cestu, a komponentu, která se zobrazí.
+Vidíme tedy, že na výchozí stránce bude komponenta HomeComponent. 
+Druhý řádek nám říká, že při zadání URL "http://host/students/id", kde id je parametr, se zobrazí komponenta StudentDetailComponent. K parametru id se poté můžeme dostat v komponentě.
 Poslední řádek definuje, že na stránce "http://host/courses" se zobrazí CourseListComponent.
 
 \newpage
