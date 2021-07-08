@@ -85,6 +85,12 @@ namespace CourseManagementSystem.API.Controllers
         public void RequestEnrollment(string courseId)
         {
             string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
+
+            if (peopleService.IsAdminOfCourse(currentUserId, courseId) || peopleService.IsMemberOfCourse(currentUserId,courseId))
+            {
+                throw new ArgumentException("Cannot enroll to the selected course. Ee are already admin/member of this course.");
+            }
+
             var currentUser = peopleService.GetById(currentUserId);
 
             courseService.RequestEnrollment(currentUser, courseId);
