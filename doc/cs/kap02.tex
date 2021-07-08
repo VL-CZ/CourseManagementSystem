@@ -1030,11 +1030,12 @@ Komponenty představují UI aplikace a slouží k zobrazování dat. Nachází s
 
 \begin{figure}
 	\centering
-	\includegraphics[width=\textwidth]{components_example.PNG}
+	\includegraphics[width=\textwidth]{components_UI.PNG}
 	\caption{Příklad UI s využitím komponent}
+	\label{fig:Components}
 \end{figure}
 
-Na obrázku vidíme část UI s využitím několika komponent. Každá komponenta reprezentuje jeden logický celek uživatelského rozhraní. Konkrétně ve výše uvedeném příkladu máme tyto komponenty
+Na obrázku \ref{fig:Components} vidíme část UI s využitím několika komponent. Každá komponenta reprezentuje jeden logický celek uživatelského rozhraní. Konkrétně v uvedeném příkladu máme tyto komponenty:
 
 \begin{itemize}
 	\item Komponenta se seznamem souborů + formulářem pro přidání souboru
@@ -1042,7 +1043,7 @@ Na obrázku vidíme část UI s využitím několika komponent. Každá komponen
 	\item Seznam administrátorů
 \end{itemize}
 
-Šablona je typicky napsaná v HTML, zatímco backend komponenty je v jazyce Typescript. 
+Šablona komponenty je typicky napsaná v HTML, zatímco backend komponenty je v jazyce Typescript. 
 
 \lstset{style=typescript}
 \begin{lstlisting}
@@ -1138,6 +1139,7 @@ export class TestListComponent implements OnInit, OnChanges {
 	@Input()
 	public courseId: string;
 	...
+}
 \end{lstlisting}
 
 \vspace{\baselineskip}
