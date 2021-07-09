@@ -20,14 +20,14 @@ namespace CourseManagementSystem.UnitTests
 
             availableQuestions = new List<TestQuestion>
             {
-                new TestQuestion(0,"Q0","China",10),
-                new TestQuestion(1,"Q1","A1",1),
-                new TestQuestion(2,"Q2","2",5),
-                new TestQuestion(3,"Q3","A3",2),
-                new TestQuestion(4,"Q4","A4",3),
-                new TestQuestion(5,"Q5","A5",1),
-                new TestQuestion(6,"Q6","yes",4),
-                new TestQuestion(7,"Q7","no",1),
+                new TestQuestion(0,"Q0","China",10,Data.QuestionType.TextAnswer),
+                new TestQuestion(1,"Q1","A1",1,Data.QuestionType.TextAnswer),
+                new TestQuestion(2,"Q2","2",5,Data.QuestionType.TextAnswer),
+                new TestQuestion(3,"Q3","A3",2,Data.QuestionType.TextAnswer),
+                new TestQuestion(4,"Q4","A4",3,Data.QuestionType.TextAnswer),
+                new TestQuestion(5,"Q5","A5",1,Data.QuestionType.TextAnswer),
+                new TestQuestion(6,"Q6","yes",4,Data.QuestionType.TextAnswer),
+                new TestQuestion(7,"Q7","no",1,Data.QuestionType.TextAnswer),
             };
         }
 

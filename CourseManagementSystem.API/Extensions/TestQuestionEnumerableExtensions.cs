@@ -17,7 +17,7 @@ namespace CourseManagementSystem.API.Extensions
         /// <returns></returns>
         public static IEnumerable<TestQuestionVM> ToViewModels(this IEnumerable<TestQuestion> questions)
         {
-            return questions.Select(q => new TestQuestionVM(q.Number, q.QuestionText, q.CorrectAnswer, q.Points));
+            return questions.Select(q => new TestQuestionVM(q.Number, q.QuestionText, q.CorrectAnswer, q.Points, q.Type));
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace CourseManagementSystem.API.Extensions
         /// <returns></returns>
         public static IEnumerable<TestQuestion> ToModels(this IEnumerable<TestQuestionVM> questionsVMs)
         {
-            return questionsVMs.Select(q => new TestQuestion(q.Number, q.QuestionText, q.CorrectAnswer, q.Points));
+            return questionsVMs.Select(q => new TestQuestion(q.Number, q.QuestionText, q.CorrectAnswer, q.Points, q.Type));
         }
     }
 }
