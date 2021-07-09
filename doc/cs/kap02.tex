@@ -1,9 +1,26 @@
 \chapter{Architektura a implementace aplikace}
 
+\begin{figure}
+	\centering
+	\includegraphics[height=0.8\textheight]{architecture.PNG}
+	\caption{Architektura aplikace}
+	\label{fig:Architecture}
+\end{figure}
+
+Na obrázku \ref{fig:Architecture} vidíme architekturu aplikace, šipky znázorňují přenos dat. Jednotlivým částem se budeme podrobněji věnovat v této kapitole.
+
 \section{Serverová část}
 
 Serverová část aplikace je naprogramovaná v jazyce C\# s použitím 
 frameworku ASP .NET Core. Je rozdělena do těchto projektů:
+
+\begin{itemize}
+	\item Data
+	\item Services
+	\item API
+	\item TestEvaluation
+	\item TestEvaluation.Tests
+\end{itemize}
 
 \subsection{Data}
 
@@ -151,12 +168,8 @@ Pokud tedy nějak změníme některou z entit (to může být např. přidání 
 
 K vytváření migrací jsem použijeme nástroj CLI tools for Entity Framework Core. https://docs.microsoft.com/cs-cz/ef/core/cli/dotnet. Pro vygenerování migrace ze změn v kódu použijeme příkaz:
 
-TO-Do: přesunout přesný příkaz jinam
-
 \begin{lstlisting}
-dotnet ef migrations add {migration_name} 
---project CourseManagementSystem.Data 
---startup-project CourseManagementSystem.API
+dotnet ef migrations add 
 \end{lstlisting}
 
 Tímto se vytvoří soubor popisující změny v migraci, ale databáze zatím zůstala beze změny. Tento soubor obsahuje třídu, jenž dědí ze třídy Migration a obsahuje metody Up a Down. V metodě Up je popis změn, které se provedou při aplikaci této migrace, naopak v metodě Down je popis změn, které se provedou v případě odstranění migrace.
@@ -185,14 +198,10 @@ public partial class TestWeight_added : Migration
 }
 \end{lstlisting}
 
-TO-DO: přesunout syntaxi příkaz jinam
-
 Pro promítnutí změn do databáze následně použijeme příkaz:
 
 \begin{lstlisting}
-dotnet ef database update 
---project CourseManagementSystem.Data 
---startup-project CourseManagementSystem.API
+dotnet ef database update
 \end{lstlisting}
 
 Tímto tedy dojde k změnám v databázi (v našem příkladu se vytvoří sloupec ScoreWeight v tabulce CourseTests).
@@ -435,7 +444,7 @@ V těle metody následně vytvoříme nový objekt kurzu, a pomocí příslušn�
 \subsubsection*{ViewModels}
 \label{serverVM}
 
-ViewModels reprezentují objekty pro komunikaci mezi Frontend a Backend částí (konkrétně mezi Frontend službami a API). Tedy např. při GET dotazu vrací příslušný Controller objekt (příp. objekty) typu ViewModel. Stejně tak při POST dotazu posílá klient v těle požadavku objekt typu ViewModel.
+ViewModels reprezentují objekty pro komunikaci mezi Frontend a Backend částí (konkrétně mezi Frontend službami a API). Tedy např. při GET dotazu vrací příslušný Controller objekt (příp. objekty) typu ViewModel a framework automaticky provede serializaci do formátu JSON. Stejně tak při POST dotazu posílá klient v těle požadavku objekt typu ViewModel.
 
 Příklad:
 \begin{lstlisting}
@@ -850,10 +859,9 @@ Ve výchozím nastavení tedy používáme databázi se jménem "CMS" na lokáln
 
 \newpage
 
-\subsection{Tests}
+\subsection{Ostatní}
 
-obsahuje testy služeb
-TODO: dopsat
+V projektu TestEvaluation se nachází třídy, které slouží ke spočítání bodů odevzdaných řešení. Projekt TestEvaluation.Tests pak obsahuje testy těchto tříd.
 
 \newpage
 
