@@ -3,7 +3,7 @@ using CourseManagementSystem.TestEvaluation.Calculators;
 using System.Collections.Generic;
 using Xunit;
 
-namespace CourseManagementSystem.UnitTests
+namespace CourseManagementSystem.TestEvaluation.Tests
 {
     /// <summary>
     /// tests for <see cref="TestScoreCalculator"/> class

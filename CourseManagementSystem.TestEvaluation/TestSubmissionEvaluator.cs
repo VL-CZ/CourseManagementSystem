@@ -52,10 +52,9 @@ namespace CourseManagementSystem.TestEvaluation
         /// <returns>calculated number of points for the answer</returns>
         private int EvaluateMultipleChoiceAnswer(TestSubmissionAnswer answer)
         {
-            string delimiter = "||";
-            var correctAnswers = answer.Question.CorrectAnswer.Split(delimiter);
-            var submittedAnswers = answer.Text.Split(delimiter);
-            var allPossibleAnswers = answer.Question.QuestionText.Split(delimiter);
+            var correctAnswers = answer.Question.CorrectAnswer.Split(Config.answersDelimiter);
+            var submittedAnswers = answer.Text.Split(Config.answersDelimiter);
+            var allPossibleAnswers = GetAnswerLetters(answer.Question.QuestionText);
 
             int correct = 0;
 
@@ -77,6 +76,16 @@ namespace CourseManagementSystem.TestEvaluation
             var containedInNone = !correctAnswers.Contains(answerLetter) && !submittedAnswers.Contains(answerLetter);
 
             return containedInBoth || containedInNone;
+        }
+
+        private string[] GetAnswerLetters(string questionText)
+        {
+            var allPossibleAnswers = questionText.Split(Config.answersDelimiter);
+            
+            return allPossibleAnswers
+                .Where((_, index) => index >= 1)
+                .Select(answer => answer.Split(Config.answerLetterDelimiter)[0])
+                .ToArray();
         }
     }
 }

@@ -11,7 +11,8 @@ namespace CourseManagementSystem.TestEvaluation.Tests
         private List<TestQuestion> questions;
         private TestSubmission submissionToEvaluate;
         private TestSubmissionEvaluator testSubmissionEvaluator;
-        private const string answersDelimiter = "||";
+        private readonly string ad = Config.answersDelimiter;
+        private readonly string ld = Config.answerLetterDelimiter;
 
         public TestSubmissionEvaluatorTests()
         {
@@ -100,8 +101,9 @@ namespace CourseManagementSystem.TestEvaluation.Tests
             questions.Clear();
             questions.AddRange(new List<TestQuestion>()
             {
-                new TestQuestion(1,"What's the capital city of Germany? ||A|Munich||B|Berlin","B",2, Data.QuestionType.SingleChoice),
-                new TestQuestion(2,"What's the capital city of Czechia? ||A|Praha||B|Brno||C|Ostrava","A",5, Data.QuestionType.SingleChoice)
+                new TestQuestion(1,$"What's the capital city of Germany? {ad}A{ld}Munich{ad}B{ld}Berlin","B",2, Data.QuestionType.SingleChoice),
+                new TestQuestion(2,$"What's the capital city of Czechia? {ad}A{ld}Praha{ad}B{ld}Brno{ad}C{ld}Ostrava",
+                    "A",5, Data.QuestionType.SingleChoice)
             });
 
             submissionToEvaluate.Answers = new List<TestSubmissionAnswer>
@@ -124,14 +126,26 @@ namespace CourseManagementSystem.TestEvaluation.Tests
             questions.Clear();
             questions.AddRange(new List<TestQuestion>()
             {
-                new TestQuestion(1,"Which of the following cities are located in Germany? ||A|Munich||B|Amsterdam||C|Vienna||D|Dresden","A||D",4, Data.QuestionType.MultipleChoice),
-                new TestQuestion(1,"Which of the following cities are located in Czechia? ||A|Brno||B|Prague||C|Warsaw","B||A",4, Data.QuestionType.MultipleChoice),
+                new TestQuestion(1,
+                    $"Which of the following cities are located in Germany? {ad}A{ld}Munich{ad}B{ld}Amsterdam{ad}C{ld}Vienna{ad}D{ld}Dresden",
+                    $"A{ad}D", 4, Data.QuestionType.MultipleChoice),
+                new TestQuestion(2,
+                    $"Which of the following cities are located in Czechia? {ad}A{ld}Brno{ad}B{ld}Prague{ad}C{ld}Warsaw",
+                    $"B{ad}A", 4, Data.QuestionType.MultipleChoice),
+                new TestQuestion(3,
+                    $"Which of these languages support object oriented programming? {ad}A{ld}Java{ad}B{ld}C#",
+                    $"A{ad}B", 2, Data.QuestionType.MultipleChoice),
+                new TestQuestion(3,
+                    $"Which of these languages are functional? {ad}A{ld}Haskell{ad}B{ld}F#",
+                    $"A{ad}B", 2, Data.QuestionType.MultipleChoice),
             });
 
             submissionToEvaluate.Answers = new List<TestSubmissionAnswer>
             {
-                new TestSubmissionAnswer(questions[0], "A||B"),
-                new TestSubmissionAnswer(questions[1], "A||B||C")
+                new TestSubmissionAnswer(questions[0], $"A{ad}B"),
+                new TestSubmissionAnswer(questions[1], $"A{ad}B{ad}C"),
+                new TestSubmissionAnswer(questions[2], $"B{ad}A"),
+                new TestSubmissionAnswer(questions[3], "")
             };
 
             testSubmissionEvaluator.Evaluate(submissionToEvaluate);
@@ -139,7 +153,9 @@ namespace CourseManagementSystem.TestEvaluation.Tests
             var answers = submissionToEvaluate.Answers.ToList();
 
             Assert.Equal(2, answers[0].Points);
-            Assert.Equal(0, answers[1].Points);
+            Assert.Equal(3, answers[1].Points);
+            Assert.Equal(2, answers[2].Points);
+            Assert.Equal(0, answers[3].Points);
         }
     }
 }
