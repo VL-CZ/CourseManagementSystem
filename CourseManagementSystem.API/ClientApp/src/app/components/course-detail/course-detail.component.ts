@@ -4,6 +4,7 @@ import {CourseService} from '../../services/course.service';
 import {RoleAuthService} from '../../services/role-auth.service';
 import {PeopleService} from '../../services/people.service';
 import {ActivatedRouteUtils} from '../../utils/activatedRouteUtils';
+import {CourseInfoVM} from '../../viewmodels/courseVM';
 
 /**
  * component representing details of the course
@@ -29,11 +30,20 @@ export class CourseDetailComponent implements OnInit {
    */
   public courseId: string;
 
+  /**
+   * info about this course
+   */
+  public courseInfo: CourseInfoVM = new CourseInfoVM();
+
   private readonly courseService: CourseService;
 
   constructor(route: ActivatedRoute, courseService: CourseService, roleAuthService: RoleAuthService, peopleService: PeopleService) {
     this.courseId = ActivatedRouteUtils.getIdParam(route);
     this.courseService = courseService;
+
+    courseService.getById(this.courseId).subscribe(course => {
+      this.courseInfo = course;
+    });
 
     roleAuthService.isCourseAdmin(this.courseId).subscribe(result => {
       this.isCourseAdmin = result.value;

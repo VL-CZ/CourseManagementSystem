@@ -2,7 +2,7 @@ import {Inject, Injectable} from '@angular/core';
 import {ApiService} from './api.service';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {AddCourseVM} from '../viewmodels/courseVM';
+import {AddCourseVM, CourseInfoVM} from '../viewmodels/courseVM';
 import {CourseMemberOrAdminVM} from '../viewmodels/courseMemberOrAdminVM';
 import {CourseFileVM} from '../viewmodels/courseFileVM';
 import {CourseTestDetailsVM} from '../viewmodels/courseTestVM';
@@ -18,6 +18,14 @@ export class CourseService extends ApiService {
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     super(http, baseUrl, CourseService.controllerName);
+  }
+
+  /**
+   * get course by its id
+   * @param id identifier of the course
+   */
+  public getById(id: string): Observable<CourseInfoVM> {
+    return this.httpGet<CourseInfoVM>(id);
   }
 
   /**
