@@ -33,6 +33,7 @@ import { ErrorDialogComponent } from './components/error-dialog/error-dialog.com
 import { StudentQuizSubmissionsComponent } from './components/student-quiz-submissions/student-quiz-submissions.component';
 import { AdminListComponent } from './components/admin-list/admin-list.component';
 import { EnrollmentRequestListComponent } from './components/enrollment-request-list/enrollment-request-list.component';
+import { TestQuestionComponent } from './components/test-question/test-question.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { EnrollmentRequestListComponent } from './components/enrollment-request-
     ErrorDialogComponent,
     StudentQuizSubmissionsComponent,
     AdminListComponent,
-    EnrollmentRequestListComponent
+    EnrollmentRequestListComponent,
+    TestQuestionComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),

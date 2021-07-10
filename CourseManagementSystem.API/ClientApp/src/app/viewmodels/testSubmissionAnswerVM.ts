@@ -16,6 +16,8 @@ export class SubmissionAnswerVM {
    * answer to the question
    */
   public answerText: string;
+
+
 }
 
 /**
