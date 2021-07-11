@@ -1,6 +1,8 @@
 /**
  * viewmodel representing an answer within a test submission
  */
+import {QuestionType} from './testQuestionVM';
+
 export class SubmissionAnswerVM {
   /**
    * number of question that this answer belongs to
@@ -17,7 +19,10 @@ export class SubmissionAnswerVM {
    */
   public answerText: string;
 
-
+  /**
+   * type of the question
+   */
+  public questionType: QuestionType;
 }
 
 /**

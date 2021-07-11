@@ -11,11 +11,12 @@ namespace CourseManagementSystem.API.ViewModels
         {
         }
 
-        public SubmissionAnswerVM(int questionNumber, string questionText, string answerText)
+        public SubmissionAnswerVM(int questionNumber, string questionText, string answerText, Data.QuestionType questionType)
         {
             QuestionNumber = questionNumber;
             QuestionText = questionText;
             AnswerText = answerText;
+            QuestionType = questionType;
         }
 
         /// <summary>
@@ -34,6 +35,11 @@ namespace CourseManagementSystem.API.ViewModels
         /// answer submitted by the student
         /// </summary>
         public string AnswerText { get; set; }
+
+        /// <summary>
+        /// type of the question
+        /// </summary>
+        public Data.QuestionType QuestionType { get; set; }
     }
 
     /// <summary>
@@ -44,8 +50,9 @@ namespace CourseManagementSystem.API.ViewModels
         public SubmissionAnswerWithCorrectAnswerVM() : base()
         { }
 
-        public SubmissionAnswerWithCorrectAnswerVM(int questionNumber, string questionText, string answerText, string correctAnswer, int receivedPoints, int maximalPoints, string comment)
-            : base(questionNumber, questionText, answerText)
+        public SubmissionAnswerWithCorrectAnswerVM(int questionNumber, string questionText, string answerText,
+            string correctAnswer, int receivedPoints, int maximalPoints, string comment, Data.QuestionType questionType)
+            : base(questionNumber, questionText, answerText, questionType)
         {
             CorrectAnswer = correctAnswer;
             ReceivedPoints = receivedPoints;

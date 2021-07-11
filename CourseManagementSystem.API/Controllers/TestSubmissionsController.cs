@@ -89,7 +89,7 @@ namespace CourseManagementSystem.API.Controllers
 
             var foundTestSubmission = testSubmissionService.LoadOrCreateSubmission(test, courseMember);
 
-            var answersVM = foundTestSubmission.Answers.Select(answer => new SubmissionAnswerVM(answer.Question.Number, answer.Question.QuestionText, answer.Text));
+            var answersVM = foundTestSubmission.Answers.Select(answer => new SubmissionAnswerVM(answer.Question.Number, answer.Question.QuestionText, answer.Text, answer.Question.Type));
 
             testSubmissionService.CommitChanges();
             return new SubmitTestVM(foundTestSubmission.Id.ToString(), test.Topic, foundTestSubmission.IsSubmitted, answersVM, test.IsGraded);
@@ -106,7 +106,7 @@ namespace CourseManagementSystem.API.Controllers
         {
             TestSubmission submission = testSubmissionService.GetSubmissionWithTestAndQuestions(testSubmissionId);
             var answersVM = submission.Answers.Select(a =>
-                new SubmissionAnswerWithCorrectAnswerVM(a.Question.Number, a.Question.QuestionText, a.Text, a.Question.CorrectAnswer, a.Points, a.Question.Points, a.Comment));
+                new SubmissionAnswerWithCorrectAnswerVM(a.Question.Number, a.Question.QuestionText, a.Text, a.Question.CorrectAnswer, a.Points, a.Question.Points, a.Comment, a.Question.Type));
 
             return new TestWithSubmissionVM(submission.Test.Id.ToString(), submission.Test.Topic, submission.Id.ToString(), answersVM,
                 submission.SubmittedDateTime, submission.IsReviewed, submission.Test.IsGraded);
