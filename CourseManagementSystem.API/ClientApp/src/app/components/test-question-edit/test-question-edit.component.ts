@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {QuestionType, TestQuestionVM} from '../../viewmodels/testQuestionVM';
 import {ArrayUtils} from '../../utils/arrayUtils';
+import {PossibleAnswer, QuestionWithAnswerChoices} from '../../utils/questionWithAnswerChoices';
 
 @Component({
   selector: 'app-test-question',
@@ -12,17 +13,20 @@ export class TestQuestionComponent implements OnInit {
   @Input()
   public question: TestQuestionVM;
 
-  public questionText = '';
   public possibleAnswersCount: number;
-  public possibleAnswers: AnswerChoice[] = [];
+  public questionWithAnswerChoices: QuestionWithAnswerChoices;
 
   constructor() {
   }
 
   ngOnInit() {
-    this.questionText = this.question.questionText;
+      this.questionWithAnswerChoices = QuestionWithAnswerChoices.createFrom(this.question.questionText);
   }
 
+  /**
+   * simple getter, in order to allow access to enum in template
+   * @constructor
+   */
   public get QuestionType() {
     return QuestionType;
   }
@@ -32,24 +36,19 @@ export class TestQuestionComponent implements OnInit {
   }
 
   public updateChoicesCount(): void {
-    ArrayUtils.resize(this.possibleAnswers, this.possibleAnswersCount, new AnswerChoice('', ''));
+    ArrayUtils.resize(this.questionWithAnswerChoices.possibleAnswers, this.possibleAnswersCount,
+      new PossibleAnswer('', ''));
     this.setChoicesLetters();
   }
 
   public serializePossibleAnswers(): void {
-    const serializedAnswers = this.possibleAnswers.map(choice => `${choice.answerLetter}||${choice.answerText}`).join('|||');
-    this.question.questionText = `${this.questionText}|||${serializedAnswers}`;
+    this.question.questionText = this.questionWithAnswerChoices.serialize();
   }
 
   private setChoicesLetters(): void {
     const allowedLetters = 'ABCDEFGHIJ';
-    for (let i = 0; i < this.possibleAnswers.length; i++) {
-      this.possibleAnswers[i].answerLetter = allowedLetters[i];
+    for (let i = 0; i < this.questionWithAnswerChoices.possibleAnswers.length; i++) {
+      this.questionWithAnswerChoices.possibleAnswers[i].answerLetter = allowedLetters[i];
     }
-  }
-}
-
-class AnswerChoice {
-  constructor(public answerLetter: string, public answerText: string) {
   }
 }
