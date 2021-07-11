@@ -37,7 +37,7 @@
   </div>
 </div>
 <div class="jumbotron" *ngFor="let question of testToUpdate.questions">
-  <app-test-question [question]="question"></app-test-question>
+  <app-test-question-edit [question]="question"></app-test-question-edit>
   <div class="my-3">
     <input type="button" class="btn btn-danger" (click)="deleteQuestion(question)" value="Delete"/>
   </div>

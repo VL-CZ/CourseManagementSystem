@@ -12,7 +12,8 @@
 <div *ngFor="let answer of submission.answers" class="jumbotron"
      [ngClass]="isCorrect(answer)?'correctAnswer':'wrongAnswer'">
   <h3>Question {{answer.questionNumber}}</h3>
-  <div>{{answer.questionText}}</div>
+  <app-test-question-text [questionText]="answer.questionText"
+                          [questionType]="answer.questionType"></app-test-question-text>
   <div>Your answer: {{answer.answerText}}</div>
   <div>Correct answer: {{answer.correctAnswer}}</div>
   <div><b>Points: {{answer.receivedPoints}}/{{answer.maximalPoints}}</b></div>

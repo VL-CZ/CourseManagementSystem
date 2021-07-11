@@ -6,7 +6,8 @@
 </div>
 <div class="jumbotron" *ngFor="let question of courseTest.questions">
   <h3>Question {{question.number}}</h3>
-  <div>{{question.questionText}}</div>
+  <app-test-question-text [questionText]="question.questionText"
+                          [questionType]="question.type"></app-test-question-text>
   <div>Correct answer: {{question.correctAnswer}}</div>
   <div>Points: {{question.points}}</div>
 </div>

@@ -58,12 +58,12 @@ export class TestSubmitComponent implements OnInit {
   public submit(): void {
     // save answers
     this.testSubmitService.saveAnswers(this.testSubmission.testSubmissionId, this.testSubmission.answers).subscribe(() => {
-        // submit the test
-        this.testSubmitService.submit(this.testSubmission).subscribe(
-          // navigate
-          () => this.navigateToSubmissionDetail()
-        );
-      });
+      // submit the test
+      this.testSubmitService.submit(this.testSubmission).subscribe(
+        // navigate
+        () => this.navigateToSubmissionDetail()
+      );
+    });
   }
 
   /**
