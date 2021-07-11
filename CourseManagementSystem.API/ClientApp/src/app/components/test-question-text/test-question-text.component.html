@@ -1,0 +1,15 @@
+<div *ngIf="questionType===QuestionType.TextAnswer">
+  {{questionText}}
+</div>
+<div *ngIf="questionType!==QuestionType.TextAnswer">
+  <div>
+    {{questionWithAnswers.questionText}}
+  </div>
+  <ul class="list-group">
+    <li *ngFor="let possibleAnswer of this.questionWithAnswers.answerChoices" class="list-group-item">
+      <b>{{possibleAnswer.answerLetter}}</b>
+      <br>
+      {{possibleAnswer.answerText}}
+    </li>
+  </ul>
+</div>

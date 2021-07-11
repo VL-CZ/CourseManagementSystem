@@ -54,11 +54,11 @@
 
   <div>
     <ul class="list-group">
-      <li *ngFor="let choice of this.questionWithAnswerChoices.possibleAnswers" class="list-group-item">
-        <label for="answerChoice{{choice.answerLetter}}"><b>{{choice.answerLetter}}</b></label>
-        <input type="text" class="form-control" id="answerChoice{{choice.answerLetter}}"
-               name="answerChoice{{choice.answerLetter}}"
-               [(ngModel)]="choice.answerText" (focusout)="serializePossibleAnswers()"/>
+      <li *ngFor="let answerChoice of this.questionWithAnswerChoices.answerChoices" class="list-group-item">
+        <label for="answerChoice{{answerChoice.answerLetter}}"><b>{{answerChoice.answerLetter}}</b></label>
+        <input type="text" class="form-control" id="answerChoice{{answerChoice.answerLetter}}"
+               name="answerChoice{{answerChoice.answerLetter}}"
+               [(ngModel)]="answerChoice.answerText" (focusout)="serializePossibleAnswers()"/>
       </li>
     </ul>
   </div>

@@ -1,19 +1,34 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {QuestionType, TestQuestionVM} from '../../viewmodels/testQuestionVM';
 import {ArrayUtils} from '../../utils/arrayUtils';
-import {PossibleAnswer, QuestionWithAnswerChoices} from '../../utils/questionWithAnswerChoices';
+import {AnswerChoice, QuestionWithAnswerChoices} from '../../utils/questionWithAnswerChoices';
 
+/**
+ * component that represents creating/editing a question
+ */
 @Component({
-  selector: 'app-test-question',
-  templateUrl: './test-question.component.html',
-  styleUrls: ['./test-question.component.css']
+  selector: 'app-test-question-edit',
+  templateUrl: './test-question-edit.component.html',
+  styleUrls: ['./test-question-edit.component.css']
 })
-export class TestQuestionComponent implements OnInit {
+export class TestQuestionEditComponent implements OnInit {
 
+  /**
+   * given question
+   */
   @Input()
   public question: TestQuestionVM;
 
+  /**
+   * number of all possible answers to the question
+   * applied only if the question has choices of answers
+   */
   public possibleAnswersCount: number;
+
+  /**
+   * the question with choices of answers
+   * applied only if the question has choices of answers
+   */
   public questionWithAnswerChoices: QuestionWithAnswerChoices;
 
   constructor() {
@@ -31,24 +46,40 @@ export class TestQuestionComponent implements OnInit {
     return QuestionType;
   }
 
+  /**
+   * check if the question has textual answer (no choices of answers)
+   */
   public hasTextAnswer(): boolean {
     return this.question.type === QuestionType.TextAnswer;
   }
 
+  /**
+   * update number of answer choices
+   * applied only if the question has choices of answers
+   */
   public updateChoicesCount(): void {
-    ArrayUtils.resize(this.questionWithAnswerChoices.possibleAnswers, this.possibleAnswersCount,
-      new PossibleAnswer('', ''));
-    this.setChoicesLetters();
+    ArrayUtils.resize(this.questionWithAnswerChoices.answerChoices, this.possibleAnswersCount,
+      new AnswerChoice('', ''));
+    this.setAnswerChoicesLetters();
   }
 
+  /**
+   * serialize all possible answers to string and store it to {@link question.questionText}
+   * applied only if the question has choices of answers
+   */
   public serializePossibleAnswers(): void {
     this.question.questionText = this.questionWithAnswerChoices.serialize();
   }
 
-  private setChoicesLetters(): void {
+  /**
+   * set letters (A,B,C,...) to answer choices
+   * applied only if the question has choices of answers
+   * @private
+   */
+  private setAnswerChoicesLetters(): void {
     const allowedLetters = 'ABCDEFGHIJ';
-    for (let i = 0; i < this.questionWithAnswerChoices.possibleAnswers.length; i++) {
-      this.questionWithAnswerChoices.possibleAnswers[i].answerLetter = allowedLetters[i];
+    for (let i = 0; i < this.questionWithAnswerChoices.answerChoices.length; i++) {
+      this.questionWithAnswerChoices.answerChoices[i].answerLetter = allowedLetters[i];
     }
   }
 }
