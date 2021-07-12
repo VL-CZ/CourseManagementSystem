@@ -11,8 +11,9 @@ namespace CourseManagementSystem.TestEvaluation.Tests
         private List<TestQuestion> questions;
         private TestSubmission submissionToEvaluate;
         private TestSubmissionEvaluator testSubmissionEvaluator;
-        private readonly string ad = Config.answersDelimiter;
-        private readonly string ld = Config.answerLetterDelimiter;
+        private const string acd = QuestionWithChoicesTools.answerChoicesDelimiter;
+        private const string ltd = QuestionWithChoicesTools.answerChoiceLetterAndTextDelimiter;
+        private const string ald = QuestionWithChoicesTools.answerLetterDelimiter;
 
         public TestSubmissionEvaluatorTests()
         {
@@ -95,14 +96,17 @@ namespace CourseManagementSystem.TestEvaluation.Tests
             Assert.Equal(0, answers[2].Points);
         }
 
+        /// <summary>
+        /// test Evaluate method on the test with single choice questions
+        /// </summary>
         [Fact]
         public void Evaluate_SingleChoiceAnswers()
         {
             questions.Clear();
             questions.AddRange(new List<TestQuestion>()
             {
-                new TestQuestion(1,$"What's the capital city of Germany? {ad}A{ld}Munich{ad}B{ld}Berlin","B",2, Data.QuestionType.SingleChoice),
-                new TestQuestion(2,$"What's the capital city of Czechia? {ad}A{ld}Praha{ad}B{ld}Brno{ad}C{ld}Ostrava",
+                new TestQuestion(1,$"What's the capital city of Germany? {acd}A{ltd}Munich{acd}B{ltd}Berlin","B",2, Data.QuestionType.SingleChoice),
+                new TestQuestion(2,$"What's the capital city of Czechia? {acd}A{ltd}Praha{acd}B{ltd}Brno{acd}C{ltd}Ostrava",
                     "A",5, Data.QuestionType.SingleChoice)
             });
 
@@ -120,6 +124,9 @@ namespace CourseManagementSystem.TestEvaluation.Tests
             Assert.Equal(0, answers[1].Points);
         }
 
+        /// <summary>
+        /// test Evaluate method on the test with multiple choice questions
+        /// </summary>
         [Fact]
         public void Evaluate_MultipleChoiceAnswers()
         {
@@ -127,24 +134,24 @@ namespace CourseManagementSystem.TestEvaluation.Tests
             questions.AddRange(new List<TestQuestion>()
             {
                 new TestQuestion(1,
-                    $"Which of the following cities are located in Germany? {ad}A{ld}Munich{ad}B{ld}Amsterdam{ad}C{ld}Vienna{ad}D{ld}Dresden",
-                    $"A{ad}D", 4, Data.QuestionType.MultipleChoice),
+                    $"Which of the following cities are located in Germany? {acd}A{ltd}Munich{acd}B{ltd}Amsterdam{acd}C{ltd}Vienna{acd}D{ltd}Dresden",
+                    $"A{ald}D", 4, Data.QuestionType.MultipleChoice),
                 new TestQuestion(2,
-                    $"Which of the following cities are located in Czechia? {ad}A{ld}Brno{ad}B{ld}Prague{ad}C{ld}Warsaw",
-                    $"B{ad}A", 4, Data.QuestionType.MultipleChoice),
+                    $"Which of the following cities are located in Czechia? {acd}A{ltd}Brno{acd}B{ltd}Prague{acd}C{ltd}Warsaw",
+                    $"B{ald}A", 4, Data.QuestionType.MultipleChoice),
                 new TestQuestion(3,
-                    $"Which of these languages support object oriented programming? {ad}A{ld}Java{ad}B{ld}C#",
-                    $"A{ad}B", 2, Data.QuestionType.MultipleChoice),
+                    $"Which of these languages support object oriented programming? {acd}A{ltd}Java{acd}B{ltd}C#",
+                    $"A{ald}B", 2, Data.QuestionType.MultipleChoice),
                 new TestQuestion(3,
-                    $"Which of these languages are functional? {ad}A{ld}Haskell{ad}B{ld}F#",
-                    $"A{ad}B", 2, Data.QuestionType.MultipleChoice),
+                    $"Which of these languages are functional? {acd}A{ltd}Haskell{acd}B{ltd}F#",
+                    $"A{ald}B", 2, Data.QuestionType.MultipleChoice),
             });
 
             submissionToEvaluate.Answers = new List<TestSubmissionAnswer>
             {
-                new TestSubmissionAnswer(questions[0], $"A{ad}B"),
-                new TestSubmissionAnswer(questions[1], $"A{ad}B{ad}C"),
-                new TestSubmissionAnswer(questions[2], $"B{ad}A"),
+                new TestSubmissionAnswer(questions[0], $"A{ald}B"),
+                new TestSubmissionAnswer(questions[1], $"A{ald}B{ald}C"),
+                new TestSubmissionAnswer(questions[2], $"B{ald}A"),
                 new TestSubmissionAnswer(questions[3], "")
             };
 

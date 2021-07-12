@@ -23,17 +23,17 @@ namespace CourseManagementSystem.TestEvaluation
                 }
                 else
                 {
-                    answer.Points = EvaluateAnswer(answer);
+                    answer.Points = EvaluateTextualOrSingleChoiceAnswer(answer);
                 }
             }
         }
 
         /// <summary>
-        /// evaluate text or single choice answer
+        /// evaluate textual or single choice answer
         /// </summary>
         /// <param name="answer">answer to evaluate</param>
         /// <returns>calculated number of points for the answer</returns>
-        private int EvaluateAnswer(TestSubmissionAnswer answer)
+        private int EvaluateTextualOrSingleChoiceAnswer(TestSubmissionAnswer answer)
         {
             if (answer.Text == answer.Question.CorrectAnswer)
             {
@@ -46,15 +46,15 @@ namespace CourseManagementSystem.TestEvaluation
         }
 
         /// <summary>
-        /// evaluate answer with multiple choices
+        /// evaluate answer with multiple answer choices
         /// </summary>
         /// <param name="answer">answer to evaluate</param>
         /// <returns>calculated number of points for the answer</returns>
         private int EvaluateMultipleChoiceAnswer(TestSubmissionAnswer answer)
         {
-            var correctAnswers = answer.Question.CorrectAnswer.Split(Config.answersDelimiter);
-            var submittedAnswers = answer.Text.Split(Config.answersDelimiter);
-            var allPossibleAnswers = GetAnswerChoiceLetters(answer.Question.QuestionText);
+            var correctAnswers = QuestionWithChoicesTools.GetCorrectAnswersLetters(answer.Question);
+            var submittedAnswers = QuestionWithChoicesTools.GetSubmittedAnswersLetters(answer);
+            var allPossibleAnswers = QuestionWithChoicesTools.GetAnswerChoicesLetters(answer.Question);
 
             int correct = 0;
 
@@ -71,7 +71,7 @@ namespace CourseManagementSystem.TestEvaluation
         }
 
         /// <summary>
-        /// check if the answer choice with the given letter is correctly responded
+        /// check if the answer choice with the given letter is correctly answered
         /// </summary>
         /// <param name="answerLetter">letter of the answer choice to check</param>
         /// <param name="correctAnswersLetters">letters of all correct answer choices</param>
@@ -83,21 +83,6 @@ namespace CourseManagementSystem.TestEvaluation
             var containedInNone = !correctAnswersLetters.Contains(answerLetter) && !submittedAnswersLetters.Contains(answerLetter);
 
             return containedInBoth || containedInNone;
-        }
-
-        /// <summary>
-        /// get all letters of answer choices
-        /// </summary>
-        /// <param name="questionText">serialized text of the question</param>
-        /// <returns></returns>
-        private string[] GetAnswerChoiceLetters(string questionText)
-        {
-            var allPossibleAnswers = questionText.Split(Config.answersDelimiter);
-            
-            return allPossibleAnswers
-                .Where((_, index) => index >= 1)
-                .Select(answer => answer.Split(Config.answerLetterDelimiter)[0])
-                .ToArray();
         }
     }
 }
