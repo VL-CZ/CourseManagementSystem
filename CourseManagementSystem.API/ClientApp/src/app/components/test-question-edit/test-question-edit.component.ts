@@ -35,7 +35,7 @@ export class TestQuestionEditComponent implements OnInit {
   }
 
   ngOnInit() {
-      this.questionWithAnswerChoices = QuestionWithAnswerChoices.createFrom(this.question.questionText);
+    this.questionWithAnswerChoices = QuestionWithAnswerChoices.createFrom(this.question.questionText);
   }
 
   /**
@@ -61,6 +61,7 @@ export class TestQuestionEditComponent implements OnInit {
     ArrayUtils.resize(this.questionWithAnswerChoices.answerChoices, this.possibleAnswersCount,
       new AnswerChoice('', ''));
     this.setAnswerChoicesLetters();
+    this.serializePossibleAnswers();
   }
 
   /**
