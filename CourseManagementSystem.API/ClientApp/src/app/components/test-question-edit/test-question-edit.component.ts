@@ -35,7 +35,10 @@ export class TestQuestionEditComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.questionWithAnswerChoices = QuestionWithAnswerChoices.createFrom(this.question.questionText);
+    if (!this.hasTextAnswer()) {
+      this.questionWithAnswerChoices = QuestionWithAnswerChoices.createFrom(this.question.questionText);
+      this.possibleAnswersCount = this.questionWithAnswerChoices.answerChoices.length;
+    }
   }
 
   /**
