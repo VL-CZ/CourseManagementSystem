@@ -23,17 +23,17 @@ namespace CourseManagementSystem.TestEvaluation
                 }
                 else
                 {
-                    answer.Points = EvaluateTextAnswer(answer);
+                    answer.Points = EvaluateAnswer(answer);
                 }
             }
         }
 
         /// <summary>
-        /// evaluate text answer
+        /// evaluate text or single choice answer
         /// </summary>
         /// <param name="answer">answer to evaluate</param>
         /// <returns>calculated number of points for the answer</returns>
-        private int EvaluateTextAnswer(TestSubmissionAnswer answer)
+        private int EvaluateAnswer(TestSubmissionAnswer answer)
         {
             if (answer.Text == answer.Question.CorrectAnswer)
             {
@@ -54,13 +54,13 @@ namespace CourseManagementSystem.TestEvaluation
         {
             var correctAnswers = answer.Question.CorrectAnswer.Split(Config.answersDelimiter);
             var submittedAnswers = answer.Text.Split(Config.answersDelimiter);
-            var allPossibleAnswers = GetAnswerLetters(answer.Question.QuestionText);
+            var allPossibleAnswers = GetAnswerChoiceLetters(answer.Question.QuestionText);
 
             int correct = 0;
 
             foreach (var possibleAnswer in allPossibleAnswers)
             {
-                if (IsCorrect(possibleAnswer, correctAnswers, submittedAnswers))
+                if (IsAnswerLetterCorrect(possibleAnswer, correctAnswers, submittedAnswers))
                 {
                     correct++;
                 }
@@ -70,15 +70,27 @@ namespace CourseManagementSystem.TestEvaluation
             return (int)Math.Round(correctRatio * answer.Question.Points);
         }
 
-        private bool IsCorrect(string answerLetter, string[] correctAnswers, string[] submittedAnswers)
+        /// <summary>
+        /// check if the answer choice with the given letter is correctly responded
+        /// </summary>
+        /// <param name="answerLetter">letter of the answer choice to check</param>
+        /// <param name="correctAnswersLetters">letters of all correct answer choices</param>
+        /// <param name="submittedAnswersLetters">letters of all submitted answer choices</param>
+        /// <returns></returns>
+        private bool IsAnswerLetterCorrect(string answerLetter, string[] correctAnswersLetters, string[] submittedAnswersLetters)
         {
-            var containedInBoth = correctAnswers.Contains(answerLetter) && submittedAnswers.Contains(answerLetter);
-            var containedInNone = !correctAnswers.Contains(answerLetter) && !submittedAnswers.Contains(answerLetter);
+            var containedInBoth = correctAnswersLetters.Contains(answerLetter) && submittedAnswersLetters.Contains(answerLetter);
+            var containedInNone = !correctAnswersLetters.Contains(answerLetter) && !submittedAnswersLetters.Contains(answerLetter);
 
             return containedInBoth || containedInNone;
         }
 
-        private string[] GetAnswerLetters(string questionText)
+        /// <summary>
+        /// get all letters of answer choices
+        /// </summary>
+        /// <param name="questionText">serialized text of the question</param>
+        /// <returns></returns>
+        private string[] GetAnswerChoiceLetters(string questionText)
         {
             var allPossibleAnswers = questionText.Split(Config.answersDelimiter);
             

@@ -63,7 +63,6 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// text of the correct answer
         /// </summary>
-        [RequiredWithDefaultErrorMessage]
         public string CorrectAnswer { get; set; }
 
         /// <summary>
