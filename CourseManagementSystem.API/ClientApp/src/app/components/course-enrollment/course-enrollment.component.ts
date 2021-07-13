@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {PeopleService} from '../../services/people.service';
 import {CourseService} from '../../services/course.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {RouterUtils} from '../../utils/routerUtils';
 
 /**
  * component with enrollment to course
@@ -18,9 +20,13 @@ export class CourseEnrollmentComponent implements OnInit {
   public courseToEnrollId: string;
 
   private readonly courseService: CourseService;
+  private router: Router;
+  private activatedRoute: ActivatedRoute;
 
-  constructor(courseService: CourseService) {
+  constructor(courseService: CourseService, activatedRoute: ActivatedRoute, router: Router) {
     this.courseService = courseService;
+    this.router = router;
+    this.activatedRoute = activatedRoute;
   }
 
   ngOnInit() {
@@ -31,7 +37,7 @@ export class CourseEnrollmentComponent implements OnInit {
    */
   public enroll(): void {
     this.courseService.enrollTo(this.courseToEnrollId).subscribe(() => {
-      console.log('Enrolled!\n');
+      RouterUtils.reloadPage(this.router, this.activatedRoute);
     });
   }
 }

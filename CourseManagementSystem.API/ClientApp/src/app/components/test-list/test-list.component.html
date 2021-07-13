@@ -1,7 +1,7 @@
 <div class="jumbotron">
   <h3>Tests</h3>
   <div *ngIf="isCourseAdmin && nonPublishedTests.length > 0">
-    <b>Not published</b>
+    <h6>Not published</h6>
     <table class="table table-striped table-responsive">
       <tr *ngFor="let test of this.nonPublishedTests">
         <td>
@@ -23,7 +23,7 @@
     </table>
   </div>
   <div *ngIf="activeTests.length > 0">
-    <b>Active</b>
+    <h6>Active</h6>
     <table class="table table-striped table-responsive">
       <tr *ngFor="let test of this.activeTests">
         <td>
@@ -40,7 +40,7 @@
     </table>
   </div>
   <div *ngIf="isCourseAdmin && testsAfterDeadline.length > 0">
-    <b>After deadline</b>
+    <h6>After deadline</h6>
     <table class="table table-striped table-responsive">
       <tr *ngFor="let test of this.testsAfterDeadline">
         <td>
