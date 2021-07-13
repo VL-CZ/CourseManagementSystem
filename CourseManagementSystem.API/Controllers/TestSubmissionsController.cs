@@ -113,6 +113,19 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
+        /// get course id of the given test submission
+        /// </summary>
+        /// <param name="testId">id of the given test submission</param>
+        /// <returns></returns>
+        [HttpGet("{testSubmissionId}/courseId")]
+        [AuthorizeCourseAdminOrMemberOf(EntityType.TestSubmission, "testSubmissionId")]
+        public WrapperVM<string> GetCourseId(string testSubmissionId)
+        {
+            string courseId = testSubmissionService.GetCourseIdOf(testSubmissionId);
+            return new WrapperVM<string>(courseId);
+        }
+
+        /// <summary>
         /// update test submission properties - points and comments
         /// </summary>
         /// <param name="testSubmissionId">id of the submission that is evaluated</param>

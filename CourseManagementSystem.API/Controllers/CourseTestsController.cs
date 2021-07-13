@@ -120,6 +120,19 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
+        /// get course id of the given test
+        /// </summary>
+        /// <param name="testId">id of the given test</param>
+        /// <returns></returns>
+        [HttpGet("{testId}/courseId")]
+        [AuthorizeCourseAdminOrMemberOf(EntityType.CourseTest, "testId")]
+        public WrapperVM<string> GetCourseId(string testId)
+        {
+            string courseId = courseTestService.GetCourseIdOf(testId);
+            return new WrapperVM<string>(courseId);
+        }
+
+        /// <summary>
         /// check that all questions have valid values in <see cref="TestQuestion.CorrectAnswer"/> property
         /// <br/>
         /// if not, throw <see cref="ArgumentException"/>
