@@ -63,7 +63,7 @@
       <div *ngIf="!editing">
         <h4>Review</h4>
         <button type="button" class="btn btn-warning mr-3" (click)="startReview()">Update points</button>
-        <button type="button" class="btn btn-primary" (click)="markAsReviewed()">Mark as reviewed</button>
+        <button type="button" class="btn btn-primary" *ngIf="!submission.isReviewed" (click)="markAsReviewed()">Mark as reviewed</button>
       </div>
     </div>
     <br>
