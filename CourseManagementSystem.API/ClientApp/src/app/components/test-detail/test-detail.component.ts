@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {CourseTestDetailsVM} from '../../viewmodels/courseTestVM';
+import {CourseTestDetailsVM, TestStatus} from '../../viewmodels/courseTestVM';
 import {CourseTestService} from '../../services/course-test.service';
 import {ActivatedRouteUtils} from '../../utils/activatedRouteUtils';
 import {DateTimeFormatter} from '../../utils/dateTimeFormatter';
@@ -39,15 +39,23 @@ export class TestDetailComponent implements OnInit {
 
   constructor(route: ActivatedRoute, courseTestService: CourseTestService) {
     this.testId = ActivatedRouteUtils.getIdParam(route);
-    courseTestService.getById(this.testId).subscribe(result => {
-      this.courseTest = result;
-    });
 
     courseTestService.getCourseId(this.testId).subscribe(result => {
       this.courseId = result.value;
     });
+
+    courseTestService.getById(this.testId).subscribe(result => {
+      this.courseTest = result;
+    });
   }
 
   ngOnInit() {
+  }
+
+  /**
+   * check if {@link courseTest} can be edited
+   */
+  public canBeEdited(): boolean {
+    return this.courseTest.status === TestStatus.New;
   }
 }

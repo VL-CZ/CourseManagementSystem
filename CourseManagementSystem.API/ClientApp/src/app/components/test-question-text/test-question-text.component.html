@@ -1,15 +1,16 @@
-<div *ngIf="questionType===QuestionType.TextAnswer">
+<p class="formattedText" *ngIf="questionType===QuestionType.TextAnswer">
   {{questionText}}
-</div>
+</p>
 <div *ngIf="questionType!==QuestionType.TextAnswer">
-  <div>
+  <p class="formattedText">
     {{questionWithAnswers.questionText}}
-  </div>
-  <ul class="list-group">
+  </p>
+  <ul class="list-group mb-2">
     <li *ngFor="let possibleAnswer of this.questionWithAnswers.answerChoices" class="list-group-item">
       <b>{{possibleAnswer.answerLetter}}</b>
-      <br>
-      {{possibleAnswer.answerText}}
+      <p>
+        {{possibleAnswer.answerText}}
+      </p>
     </li>
   </ul>
 </div>
