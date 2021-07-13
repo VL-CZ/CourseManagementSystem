@@ -54,8 +54,9 @@
         <app-test-question-edit [question]="question"></app-test-question-edit>
       </div>
     </form>
-    <div class="my-3">
-      <button *ngIf="testToCreate.questions.length > 0" type="button" class="btn btn-success" (click)="createTest()">
+    <div class="jumbotron" *ngIf="testToCreate.questions.length > 0">
+      <h4>Create the test</h4>
+      <button type="button" class="btn btn-success" (click)="createTest()">
         Create
       </button>
     </div>

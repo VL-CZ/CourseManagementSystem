@@ -1,13 +1,13 @@
 <h3>Question {{question.number}}</h3>
 
-<div>
-  Select question type:
+<div class="my-3">
+  Select type of answer:
   <div class="form-check">
     <input class="form-check-input" type="radio" name="questionType{{question.number}}"
            id="questionType{{question.number}}TextAnswer"
            [(ngModel)]="question.type" [value]="QuestionType.TextAnswer">
     <label class="form-check-label" for="questionType{{question.number}}TextAnswer">
-      Text answer (textbox)
+      Textual answer (textbox)
     </label>
   </div>
   <div class="form-check">
@@ -15,7 +15,7 @@
            id="questionType{{question.number}}SingleChoice"
            [(ngModel)]="question.type" [value]="QuestionType.SingleChoice">
     <label class="form-check-label" for="questionType{{question.number}}SingleChoice">
-      Answer with single choice (radio buttons)
+      Choice of answers (radio buttons)
     </label>
   </div>
   <div class="form-check">
@@ -23,7 +23,7 @@
            id="questionType{{question.number}}MultipleChoice"
            [(ngModel)]="question.type" [value]="QuestionType.MultipleChoice">
     <label class="form-check-label" for="questionType{{question.number}}MultipleChoice">
-      Answer with multiple choices (checkboxes)
+      Multiple choice of answers (checkboxes)
     </label>
   </div>
 </div>
@@ -45,14 +45,14 @@
   </div>
 
   <div class="form-group">
-    <label for="answerCountInput">Answer count</label>
+    <label for="answerCountInput">Answer choices count</label>
     <input type="number" min="1" max="10" class="form-control" id="answerCountInput"
            [(ngModel)]="this.possibleAnswersCount"
            name="answerCount">
     <button type="button" class="btn btn-primary" (click)="updateChoicesCount()">Apply</button>
   </div>
 
-  <div>
+  <div class="mb-2">
     <ul class="list-group">
       <li *ngFor="let answerChoice of this.questionWithAnswerChoices.answerChoices" class="list-group-item">
         <label for="answerChoice{{answerChoice.answerLetter}}"><b>{{answerChoice.answerLetter}}</b></label>
