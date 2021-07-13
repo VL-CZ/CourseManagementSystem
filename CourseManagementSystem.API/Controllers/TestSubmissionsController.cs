@@ -92,7 +92,7 @@ namespace CourseManagementSystem.API.Controllers
             var answersVM = foundTestSubmission.Answers.Select(answer => new SubmissionAnswerVM(answer.Question.Number, answer.Question.QuestionText, answer.Text, answer.Question.Type));
 
             testSubmissionService.CommitChanges();
-            return new SubmitTestVM(foundTestSubmission.Id.ToString(), test.Topic, foundTestSubmission.IsSubmitted, answersVM, test.IsGraded);
+            return new SubmitTestVM(foundTestSubmission.Id.ToString(), test.Topic, foundTestSubmission.IsSubmitted, answersVM, test.IsGraded, test.Deadline);
         }
 
         /// <summary>
@@ -110,6 +110,19 @@ namespace CourseManagementSystem.API.Controllers
 
             return new TestWithSubmissionVM(submission.Test.Id.ToString(), submission.Test.Topic, submission.Id.ToString(), answersVM,
                 submission.SubmittedDateTime, submission.IsReviewed, submission.Test.IsGraded);
+        }
+
+        /// <summary>
+        /// get course id of the given test submission
+        /// </summary>
+        /// <param name="testId">id of the given test submission</param>
+        /// <returns></returns>
+        [HttpGet("{testSubmissionId}/courseId")]
+        [AuthorizeCourseAdminOrMemberOf(EntityType.TestSubmission, "testSubmissionId")]
+        public WrapperVM<string> GetCourseId(string testSubmissionId)
+        {
+            string courseId = testSubmissionService.GetCourseIdOf(testSubmissionId);
+            return new WrapperVM<string>(courseId);
         }
 
         /// <summary>

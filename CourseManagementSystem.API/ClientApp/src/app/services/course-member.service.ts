@@ -75,4 +75,12 @@ export class CourseMemberService extends ApiService {
   public getAverageScore(courseMemberId: string): Observable<WrapperVM<number>> {
     return this.httpGet<WrapperVM<number>>(`${courseMemberId}/averageScore`);
   }
+
+  /**
+   * get id of the course that this course member entity belongs to
+   * @param courseMemberId id of the course member entity
+   */
+  public getCourseId(courseMemberId: string): Observable<WrapperVM<string>> {
+    return this.httpGet<WrapperVM<string>>(`${courseMemberId}/courseId`);
+  }
 }

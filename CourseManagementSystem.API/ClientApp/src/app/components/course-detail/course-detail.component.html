@@ -3,10 +3,9 @@
   <div>
     <b>Course Id:</b> {{courseId}}
   </div>
-</div>
-
-<div *ngIf="!isCourseAdmin">
-  <button class="btn btn-success" routerLink="/students/{{currentCourseMemberId}}">My Grades</button>
+  <div *ngIf="!isCourseAdmin" class="my-3">
+    <button class="btn btn-success" routerLink="/students/{{currentCourseMemberId}}">My Grades</button>
+  </div>
 </div>
 
 <app-test-list [courseId]="courseId" [isCourseAdmin]="isCourseAdmin"></app-test-list>
@@ -15,6 +14,12 @@
 <app-admin-list *ngIf="isCourseAdmin" [courseId]="courseId"></app-admin-list>
 <app-course-forum [courseId]="courseId" [isCourseAdmin]="isCourseAdmin"></app-course-forum>
 
-<div *ngIf="isCourseAdmin">
-  <button class="btn btn-info" routerLink="/courses/{{courseId}}/enrollmentRequests">Enrollment requests</button>
+<div class="jumbotron">
+  <h3>Leave this course</h3>
+  <div *ngIf="isCourseAdmin">
+    <button class="btn btn-danger" (click)="removeCurrentAdmin()">Leave</button>
+  </div>
+  <div *ngIf="!isCourseAdmin">
+    <button class="btn btn-danger" (click)="removeCurrentMember()">Leave</button>
+  </div>
 </div>

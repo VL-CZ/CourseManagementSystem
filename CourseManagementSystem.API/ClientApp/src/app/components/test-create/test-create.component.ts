@@ -35,7 +35,7 @@ export class TestCreateComponent implements OnInit {
    */
   public dateTimeBinder = new DateTimeBinder();
 
-  private readonly courseId: string;
+  public readonly courseId: string;
   private courseTestService: CourseTestService;
   private router: Router;
   private bsModalRef: BsModalRef;

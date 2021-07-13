@@ -1,4 +1,5 @@
 ﻿using CourseManagementSystem.API.Validation.Attributes;
+using System;
 using System.Collections.Generic;
 
 namespace CourseManagementSystem.API.ViewModels
@@ -12,13 +13,14 @@ namespace CourseManagementSystem.API.ViewModels
         {
         }
 
-        public SubmitTestVM(string testId, string testTopic, bool isSubmitted, IEnumerable<SubmissionAnswerVM> answers, bool isTestGraded)
+        public SubmitTestVM(string testId, string testTopic, bool isSubmitted, IEnumerable<SubmissionAnswerVM> answers, bool isTestGraded, DateTime testDeadline)
         {
             TestSubmissionId = testId;
             TestTopic = testTopic;
             Answers = answers;
             IsSubmitted = isSubmitted;
             IsTestGraded = isTestGraded;
+            TestDeadline = testDeadline;
         }
 
         /// <summary>
@@ -42,6 +44,11 @@ namespace CourseManagementSystem.API.ViewModels
         /// is the test graded?
         /// </summary>
         public bool IsTestGraded { get; set; }
+
+        /// <summary>
+        /// deadline of the test
+        /// </summary>
+        public DateTime TestDeadline { get; set; }
 
         /// <summary>
         /// answers submitted by student

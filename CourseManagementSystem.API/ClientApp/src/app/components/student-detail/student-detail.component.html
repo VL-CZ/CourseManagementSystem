@@ -1,13 +1,20 @@
-<div class="jumbotron">
-  <h2>Student: {{courseMember.name}}</h2>
+<div class="row">
+  <div class="col-md-2 order-md-2">
+    <app-course-menu [courseId]="courseId"></app-course-menu>
+  </div>
+  <div class="col-md-10 order-md-1">
+    <div class="jumbotron">
+      <h2>Student: {{courseMember.name}}</h2>
+    </div>
+
+    <app-student-test-submissions [courseMemberId]="courseMemberId"></app-student-test-submissions>
+
+    <app-student-grade-list [courseMemberId]="courseMemberId" [isAdmin]="isCourseAdmin"></app-student-grade-list>
+
+    <app-student-average-score [courseMemberId]="courseMemberId"></app-student-average-score>
+
+    <app-add-grade *ngIf="isCourseAdmin" [courseMemberId]="courseMemberId"></app-add-grade>
+
+    <app-student-quiz-submissions [courseMemberId]="courseMemberId"></app-student-quiz-submissions>
+  </div>
 </div>
-
-<app-student-test-submissions [courseMemberId]="courseMemberId"></app-student-test-submissions>
-
-<app-student-grade-list [courseMemberId]="courseMemberId" [isAdmin]="isCourseAdmin"></app-student-grade-list>
-
-<app-student-average-score [courseMemberId]="courseMemberId"></app-student-average-score>
-
-<app-add-grade *ngIf="isCourseAdmin" [courseMemberId]="courseMemberId"></app-add-grade>
-
-<app-student-quiz-submissions [courseMemberId]="courseMemberId"></app-student-quiz-submissions>

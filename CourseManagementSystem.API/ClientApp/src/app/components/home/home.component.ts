@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {Router} from '@angular/router';
 
 /**
  * home component
@@ -8,4 +9,7 @@ import {Component} from '@angular/core';
   templateUrl: './home.component.html',
 })
 export class HomeComponent {
+  constructor(router: Router) {
+    router.navigate(['/courses']);
+  }
 }

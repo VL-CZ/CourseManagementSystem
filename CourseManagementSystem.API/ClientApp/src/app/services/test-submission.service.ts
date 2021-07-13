@@ -6,6 +6,7 @@ import {SubmitTestVM} from '../viewmodels/submitTestVM';
 import {TestWithSubmissionVM} from '../viewmodels/testSubmissionVM';
 import {EvaluatedTestSubmissionVM} from '../viewmodels/evaluatedTestSubmissionVM';
 import {SubmissionAnswerVM} from '../viewmodels/testSubmissionAnswerVM';
+import {WrapperVM} from '../viewmodels/wrapperVM';
 
 @Injectable({
   providedIn: 'root'
@@ -57,5 +58,13 @@ export class TestSubmissionService extends ApiService {
    */
   public updateSubmission(submissionId: string, evaluatedTestSubmission: EvaluatedTestSubmissionVM): Observable<{}> {
     return this.httpPut(submissionId, evaluatedTestSubmission);
+  }
+
+  /**
+   * get id of the course that this test submission belongs to
+   * @param testSubmissionId id of the assignment submission
+   */
+  public getCourseId(testSubmissionId: string): Observable<WrapperVM<string>> {
+    return this.httpGet<WrapperVM<string>>(`${testSubmissionId}/courseId`);
   }
 }

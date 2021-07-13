@@ -22,6 +22,11 @@ export class StudentDetailComponent implements OnInit {
   public isCourseAdmin: boolean;
 
   /**
+   * id of the course that this course member belongs to
+   */
+  public courseId: string;
+
+  /**
    * current course member
    */
   public courseMember: CourseMemberOrAdminVM = new CourseMemberOrAdminVM();
@@ -30,6 +35,10 @@ export class StudentDetailComponent implements OnInit {
     this.courseMemberId = ActivatedRouteUtils.getIdParam(route);
     courseMemberService.getById(this.courseMemberId).subscribe(cm => {
       this.courseMember = cm;
+    });
+
+    courseMemberService.getCourseId(this.courseMemberId).subscribe(result => {
+      this.courseId = result.value;
     });
 
     roleAuthService.isCourseMemberAdmin(this.courseMemberId).subscribe(result => {

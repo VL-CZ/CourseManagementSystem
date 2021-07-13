@@ -25,6 +25,11 @@ export class SubmitTestVM {
   public isSubmitted: boolean;
 
   /**
+   * deadline of the test
+   */
+  public testDeadline: string;
+
+  /**
    * answers to the test
    */
   public answers: SubmissionAnswerVM[] = [];

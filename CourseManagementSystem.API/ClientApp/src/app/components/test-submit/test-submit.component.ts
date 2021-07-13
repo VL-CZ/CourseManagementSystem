@@ -5,6 +5,7 @@ import {SubmitTestVM} from '../../viewmodels/submitTestVM';
 import {TestSubmissionService} from '../../services/test-submission.service';
 import {ActivatedRouteUtils} from '../../utils/activatedRouteUtils';
 import {CourseTestUtils} from '../../utils/courseTestUtils';
+import {DateTimeFormatter} from '../../utils/dateTimeFormatter';
 
 /**
  * component for submitting a test
@@ -21,21 +22,35 @@ export class TestSubmitComponent implements OnInit {
    */
   public testSubmission: SubmitTestVM = new SubmitTestVM();
 
+  /**
+   * id of the course that this test submission belongs to
+   */
+  public courseId: string;
+
+  /**
+   * formatter of date-time values
+   */
+  public dateTimeFormatter: DateTimeFormatter = new DateTimeFormatter();
+
   public courseTestUtils: CourseTestUtils = new CourseTestUtils();
 
   private router: Router;
   private testSubmitService: TestSubmissionService;
 
-  constructor(route: ActivatedRoute, courseTestService: CourseTestService, testSubmitService: TestSubmissionService, router: Router) {
+  constructor(route: ActivatedRoute, courseTestService: CourseTestService, testSubmissionService: TestSubmissionService, router: Router) {
     const testId = ActivatedRouteUtils.getIdParam(route);
-    this.testSubmitService = testSubmitService;
+    this.testSubmitService = testSubmissionService;
     this.router = router;
 
-    testSubmitService.loadSubmission(testId).subscribe(submission => {
+    testSubmissionService.loadSubmission(testId).subscribe(submission => {
       this.testSubmission = submission;
       if (submission.isSubmitted) {
         this.navigateToSubmissionDetail();
       }
+    });
+
+    courseTestService.getCourseId(testId).subscribe(result => {
+      this.courseId = result.value;
     });
   }
 

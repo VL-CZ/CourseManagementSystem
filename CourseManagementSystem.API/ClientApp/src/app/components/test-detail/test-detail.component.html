@@ -1,19 +1,29 @@
-<div class="jumbotron">
-  <h2>{{courseTest.topic}}</h2>
-  <div>Weight: {{courseTest.weight}}</div>
-  <div>{{courseTestUtils.isGradedToString(courseTest.isGraded)}}</div>
-  <div>Deadline: {{dateTimeFormatter.formatToLocal(courseTest.deadline)}}</div>
-</div>
-<div class="jumbotron" *ngFor="let question of courseTest.questions">
-  <h3>Question {{question.number}}</h3>
-  <app-test-question-text [questionText]="question.questionText"
-                          [questionType]="question.type"></app-test-question-text>
-  <div>Correct answer: {{question.correctAnswer}}</div>
-  <div>Points: {{question.points}}</div>
-</div>
+<div class="row">
+  <div class="col-md-2 order-md-2">
+    <app-course-menu [courseId]="courseId"></app-course-menu>
+  </div>
+  <div class="col-md-10 order-md-1">
+    <div class="jumbotron">
+      <h2>{{courseTest.topic}}</h2>
+      <h6>Deadline: {{dateTimeFormatter.formatToLocal(courseTest.deadline)}}</h6>
+      <div>Weight: {{courseTest.weight}}</div>
+      <div>{{courseTestUtils.isGradedToString(courseTest.isGraded)}}</div>
+    </div>
+    <div class="jumbotron" *ngFor="let question of courseTest.questions">
+      <h3>Question {{question.number}}</h3>
+      <app-test-question-text [questionText]="question.questionText"
+                              [questionType]="question.type"></app-test-question-text>
+      <h5>Correct answer:</h5>
+      <p class="formattedText">
+        {{question.correctAnswer}}
+      </p>
+      <div>Points: {{question.points}}</div>
+    </div>
 
-<div class="my-3">
-  <button type="button" class="btn btn-warning" routerLink="/tests/edit/{{testId}}">Edit</button>
-</div>
+    <div class="my-3" *ngIf="canBeEdited()">
+      <button type="button" class="btn btn-warning" routerLink="/tests/edit/{{testId}}">Edit</button>
+    </div>
 
-<app-test-submission-list [testId]="testId"></app-test-submission-list>
+    <app-test-submission-list [testId]="testId"></app-test-submission-list>
+  </div>
+</div>

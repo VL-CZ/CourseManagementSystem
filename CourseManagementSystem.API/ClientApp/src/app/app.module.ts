@@ -27,15 +27,17 @@ import {StudentTestSubmissionsComponent} from './components/student-test-submiss
 import {ConfirmDialogComponent} from './components/confirm-dialog/confirm-dialog.component';
 import {CourseForumComponent} from './components/course-forum/course-forum.component';
 import {TestEditComponent} from './components/test-edit/test-edit.component';
-import { CourseEnrollmentComponent } from './components/course-enrollment/course-enrollment.component';
-import { StudentAverageScoreComponent } from './components/student-average-score/student-average-score.component';
-import { ErrorDialogComponent } from './components/error-dialog/error-dialog.component';
-import { StudentQuizSubmissionsComponent } from './components/student-quiz-submissions/student-quiz-submissions.component';
-import { AdminListComponent } from './components/admin-list/admin-list.component';
-import { EnrollmentRequestListComponent } from './components/enrollment-request-list/enrollment-request-list.component';
-import { TestQuestionEditComponent } from './components/test-question-edit/test-question-edit.component';
-import { TestQuestionTextComponent } from './components/test-question-text/test-question-text.component';
-import { TestQuestionAnswerFormComponent } from './components/test-question-answer-form/test-question-answer-form.component';
+import {CourseEnrollmentComponent} from './components/course-enrollment/course-enrollment.component';
+import {StudentAverageScoreComponent} from './components/student-average-score/student-average-score.component';
+import {ErrorDialogComponent} from './components/error-dialog/error-dialog.component';
+import {StudentQuizSubmissionsComponent} from './components/student-quiz-submissions/student-quiz-submissions.component';
+import {AdminListComponent} from './components/admin-list/admin-list.component';
+import {EnrollmentRequestListComponent} from './components/enrollment-request-list/enrollment-request-list.component';
+import {TestQuestionEditComponent} from './components/test-question-edit/test-question-edit.component';
+import {TestQuestionTextComponent} from './components/test-question-text/test-question-text.component';
+import {TestQuestionAnswerFormComponent} from './components/test-question-answer-form/test-question-answer-form.component';
+import {CourseMenuComponent} from './components/course-menu/course-menu.component';
+import {AuthorizeGuard} from '../api-authorization/authorize.guard';
 
 @NgModule({
   declarations: [
@@ -67,7 +69,8 @@ import { TestQuestionAnswerFormComponent } from './components/test-question-answ
     EnrollmentRequestListComponent,
     TestQuestionEditComponent,
     TestQuestionTextComponent,
-    TestQuestionAnswerFormComponent
+    TestQuestionAnswerFormComponent,
+    CourseMenuComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -75,7 +78,7 @@ import { TestQuestionAnswerFormComponent } from './components/test-question-answ
     FormsModule,
     ApiAuthorizationModule,
     RouterModule.forRoot([
-      {path: '', component: HomeComponent, pathMatch: 'full'},
+      {path: '', component: HomeComponent, pathMatch: 'full', canActivate: [AuthorizeGuard]},
       {path: 'students/:id', component: StudentDetailComponent},
       {path: 'courses', component: CourseListComponent},
       {path: 'courses/:id', component: CourseDetailComponent},

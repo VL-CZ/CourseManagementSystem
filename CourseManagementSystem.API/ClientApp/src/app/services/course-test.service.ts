@@ -4,6 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {AddCourseTestVM, CourseTestDetailsVM} from '../viewmodels/courseTestVM';
 import {Observable} from 'rxjs';
 import {TestSubmissionWithUserInfoVM} from '../viewmodels/testSubmissionVM';
+import {WrapperVM} from '../viewmodels/wrapperVM';
 
 @Injectable({
   providedIn: 'root'
@@ -63,5 +64,13 @@ export class CourseTestService extends ApiService {
    */
   public publishTest(testId: string): Observable<{}> {
     return this.httpPost(`${testId}/publish`, {});
+  }
+
+  /**
+   * get id of the course that this test belongs to
+   * @param testId id of the given test
+   */
+  public getCourseId(testId: string): Observable<WrapperVM<string>> {
+    return this.httpGet<WrapperVM<string>>(`${testId}/courseId`);
   }
 }

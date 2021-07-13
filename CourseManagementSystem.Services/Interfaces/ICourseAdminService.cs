@@ -16,5 +16,13 @@ namespace CourseManagementSystem.Services.Interfaces
         /// <param name="courseAdminId">identifier of the course admin object</param>
         /// <returns></returns>
         string GetPersonId(string courseAdminId);
+
+        /// <summary>
+        /// get <see cref="CourseAdmin"/> instance that belongs to the selected course and person
+        /// </summary>
+        /// <param name="userId">identifier of the user</param>
+        /// <param name="courseId">identifier of the course</param>
+        /// <returns></returns>
+        CourseAdmin GetByUserAndCourse(string userId, string courseId);
     }
 }

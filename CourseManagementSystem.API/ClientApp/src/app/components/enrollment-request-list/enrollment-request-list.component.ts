@@ -17,7 +17,11 @@ export class EnrollmentRequestListComponent implements OnInit {
    */
   public enrollmentRequests: EnrollmentRequestVM[] = [];
 
-  private courseId: string;
+  /**
+   * id of the course that these reqeusts belong to
+   */
+  public courseId: string;
+
   private enrollmentRequestService: EnrollmentRequestService;
   private courseService: CourseService;
 
