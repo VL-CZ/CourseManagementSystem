@@ -30,12 +30,21 @@ export class TestDetailComponent implements OnInit {
    */
   public dateTimeFormatter: DateTimeFormatter = new DateTimeFormatter();
 
+  /**
+   * id of the course that this test belongs to
+   */
+  public courseId: string;
+
   public courseTestUtils: CourseTestUtils = new CourseTestUtils();
 
   constructor(route: ActivatedRoute, courseTestService: CourseTestService) {
     this.testId = ActivatedRouteUtils.getIdParam(route);
     courseTestService.getById(this.testId).subscribe(result => {
       this.courseTest = result;
+    });
+
+    courseTestService.getCourseId(this.testId).subscribe(result => {
+      this.courseId = result.value;
     });
   }
 

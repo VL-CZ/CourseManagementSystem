@@ -39,6 +39,11 @@ export class TestEditComponent implements OnInit {
    */
   public dateTimeFormatter = new DateTimeFormatter();
 
+  /**
+   * id of the course that this test belongs to
+   */
+  public courseId: string;
+
   public courseTestUtils: CourseTestUtils = new CourseTestUtils();
 
   private router: Router;
@@ -51,6 +56,10 @@ export class TestEditComponent implements OnInit {
 
     courseTestService.getById(this.testId).subscribe(result => {
       this.testToUpdate = result;
+    });
+
+    courseTestService.getCourseId(this.testId).subscribe(result => {
+      this.courseId = result.value;
     });
   }
 

@@ -1,50 +1,55 @@
-<div class="jumbotron">
-  <h2>{{submission.testTopic}}</h2>
-  <b>{{courseTestUtils.isGradedToString(submission.isTestGraded)}}</b>
-  <div>
-    Submitted at: {{dateTimeFormatter.formatToLocal(submission.submittedDateTime)}}
-  </div>
-  <div *ngIf="submission.isReviewed">
-    <b>Reviewed</b>
-  </div>
-</div>
-
-<div *ngFor="let answer of submission.answers" class="jumbotron"
-     [ngClass]="isCorrect(answer)?'correctAnswer':'wrongAnswer'">
-  <h3>Question {{answer.questionNumber}}</h3>
-  <app-test-question-text [questionText]="answer.questionText"
-                          [questionType]="answer.questionType"></app-test-question-text>
-  <div>Your answer: {{answer.answerText}}</div>
-  <div>Correct answer: {{answer.correctAnswer}}</div>
-  <div><b>Points: {{answer.receivedPoints}}/{{answer.maximalPoints}}</b></div>
-  <div>Comment: {{answer.comment}}</div>
-
-  <br>
-
-  <div *ngIf="isAdmin">
-    <h4>Update</h4>
-    <div class="form-group">
-      <label for="updatedPoints{{answer.questionNumber}}">Points:</label>
-      <input type="number" class="form-control" id="updatedPoints{{answer.questionNumber}}"
-             [(ngModel)]="getCorrespondingEvaluatedAnswer(answer).updatedPoints"
-             name="updatedPoints{{answer.questionNumber}}" min="0">
+<div class="row">
+  <app-course-menu [courseId]="courseId"></app-course-menu>
+  <div class="col-md-10 order-md-1">
+    <div class="jumbotron">
+      <h2>{{submission.testTopic}}</h2>
+      <b>{{courseTestUtils.isGradedToString(submission.isTestGraded)}}</b>
+      <div>
+        Submitted at: {{dateTimeFormatter.formatToLocal(submission.submittedDateTime)}}
+      </div>
+      <div *ngIf="submission.isReviewed">
+        <b>Reviewed</b>
+      </div>
     </div>
-    <div class="form-group">
-      <label for="comment{{answer.questionNumber}}">Comment:</label>
-      <textarea class="form-control" id="comment{{answer.questionNumber}}"
-                [(ngModel)]="getCorrespondingEvaluatedAnswer(answer).updatedComment"
-                name="comment{{answer.questionNumber}}"></textarea>
+
+    <div *ngFor="let answer of submission.answers" class="jumbotron"
+         [ngClass]="isCorrect(answer)?'correctAnswer':'wrongAnswer'">
+      <h3>Question {{answer.questionNumber}}</h3>
+      <app-test-question-text [questionText]="answer.questionText"
+                              [questionType]="answer.questionType"></app-test-question-text>
+      <div>Your answer: {{answer.answerText}}</div>
+      <div>Correct answer: {{answer.correctAnswer}}</div>
+      <div><b>Points: {{answer.receivedPoints}}/{{answer.maximalPoints}}</b></div>
+      <div>Comment: {{answer.comment}}</div>
+
+      <br>
+
+      <div *ngIf="isAdmin">
+        <h4>Update</h4>
+        <div class="form-group">
+          <label for="updatedPoints{{answer.questionNumber}}">Points:</label>
+          <input type="number" class="form-control" id="updatedPoints{{answer.questionNumber}}"
+                 [(ngModel)]="getCorrespondingEvaluatedAnswer(answer).updatedPoints"
+                 name="updatedPoints{{answer.questionNumber}}" min="0">
+        </div>
+        <div class="form-group">
+          <label for="comment{{answer.questionNumber}}">Comment:</label>
+          <textarea class="form-control" id="comment{{answer.questionNumber}}"
+                    [(ngModel)]="getCorrespondingEvaluatedAnswer(answer).updatedComment"
+                    name="comment{{answer.questionNumber}}"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="isAdmin">
+      <button type="button" class="btn btn-success" (click)="saveUpdates()">Apply updates</button>
+      <button type="button" class="btn btn-danger" (click)="discardUpdates()">Discard updates</button>
+    </div>
+    <br>
+
+    <div class="jumbotron">
+      <h2>Total score: {{getPercentualScore(submission)}}</h2>
+      <h3>Points: {{getReceivedPoints(submission)}}/{{getMaximalPoints(submission)}}</h3>
     </div>
   </div>
-</div>
-
-<div *ngIf="isAdmin">
-  <button type="button" class="btn btn-success" (click)="saveUpdates()">Apply updates</button>
-  <button type="button" class="btn btn-danger" (click)="discardUpdates()">Discard updates</button>
-</div>
-<br>
-
-<div class="jumbotron">
-  <h2>Total score: {{getPercentualScore(submission)}}</h2>
-  <h3>Points: {{getReceivedPoints(submission)}}/{{getMaximalPoints(submission)}}</h3>
 </div>

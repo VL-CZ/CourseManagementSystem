@@ -134,5 +134,18 @@ namespace CourseManagementSystem.API.Controllers
             double averageScore = AverageScoreCalculator.GetScore(scoresWithWeights);
             return new WrapperVM<double>(averageScore);
         }
+
+        /// <summary>
+        /// get id of the course that this course member entity belongs to
+        /// </summary>
+        /// <param name="id">identifier of the course member</param>
+        /// <returns></returns>
+        [HttpGet("{id}/courseId")]
+        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "id")]
+        public WrapperVM<string> GetCourseId(string id)
+        {
+            string courseId = courseMemberService.GetCourseIdOf(id);
+            return new WrapperVM<string>(courseId);
+        }
     }
 }

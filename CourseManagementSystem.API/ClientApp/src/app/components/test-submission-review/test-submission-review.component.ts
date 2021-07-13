@@ -41,6 +41,11 @@ export class TestSubmissionReviewComponent implements OnInit {
    */
   public isAdmin: boolean;
 
+  /**
+   * id of the course that this test submission belongs to
+   */
+  public courseId: string;
+
   public courseTestUtils: CourseTestUtils = new CourseTestUtils();
 
   private testSubmissionService: TestSubmissionService;
@@ -62,6 +67,10 @@ export class TestSubmissionReviewComponent implements OnInit {
       roleAuthService.isCourseTestAdmin(this.submission.testId).subscribe(result => {
         this.isAdmin = result.value;
       });
+    });
+
+    testSubmissionService.getCourseId(submissionId).subscribe(result => {
+      this.courseId = result.value;
     });
   }
 
