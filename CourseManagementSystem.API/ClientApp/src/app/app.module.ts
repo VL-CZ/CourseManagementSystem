@@ -37,6 +37,7 @@ import {TestQuestionEditComponent} from './components/test-question-edit/test-qu
 import {TestQuestionTextComponent} from './components/test-question-text/test-question-text.component';
 import {TestQuestionAnswerFormComponent} from './components/test-question-answer-form/test-question-answer-form.component';
 import {CourseMenuComponent} from './components/course-menu/course-menu.component';
+import {AuthorizeGuard} from '../api-authorization/authorize.guard';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,7 @@ import {CourseMenuComponent} from './components/course-menu/course-menu.componen
     FormsModule,
     ApiAuthorizationModule,
     RouterModule.forRoot([
-      {path: '', component: HomeComponent, pathMatch: 'full'},
+      {path: '', component: HomeComponent, pathMatch: 'full', canActivate: [AuthorizeGuard]},
       {path: 'students/:id', component: StudentDetailComponent},
       {path: 'courses', component: CourseListComponent},
       {path: 'courses/:id', component: CourseDetailComponent},
