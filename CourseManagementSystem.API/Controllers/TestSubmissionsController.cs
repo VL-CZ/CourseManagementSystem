@@ -92,7 +92,7 @@ namespace CourseManagementSystem.API.Controllers
             var answersVM = foundTestSubmission.Answers.Select(answer => new SubmissionAnswerVM(answer.Question.Number, answer.Question.QuestionText, answer.Text, answer.Question.Type));
 
             testSubmissionService.CommitChanges();
-            return new SubmitTestVM(foundTestSubmission.Id.ToString(), test.Topic, foundTestSubmission.IsSubmitted, answersVM, test.IsGraded);
+            return new SubmitTestVM(foundTestSubmission.Id.ToString(), test.Topic, foundTestSubmission.IsSubmitted, answersVM, test.IsGraded, test.Deadline);
         }
 
         /// <summary>

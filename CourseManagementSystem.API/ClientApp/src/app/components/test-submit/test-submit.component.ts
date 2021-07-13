@@ -5,6 +5,7 @@ import {SubmitTestVM} from '../../viewmodels/submitTestVM';
 import {TestSubmissionService} from '../../services/test-submission.service';
 import {ActivatedRouteUtils} from '../../utils/activatedRouteUtils';
 import {CourseTestUtils} from '../../utils/courseTestUtils';
+import {DateTimeFormatter} from '../../utils/dateTimeFormatter';
 
 /**
  * component for submitting a test
@@ -25,6 +26,11 @@ export class TestSubmitComponent implements OnInit {
    * id of the course that this test submission belongs to
    */
   public courseId: string;
+
+  /**
+   * formatter of date-time values
+   */
+  public dateTimeFormatter: DateTimeFormatter = new DateTimeFormatter();
 
   public courseTestUtils: CourseTestUtils = new CourseTestUtils();
 

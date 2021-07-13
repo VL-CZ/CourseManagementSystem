@@ -3,22 +3,19 @@
     <app-course-menu [courseId]="courseId"></app-course-menu>
   </div>
   <div class="col-md-10 order-md-1">
-    <div class="row">
-      <app-course-menu [courseId]="courseId"></app-course-menu>
-      <div class="col-md-10 order-md-1">
-        <div class="jumbotron">
-          <h2>{{this.testSubmission.testTopic}}</h2>
-          <b>{{courseTestUtils.isGradedToString(this.testSubmission.isTestGraded)}}</b>
-        </div>
-        <div class="jumbotron" *ngFor="let answer of this.testSubmission.answers">
-          <h3>Question {{answer.questionNumber}}</h3>
-          <app-test-question-answer-form [answer]="answer"></app-test-question-answer-form>
-        </div>
-        <div>
-          <button type="button" class="btn btn-info" (click)="saveAnswers()">Save answers</button>
-          <button type="button" class="btn btn-success" (click)="submit()">Submit</button>
-        </div>
-      </div>
+    <div class="jumbotron">
+      <h2>{{this.testSubmission.testTopic}}</h2>
+      <div><b>{{courseTestUtils.isGradedToString(this.testSubmission.isTestGraded)}}</b></div>
+      <div><b>Deadline: {{dateTimeFormatter.formatToLocal(testSubmission.testDeadline)}}</b></div>
+    </div>
+    <div class="jumbotron" *ngFor="let answer of this.testSubmission.answers">
+      <h3>Question {{answer.questionNumber}}</h3>
+      <app-test-question-answer-form [answer]="answer"></app-test-question-answer-form>
+    </div>
+    <div class="jumbotron">
+      <h4>Submit</h4>
+      <button type="button" class="btn btn-info mr-3" (click)="saveAnswers()">Save answers</button>
+      <button type="button" class="btn btn-success" (click)="submit()">Submit</button>
     </div>
   </div>
 </div>

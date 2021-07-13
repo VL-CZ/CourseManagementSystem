@@ -44,7 +44,7 @@ export class TestListComponent implements OnInit, OnChanges {
   public testsAfterDeadline: CourseTestDetailsVM[] = [];
 
   /**
-   * formatter of date-time
+   * formatter of date-time values
    */
   public dateTimeFormatter: DateTimeFormatter = new DateTimeFormatter();
 
