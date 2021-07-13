@@ -15,10 +15,11 @@
 <app-course-forum [courseId]="courseId" [isCourseAdmin]="isCourseAdmin"></app-course-forum>
 
 <div class="jumbotron">
+  <h3>Leave this course</h3>
   <div *ngIf="isCourseAdmin">
-    <button class="btn btn-danger" (click)="removeCurrentAdmin()">Leave this course</button>
+    <button class="btn btn-danger" (click)="removeCurrentAdmin()">Leave</button>
   </div>
   <div *ngIf="!isCourseAdmin">
-    <button class="btn btn-danger" (click)="removeCurrentMember()">Leave this course</button>
+    <button class="btn btn-danger" (click)="removeCurrentMember()">Leave</button>
   </div>
 </div>

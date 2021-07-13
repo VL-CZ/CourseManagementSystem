@@ -218,12 +218,13 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="courseId">idnetifier of the given course</param>
         [HttpDelete("{courseId}/removeCurrentMember")]
-        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "courseId")]
+        [AuthorizeCourseAdminOrMemberOf(EntityType.Course, "courseId")]
         public void RemoveCurrentMember(string courseId)
         {
             string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
             var currentMember = courseMemberService.GetMemberByUserAndCourse(currentUserId, courseId);
             courseMemberService.ArchiveMemberById(currentMember.Id.ToString());
+            courseMemberService.CommitChanges();
         }
 
         /// <summary>
@@ -233,7 +234,7 @@ namespace CourseManagementSystem.API.Controllers
         /// </summary>
         /// <param name="courseId">idnetifier of the given course</param>
         [HttpDelete("{courseId}/removeCurrentAdmin")]
-        [AuthorizeCourseAdminOf(EntityType.CourseMember, "courseId")]
+        [AuthorizeCourseAdminOf(EntityType.Course, "courseId")]
         public void RemoveCurrentAdmin(string courseId)
         {
             string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
@@ -243,6 +244,7 @@ namespace CourseManagementSystem.API.Controllers
             if (adminCount >= 2)
             {
                 courseAdminService.RemoveById(currentAdmin.Id.ToString());
+                courseAdminService.CommitChanges();
             }
             else
             {
