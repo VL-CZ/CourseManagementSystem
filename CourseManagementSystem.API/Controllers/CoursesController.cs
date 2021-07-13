@@ -22,13 +22,18 @@ namespace CourseManagementSystem.API.Controllers
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly ICourseService courseService;
         private readonly IPeopleService peopleService;
+        private readonly ICourseMemberService courseMemberService;
+        private readonly ICourseAdminService courseAdminService;
         private CourseTestFilter courseTestFilter;
 
-        public CoursesController(IHttpContextAccessor httpContextAccessor, ICourseService courseService, IPeopleService peopleService)
+        public CoursesController(IHttpContextAccessor httpContextAccessor, ICourseService courseService, IPeopleService peopleService,
+            ICourseMemberService courseMemberService, ICourseAdminService courseAdminService)
         {
             this.httpContextAccessor = httpContextAccessor;
             this.courseService = courseService;
             this.peopleService = peopleService;
+            this.courseAdminService = courseAdminService;
+            this.courseMemberService = courseMemberService;
             courseTestFilter = new CourseTestFilter();
         }
 
@@ -206,6 +211,43 @@ namespace CourseManagementSystem.API.Controllers
         {
             var requests = courseService.GetEnrollmentRequestsWithPeople(id);
             return requests.Select(req => new EnrollmentRequestVM(req.Id.ToString(), req.Person.UserName, req.Person.Email));
+        }
+
+        /// <summary>
+        /// remove the current course member from the selected course
+        /// </summary>
+        /// <param name="courseId">idnetifier of the given course</param>
+        [HttpDelete("{courseId}/removeCurrentMember")]
+        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "courseId")]
+        public void RemoveCurrentMember(string courseId)
+        {
+            string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
+            var currentMember = courseMemberService.GetMemberByUserAndCourse(currentUserId, courseId);
+            courseMemberService.ArchiveMemberById(currentMember.Id.ToString());
+        }
+
+        /// <summary>
+        /// remove the current course admin from the selected course
+        /// <br/>
+        /// if there is just 1 admin, throw <see cref="ArgumentException"/> 
+        /// </summary>
+        /// <param name="courseId">idnetifier of the given course</param>
+        [HttpDelete("{courseId}/removeCurrentAdmin")]
+        [AuthorizeCourseAdminOf(EntityType.CourseMember, "courseId")]
+        public void RemoveCurrentAdmin(string courseId)
+        {
+            string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
+            var currentAdmin = courseAdminService.GetByUserAndCourse(currentUserId, courseId);
+
+            var adminCount = courseService.GetAdminsWithUsers(courseId).Count;
+            if (adminCount >= 2)
+            {
+                courseAdminService.RemoveById(currentAdmin.Id.ToString());
+            }
+            else
+            {
+                throw new ArgumentException("Cannot remove the last admin of the course.");
+            }
         }
 
         /// <summary>

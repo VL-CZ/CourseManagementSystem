@@ -124,4 +124,20 @@ export class CourseService extends ApiService {
   public getEnrollmentRequests(courseId: string): Observable<EnrollmentRequestVM[]> {
     return this.httpGet<EnrollmentRequestVM[]>(`${courseId}/enrollmentRequests`);
   }
+
+  /**
+   * remove the current member from the selected course
+   * @param courseId identifier of the course
+   */
+  public removeCurrentMember(courseId: string): Observable<{}> {
+    return this.httpDelete(`${courseId}/removeCurrentMember`);
+  }
+
+  /**
+   * remove the current admin from the selected course
+   * @param courseId identifier of the course
+   */
+  public removeCurrentAdmin(courseId: string): Observable<{}> {
+    return this.httpDelete(`${courseId}/removeCurrentAdmin`);
+  }
 }
