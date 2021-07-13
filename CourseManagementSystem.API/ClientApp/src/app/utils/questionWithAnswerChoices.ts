@@ -5,12 +5,12 @@ export class QuestionWithAnswerChoices {
   /**
    * delimiter that separates choices of answers
    */
-  public static readonly answerDelimiter = '|||';
+  public static readonly answerDelimiter = '@@@@';
 
   /**
    * delimiter that separates letter of the answer choice from the choice text
    */
-  public static readonly answerLetterDelimiter = '||';
+  public static readonly answerLetterDelimiter = '@@@';
 
   /**
    * text of the question
@@ -61,7 +61,8 @@ export class QuestionWithAnswerChoices {
    * each choice of answers contains answer choice letter and its text separated by {@link answerLetterDelimiter}
    */
   public serialize(): string {
-    const serializedAnswers = this.answerChoices.map(choice => `${choice.answerLetter}||${choice.answerText}`)
+    const serializedAnswers = this.answerChoices.map(choice =>
+      choice.answerLetter + QuestionWithAnswerChoices.answerLetterDelimiter + choice.answerText)
       .join(QuestionWithAnswerChoices.answerDelimiter);
     return [this.questionText, serializedAnswers].join(QuestionWithAnswerChoices.answerDelimiter);
   }
