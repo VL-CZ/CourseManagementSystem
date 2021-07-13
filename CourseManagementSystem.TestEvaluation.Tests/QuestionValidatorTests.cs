@@ -116,5 +116,35 @@ namespace CourseManagementSystem.TestEvaluation.Tests
 
             Assert.False(valid);
         }
+
+        /// <summary>
+        /// test HasValidCorrectAnswer on a question with two choices that have the same letters
+        /// </summary>
+        [Fact]
+        public void HasValidCorrectAnswer_MultipleChoice_TwoChoicesWithSameLetter()
+        {
+            var question = new TestQuestion(2,
+                    $"Which of the following cities are located in Czechia? {acd}A{ltd}Brno{acd}B{ltd}Prague{acd}B{ltd}Warsaw",
+                    $"B{ald}A{ald}", 4, QuestionType.MultipleChoice);
+
+            bool valid = questionValidator.HasValidCorrectAnswer(question);
+
+            Assert.False(valid);
+        }
+
+        /// <summary>
+        /// test HasValidCorrectAnswer on a question with a choice that has non-letter identifier
+        /// </summary>
+        [Fact]
+        public void HasValidCorrectAnswer_MultipleChoice_NonLetterIdentifier()
+        {
+            var question = new TestQuestion(2,
+                    $"Which of the following cities are located in Czechia? {acd}A{ltd}Brno{acd}B{ltd}Prague{acd}Or is it?{ltd}Warsaw",
+                    $"B{ald}A{ald}", 4, QuestionType.MultipleChoice);
+
+            bool valid = questionValidator.HasValidCorrectAnswer(question);
+
+            Assert.False(valid);
+        }
     }
 }

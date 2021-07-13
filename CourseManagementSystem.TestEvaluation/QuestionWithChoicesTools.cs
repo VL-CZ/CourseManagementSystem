@@ -12,12 +12,12 @@ namespace CourseManagementSystem.TestEvaluation
         /// <summary>
         /// delimiter of answer choices (each choice contains choice letter and text)
         /// </summary>
-        public const string answerChoicesDelimiter = "|||";
+        public const string answerChoicesDelimiter = "@@@@";
 
         /// <summary>
         /// delimiter of the answer choice letter and answer choice text
         /// </summary>
-        public const string answerChoiceLetterAndTextDelimiter = "||";
+        public const string answerChoiceLetterAndTextDelimiter = "@@@";
 
         /// <summary>
         /// delimiter between the letters of selected answer choices

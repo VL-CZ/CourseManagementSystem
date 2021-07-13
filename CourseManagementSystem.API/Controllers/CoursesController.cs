@@ -168,7 +168,7 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOf(EntityType.Course, "id")]
         public IEnumerable<CourseTestDetailsVM> GetNonPublishedTests(string id)
         {
-            return GetAndFilterTests(id, courseTestFilter.FilterNonPublished);
+            return GetAndFilterTests(id, courseTestFilter.FilterNonPublishedBeforeDeadline);
         }
 
         /// <summary>

@@ -23,19 +23,32 @@ namespace CourseManagementSystem.TestEvaluation
             else
             {
                 var correctLetters = QuestionWithChoicesTools.GetCorrectAnswersLetters(question);
-                var possibleLetters = QuestionWithChoicesTools.GetAnswerChoicesLetters(question);
+                var allChoicesLetters = QuestionWithChoicesTools.GetAnswerChoicesLetters(question);
 
-                bool allAnswersValid = correctLetters.All(letter => possibleLetters.Contains(letter));
+                bool allAnswersValid = correctLetters.All(letter => allChoicesLetters.Contains(letter));
+                bool choicesValid = AreChoicesValid(allChoicesLetters);
 
                 if (question.Type == QuestionType.SingleChoice)
                 {
-                    return allAnswersValid && correctLetters.Length == 1;
+                    return allAnswersValid && choicesValid && correctLetters.Length == 1;
                 }
                 else
                 {
-                    return allAnswersValid;
+                    return allAnswersValid && choicesValid;
                 }
             }
+        }
+
+        /// <summary>
+        /// check if the all choices are valid (e.g. there are no 2 choices with the same letter, or choice with non-letter identifier,...)
+        /// </summary>
+        /// <param name="choicesIdentifiers">identifiers of the answer choices (typically uppercase letters)</param>
+        /// <returns></returns>
+        private bool AreChoicesValid(string[] choicesIdentifiers)
+        {
+            var distinctChoicesLetters = choicesIdentifiers.Distinct();
+            var allLetters = choicesIdentifiers.All(choice => choice.Length == 1 && char.IsUpper(choice, 0));
+            return allLetters && choicesIdentifiers.SequenceEqual(distinctChoicesLetters);
         }
     }
 }

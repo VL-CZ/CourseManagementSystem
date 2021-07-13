@@ -25,14 +25,15 @@ namespace CourseManagementSystem.API.Tools
         }
 
         /// <summary>
-        /// filter tests that haven't been published yet from <paramref name="tests"/>
+        /// filter tests that haven't been published yet from <paramref name="tests"/> and their deadline is >= current time
         /// </summary>
         /// <param name="tests">tests to filter</param>
         /// <returns></returns>
-        public IEnumerable<CourseTest> FilterNonPublished(IEnumerable<CourseTest> tests)
+        public IEnumerable<CourseTest> FilterNonPublishedBeforeDeadline(IEnumerable<CourseTest> tests)
         {
             return tests
-                .Where(test => !IsPublished(test));
+                .Where(test => !IsPublished(test))
+                .Where(test => test.Deadline >= DateTime.UtcNow); ;
         }
 
         /// <summary>
