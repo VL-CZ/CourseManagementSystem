@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {CourseService} from '../../services/course.service';
 import {CourseInfoVM} from '../../viewmodels/courseVM';
 
@@ -7,7 +7,7 @@ import {CourseInfoVM} from '../../viewmodels/courseVM';
   templateUrl: './course-menu.component.html',
   styleUrls: ['./course-menu.component.css']
 })
-export class CourseMenuComponent implements OnInit {
+export class CourseMenuComponent implements OnInit, OnChanges {
 
   @Input()
   private courseId: string;
@@ -21,8 +21,24 @@ export class CourseMenuComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.courseService.getById(this.courseId).subscribe(res => {
-      this.courseInfo = res;
-    });
+    this.loadCourse();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.loadCourse();
+  }
+
+  /**
+   * load course data from the API
+   * @private
+   */
+  private loadCourse(): void {
+    if (this.courseId == null) {
+      return;
+    } else {
+      this.courseService.getById(this.courseId).subscribe(res => {
+        this.courseInfo = res;
+      });
+    }
   }
 }
