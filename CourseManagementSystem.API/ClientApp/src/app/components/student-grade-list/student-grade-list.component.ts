@@ -5,6 +5,8 @@ import {CourseMemberService} from '../../services/course-member.service';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
 import {PercentStringFormatter} from '../../utils/percentStringFormatter';
+import {RouterUtils} from '../../utils/routerUtils';
+import {ActivatedRoute, Router} from '@angular/router';
 
 /**
  * component with list of student's grades
@@ -43,11 +45,16 @@ export class StudentGradeListComponent implements OnInit {
   private courseMemberService: CourseMemberService;
   private bsModalRef: BsModalRef;
   private modalService: BsModalService;
+  private router: Router;
+  private activatedRoute: ActivatedRoute;
 
-  constructor(gradeService: GradeService, courseMemberService: CourseMemberService, modalService: BsModalService) {
+  constructor(gradeService: GradeService, courseMemberService: CourseMemberService, modalService: BsModalService,
+              router: Router, activatedRoute: ActivatedRoute) {
     this.gradeService = gradeService;
     this.courseMemberService = courseMemberService;
     this.modalService = modalService;
+    this.activatedRoute = activatedRoute;
+    this.router = router;
   }
 
   ngOnInit() {
@@ -67,7 +74,7 @@ export class StudentGradeListComponent implements OnInit {
       text: 'Are you sure you want to delete this grade?',
       onConfirm: () => {
         this.gradeService.delete(gradeId).subscribe(() => {
-          this.reloadGrades();
+          RouterUtils.reloadPage(this.router, this.activatedRoute);
         });
       }
     };
