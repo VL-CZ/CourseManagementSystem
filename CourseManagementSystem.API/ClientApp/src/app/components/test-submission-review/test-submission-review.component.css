@@ -5,3 +5,7 @@
 .wrongAnswer{
   background-color: #FFCCCB;
 }
+
+.partiallyCorrectAnswer{
+  background-color: #FFE6CC;
+}

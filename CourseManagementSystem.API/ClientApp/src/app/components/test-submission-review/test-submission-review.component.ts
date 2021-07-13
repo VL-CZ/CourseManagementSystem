@@ -8,7 +8,7 @@ import {PercentCalculator} from '../../utils/percentCalculator';
 import {RoleAuthService} from '../../services/role-auth.service';
 import {EvaluatedAnswerVM, EvaluatedTestSubmissionVM} from '../../viewmodels/evaluatedTestSubmissionVM';
 import {RouterUtils} from '../../utils/routerUtils';
-import {SubmissionAnswerWithCorrectAnswerVM} from '../../viewmodels/testSubmissionAnswerVM';
+import {SubmissionAnswerVM, SubmissionAnswerWithCorrectAnswerVM} from '../../viewmodels/testSubmissionAnswerVM';
 import {DateTimeFormatter} from '../../utils/dateTimeFormatter';
 import {CourseTestUtils} from '../../utils/courseTestUtils';
 
@@ -46,6 +46,11 @@ export class TestSubmissionReviewComponent implements OnInit {
    */
   public courseId: string;
 
+  /**
+   * are we editing the submission?
+   */
+  public editing: boolean;
+
   public courseTestUtils: CourseTestUtils = new CourseTestUtils();
 
   private testSubmissionService: TestSubmissionService;
@@ -57,6 +62,7 @@ export class TestSubmissionReviewComponent implements OnInit {
     this.testSubmissionService = testSubmissionService;
     this.router = router;
     this.activatedRoute = activatedRoute;
+    this.editing = false;
 
     const submissionId = ActivatedRouteUtils.getIdParam(activatedRoute);
 
@@ -78,11 +84,17 @@ export class TestSubmissionReviewComponent implements OnInit {
   }
 
   /**
-   * is the given answer correct?
+   * get name of the CSS class for this answer based on the number of points
    * @param answer answer to check
    */
-  public isCorrect(answer: SubmissionAnswerWithCorrectAnswerVM): boolean {
-    return answer.receivedPoints >= answer.maximalPoints;
+  public getAnswerClassName(answer: SubmissionAnswerWithCorrectAnswerVM): string {
+    if (answer.receivedPoints >= answer.maximalPoints) {
+      return 'correctAnswer';
+    } else if (answer.receivedPoints === 0) {
+      return 'wrongAnswer';
+    } else {
+      return 'partiallyCorrectAnswer';
+    }
   }
 
   /**
@@ -122,6 +134,7 @@ export class TestSubmissionReviewComponent implements OnInit {
    * discard updates of the test submission
    */
   public discardUpdates(): void {
+    this.editing = false;
     this.evaluatedTestSubmission = EvaluatedTestSubmissionVM.createFrom(this.submission);
   }
 
@@ -129,6 +142,37 @@ export class TestSubmissionReviewComponent implements OnInit {
    * save updates of the test submission
    */
   public saveUpdates(): void {
+    this.editing = false;
+    this.updateSubmission();
+  }
+
+  /**
+   * start editing the submission
+   */
+  public startReview(): void {
+    this.editing = true;
+  }
+
+  /**
+   * mark the test submission as reviewed
+   */
+  public markAsReviewed(): void {
+    this.updateSubmission();
+  }
+
+  /**
+   * check if the answer has comment
+   * @param answer selected answer to check
+   */
+  public hasComment(answer: SubmissionAnswerWithCorrectAnswerVM): boolean {
+    return answer.comment && answer.comment.length >= 1;
+  }
+
+  /**
+   * update the assignment submission
+   * @private
+   */
+  private updateSubmission(): void {
     this.testSubmissionService.updateSubmission(this.submission.testSubmissionId.toString(), this.evaluatedTestSubmission)
       .subscribe(() => {
         RouterUtils.reloadPage(this.router, this.activatedRoute);

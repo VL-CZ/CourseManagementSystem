@@ -15,18 +15,29 @@
     </div>
 
     <div *ngFor="let answer of submission.answers" class="jumbotron"
-         [ngClass]="isCorrect(answer)?'correctAnswer':'wrongAnswer'">
+         [ngClass]="getAnswerClassName(answer)">
       <h3>Question {{answer.questionNumber}}</h3>
       <app-test-question-text [questionText]="answer.questionText"
                               [questionType]="answer.questionType"></app-test-question-text>
-      <div>Your answer: {{answer.answerText}}</div>
-      <div>Correct answer: {{answer.correctAnswer}}</div>
+      <h6>Your answer </h6>
+      <p class="formattedText">
+        {{answer.answerText}}
+      </p>
+      <h6>Correct answer</h6>
+      <p class="formattedText">
+        {{answer.correctAnswer}}
+      </p>
+      <div *ngIf="hasComment(answer)">
+        <h6>Comment</h6>
+        <p class="formattedText">
+          {{answer.comment}}
+        </p>
+      </div>
       <div><b>Points: {{answer.receivedPoints}}/{{answer.maximalPoints}}</b></div>
-      <div>Comment: {{answer.comment}}</div>
 
       <br>
 
-      <div *ngIf="isAdmin">
+      <div *ngIf="isAdmin && editing">
         <h4>Update</h4>
         <div class="form-group">
           <label for="updatedPoints{{answer.questionNumber}}">Points:</label>
@@ -43,9 +54,17 @@
       </div>
     </div>
 
-    <div *ngIf="isAdmin">
-      <button type="button" class="btn btn-success" (click)="saveUpdates()">Apply updates</button>
-      <button type="button" class="btn btn-danger" (click)="discardUpdates()">Discard updates</button>
+    <div class="jumbotron" *ngIf="isAdmin">
+      <div *ngIf="editing">
+        <h4>Apply/Discard updates</h4>
+        <button type="button" class="btn btn-success mr-3" (click)="saveUpdates()">Apply</button>
+        <button type="button" class="btn btn-danger" (click)="discardUpdates()">Discard</button>
+      </div>
+      <div *ngIf="!editing">
+        <h4>Review</h4>
+        <button type="button" class="btn btn-warning mr-3" (click)="startReview()">Update points</button>
+        <button type="button" class="btn btn-primary" (click)="markAsReviewed()">Mark as reviewed</button>
+      </div>
     </div>
     <br>
 
