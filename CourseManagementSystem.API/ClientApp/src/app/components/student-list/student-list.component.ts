@@ -14,8 +14,11 @@ import {CourseMemberService} from '../../services/course-member.service';
 })
 export class StudentListComponent implements OnInit {
 
+  /**
+   * id of the course
+   */
   @Input()
-  private courseId: string;
+  public courseId: string;
 
   /**
    * list of students
@@ -53,5 +56,4 @@ export class StudentListComponent implements OnInit {
       this.students = result;
     });
   }
-
 }

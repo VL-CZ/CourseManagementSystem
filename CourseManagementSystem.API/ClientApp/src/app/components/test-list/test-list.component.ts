@@ -73,7 +73,7 @@ export class TestListComponent implements OnInit, OnChanges {
    * @param test test to delete
    */
   public deleteTest(test: CourseTestDetailsVM): void {
-    this.courseTestService.delete(test.id.toString()).subscribe(() => {
+    this.courseTestService.delete(test.id).subscribe(() => {
       this.reloadTests();
     });
   }
@@ -83,7 +83,7 @@ export class TestListComponent implements OnInit, OnChanges {
    * @param test test to publish
    */
   public publishTest(test: CourseTestDetailsVM): void {
-    this.courseTestService.publishTest(test.id.toString()).subscribe(() => {
+    this.courseTestService.publishTest(test.id).subscribe(() => {
       this.reloadTests();
     });
   }

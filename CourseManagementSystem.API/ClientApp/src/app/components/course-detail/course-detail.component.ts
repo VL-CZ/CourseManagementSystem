@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {CourseService} from '../../services/course.service';
 import {RoleAuthService} from '../../services/role-auth.service';
 import {PeopleService} from '../../services/people.service';
 import {ActivatedRouteUtils} from '../../utils/activatedRouteUtils';
 import {CourseInfoVM} from '../../viewmodels/courseVM';
+import {CourseMemberService} from '../../services/course-member.service';
 
 /**
  * component representing details of the course
@@ -36,10 +37,15 @@ export class CourseDetailComponent implements OnInit {
   public courseInfo: CourseInfoVM = new CourseInfoVM();
 
   private readonly courseService: CourseService;
+  private readonly courseMemberService: CourseMemberService;
+  private router: Router;
 
-  constructor(route: ActivatedRoute, courseService: CourseService, roleAuthService: RoleAuthService, peopleService: PeopleService) {
+  constructor(route: ActivatedRoute, router: Router, courseService: CourseService, roleAuthService: RoleAuthService,
+              peopleService: PeopleService, courseMemberService: CourseMemberService) {
     this.courseId = ActivatedRouteUtils.getIdParam(route);
     this.courseService = courseService;
+    this.courseMemberService = courseMemberService;
+    this.router = router;
 
     courseService.getById(this.courseId).subscribe(course => {
       this.courseInfo = course;
@@ -59,4 +65,21 @@ export class CourseDetailComponent implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * remove the current admin from the course
+   */
+  public removeCurrentAdmin(): void {
+    this.courseService.removeCurrentAdmin(this.courseId).subscribe(() => {
+      this.router.navigate(['/']);
+    });
+  }
+
+  /**
+   * remove the current course member from the course
+   */
+  public removeCurrentMember(): void {
+    this.courseService.removeCurrentMember(this.courseId).subscribe(() => {
+      this.router.navigate(['/']);
+    });
+  }
 }
