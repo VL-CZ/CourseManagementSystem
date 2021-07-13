@@ -1,0 +1,37 @@
+<div *ngIf="answer.questionType == QuestionType.TextAnswer" class="form-group">
+  <div>{{answer.questionText}}</div>
+  <label for="answerText{{answer.questionNumber}}">Answer text</label>
+  <input type="text" class="form-control" id="answerText{{answer.questionNumber}}"
+         [(ngModel)]="answer.answerText" name="answerText{{answer.questionNumber}}">
+</div>
+
+<div *ngIf="answer.questionType == QuestionType.SingleChoice" class="form-group">
+  <div>
+    {{questionWithAnswers.questionText}}
+  </div>
+  <div>
+    <div *ngFor="let possibleAnswer of questionWithAnswers.answerChoices" class="form-check">
+      <input class="form-check-input" type="radio" name="possibleAnswerSingleChoice{{answer.questionNumber}}{{possibleAnswer.answerLetter}}"
+             id="possibleAnswerSingleChoice{{answer.questionNumber}}{{possibleAnswer.answerLetter}}"
+             [(ngModel)]="answer.answerText" [value]="possibleAnswer.answerLetter">
+      <label class="form-check-label" for="possibleAnswerSingleChoice{{answer.questionNumber}}{{possibleAnswer.answerLetter}}">
+        <b>{{possibleAnswer.answerLetter}}</b>
+        <br>
+        {{possibleAnswer.answerText}}
+      </label>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="answer.questionType == QuestionType.MultipleChoice" class="form-group">
+  <div *ngFor="let answerChoice of questionWithAnswers.answerChoices" class="form-check">
+    <input class="form-check-input" type="checkbox" name="possibleAnswerMultipleChoice{{answer.questionNumber}}{{answerChoice.answerLetter}}"
+           id="possibleAnswerMultipleChoice{{answer.questionNumber}}{{answerChoice.answerLetter}}"
+           [checked]="isSelectedAnswer[answerChoice.answerLetter]" (change)="toggleCheckboxAnswer(answerChoice.answerLetter)">
+    <label class="form-check-label" for="possibleAnswerMultipleChoice{{answer.questionNumber}}{{answerChoice.answerLetter}}">
+      <b>{{answerChoice.answerLetter}}</b>
+      <br>
+      {{answerChoice.answerText}}
+    </label>
+  </div>
+</div>

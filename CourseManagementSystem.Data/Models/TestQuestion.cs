@@ -8,12 +8,13 @@ namespace CourseManagementSystem.Data.Models
     {
         public TestQuestion() { }
 
-        public TestQuestion(int number, string text, string correctAnswer, int points) : this()
+        public TestQuestion(int number, string text, string correctAnswer, int points, QuestionType questionType) : this()
         {
             Number = number;
             QuestionText = text;
             CorrectAnswer = correctAnswer;
             Points = points;
+            Type = questionType;
         }
 
         /// <summary>
@@ -27,6 +28,11 @@ namespace CourseManagementSystem.Data.Models
         /// number of question in the test
         /// </summary>
         public int Number { get; set; }
+
+        /// <summary>
+        /// type of the question
+        /// </summary>
+        public QuestionType Type { get; set; }
 
         /// <summary>
         /// text of the question

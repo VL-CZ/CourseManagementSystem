@@ -30,6 +30,11 @@ export class CourseListComponent implements OnInit {
    */
   public managedCourses: CourseInfoVM[];
 
+  /**
+   * identifier of the current user
+   */
+  public currentUserId: string;
+
   private readonly courseService: CourseService;
   private readonly peopleService: PeopleService;
 
@@ -39,6 +44,10 @@ export class CourseListComponent implements OnInit {
     this.memberCourses = [];
     this.courseService = courseService;
     this.peopleService = peopleService;
+
+    roleAuthService.getCurrentUserId().subscribe(id => {
+      this.currentUserId = id.value;
+    });
 
     this.reloadCourseInfo();
   }

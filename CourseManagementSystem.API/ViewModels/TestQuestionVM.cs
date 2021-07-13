@@ -11,12 +11,13 @@ namespace CourseManagementSystem.API.ViewModels
         {
         }
 
-        public TestQuestionVM(int number, string text, string correctAnswer, int points) : this()
+        public TestQuestionVM(int number, string text, string correctAnswer, int points, Data.QuestionType questionType) : this()
         {
             Number = number;
             QuestionText = text;
             CorrectAnswer = correctAnswer;
             Points = points;
+            Type = questionType;
         }
 
         /// <summary>
@@ -47,5 +48,10 @@ namespace CourseManagementSystem.API.ViewModels
         /// </summary>
         [PositiveIntValue]
         public int Points { get; set; }
+
+        /// <summary>
+        /// type of the question
+        /// </summary>
+        public Data.QuestionType Type { get; set; }
     }
 }

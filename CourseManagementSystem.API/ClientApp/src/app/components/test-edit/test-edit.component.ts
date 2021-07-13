@@ -63,6 +63,7 @@ export class TestEditComponent implements OnInit {
    */
   public deleteQuestion(question: TestQuestionVM): void {
     this.testToUpdate.questions = this.testToUpdate.questions.filter(q => q !== question);
+    TestQuestionNumberSetter.setQuestionNumbers(this.testToUpdate.questions);
   }
 
   /**
@@ -70,6 +71,7 @@ export class TestEditComponent implements OnInit {
    */
   public addQuestion(): void {
     this.testToUpdate.questions.push(new TestQuestionVM());
+    TestQuestionNumberSetter.setQuestionNumbers(this.testToUpdate.questions);
   }
 
   /**

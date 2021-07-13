@@ -40,7 +40,7 @@ namespace CourseManagementSystem.Services.Implementations
                 .Include(user => user.CourseMemberships)
                 .ThenInclude(cm => cm.Course)
                 .SingleOrDefault(user => user.Id == personId);
-            return user.CourseMemberships.SingleOrDefault(cm => cm.Course.Id.ToString() == courseId);
+            return user.CourseMemberships.SingleOrDefault(cm => cm.Course.Id.ToString() == courseId && !cm.IsArchived);
         }
 
         /// <inheritdoc/>

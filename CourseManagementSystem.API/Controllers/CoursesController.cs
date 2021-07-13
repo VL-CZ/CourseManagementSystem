@@ -33,6 +33,19 @@ namespace CourseManagementSystem.API.Controllers
         }
 
         /// <summary>
+        /// get course info by its identifier
+        /// </summary>
+        /// <param name="id">id of the course to return</param>
+        /// <returns></returns>
+        [AuthorizeCourseAdminOrMemberOf(EntityType.Course, "id")]
+        [HttpGet("{id}")]
+        public CourseInfoVM GetById(string id)
+        {
+            var selectedCourse = courseService.GetById(id);
+            return new CourseInfoVM(selectedCourse.Id.ToString(), selectedCourse.Name);
+        }
+
+        /// <summary>
         /// create new course
         /// </summary>
         [HttpPost("create")]
@@ -86,7 +99,7 @@ namespace CourseManagementSystem.API.Controllers
         {
             string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
 
-            if (peopleService.IsAdminOfCourse(currentUserId, courseId) || peopleService.IsMemberOfCourse(currentUserId,courseId))
+            if (peopleService.IsAdminOfCourse(currentUserId, courseId) || peopleService.IsMemberOfCourse(currentUserId, courseId))
             {
                 throw new ArgumentException("Cannot enroll to the selected course. Ee are already admin/member of this course.");
             }
@@ -155,7 +168,7 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOf(EntityType.Course, "id")]
         public IEnumerable<CourseTestDetailsVM> GetNonPublishedTests(string id)
         {
-            return GetAndFilterTests(id, courseTestFilter.FilterNonPublished);
+            return GetAndFilterTests(id, courseTestFilter.FilterNonPublishedBeforeDeadline);
         }
 
         /// <summary>

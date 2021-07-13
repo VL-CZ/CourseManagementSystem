@@ -37,21 +37,7 @@
   </div>
 </div>
 <div class="jumbotron" *ngFor="let question of testToUpdate.questions">
-  <div class="form-group">
-    <label for="questionText{{question.number}}">Question text</label>
-    <textarea class="form-control" id="questionText{{question.number}}"
-              [(ngModel)]="question.questionText" name="questionText{{question.number}}"></textarea>
-  </div>
-  <div class="form-group">
-    <label for="questionAnswer{{question.number}}">Correct answer</label>
-    <textarea class="form-control" id="questionAnswer{{question.number}}"
-              [(ngModel)]="question.correctAnswer" name="questionAnswer{{question.number}}"></textarea>
-  </div>
-  <div class="form-group">
-    <label for="questionPoints{{question.number}}">Points</label>
-    <input type="number" min="0" class="form-control" id="questionPoints{{question.number}}"
-           [(ngModel)]="question.points" name="questionPoints{{question.number}}">
-  </div>
+  <app-test-question-edit [question]="question"></app-test-question-edit>
   <div class="my-3">
     <input type="button" class="btn btn-danger" (click)="deleteQuestion(question)" value="Delete"/>
   </div>
