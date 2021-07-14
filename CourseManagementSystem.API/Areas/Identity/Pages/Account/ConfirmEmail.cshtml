@@ -2,6 +2,16 @@
 @model ConfirmEmailModel
 @{
     ViewData["Title"] = "Confirm email";
+
+    string returnUrl = null;
+    var query = ViewContext.HttpContext.Request.Query;
+    if (query.ContainsKey("returnUrl"))
+    {
+        returnUrl = query["returnUrl"];
+    }
 }
 
 <h1>@ViewData["Title"]</h1>
+<div>
+    <a asp-area="Identity" asp-page="./Login" asp-route-returnUrl="@returnUrl">Go to Login Page</a>
+</div>
