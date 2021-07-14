@@ -7,6 +7,8 @@
 	\label{fig:Architecture}
 \end{figure}
 
+Aplikace se skládá ze 2 hlavních částí: serverové a klientské.
+
 Na obrázku \ref{fig:Architecture} vidíme architekturu aplikace, šipky znázorňují přenos dat. Jednotlivým částem se budeme podrobněji věnovat v této kapitole.
 
 \section{Serverová část}
@@ -857,6 +859,8 @@ V souboru appsettings.json se nachází konfigurace aplikace ve formátu JSON. J
 
 Ve výchozím nastavení tedy používáme databázi se jménem "CMS" na lokálním SQL Serveru (znak "." symbolizuje lokální server).
 
+Ve složkách Pages a Areas/Identity se nachází stránky, které slouží k přihlášení a registraci uživatele. Tato část kódu je vygenerovaná frameworkem.
+
 \newpage
 
 \subsection{Ostatní}
@@ -1229,16 +1233,75 @@ Poslední řádek definuje, že na stránce "http://host/courses" se zobrazí Co
 
 \newpage
 
-\section{Zajímavé problémy}
+\section{Další vybrané problémy}
 
-\subsection{ViewModels x DB entity}
+\subsection{ViewModely x Databázové entity}
 
-Použil jsem různé objekty pro databázové entity a view-modely.
+Můžeme si všimnout, že v kódu používáme různé objekty pro ViewModely a databázové entity. 
+Na následujícím příkladu můžeme vidět největší rozdíly mezi těmito objekty.
 
-TODO: pořádně rozepsat + vysvětlit + ukázka kódu
+\lstset{style=sharpc}
+\begin{lstlisting}
+public class TestSubmissionAnswer : IGuidIdObject
+{	
+	/// <summary>
+	/// question which is answered
+	/// </summary>
+	[Required]
+	public TestQuestion Question { get; set; }
+	
+	/// <summary>
+	/// submitted text of the answer
+	/// </summary>
+	public string Text { get; set; }
+	
+	/// <summary>
+	/// points obtained for the answer
+	/// </summary>
+	public int Points { get; set; }
+	...
+}
+
+public class SubmissionAnswerVM
+{	
+	/// <summary>
+	/// number of question that this answer belongs to
+	/// </summary>
+	[PositiveIntValue]
+	public int QuestionNumber { get; set; }
+	
+	/// <summary>
+	/// text of the question
+	/// </summary>
+	[RequiredWithDefaultErrorMessage]
+	public string QuestionText { get; set; }
+	
+	/// <summary>
+	/// answer submitted by the student
+	/// </summary>
+	public string AnswerText { get; set; }
+	...
+}
+\end{lstlisting}
+
+Příklad obsahuje databázovou entitu TestSubmissionAnswer a ViewModel SubmissionAnswerVM, oba typy reprezentují odpověď studenta na danou otázku.
+Vidíme, že v tomto případě ViewModel obsahuje vlastnosti převzaté z více databázových entit, což je velmi častá situace. Vlastnosti QuestionNumber a QuestionText jsou převzaté z entity TestQuestion, naopak vlastnost AnswerText je z entity TestSubmissionAnswer.
+
+Některé jiné ViewModely naopak obsahují jen vybrané vlastnosti příslušných databázových entit, ostatní data jsou v daném kontextu zbytečná.
+
+Z toho vyplývá, že nemůžeme použít instance stejné třídy pro tyto typy objektů.
+
+Pokud bychom se rozhodli použít dědičnost (tedy např. ViewModel by dědil z databázové entity, příp. naopak), narazili bychom na problém s atributy.
+Téměř všechny databázové entity totiž obsahují atributy, které slouží ke konfiguraci databázových tabulek, naopak ViewModely obsahují atributy pro validaci. 
+
+Vzhledem k výše uvedeným argumentům tedy používáme různé objekty.
+
 
 \subsection{ViewModels v serverové i klientské části}
 
 view-modely jsou v serverové i klientské části aplikace
 
 TODO: pořádně rozepsat + vysvětlit + ukázka kódu
+
+Vzhledem k tomu, že se jedná o dvě víceméně nesouvisející části aplikace, napsané v různých jazycích, je toto řešení v pořádku.
+
