@@ -1004,8 +1004,9 @@ Volání metody subscribe v našem programu typicky probíhá až v komponentác
 \newpage
 
 \subsection{ViewModels}
+\label{clientVM}
 
-V klientské části se také nacházejí ViewModely, které slouží ke komunikaci s API. Tyto objekty přesně odpovídají ViewModelům ze serverové části (tzn. obsahují stejné položky stejných typů).
+V klientské části se také nacházejí ViewModely, které slouží ke komunikaci s API. Tyto objekty přesně odpovídají ViewModelům ze serverové části (tzn. obsahují stejné položky).
 
 Na příkladu vidíme ViewModel, který reprezentuje odeslaný test (vidíme, že odpovídá ViewModelu ze serverové části -- viz. sekce \ref{serverVM})
 \begin{lstlisting}
@@ -1297,11 +1298,14 @@ Téměř všechny databázové entity totiž obsahují atributy, které slouží
 Vzhledem k výše uvedeným argumentům tedy používáme různé objekty.
 
 
-\subsection{ViewModels v serverové i klientské části}
+\subsection{ViewModely v serverové i klientské části}
 
-view-modely jsou v serverové i klientské části aplikace
+V kapitolách \ref{serverVM} a \ref{clientVM} můžeme vidět, že ViewModely se nachází jak v serverové, tak i v klientské části aplikace. 
 
-TODO: pořádně rozepsat + vysvětlit + ukázka kódu
+Tyto ViewModely jsou shodné (obsahují tedy stejné položky), akorát jsou zapsané v jiném jazyce. ViewModely v serverové části navíc často obsahují atributy, které slouží k validaci dat.
 
-Vzhledem k tomu, že se jedná o dvě víceméně nesouvisející části aplikace, napsané v různých jazycích, je toto řešení v pořádku.
+Typ položek je ve většině případů stejný, někdy se ovšem může lišit. To je většinou z toho důvodu, že neexistují typy, které si v jazycích C\# a Typescript přesně odpovídají.
+Například jazyk Typescript používá pro všechna čísla typ number, zatímco v jazyce C\# můžeme použít několik typů. 
+Pro celá čísla používáme např. typy int a long, pro desetinná čísla float či double.
 
+Toto řešení je nutné, abychom mohli s ViewModely pracovat v obou částech aplikace.
