@@ -168,7 +168,7 @@ V programu je dále složka Migrations. Při vývoji byl použit princip Code fi
 
 Pokud tedy nějak změníme některou z entit (to může být např. přidání vlastnosti, změna jména vlastnosti, apod.), pak pomocí ORM můžeme vygenerovat soubor popisující tzv. databázovou migraci, která slouží k aplikaci změn z kódu do databáze. Ke každé migraci se vygeneruje jeden soubor, který obsahuje popis změn, které se později provedou v databázi.
 
-K vytváření migrací jsem použijeme nástroj CLI tools for Entity Framework Core. https://docs.microsoft.com/cs-cz/ef/core/cli/dotnet. Pro vygenerování migrace ze změn v kódu použijeme příkaz:
+K vytváření migrací jsem použijeme nástroj CLI tools for Entity Framework Core. \cite{EfCoreCliDocs} Pro vygenerování migrace ze změn v kódu použijeme příkaz:
 
 \begin{lstlisting}
 dotnet ef migrations add 
