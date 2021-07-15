@@ -37,18 +37,26 @@ V aplikaci tento používáme xUnit.net v projektu TestEvaluation.Tests, který 
 \section{Klientská část}
 
 \subsection{Jazyk TypeScript}
-TODO: stručný popis
+TypeScript je programovací jazyk vyvinutý firmou Microsoft. Jedná se o nadstavbu jazyka JavaScript, používá tedy stejnou syntaxi jako jazyk JavaScript. Kód v jazyce TypeScript se kompiluje do JavaScriptu.
+Oproti jazyku JavaScript používá statické typování a umožňuje používat třídy, rozhraní a další konstrukce z OOP. 
 \cite{TypescriptDocs}
 
+Téměř celá klientská část aplikace (kromě HTML šablon a CSS stylů) je napsána v jazyce TypeScript.
+
 \subsection{Angular}
-Pro frontend aplikace
+Angular je frontend framework pro tvorbu single-page webových aplikací. Framework používá jazyk TypeScript a jeho architektura je založená na komponentách.
+Komponenty jsou jednotky kódu, ze kterých se skládá UI aplikace. Každá komponenta obsahuje TypeScript třídu označenou dekorátorem @Component(), HTML šablonu, a případně i soubor s CSS styly. 
+Součástí frameworku je i vestavěný HTTP klient pro snadnější komunikaci pomocí HTTP, router sloužící k navigaci mezi stránkami a velké množství dalších knihoven. Angular nám umožňuje používat obousměrný data binding.
 \cite{AngularDocs}
 
-TODO: stručný popis
+Angular využíváme v klientské části aplikace, celá klientská část programu je Angular projekt.
 
 \subsection{Bootstrap}
-Stylování elementů.
+Bootstrap je CSS framework, který se používá k designu webových stránek.
+Umožňuje jednoduše vytvářet responzivní layout a obsahuje velké množství definovaných CSS stylů, které lze použít ke stylování HTML elementů.
 \cite{BootstrapDocs}
+
+Bootstrap hojně používáme ke stylování HTML elementů v šablonách Angular komponent.
 
 \section{MSSQL databáze}
 Databáze, ve které jsou uložena data
