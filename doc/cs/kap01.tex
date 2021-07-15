@@ -58,20 +58,35 @@ Umožňuje jednoduše vytvářet responzivní layout a obsahuje velké množstv�
 
 Bootstrap hojně používáme ke stylování HTML elementů v šablonách Angular komponent.
 
-\section{MSSQL databáze}
-Databáze, ve které jsou uložena data
+\section{Microsoft SQL Server}
+Microsoft SQL Server je multiplatformní relační databázový systém. Ke komunikaci s databází využívá jazyk T-SQL, což je rozšíření klasického SQL. K administraci Microsoft SQL Serveru a práci s databázemi můžeme použít například aplikaci SQL Server Management Studio.
 \cite{SqlServerDocs}
 
-TODO: stručný popis
+Microsoft SQL Server používáme jako databázi pro data v naší aplikaci. Jazyk T-SQL vůbec nepoužíváme, jelikož s daty pracujeme pomocí ORM frameworku Entity Framework Core.
 
 \section{Git}
-Verzovací systém
+Git je distribuovaný systém správy verzí, který se velmi často používá při vývoji softwaru. Podporuje tzv. větvení, což znamená, že se můžeme odloučit od hlavní linie vývoje a pokračovat ve vývoji v nové větvi, aniž bychom do původní větve zasahovali. Pomocí příkazu merge pak můžeme změny promítnout zpět do hlavní větve.
 \cite{GitDocs}
 
-TODO: stručný popis, zmínit použití branches
+Při vývoji aplikace používáme několik větví: master, develop a feature větve.
+\begin{itemize}
+	\item Feature větve používáme při programování nové funkcionality. Typicky máme pro každou funkcionalitu samostatnou větev, jež se ve většině případů jmenuje feature/popis-funkcionality.
+	\item Develop je větev, do které se provádí merge z feature větví. Při vývoji nové funkcionality tedy nejprve vytvoříme novou větev a po dokončení vývoje provedeme merge do větve develop.
+	\item Master větev obsahuje verzi aplikace, která je plně funkční a lze spustit. V případě, že dokončíme nějakou ucelenou část aplikace a ověříme, že funguje správně, můžeme provést merge z větve develop do master.
+\end{itemize}
+Díky tomuto rozdělení větví můžeme pohodlně pracovat na více částech aplikace zároveň, a máme stále aspoň jednu verzi aplikace, která je plně funkční (ve větvi master).
 
-\section{Github Actions}
-CI tool.
+Aplikace je uložená ve veřejném GitHub repozitáři na této URL: \url{https://github.com/VL-CZ/CourseManagementSystem}.
+
+\section{GitHub Actions}
+Technologie GitHub Actions slouží k automatizaci úloh během životního cyklu vývoje softwaru. Používají tzv. CI Workflows, což je automatizovaná procedura, která je typicky spuštěna nějakou akcí (např. přidáním nového commitu).
+Ke konfiguraci Workflows se používají soubory ve formátu YAML, které se nachází ve složce .github/workflows.
 \cite{GitHubActionsDocs}
 
-TODO: stručný popis, zmínit použití
+V této aplikaci používáme dva Workflows, které se spustí po každém commitu ve větvích master a develop.
+\begin{itemize}
+	\item .NET Workflow - provede build serverové části aplikace a spustí všechny testy
+	\item Angular Workflow - provede build klientské části aplikace
+\end{itemize}
+
+Použitím technologie GitHub Actions si můžeme lehce ověřit, že přidáním nové funkcionality jsme nerozbili nějakou již existující část aplikace. Po přidání nových změn si můžeme jednoduše ověřit, že Workflows proběhly úspěšně.
