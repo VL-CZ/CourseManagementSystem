@@ -2,53 +2,68 @@
 
 \chapter{Použité technologie}
 
+V této kapitole se nachází popis technologií, použitých při vývoji aplikace.
+
 \section{Serverová část}
 
 \subsection{Jazyk C\#}
 C\# je objektově orientovaný, staticky typovaný programovací jazyk, vyvinutý firmou Microsoft.
 C\# podporuje koncepty zapouzdření, dědičnosti a polymorfismu. Programy v jazyce C\# běží na platformě .NET. 
-Při kompilaci je zdrojový kód nejprve zkompilován do mezikódu zvaného IL. 
+Při kompilaci C\# programu je zdrojový kód nejprve zkompilován do mezikódu zvaného IL. 
 Po spuštění programu pak modul CLR, který je součástí platformy .NET, provede JIT (just-in-time) kompilaci IL kódu do strojových instrukcí počítače.
-Jazyk C\# lze využít k tvorbě konzolových aplikací, webových aplikací a stránek, formulářových aplikací ve Windows, softwaru pro mobilní zařízení, apod. \cite{CSharpDocs}
+Jazyk C\# lze využít k tvorbě konzolových aplikací, webových aplikací a stránek, formulářových aplikací ve Windows, softwaru pro mobilní zařízení, apod. 
+\cite{CSharpDocs}
 
 Jazyk C\# využíváme v serverové části aplikace. Používáme platformu .NET Core verze 3.1 a jazyk C\# verze 8.0.
 
-\subsection{ASP .NET Core Web API}
-Pro backend aplikace \cite{AspNetDocs}
+\subsection{ASP .NET Core}
+ASP.NET Core je open source framework, který slouží k vývoji webových aplikací na platformě .NET Core. Aplikace je možné psát v libovolném jazyce, který běží na platformě .NET Core (například v jazyce C\#). Jedná se o novější alternativu k frameworku ASP .NET. Součástí frameworku je mimo jiné webový server Kestrel a vestavěný IoC kontejner.
+\cite{AspNetCoreDocs}
 
-TODO: popis frameworku
+V aplikaci používáme framework ASP .NET Core verze 3.1 v projektu API. Tento projekt funguje jako REST API a slouží ke komunikaci serverové části s klientskou.
 
 \subsection{Entity Framework Core}
-ORM pro práci s databází
+Entity Framework Core je ORM framework. Objektově relační mapování je technika, která nám umožňuje objektově pracovat s daty v relační databázi. Databázové tabulky jsou ve frameworku reprezentované pomocí kolekcí, jednotlivé objekty v kolekci pak představují řádky v dané tabulce. Při práci s databází pak vůbec nepoužíváme jazyk SQL, pouze pracujeme s objekty a kolekcemi.
+\cite{EfCoreDocs}
 
-TODO: popis frameworku
+Tento framework využíváme v projektu Data, ve kterém se nachází objekty reprezentující databázové entity, a v projektu Services, který obsahuje služby pro komunikaci s databází.
 
-\subsection{xUnit}
-Framework pro unit testy
+\subsection{xUnit.net}
+xUnit.net je framework, který slouží k testování aplikací na platformě .NET. Nejčastěji se používá k unit a integračním testům. 
+\cite{xUnitDocs}
 
-TODO: popis frameworku
+V aplikaci tento používáme xUnit.net v projektu TestEvaluation.Tests, který obsahuje unit testy tříd z projektu TestEvaluation.
 
 \section{Klientská část}
 
 \subsection{Jazyk TypeScript}
 TODO: stručný popis
+\cite{TypescriptDocs}
 
 \subsection{Angular}
 Pro frontend aplikace
+\cite{AngularDocs}
 
 TODO: stručný popis
 
+\subsection{Bootstrap}
+Stylování elementů.
+\cite{BootstrapDocs}
+
 \section{MSSQL databáze}
 Databáze, ve které jsou uložena data
+\cite{SqlServerDocs}
 
 TODO: stručný popis
 
 \section{Git}
 Verzovací systém
+\cite{GitDocs}
 
 TODO: stručný popis, zmínit použití branches
 
 \section{Github Actions}
 CI tool.
+\cite{GitHubActionsDocs}
 
 TODO: stručný popis, zmínit použití
