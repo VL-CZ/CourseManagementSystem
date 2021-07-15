@@ -623,7 +623,7 @@ Dále jsou v aplikaci ještě použité atributy NonNegativeIntValueAttribute a 
 
 \subsubsection*{Obsluha chyb}
 
-V případě, že nastane chyba při deserializaci dat (např. klient pošle v těle POST dotazu nevalidní data), tak framework vyhodí výjimku a vrátí objekt, který popisuje chybu. \url{https://docs.microsoft.com/en-us/aspnet/core/web-api/?view=aspnetcore-5.0#automatic-http-400-responses}
+V případě, že nastane chyba při deserializaci dat (např. klient pošle v těle POST dotazu nevalidní data), tak framework vyhodí výjimku a vrátí objekt, který popisuje chybu. \cite{AspNetCoreDocs}
 
 Pokud nastane chyba při obsluze dotazu (např. klient se pomocí GET dotazu pokusí získat informace o nějaké již smazané entitě), pak v programu vyhodíme výjimku. Všechny výjimky jsou pak zachyceny třídou ErrorHandlerController, která funguje jako obecný Error handler.
 Toto je nakonfigurováno v metodě Configure(), jenž se nachází ve třídě Startup.
