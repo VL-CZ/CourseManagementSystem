@@ -20,10 +20,10 @@ Jazyk C\# využíváme v serverové části aplikace. Používáme platformu .NE
 ASP.NET Core je open source framework, který slouží k vývoji webových aplikací na platformě .NET Core. Aplikace je možné psát v libovolném jazyce, který běží na platformě .NET Core (například v jazyce C\#). Jedná se o novější alternativu k frameworku ASP .NET. Součástí frameworku je mimo jiné webový server Kestrel a vestavěný IoC kontejner.
 \cite{AspNetCoreDocs}
 
-V aplikaci používáme framework ASP .NET Core verze 3.1 v projektu API. Tento projekt funguje jako REST API a slouží ke komunikaci serverové části s klientskou.
+V aplikaci používáme framework ASP .NET Core verze 3.1 v projektu API. Tento projekt funguje jako REST API a slouží k obsluze HTTP požadavků.
 
 \subsection{Entity Framework Core}
-Entity Framework Core je ORM framework. Objektově relační mapování je technika, která nám umožňuje objektově pracovat s daty v relační databázi. Databázové tabulky jsou ve frameworku reprezentované pomocí kolekcí, jednotlivé objekty v kolekci pak představují řádky v dané tabulce. Při práci s databází pak vůbec nepoužíváme jazyk SQL, pouze pracujeme s objekty a kolekcemi.
+Entity Framework Core je ORM framework. Objektově relační mapování je technika, která nám umožňuje objektově pracovat s daty v relační databázi. Framework reprezentuje databázové tabulky pomocí kolekcí, jednotlivé objekty v kolekci pak představují řádky v dané tabulce. Při práci s databází pak vůbec nepoužíváme jazyk SQL, pouze pracujeme s objekty a kolekcemi.
 \cite{EfCoreDocs}
 
 Tento framework využíváme v projektu Data, ve kterém se nachází objekty reprezentující databázové entity, a v projektu Services, který obsahuje služby pro komunikaci s databází.
@@ -37,7 +37,7 @@ V aplikaci tento používáme xUnit.net v projektu TestEvaluation.Tests, který 
 \section{Klientská část}
 
 \subsection{Jazyk TypeScript}
-TypeScript je programovací jazyk vyvinutý firmou Microsoft. Jedná se o nadstavbu jazyka JavaScript, používá tedy stejnou syntaxi jako jazyk JavaScript. Kód v jazyce TypeScript se kompiluje do JavaScriptu.
+TypeScript je programovací jazyk vyvinutý firmou Microsoft. Jedná se o nadstavbu jazyka JavaScript, oba jazyky tedy používají stejnou syntaxi. Kód v jazyce TypeScript se kompiluje do JavaScriptu.
 Oproti jazyku JavaScript používá statické typování a umožňuje používat třídy, rozhraní a další konstrukce z OOP. 
 \cite{TypescriptDocs}
 
@@ -49,7 +49,7 @@ Komponenty jsou jednotky kódu, ze kterých se skládá UI aplikace. Každá kom
 Součástí frameworku je i vestavěný HTTP klient pro snadnější komunikaci pomocí HTTP, router sloužící k navigaci mezi stránkami a velké množství dalších knihoven. Angular nám umožňuje používat obousměrný data binding.
 \cite{AngularDocs}
 
-Angular využíváme v klientské části aplikace, celá klientská část programu je Angular projekt.
+Tento framework využíváme v klientské části aplikace, celá klientská část programu je Angular projekt.
 
 \subsection{Bootstrap}
 Bootstrap je CSS framework, který se používá k designu webových stránek.
