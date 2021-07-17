@@ -8,7 +8,7 @@
     </tr>
     <tr *ngFor="let person of students">
       <td>{{person.name}}</td>
-      <td><a class="nav-link" routerLink="/students/{{person.id}}">Details</a></td>
+      <td><a class="btn btn-link" (click)="pageNavigator.navigateToStudentDetail(person.id)">Details</a></td>
       <td>
         <button class="btn btn-danger" (click)="removeMember(person)">Remove</button>
       </td>
@@ -16,7 +16,7 @@
   </table>
   <div class="my-2">
     <div>
-      <button class="btn btn-info" routerLink="/courses/{{courseId}}/enrollmentRequests">Enrollment requests</button>
+      <button class="btn btn-info" (click)="pageNavigator.navigateToCourseEnrollmentRequests(courseId)">Enrollment requests</button>
     </div>
   </div>
 </div>

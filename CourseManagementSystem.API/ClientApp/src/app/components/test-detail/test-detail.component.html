@@ -7,7 +7,7 @@
       <h2>{{courseTest.topic}}</h2>
       <h6>Deadline: {{dateTimeFormatter.formatToLocal(courseTest.deadline)}}</h6>
       <div>Weight: {{courseTest.weight}}</div>
-      <div>{{courseTestUtils.isGradedToString(courseTest.isGraded)}}</div>
+      <div>{{courseTestTools.isGradedToString(courseTest.isGraded)}}</div>
     </div>
     <div class="jumbotron" *ngFor="let question of courseTest.questions">
       <h3>Question {{question.number}}</h3>
@@ -21,7 +21,7 @@
     </div>
 
     <div class="my-3" *ngIf="canBeEdited()">
-      <button type="button" class="btn btn-warning" routerLink="/tests/edit/{{testId}}">Edit</button>
+      <button type="button" class="btn btn-warning" (click)="pageNavigator.navigateToAssignmentEditation(testId)">Edit</button>
     </div>
 
     <app-test-submission-list [testId]="testId"></app-test-submission-list>

@@ -6,6 +6,7 @@ import {CourseMemberService} from '../../services/course-member.service';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ConfirmDialogManager} from '../../tools/dialog-managers/confirmDialogManager';
+import {PageNavigator} from '../../tools/pageNavigator';
 
 /**
  * component representing list of students
@@ -28,6 +29,11 @@ export class StudentListComponent implements OnInit {
    */
   public students: CourseMemberOrAdminVM[] = [];
 
+  /**
+   * class for navigating between the pages
+   */
+  public readonly pageNavigator: PageNavigator;
+
   private readonly courseService: CourseService;
   private readonly courseMemberService: CourseMemberService;
   private bsModalRef: BsModalRef;
@@ -35,11 +41,12 @@ export class StudentListComponent implements OnInit {
   private confirmDialogManager: ConfirmDialogManager;
 
   constructor(roleAuthService: RoleAuthService, courseService: CourseService, courseMemberService: CourseMemberService,
-              bsModalService: BsModalService) {
+              bsModalService: BsModalService, router: Router) {
     this.courseService = courseService;
     this.courseMemberService = courseMemberService;
     this.bsModalService = bsModalService;
     this.confirmDialogManager = new ConfirmDialogManager(this.bsModalRef, this.bsModalService);
+    this.pageNavigator = new PageNavigator(router);
   }
 
   ngOnInit() {

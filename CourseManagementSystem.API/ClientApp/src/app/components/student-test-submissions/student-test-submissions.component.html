@@ -10,7 +10,7 @@
     </tr>
     <tr *ngFor="let submission of testSubmissions">
       <td>
-        <a routerLink="/submissions/{{submission.testSubmissionId}}">{{submission.testTopic}}</a>
+        <a class="btn btn-link" (click)="pageNavigator.navigateToSubmissionReview(submission.testSubmissionId)">{{submission.testTopic}}</a>
       </td>
       <td>
         <b>{{percentStringFormatter.format(submission.percentualScore)}}</b>

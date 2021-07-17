@@ -44,12 +44,16 @@ export class CourseDetailComponent implements OnInit {
    */
   public courseInfo: CourseInfoVM = new CourseInfoVM();
 
+  /**
+   * class for navigating between the pages
+   */
+  public readonly pageNavigator: PageNavigator;
+
   private readonly courseService: CourseService;
   private readonly courseMemberService: CourseMemberService;
   private bsModalRef: BsModalRef;
   private bsModalService: BsModalService;
   private confirmDialogManager: ConfirmDialogManager;
-  private readonly pageNavigator: PageNavigator;
 
   constructor(route: ActivatedRoute, router: Router, courseService: CourseService, roleAuthService: RoleAuthService,
               peopleService: PeopleService, courseMemberService: CourseMemberService, bsModalService: BsModalService) {

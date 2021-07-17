@@ -1,7 +1,12 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {CourseService} from '../../services/course.service';
 import {CourseInfoVM} from '../../viewmodels/courseVM';
+import {PageNavigator} from '../../tools/pageNavigator';
+import {Router} from '@angular/router';
 
+/**
+ * class representing menu with link to course detail
+ */
 @Component({
   selector: 'app-course-menu',
   templateUrl: './course-menu.component.html',
@@ -12,12 +17,21 @@ export class CourseMenuComponent implements OnInit, OnChanges {
   @Input()
   private courseId: string;
 
+  /**
+   *
+   */
   public courseInfo: CourseInfoVM = new CourseInfoVM();
+
+  /**
+   * class for navigating between the pages
+   */
+  public readonly pageNavigator: PageNavigator;
 
   private courseService: CourseService;
 
-  constructor(courseService: CourseService) {
+  constructor(courseService: CourseService, router: Router) {
     this.courseService = courseService;
+    this.pageNavigator = new PageNavigator(router);
   }
 
   ngOnInit() {

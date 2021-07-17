@@ -13,7 +13,7 @@
       <td><b>{{percentStringFormatter.format(testInfo.percentualScore)}}</b></td>
       <td>{{dateTimeFormatter.formatToLocal(testInfo.submittedDateTime)}}</td>
       <td>{{testInfo.isReviewed ? 'YES' : 'NO'}}</td>
-      <td><a routerLink="/submissions/{{testInfo.testSubmissionId}}">Detail</a></td>
+      <td><a class="btn btn-link" (click)="pageNavigator.navigateToSubmissionReview(testInfo.testSubmissionId)">Detail</a></td>
     </tr>
   </table>
 </div>
