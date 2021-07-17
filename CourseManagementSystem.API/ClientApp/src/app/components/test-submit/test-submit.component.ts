@@ -6,6 +6,8 @@ import {TestSubmissionService} from '../../services/test-submission.service';
 import {ActivatedRouteUtils} from '../../utils/activatedRouteUtils';
 import {CourseTestUtils} from '../../utils/courseTestUtils';
 import {DateTimeFormatter} from '../../utils/dateTimeFormatter';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {ObservableWrapper} from '../../utils/observableWrapper';
 
 /**
  * component for submitting a test
@@ -36,11 +38,17 @@ export class TestSubmitComponent implements OnInit {
 
   private router: Router;
   private testSubmitService: TestSubmissionService;
+  private bsModalRef: BsModalRef;
+  private bsModalService: BsModalService;
+  private observableWrapper: ObservableWrapper;
 
-  constructor(route: ActivatedRoute, courseTestService: CourseTestService, testSubmissionService: TestSubmissionService, router: Router) {
+  constructor(route: ActivatedRoute, courseTestService: CourseTestService, testSubmissionService: TestSubmissionService, router: Router,
+              bsModalService: BsModalService) {
     const testId = ActivatedRouteUtils.getIdParam(route);
     this.testSubmitService = testSubmissionService;
     this.router = router;
+    this.bsModalService = bsModalService;
+    this.observableWrapper = new ObservableWrapper(this.bsModalRef, this.bsModalService);
 
     testSubmissionService.loadSubmission(testId).subscribe(submission => {
       this.testSubmission = submission;
@@ -61,7 +69,8 @@ export class TestSubmitComponent implements OnInit {
    * save current answer contents
    */
   public saveAnswers(): void {
-    this.testSubmitService.saveAnswers(this.testSubmission.testSubmissionId, this.testSubmission.answers).subscribe(
+    this.observableWrapper.subscribeOrShowError(
+      this.testSubmitService.saveAnswers(this.testSubmission.testSubmissionId, this.testSubmission.answers),
       () => {
       }
     );
@@ -71,14 +80,16 @@ export class TestSubmitComponent implements OnInit {
    * submit the test
    */
   public submit(): void {
-    // save answers
-    this.testSubmitService.saveAnswers(this.testSubmission.testSubmissionId, this.testSubmission.answers).subscribe(() => {
-      // submit the test
-      this.testSubmitService.submit(this.testSubmission).subscribe(
-        // navigate
-        () => this.navigateToSubmissionDetail()
-      );
-    });
+    this.observableWrapper.subscribeOrShowError(
+      // save answers
+      this.testSubmitService.saveAnswers(this.testSubmission.testSubmissionId, this.testSubmission.answers),
+      () => {
+        // submit the test
+        this.testSubmitService.submit(this.testSubmission).subscribe(
+          // navigate
+          () => this.navigateToSubmissionDetail()
+        );
+      });
   }
 
   /**

@@ -4,6 +4,8 @@ import {CourseService} from '../../services/course.service';
 import {ForumPostService} from '../../services/forum-post.service';
 import {RoleAuthService} from '../../services/role-auth.service';
 import {WrapperVM} from '../../viewmodels/wrapperVM';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {ObservableWrapper} from '../../utils/observableWrapper';
 
 @Component({
   selector: 'app-course-forum',
@@ -37,10 +39,16 @@ export class CourseForumComponent implements OnInit {
 
   private courseService: CourseService;
   private forumPostService: ForumPostService;
+  private bsModalRef: BsModalRef;
+  private bsModalService: BsModalService;
+  private observableWrapper: ObservableWrapper;
 
-  constructor(courseService: CourseService, forumPostService: ForumPostService, roleAuthService: RoleAuthService) {
+  constructor(courseService: CourseService, forumPostService: ForumPostService, roleAuthService: RoleAuthService,
+              bsModalService: BsModalService) {
     this.courseService = courseService;
     this.forumPostService = forumPostService;
+    this.bsModalService = bsModalService;
+    this.observableWrapper = new ObservableWrapper(this.bsModalRef, this.bsModalService);
   }
 
   ngOnInit() {
@@ -61,10 +69,12 @@ export class CourseForumComponent implements OnInit {
    * add a new post
    */
   public addPost(): void {
-    this.forumPostService.add(this.postToAdd, this.courseId).subscribe(() => {
-      this.reloadPosts();
-      this.postToAdd = new WrapperVM<string>();
-    });
+    this.observableWrapper.subscribeOrShowError(
+      this.forumPostService.add(this.postToAdd, this.courseId),
+      () => {
+        this.reloadPosts();
+        this.postToAdd = new WrapperVM<string>();
+      });
   }
 
   /**

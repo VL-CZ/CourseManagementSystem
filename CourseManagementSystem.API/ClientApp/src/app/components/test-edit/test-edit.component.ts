@@ -8,6 +8,8 @@ import {TestQuestionNumberSetter} from '../../utils/testQuestionNumberSetter';
 import {DateTimeBinder} from '../../utils/dateTimeBinder';
 import {DateTimeFormatter} from '../../utils/dateTimeFormatter';
 import {CourseTestUtils} from '../../utils/courseTestUtils';
+import {ObservableWrapper} from '../../utils/observableWrapper';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 
 /**
  * component for editing a test
@@ -48,11 +50,16 @@ export class TestEditComponent implements OnInit {
 
   private router: Router;
   private courseTestService: CourseTestService;
+  private bsModalRef: BsModalRef;
+  private bsModalService: BsModalService;
+  private observableWrapper: ObservableWrapper;
 
-  constructor(activatedRoute: ActivatedRoute, router: Router, courseTestService: CourseTestService) {
+  constructor(activatedRoute: ActivatedRoute, router: Router, courseTestService: CourseTestService, bsModalService: BsModalService) {
     this.router = router;
     this.testId = ActivatedRouteUtils.getIdParam(activatedRoute);
     this.courseTestService = courseTestService;
+    this.bsModalService = bsModalService;
+    this.observableWrapper = new ObservableWrapper(this.bsModalRef, this.bsModalService);
 
     courseTestService.getById(this.testId).subscribe(result => {
       this.testToUpdate = result;
@@ -93,8 +100,10 @@ export class TestEditComponent implements OnInit {
     const updatedTest = AddCourseTestVM.getFrom(this.testToUpdate);
     TestQuestionNumberSetter.setQuestionNumbers(updatedTest.questions);
 
-    this.courseTestService.updateTest(this.testId, updatedTest).subscribe(() => {
-      this.router.navigate(['/tests', this.testId]);
-    });
+    this.observableWrapper.subscribeOrShowError(
+      this.courseTestService.updateTest(this.testId, updatedTest),
+      () => {
+        this.router.navigate(['/tests', this.testId]);
+      });
   }
 }

@@ -4,6 +4,8 @@ import {CourseService} from '../../services/course.service';
 import {RoleAuthService} from '../../services/role-auth.service';
 import {AddCourseVM} from '../../viewmodels/courseVM';
 import {PeopleService} from '../../services/people.service';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {ObservableWrapper} from '../../utils/observableWrapper';
 
 /**
  * component representing list of courses
@@ -37,13 +39,19 @@ export class CourseListComponent implements OnInit {
 
   private readonly courseService: CourseService;
   private readonly peopleService: PeopleService;
+  private bsModalRef: BsModalRef;
+  private bsModalService: BsModalService;
+  private observableWrapper: ObservableWrapper;
 
-  constructor(courseService: CourseService, peopleService: PeopleService, roleAuthService: RoleAuthService) {
+  constructor(courseService: CourseService, peopleService: PeopleService, roleAuthService: RoleAuthService,
+              bsModalService: BsModalService) {
     this.newCourse = new AddCourseVM();
     this.managedCourses = [];
     this.memberCourses = [];
     this.courseService = courseService;
     this.peopleService = peopleService;
+    this.bsModalService = bsModalService;
+    this.observableWrapper = new ObservableWrapper(this.bsModalRef, this.bsModalService);
 
     roleAuthService.getCurrentUserId().subscribe(id => {
       this.currentUserId = id.value;
@@ -69,9 +77,12 @@ export class CourseListComponent implements OnInit {
    * add a new course
    */
   public addCourse(): void {
-    this.courseService.create(this.newCourse).subscribe(() => {
-      this.reloadCourseInfo();
-    });
+    this.observableWrapper.subscribeOrShowError(
+      this.courseService.create(this.newCourse),
+      () => {
+        this.reloadCourseInfo();
+        this.newCourse = new AddCourseVM();
+      });
   }
 
   /**

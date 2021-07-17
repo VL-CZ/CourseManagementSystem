@@ -3,6 +3,8 @@ import {PeopleService} from '../../services/people.service';
 import {CourseService} from '../../services/course.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RouterUtils} from '../../utils/routerUtils';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {ObservableWrapper} from '../../utils/observableWrapper';
 
 /**
  * component with enrollment to course
@@ -22,11 +24,16 @@ export class CourseEnrollmentComponent implements OnInit {
   private readonly courseService: CourseService;
   private router: Router;
   private activatedRoute: ActivatedRoute;
+  private bsModalRef: BsModalRef;
+  private bsModalService: BsModalService;
+  private observableWrapper: ObservableWrapper;
 
-  constructor(courseService: CourseService, activatedRoute: ActivatedRoute, router: Router) {
+  constructor(courseService: CourseService, activatedRoute: ActivatedRoute, router: Router, bsModalService: BsModalService) {
     this.courseService = courseService;
     this.router = router;
     this.activatedRoute = activatedRoute;
+    this.bsModalService = bsModalService;
+    this.observableWrapper = new ObservableWrapper(this.bsModalRef, this.bsModalService);
   }
 
   ngOnInit() {
@@ -36,8 +43,10 @@ export class CourseEnrollmentComponent implements OnInit {
    * enroll to a course
    */
   public enroll(): void {
-    this.courseService.enrollTo(this.courseToEnrollId).subscribe(() => {
-      RouterUtils.reloadPage(this.router, this.activatedRoute);
-    });
+    this.observableWrapper.subscribeOrShowError(
+      this.courseService.enrollTo(this.courseToEnrollId),
+      () => {
+        RouterUtils.reloadPage(this.router, this.activatedRoute);
+      });
   }
 }

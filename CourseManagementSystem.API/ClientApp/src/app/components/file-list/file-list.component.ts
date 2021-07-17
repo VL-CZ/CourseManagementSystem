@@ -4,6 +4,8 @@ import {FileService} from '../../services/file.service';
 import {CourseFileVM} from '../../viewmodels/courseFileVM';
 import {CourseService} from '../../services/course.service';
 import * as FileSaver from 'file-saver';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {ObservableWrapper} from '../../utils/observableWrapper';
 
 
 /**
@@ -41,9 +43,15 @@ export class FileListComponent implements OnInit {
    */
   public uploadedFiles: CourseFileVM[] = [];
 
-  constructor(roleAuthService: RoleAuthService, fileService: FileService, courseService: CourseService) {
+  private bsModalRef: BsModalRef;
+  private bsModalService: BsModalService;
+  private observableWrapper: ObservableWrapper;
+
+  constructor(roleAuthService: RoleAuthService, fileService: FileService, courseService: CourseService, bsModalService: BsModalService) {
     this.fileService = fileService;
     this.courseService = courseService;
+    this.bsModalService = bsModalService;
+    this.observableWrapper = new ObservableWrapper(this.bsModalRef, this.bsModalService);
   }
 
   ngOnInit() {
@@ -62,9 +70,12 @@ export class FileListComponent implements OnInit {
    * upload a new file
    */
   public uploadFile(): void {
-    this.fileService.uploadTo(this.fileToUpload, this.courseId).subscribe(() => {
-      this.reloadFileData();
-    });
+    this.observableWrapper.subscribeOrShowError(
+      this.fileService.uploadTo(this.fileToUpload, this.courseId),
+      () => {
+        this.reloadFileData();
+      });
+
     this.fileToUpload = null;
     this.inputFile.nativeElement.value = ''; // clear file input
   }
