@@ -6,6 +6,7 @@ import {ActivatedRouteUtils} from '../../utils/activatedRouteUtils';
 import {CourseService} from '../../services/course.service';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
+import {InformationDialogManager} from '../../utils/informationDialogManager';
 
 @Component({
   selector: 'app-enrollment-request-list',
@@ -29,6 +30,7 @@ export class EnrollmentRequestListComponent implements OnInit {
   private bsModalRef: BsModalRef;
   private bsModalService: BsModalService;
   private confirmDialogManager: ConfirmDialogManager;
+  private informationDialogManager: InformationDialogManager;
 
   constructor(route: ActivatedRoute, enrollmentRequestService: EnrollmentRequestService, courseService: CourseService,
               bsModalService: BsModalService) {
@@ -36,7 +38,9 @@ export class EnrollmentRequestListComponent implements OnInit {
     this.courseService = courseService;
     this.courseId = ActivatedRouteUtils.getIdParam(route);
     this.bsModalService = bsModalService;
+
     this.confirmDialogManager = new ConfirmDialogManager(this.bsModalRef, this.bsModalService);
+    this.informationDialogManager = new InformationDialogManager(this.bsModalRef, this.bsModalService);
 
     this.reload();
   }
@@ -51,6 +55,7 @@ export class EnrollmentRequestListComponent implements OnInit {
   public approve(request: EnrollmentRequestVM): void {
     this.enrollmentRequestService.approve(request.id).subscribe(() => {
       this.reload();
+      this.informationDialogManager.displayDialog('Enrollment request has been approved. The person has been added to members of the course.');
     });
   }
 

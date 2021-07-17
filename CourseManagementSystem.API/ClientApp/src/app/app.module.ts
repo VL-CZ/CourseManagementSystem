@@ -38,6 +38,7 @@ import {TestQuestionTextComponent} from './components/test-question-text/test-qu
 import {TestQuestionAnswerFormComponent} from './components/test-question-answer-form/test-question-answer-form.component';
 import {CourseMenuComponent} from './components/course-menu/course-menu.component';
 import {AuthorizeGuard} from '../api-authorization/authorize.guard';
+import {InformationDialogComponent} from './components/information-dialog/information-dialog.component';
 
 @NgModule({
   declarations: [
@@ -70,7 +71,8 @@ import {AuthorizeGuard} from '../api-authorization/authorize.guard';
     TestQuestionEditComponent,
     TestQuestionTextComponent,
     TestQuestionAnswerFormComponent,
-    CourseMenuComponent
+    CourseMenuComponent,
+    InformationDialogComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -95,7 +97,7 @@ import {AuthorizeGuard} from '../api-authorization/authorize.guard';
     {provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true}
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ConfirmDialogComponent, ErrorDialogComponent]
+  entryComponents: [ConfirmDialogComponent, ErrorDialogComponent, InformationDialogComponent]
 })
 export class AppModule {
 }
