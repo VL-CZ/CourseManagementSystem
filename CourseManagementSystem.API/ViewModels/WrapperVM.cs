@@ -3,7 +3,7 @@
 namespace CourseManagementSystem.API.ViewModels
 {
     /// <summary>
-    /// wrapper viewmodel for simple types (such as <see cref="int"/>, <see cref="string"/> or <see cref="bool"/>)
+    /// wrapper viewmodel for simple non-structured types (such as <see cref="int"/>, <see cref="string"/> or <see cref="bool"/>)
     /// </summary>
     /// <typeparam name="T">type of the value</typeparam>
     public class WrapperVM<T>

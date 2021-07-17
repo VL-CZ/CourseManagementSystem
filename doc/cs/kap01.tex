@@ -2,47 +2,91 @@
 
 \chapter{Použité technologie}
 
-\section{Backend}
+V této kapitole se nachází popis technologií, použitých při vývoji aplikace.
+
+\section{Serverová část}
 
 \subsection{Jazyk C\#}
-TODO: stručný popis
+C\# je objektově orientovaný, staticky typovaný programovací jazyk, vyvinutý firmou Microsoft.
+C\# podporuje koncepty zapouzdření, dědičnosti a polymorfismu. Programy v jazyce C\# běží na platformě .NET. 
+Při kompilaci C\# programu je zdrojový kód nejprve zkompilován do mezikódu zvaného IL. 
+Po spuštění programu pak modul CLR, který je součástí platformy .NET, provede JIT (just-in-time) kompilaci IL kódu do strojových instrukcí počítače.
+Jazyk C\# lze využít k tvorbě konzolových aplikací, webových aplikací a stránek, formulářových aplikací ve Windows, softwaru pro mobilní zařízení, apod. 
+\cite{CSharpDocs}
 
-\subsection{ASP .NET Core Web API}
-Pro backend aplikace
+Jazyk C\# využíváme v serverové části aplikace. Používáme platformu .NET Core verze 3.1 a jazyk C\# verze 8.0.
 
-TODO: popis frameworku
+\subsection{ASP .NET Core}
+ASP.NET Core je open source framework, který slouží k vývoji webových aplikací na platformě .NET Core. Aplikace je možné psát v libovolném jazyce, který běží na platformě .NET Core (například v jazyce C\#). Jedná se o novější alternativu k frameworku ASP .NET. Součástí frameworku je mimo jiné webový server Kestrel a vestavěný IoC kontejner.
+\cite{AspNetCoreDocs}
+
+V aplikaci používáme framework ASP .NET Core verze 3.1 v projektu API. Tento projekt funguje jako REST API a slouží k obsluze HTTP požadavků.
 
 \subsection{Entity Framework Core}
-ORM pro práci s databází
+Entity Framework Core je ORM framework. Objektově relační mapování je technika, která nám umožňuje objektově pracovat s daty v relační databázi. Framework reprezentuje databázové tabulky pomocí kolekcí, jednotlivé objekty v kolekci pak představují řádky v dané tabulce. Při práci s databází pak vůbec nepoužíváme jazyk SQL, pouze pracujeme s objekty a kolekcemi.
+\cite{EfCoreDocs}
 
-TODO: popis frameworku
+Tento framework využíváme v projektu Data, ve kterém se nachází objekty reprezentující databázové entity, a v projektu Services, který obsahuje služby pro komunikaci s databází.
 
-\subsection{xUnit}
-Framework pro unit testy
+\subsection{xUnit.net}
+xUnit.net je framework, který slouží k testování aplikací na platformě .NET. Nejčastěji se používá k unit a integračním testům. 
+\cite{xUnitDocs}
 
-TODO: popis frameworku
+V aplikaci tento používáme xUnit.net v projektu TestEvaluation.Tests, který obsahuje unit testy tříd z projektu TestEvaluation.
 
-\section{Frontend}
+\section{Klientská část}
 
-\subsection{Jazyk Typescript}
-TODO: stručný popis
+\subsection{Jazyk TypeScript}
+TypeScript je programovací jazyk vyvinutý firmou Microsoft. Jedná se o nadstavbu jazyka JavaScript, oba jazyky tedy používají stejnou syntaxi. Kód v jazyce TypeScript se kompiluje do JavaScriptu.
+Oproti jazyku JavaScript používá statické typování a umožňuje používat třídy, rozhraní a další konstrukce z OOP. 
+\cite{TypescriptDocs}
+
+Téměř celá klientská část aplikace (kromě HTML šablon a CSS stylů) je napsána v jazyce TypeScript.
 
 \subsection{Angular}
-Pro frontend aplikace
+Angular je frontend framework pro tvorbu single-page webových aplikací. Framework používá jazyk TypeScript a jeho architektura je založená na komponentách.
+Komponenty jsou jednotky kódu, ze kterých se skládá UI aplikace. Každá komponenta obsahuje TypeScript třídu označenou dekorátorem @Component(), HTML šablonu, a případně i soubor s CSS styly. 
+Součástí frameworku je i vestavěný HTTP klient pro snadnější komunikaci pomocí HTTP, router sloužící k navigaci mezi stránkami a velké množství dalších knihoven. Angular nám umožňuje používat obousměrný data binding.
+\cite{AngularDocs}
 
-TODO: stručný popis
+Tento framework využíváme v klientské části aplikace, celá klientská část programu je Angular projekt.
 
-\section{MSSQL databáze}
-Databáze, ve které jsou uložena data
+\subsection{Bootstrap}
+Bootstrap je CSS framework, který se používá k designu webových stránek.
+Umožňuje jednoduše vytvářet responzivní layout a obsahuje velké množství definovaných CSS stylů, které lze použít ke stylování HTML elementů.
+\cite{BootstrapDocs}
 
-TODO: stručný popis
+Bootstrap hojně používáme ke stylování HTML elementů v šablonách Angular komponent.
+
+\section{Microsoft SQL Server}
+Microsoft SQL Server je multiplatformní relační databázový systém. Ke komunikaci s databází využívá jazyk T-SQL, což je rozšíření klasického SQL. K administraci Microsoft SQL Serveru a práci s databázemi můžeme použít například aplikaci SQL Server Management Studio.
+\cite{SqlServerDocs}
+
+Microsoft SQL Server používáme jako databázi pro data v naší aplikaci. Jazyk T-SQL vůbec nepoužíváme, jelikož s daty pracujeme pomocí ORM frameworku Entity Framework Core.
 
 \section{Git}
-Verzovací systém
+Git je distribuovaný systém správy verzí, který se velmi často používá při vývoji softwaru. Podporuje tzv. větvení, což znamená, že se můžeme odloučit od hlavní linie vývoje a pokračovat ve vývoji v nové větvi, aniž bychom do původní větve zasahovali. Pomocí příkazu merge pak můžeme změny promítnout zpět do hlavní větve.
+\cite{GitDocs}
 
-TODO: stručný popis, zmínit použití branches
+Při vývoji aplikace používáme několik větví: master, develop a feature větve.
+\begin{itemize}
+	\item Feature větve používáme při programování nové funkcionality. Typicky máme pro každou funkcionalitu samostatnou větev, jež se ve většině případů jmenuje feature/popis-funkcionality.
+	\item Develop je větev, do které se provádí merge z feature větví. Při vývoji nové funkcionality tedy nejprve vytvoříme novou větev a po dokončení vývoje provedeme merge do větve develop.
+	\item Master větev obsahuje verzi aplikace, která je plně funkční a lze spustit. V případě, že dokončíme nějakou ucelenou část aplikace a ověříme, že funguje správně, můžeme provést merge z větve develop do master.
+\end{itemize}
+Díky tomuto rozdělení větví můžeme pohodlně pracovat na více částech aplikace zároveň, a máme stále aspoň jednu verzi aplikace, která je plně funkční (ve větvi master).
 
-\section{Github Actions}
-CI tool.
+Aplikace je uložená ve veřejném GitHub repozitáři na této URL: \url{https://github.com/VL-CZ/CourseManagementSystem}.
 
-TODO: stručný popis, zmínit použití
+\section{GitHub Actions}
+Technologie GitHub Actions slouží k automatizaci úloh během životního cyklu vývoje softwaru. Používají tzv. CI Workflows, což je automatizovaná procedura, která je typicky spuštěna nějakou akcí (např. přidáním nového commitu).
+Ke konfiguraci Workflows se používají soubory ve formátu YAML, které se nachází ve složce .github/workflows.
+\cite{GitHubActionsDocs}
+
+V této aplikaci používáme dva Workflows, které se spustí po každém commitu ve větvích master a develop.
+\begin{itemize}
+	\item .NET Workflow - provede build serverové části aplikace a spustí všechny testy
+	\item Angular Workflow - provede build klientské části aplikace
+\end{itemize}
+
+Použitím technologie GitHub Actions si můžeme lehce ověřit, že přidáním nové funkcionality jsme nerozbili nějakou již existující část aplikace. Po přidání nových změn si můžeme jednoduše ověřit, že Workflows proběhly úspěšně.

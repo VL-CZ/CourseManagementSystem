@@ -7,6 +7,8 @@
 	\label{fig:Architecture}
 \end{figure}
 
+Aplikace se skládá ze 2 hlavních částí: serverové a klientské.
+
 Na obrázku \ref{fig:Architecture} vidíme architekturu aplikace, šipky znázorňují přenos dat. Jednotlivým částem se budeme podrobněji věnovat v této kapitole.
 
 \section{Serverová část}
@@ -166,7 +168,7 @@ V programu je dále složka Migrations. Při vývoji byl použit princip Code fi
 
 Pokud tedy nějak změníme některou z entit (to může být např. přidání vlastnosti, změna jména vlastnosti, apod.), pak pomocí ORM můžeme vygenerovat soubor popisující tzv. databázovou migraci, která slouží k aplikaci změn z kódu do databáze. Ke každé migraci se vygeneruje jeden soubor, který obsahuje popis změn, které se později provedou v databázi.
 
-K vytváření migrací jsem použijeme nástroj CLI tools for Entity Framework Core. https://docs.microsoft.com/cs-cz/ef/core/cli/dotnet. Pro vygenerování migrace ze změn v kódu použijeme příkaz:
+K vytváření migrací jsem použijeme nástroj CLI tools for Entity Framework Core. \cite{EfCoreCliDocs} Pro vygenerování migrace ze změn v kódu použijeme příkaz:
 
 \begin{lstlisting}
 dotnet ef migrations add 
@@ -410,7 +412,7 @@ public IEnumerable<CourseMemberOrAdminVM> GetAllMembers(string id)
 
 Vidíme, že je tedy označená atributem HttpGet, který zároveň obsahuje URL, přes kterou lze tuto metodu zavolat. V tomto případě je URL suffix "\{id\}/members". Položka Id označuje parametr, jenž má stejnou hodnotu jako proměnná id (parametr metody). Tento suffix se připojí za URL daného Controlleru, a tím získáme celou URL k zavolání této metody. V našem případě dostaneme
 \newline
-"http://host/api/courses/course-id/members", kde course-id je identifikátor příslušného kurzu a host označuje URL serveru, na kterém aplikace běží. Pokud máme aplikaci spuštěnou lokálně, pak by hodnota měla být localhost:5001. Při HTTP GET dotazu na tuto URL by tedy aplikace zavolala tuto metodu, a vrátila data.
+"http://host/api/courses/course-id/members", kde course-id je identifikátor příslušného kurzu a host označuje URL serveru, na kterém aplikace běží. Pokud máme aplikaci spuštěnou lokálně, pak by hodnota měla být localhost:5001. Při HTTP GET dotazu na tuto URL by tedy aplikace zavolala tuto metodu, a vrátila data ve formátu JSON.
 
 Metoda dále obsahuje atribut určený k autorizaci, pomocí něhož ověříme, že klient má dostatečná práva. V tomto případě povolíme zavolat metodu pouze administrátorům daného kurzu.
 
@@ -621,7 +623,7 @@ Dále jsou v aplikaci ještě použité atributy NonNegativeIntValueAttribute a 
 
 \subsubsection*{Obsluha chyb}
 
-V případě, že nastane chyba při deserializaci dat (např. klient pošle v těle POST dotazu nevalidní data), tak framework vyhodí výjimku a vrátí objekt, který popisuje chybu. \url{https://docs.microsoft.com/en-us/aspnet/core/web-api/?view=aspnetcore-5.0#automatic-http-400-responses}
+V případě, že nastane chyba při deserializaci dat (např. klient pošle v těle POST dotazu nevalidní data), tak framework vyhodí výjimku a vrátí objekt, který popisuje chybu. \cite{AspNetCoreDocs}
 
 Pokud nastane chyba při obsluze dotazu (např. klient se pomocí GET dotazu pokusí získat informace o nějaké již smazané entitě), pak v programu vyhodíme výjimku. Všechny výjimky jsou pak zachyceny třídou ErrorHandlerController, která funguje jako obecný Error handler.
 Toto je nakonfigurováno v metodě Configure(), jenž se nachází ve třídě Startup.
@@ -857,6 +859,8 @@ V souboru appsettings.json se nachází konfigurace aplikace ve formátu JSON. J
 
 Ve výchozím nastavení tedy používáme databázi se jménem "CMS" na lokálním SQL Serveru (znak "." symbolizuje lokální server).
 
+Ve složkách Pages a Areas/Identity se nachází stránky, které slouží k přihlášení a registraci uživatele. Tato část kódu je vygenerovaná frameworkem.
+
 \newpage
 
 \subsection{Ostatní}
@@ -1000,8 +1004,9 @@ Volání metody subscribe v našem programu typicky probíhá až v komponentác
 \newpage
 
 \subsection{ViewModels}
+\label{clientVM}
 
-V klientské části se také nacházejí ViewModely, které slouží ke komunikaci s API. Tyto objekty přesně odpovídají ViewModelům ze serverové části (tzn. obsahují stejné položky stejných typů).
+V klientské části se také nacházejí ViewModely, které slouží ke komunikaci s API. Tyto objekty přesně odpovídají ViewModelům ze serverové části (tzn. obsahují stejné položky).
 
 Na příkladu vidíme ViewModel, který reprezentuje odeslaný test (vidíme, že odpovídá ViewModelu ze serverové části -- viz. sekce \ref{serverVM})
 \begin{lstlisting}
@@ -1229,16 +1234,78 @@ Poslední řádek definuje, že na stránce "http://host/courses" se zobrazí Co
 
 \newpage
 
-\section{Zajímavé problémy}
+\section{Další vybrané problémy}
 
-\subsection{ViewModels x DB entity}
+\subsection{ViewModely x Databázové entity}
 
-Použil jsem různé objekty pro databázové entity a view-modely.
+Můžeme si všimnout, že v kódu používáme různé objekty pro ViewModely a databázové entity. 
+Na následujícím příkladu můžeme vidět největší rozdíly mezi těmito objekty.
 
-TODO: pořádně rozepsat + vysvětlit + ukázka kódu
+\lstset{style=sharpc}
+\begin{lstlisting}
+public class TestSubmissionAnswer : IGuidIdObject
+{	
+	/// <summary>
+	/// question which is answered
+	/// </summary>
+	[Required]
+	public TestQuestion Question { get; set; }
+	
+	/// <summary>
+	/// submitted text of the answer
+	/// </summary>
+	public string Text { get; set; }
+	
+	/// <summary>
+	/// points obtained for the answer
+	/// </summary>
+	public int Points { get; set; }
+	...
+}
 
-\subsection{ViewModels v serverové i klientské části}
+public class SubmissionAnswerVM
+{	
+	/// <summary>
+	/// number of question that this answer belongs to
+	/// </summary>
+	[PositiveIntValue]
+	public int QuestionNumber { get; set; }
+	
+	/// <summary>
+	/// text of the question
+	/// </summary>
+	[RequiredWithDefaultErrorMessage]
+	public string QuestionText { get; set; }
+	
+	/// <summary>
+	/// answer submitted by the student
+	/// </summary>
+	public string AnswerText { get; set; }
+	...
+}
+\end{lstlisting}
 
-view-modely jsou v serverové i klientské části aplikace
+Příklad obsahuje databázovou entitu TestSubmissionAnswer a ViewModel SubmissionAnswerVM, oba typy reprezentují odpověď studenta na danou otázku.
+Vidíme, že v tomto případě ViewModel obsahuje vlastnosti převzaté z více databázových entit, což je velmi častá situace. Vlastnosti QuestionNumber a QuestionText jsou převzaté z entity TestQuestion, naopak vlastnost AnswerText je z entity TestSubmissionAnswer.
 
-TODO: pořádně rozepsat + vysvětlit + ukázka kódu
+Některé jiné ViewModely naopak obsahují jen vybrané vlastnosti příslušných databázových entit, ostatní data jsou v daném kontextu zbytečná.
+
+Z toho vyplývá, že nemůžeme použít instance stejné třídy pro tyto typy objektů.
+
+Pokud bychom se rozhodli použít dědičnost (tedy např. ViewModel by dědil z databázové entity, příp. naopak), narazili bychom na problém s atributy.
+Téměř všechny databázové entity totiž obsahují atributy, které slouží ke konfiguraci databázových tabulek, naopak ViewModely obsahují atributy pro validaci. 
+
+Vzhledem k výše uvedeným argumentům tedy používáme různé objekty.
+
+
+\subsection{ViewModely v serverové i klientské části}
+
+V kapitolách \ref{serverVM} a \ref{clientVM} můžeme vidět, že ViewModely se nachází jak v serverové, tak i v klientské části aplikace. 
+
+Tyto ViewModely jsou shodné (obsahují tedy stejné položky), akorát jsou zapsané v jiném jazyce. ViewModely v serverové části navíc často obsahují atributy, které slouží k validaci dat.
+
+Typ položek je ve většině případů stejný, někdy se ovšem může lišit. To je většinou z toho důvodu, že neexistují typy, které si v jazycích C\# a Typescript přesně odpovídají.
+Například jazyk Typescript používá pro všechna čísla typ number, zatímco v jazyce C\# můžeme použít několik typů. 
+Pro celá čísla používáme např. typy int a long, pro desetinná čísla float či double.
+
+Toto řešení je nutné, abychom mohli s ViewModely pracovat v obou částech aplikace.
