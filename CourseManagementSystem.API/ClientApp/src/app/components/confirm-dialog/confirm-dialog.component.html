@@ -10,6 +10,7 @@
   {{textAppendix}}
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-danger" (click)="confirm()">Confirm</button>
+  <button *ngIf="confirmButtonStyle==ConfirmButtonStyle.Warning" type="button" class="btn btn-danger" (click)="confirm()">Confirm</button>
+  <button *ngIf="confirmButtonStyle==ConfirmButtonStyle.Information" type="button" class="btn btn-info" (click)="confirm()">Confirm</button>
   <button type="button" class="btn btn-default" (click)="modalRef.hide()">Cancel</button>
 </div>

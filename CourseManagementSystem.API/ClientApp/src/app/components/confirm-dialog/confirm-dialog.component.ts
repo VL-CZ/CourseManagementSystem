@@ -27,6 +27,11 @@ export class ConfirmDialogComponent implements OnInit {
   public textAppendix: string;
 
   /**
+   * style of the confirm button
+   */
+  public confirmButtonStyle: ConfirmButtonStyle;
+
+  /**
    * action to execute on dialog confirmation
    */
   public onConfirm: () => void;
@@ -41,10 +46,33 @@ export class ConfirmDialogComponent implements OnInit {
   }
 
   /**
+   * simple getter for accessing the enum in the template
+   * @constructor
+   */
+  public get ConfirmButtonStyle() {
+    return ConfirmButtonStyle;
+  }
+
+  /**
    * confirm the dialog
    */
   public confirm(): void {
     this.modalRef.hide();
     this.onConfirm();
   }
+}
+
+/**
+ * enum that specifies the design of the 'confirm' button in the dialog
+ */
+export enum ConfirmButtonStyle {
+  /**
+   * the button is styled red (using btn-danger bootstrap class)
+   */
+  Warning,
+
+  /**
+   * the button is styled blue (using btn-info bootstrap class)
+   */
+  Information
 }
