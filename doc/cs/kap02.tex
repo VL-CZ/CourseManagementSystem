@@ -1232,6 +1232,19 @@ Vidíme tedy, že na výchozí stránce bude komponenta HomeComponent.
 Druhý řádek nám říká, že při zadání URL "http://host/students/id", kde id je parametr, se zobrazí komponenta StudentDetailComponent. K parametru id se poté můžeme dostat v komponentě.
 Poslední řádek definuje, že na stránce "http://host/courses" se zobrazí CourseListComponent.
 
+K navigaci mezi stránkami nepoužíváme přímo vestavěný router, ale pomocnou třídu PageNavigator, která se nachází ve složce src/app/tools. Tato třída obsahuje referenci na Router a metody, které slouží k navigaci na jednotlivé stránky. Pro každou stránku máme tedy jednu navigační metodu.
+
+Na následujícím příkladu vidíme kód metody navigateToCourseDetail, která slouží k navigaci na stránku s detaily daného kurzu.
+\begin{lstlisting}
+/**
+* navigate to the page with course details
+* @param courseId identifier of the course
+*/
+public navigateToCourseDetail(courseId: string): void {
+	this.router.navigate(['/courses', courseId]).then(this.scrollToTop);
+}
+\end{lstlisting}
+
 \newpage
 
 \section{Další vybrané problémy}
