@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {CourseTestDetailsVM, TestStatus} from '../../viewmodels/courseTestVM';
 import {CourseTestService} from '../../services/course-test.service';
-import {ActivatedRouteUtils} from '../../utils/activatedRouteUtils';
-import {DateTimeFormatter} from '../../utils/dateTimeFormatter';
-import {CourseTestUtils} from '../../utils/courseTestUtils';
+import {ActivatedRouteTools} from '../../tools/activatedRouteTools';
+import {DateTimeFormatter} from '../../tools/datetime/dateTimeFormatter';
+import {CourseTestTools} from '../../tools/courseTestTools';
+import {PageNavigator} from '../../tools/pageNavigator';
 
 /**
  * component representing detail of the test
@@ -35,10 +36,16 @@ export class TestDetailComponent implements OnInit {
    */
   public courseId: string;
 
-  public courseTestUtils: CourseTestUtils = new CourseTestUtils();
+  /**
+   * class for navigating between the pages
+   */
+  public readonly pageNavigator: PageNavigator;
 
-  constructor(route: ActivatedRoute, courseTestService: CourseTestService) {
-    this.testId = ActivatedRouteUtils.getIdParam(route);
+  public courseTestTools: CourseTestTools = new CourseTestTools();
+
+  constructor(route: ActivatedRoute, router: Router, courseTestService: CourseTestService) {
+    this.testId = ActivatedRouteTools.getIdParam(route);
+    this.pageNavigator = new PageNavigator(router);
 
     courseTestService.getCourseId(this.testId).subscribe(result => {
       this.courseId = result.value;

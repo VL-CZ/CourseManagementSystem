@@ -5,8 +5,8 @@ import {ForumPostService} from '../../services/forum-post.service';
 import {RoleAuthService} from '../../services/role-auth.service';
 import {WrapperVM} from '../../viewmodels/wrapperVM';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {ObservableWrapper} from '../../utils/observableWrapper';
-import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
+import {ObservableWrapper} from '../../tools/observableWrapper';
+import {ConfirmDialogManager} from '../../tools/dialog-managers/confirmDialogManager';
 
 @Component({
   selector: 'app-course-forum',

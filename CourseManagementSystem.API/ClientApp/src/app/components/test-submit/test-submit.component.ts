@@ -3,13 +3,14 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {CourseTestService} from '../../services/course-test.service';
 import {SubmitTestVM} from '../../viewmodels/submitTestVM';
 import {TestSubmissionService} from '../../services/test-submission.service';
-import {ActivatedRouteUtils} from '../../utils/activatedRouteUtils';
-import {CourseTestUtils} from '../../utils/courseTestUtils';
-import {DateTimeFormatter} from '../../utils/dateTimeFormatter';
+import {ActivatedRouteTools} from '../../tools/activatedRouteTools';
+import {CourseTestTools} from '../../tools/courseTestTools';
+import {DateTimeFormatter} from '../../tools/datetime/dateTimeFormatter';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {ObservableWrapper} from '../../utils/observableWrapper';
-import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
+import {ObservableWrapper} from '../../tools/observableWrapper';
+import {ConfirmDialogManager} from '../../tools/dialog-managers/confirmDialogManager';
 import {ConfirmButtonStyle} from '../confirm-dialog/confirm-dialog.component';
+import {PageNavigator} from '../../tools/pageNavigator';
 
 /**
  * component for submitting a test
@@ -36,9 +37,9 @@ export class TestSubmitComponent implements OnInit {
    */
   public dateTimeFormatter: DateTimeFormatter = new DateTimeFormatter();
 
-  public courseTestUtils: CourseTestUtils = new CourseTestUtils();
+  public courseTestUtils: CourseTestTools = new CourseTestTools();
 
-  private router: Router;
+  private readonly pageNavigator: PageNavigator;
   private testSubmitService: TestSubmissionService;
   private bsModalRef: BsModalRef;
   private bsModalService: BsModalService;
@@ -47,9 +48,9 @@ export class TestSubmitComponent implements OnInit {
 
   constructor(route: ActivatedRoute, courseTestService: CourseTestService, testSubmissionService: TestSubmissionService, router: Router,
               bsModalService: BsModalService) {
-    const testId = ActivatedRouteUtils.getIdParam(route);
+    const testId = ActivatedRouteTools.getIdParam(route);
     this.testSubmitService = testSubmissionService;
-    this.router = router;
+    this.pageNavigator = new PageNavigator(router);
     this.bsModalService = bsModalService;
     this.confirmDialogManager = new ConfirmDialogManager(this.bsModalRef, this.bsModalService);
     this.observableWrapper = new ObservableWrapper(this.bsModalRef, this.bsModalService);
@@ -57,7 +58,7 @@ export class TestSubmitComponent implements OnInit {
     testSubmissionService.loadSubmission(testId).subscribe(submission => {
       this.testSubmission = submission;
       if (submission.isSubmitted) {
-        this.navigateToSubmissionDetail();
+        this.pageNavigator.navigateToSubmissionReview(this.testSubmission.testSubmissionId);
       }
     });
 
@@ -95,19 +96,11 @@ export class TestSubmitComponent implements OnInit {
             // submit the test
             this.testSubmitService.submit(this.testSubmission).subscribe(
               // navigate
-              () => this.navigateToSubmissionDetail()
+              () => this.pageNavigator.navigateToSubmissionReview(this.testSubmission.testSubmissionId)
             );
           });
       },
       ConfirmButtonStyle.Information
     );
-  }
-
-  /**
-   * navigate to submission detail page
-   * @private
-   */
-  private navigateToSubmissionDetail(): void {
-    this.router.navigate(['/submissions', this.testSubmission.testSubmissionId]);
   }
 }

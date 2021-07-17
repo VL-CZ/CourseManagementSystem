@@ -3,11 +3,12 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {CourseService} from '../../services/course.service';
 import {RoleAuthService} from '../../services/role-auth.service';
 import {PeopleService} from '../../services/people.service';
-import {ActivatedRouteUtils} from '../../utils/activatedRouteUtils';
+import {ActivatedRouteTools} from '../../tools/activatedRouteTools';
 import {CourseInfoVM} from '../../viewmodels/courseVM';
 import {CourseMemberService} from '../../services/course-member.service';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
+import {ConfirmDialogManager} from '../../tools/dialog-managers/confirmDialogManager';
+import {PageNavigator} from '../../tools/pageNavigator';
 
 /**
  * component representing details of the course
@@ -43,19 +44,23 @@ export class CourseDetailComponent implements OnInit {
    */
   public courseInfo: CourseInfoVM = new CourseInfoVM();
 
+  /**
+   * class for navigating between the pages
+   */
+  public readonly pageNavigator: PageNavigator;
+
   private readonly courseService: CourseService;
   private readonly courseMemberService: CourseMemberService;
   private bsModalRef: BsModalRef;
   private bsModalService: BsModalService;
   private confirmDialogManager: ConfirmDialogManager;
-  private router: Router;
 
   constructor(route: ActivatedRoute, router: Router, courseService: CourseService, roleAuthService: RoleAuthService,
               peopleService: PeopleService, courseMemberService: CourseMemberService, bsModalService: BsModalService) {
-    this.courseId = ActivatedRouteUtils.getIdParam(route);
+    this.courseId = ActivatedRouteTools.getIdParam(route);
     this.courseService = courseService;
     this.courseMemberService = courseMemberService;
-    this.router = router;
+    this.pageNavigator = new PageNavigator(router);
     this.bsModalService = bsModalService;
     this.confirmDialogManager = new ConfirmDialogManager(this.bsModalRef, this.bsModalService);
 
@@ -90,7 +95,7 @@ export class CourseDetailComponent implements OnInit {
       'Are you sure you want to leave this course?',
       () => {
         this.courseService.removeCurrentAdmin(this.courseId).subscribe(() => {
-          this.router.navigate(['/']);
+          this.pageNavigator.navigateHome();
         });
       });
   }
@@ -104,7 +109,7 @@ export class CourseDetailComponent implements OnInit {
       'Are you sure you want to leave this course?',
       () => {
         this.courseService.removeCurrentMember(this.courseId).subscribe(() => {
-          this.router.navigate(['/']);
+          this.pageNavigator.navigateHome();
         });
       });
   }

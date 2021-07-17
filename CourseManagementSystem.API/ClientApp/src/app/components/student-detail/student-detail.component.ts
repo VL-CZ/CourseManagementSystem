@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {CourseMemberService} from '../../services/course-member.service';
 import {RoleAuthService} from '../../services/role-auth.service';
-import {ActivatedRouteUtils} from '../../utils/activatedRouteUtils';
+import {ActivatedRouteTools} from '../../tools/activatedRouteTools';
 import {CourseMemberOrAdminVM} from '../../viewmodels/courseMemberOrAdminVM';
 
 @Component({
@@ -32,7 +32,7 @@ export class StudentDetailComponent implements OnInit {
   public courseMember: CourseMemberOrAdminVM = new CourseMemberOrAdminVM();
 
   constructor(route: ActivatedRoute, courseMemberService: CourseMemberService, roleAuthService: RoleAuthService) {
-    this.courseMemberId = ActivatedRouteUtils.getIdParam(route);
+    this.courseMemberId = ActivatedRouteTools.getIdParam(route);
     courseMemberService.getById(this.courseMemberId).subscribe(cm => {
       this.courseMember = cm;
     });

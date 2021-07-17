@@ -1,7 +1,7 @@
 /**
  * class containing additional array methods
  */
-export class ArrayUtils {
+export class ArrayTools {
 
   /**
    * resize array to the given size (modifies the array!)

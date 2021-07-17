@@ -5,8 +5,8 @@ import {CourseFileVM} from '../../viewmodels/courseFileVM';
 import {CourseService} from '../../services/course.service';
 import * as FileSaver from 'file-saver';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {ObservableWrapper} from '../../utils/observableWrapper';
-import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
+import {ObservableWrapper} from '../../tools/observableWrapper';
+import {ConfirmDialogManager} from '../../tools/dialog-managers/confirmDialogManager';
 
 
 /**

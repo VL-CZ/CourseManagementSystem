@@ -1,8 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CourseTestService} from '../../services/course-test.service';
 import {TestSubmissionWithUserInfoVM} from '../../viewmodels/testSubmissionVM';
-import {PercentStringFormatter} from '../../utils/percentStringFormatter';
-import {DateTimeFormatter} from '../../utils/dateTimeFormatter';
+import {PercentStringFormatter} from '../../tools/percent-tools/percentStringFormatter';
+import {DateTimeFormatter} from '../../tools/datetime/dateTimeFormatter';
+import {PageNavigator} from '../../tools/pageNavigator';
+import {Router} from '@angular/router';
 
 /**
  * component representing submitted solutions of the test
@@ -32,10 +34,16 @@ export class TestSubmissionListComponent implements OnInit {
    */
   public dateTimeFormatter: DateTimeFormatter = new DateTimeFormatter();
 
+  /**
+   * class for navigating between the pages
+   */
+  public readonly pageNavigator: PageNavigator;
+
   private courseTestService: CourseTestService;
 
-  constructor(courseTestService: CourseTestService) {
+  constructor(courseTestService: CourseTestService, router: Router) {
     this.courseTestService = courseTestService;
+    this.pageNavigator = new PageNavigator(router);
   }
 
   ngOnInit() {

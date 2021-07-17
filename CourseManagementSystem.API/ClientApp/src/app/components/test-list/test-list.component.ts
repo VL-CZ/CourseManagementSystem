@@ -3,11 +3,13 @@ import {CourseTestDetailsVM, TestStatus} from '../../viewmodels/courseTestVM';
 import {CourseService} from '../../services/course.service';
 import {RoleAuthService} from '../../services/role-auth.service';
 import {CourseTestService} from '../../services/course-test.service';
-import {DateTimeFormatter} from '../../utils/dateTimeFormatter';
-import {CourseTestUtils} from '../../utils/courseTestUtils';
+import {DateTimeFormatter} from '../../tools/datetime/dateTimeFormatter';
+import {CourseTestTools} from '../../tools/courseTestTools';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
+import {ConfirmDialogManager} from '../../tools/dialog-managers/confirmDialogManager';
 import {ConfirmButtonStyle} from '../confirm-dialog/confirm-dialog.component';
+import {Router} from '@angular/router';
+import {PageNavigator} from '../../tools/pageNavigator';
 
 /**
  * component representing list of tests in a course
@@ -51,7 +53,12 @@ export class TestListComponent implements OnInit, OnChanges {
    */
   public dateTimeFormatter: DateTimeFormatter = new DateTimeFormatter();
 
-  public courseTestUtils: CourseTestUtils = new CourseTestUtils();
+  /**
+   * class for navigating between the pages
+   */
+  public readonly pageNavigator: PageNavigator;
+
+  public courseTestUtils: CourseTestTools = new CourseTestTools();
 
   private courseService: CourseService;
   private courseTestService: CourseTestService;
@@ -61,11 +68,12 @@ export class TestListComponent implements OnInit, OnChanges {
   private confirmDialogManager: ConfirmDialogManager;
 
   constructor(courseService: CourseService, roleAuthService: RoleAuthService, courseTestService: CourseTestService,
-              bsModalService: BsModalService) {
+              bsModalService: BsModalService, router: Router) {
     this.courseService = courseService;
     this.courseTestService = courseTestService;
     this.roleAuthService = roleAuthService;
     this.bsModalService = bsModalService;
+    this.pageNavigator = new PageNavigator(router);
     this.confirmDialogManager = new ConfirmDialogManager(this.bsModalRef, this.bsModalService);
   }
 
