@@ -7,7 +7,6 @@ import {ArrayUtils} from '../../utils/arrayUtils';
 import {ActivatedRouteUtils} from '../../utils/activatedRouteUtils';
 import {TestQuestionNumberSetter} from '../../utils/testQuestionNumberSetter';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {ErrorModalManager} from '../../utils/errorModalManager';
 import {DateTimeBinder} from '../../utils/dateTimeBinder';
 import {ObservableWrapper} from '../../utils/observableWrapper';
 

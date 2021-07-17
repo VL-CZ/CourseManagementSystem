@@ -1,19 +1,19 @@
 import {Observable} from 'rxjs';
-import {ErrorModalManager} from './errorModalManager';
+import {ErrorDialogManager} from './errorDialogManager';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 
 /**
  * helper class for {@link Observable}
  */
 export class ObservableWrapper {
-  private errorModalManager: ErrorModalManager;
+  private errorModalManager: ErrorDialogManager;
   private modalService: BsModalService;
   private bsModalRef: BsModalRef;
 
   public constructor(bsModalRef: BsModalRef, bsModalService: BsModalService) {
     this.modalService = bsModalService;
     this.bsModalRef = bsModalRef;
-    this.errorModalManager = new ErrorModalManager(this.bsModalRef, this.modalService);
+    this.errorModalManager = new ErrorDialogManager(this.bsModalRef, this.modalService);
   }
 
   /**
