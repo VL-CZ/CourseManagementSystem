@@ -8,6 +8,8 @@ import {CourseTestUtils} from '../../utils/courseTestUtils';
 import {DateTimeFormatter} from '../../utils/dateTimeFormatter';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {ObservableWrapper} from '../../utils/observableWrapper';
+import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
+import {ConfirmButtonStyle} from '../confirm-dialog/confirm-dialog.component';
 
 /**
  * component for submitting a test
@@ -41,6 +43,7 @@ export class TestSubmitComponent implements OnInit {
   private bsModalRef: BsModalRef;
   private bsModalService: BsModalService;
   private observableWrapper: ObservableWrapper;
+  private confirmDialogManager: ConfirmDialogManager;
 
   constructor(route: ActivatedRoute, courseTestService: CourseTestService, testSubmissionService: TestSubmissionService, router: Router,
               bsModalService: BsModalService) {
@@ -48,6 +51,7 @@ export class TestSubmitComponent implements OnInit {
     this.testSubmitService = testSubmissionService;
     this.router = router;
     this.bsModalService = bsModalService;
+    this.confirmDialogManager = new ConfirmDialogManager(this.bsModalRef, this.bsModalService);
     this.observableWrapper = new ObservableWrapper(this.bsModalRef, this.bsModalService);
 
     testSubmissionService.loadSubmission(testId).subscribe(submission => {
@@ -80,16 +84,23 @@ export class TestSubmitComponent implements OnInit {
    * submit the test
    */
   public submit(): void {
-    this.observableWrapper.subscribeOrShowError(
-      // save answers
-      this.testSubmitService.saveAnswers(this.testSubmission.testSubmissionId, this.testSubmission.answers),
+    this.confirmDialogManager.displayDialog(
+      'Submit the assignment',
+      'Are you sure you want to submit the assignment?',
       () => {
-        // submit the test
-        this.testSubmitService.submit(this.testSubmission).subscribe(
-          // navigate
-          () => this.navigateToSubmissionDetail()
-        );
-      });
+        this.observableWrapper.subscribeOrShowError(
+          // save answers
+          this.testSubmitService.saveAnswers(this.testSubmission.testSubmissionId, this.testSubmission.answers),
+          () => {
+            // submit the test
+            this.testSubmitService.submit(this.testSubmission).subscribe(
+              // navigate
+              () => this.navigateToSubmissionDetail()
+            );
+          });
+      },
+      ConfirmButtonStyle.Information
+    );
   }
 
   /**

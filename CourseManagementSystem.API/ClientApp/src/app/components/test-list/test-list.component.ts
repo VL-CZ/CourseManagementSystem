@@ -7,6 +7,7 @@ import {DateTimeFormatter} from '../../utils/dateTimeFormatter';
 import {CourseTestUtils} from '../../utils/courseTestUtils';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
+import {ConfirmButtonStyle} from '../confirm-dialog/confirm-dialog.component';
 
 /**
  * component representing list of tests in a course
@@ -96,9 +97,16 @@ export class TestListComponent implements OnInit, OnChanges {
    * @param test test to publish
    */
   public publishTest(test: CourseTestDetailsVM): void {
-    this.courseTestService.publishTest(test.id).subscribe(() => {
-      this.reloadTests();
-    });
+    this.confirmDialogManager.displayDialog(
+      'Publish a test',
+      'Are you sure you want to publish this test? Any member of the course will be able to see it.',
+      () => {
+        this.courseTestService.publishTest(test.id).subscribe(() => {
+          this.reloadTests();
+        });
+      },
+      ConfirmButtonStyle.Information
+    );
   }
 
   /**

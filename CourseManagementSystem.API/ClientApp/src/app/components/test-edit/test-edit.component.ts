@@ -10,6 +10,7 @@ import {DateTimeFormatter} from '../../utils/dateTimeFormatter';
 import {CourseTestUtils} from '../../utils/courseTestUtils';
 import {ObservableWrapper} from '../../utils/observableWrapper';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
 
 /**
  * component for editing a test
@@ -53,6 +54,7 @@ export class TestEditComponent implements OnInit {
   private bsModalRef: BsModalRef;
   private bsModalService: BsModalService;
   private observableWrapper: ObservableWrapper;
+  private confirmDialogManager: ConfirmDialogManager;
 
   constructor(activatedRoute: ActivatedRoute, router: Router, courseTestService: CourseTestService, bsModalService: BsModalService) {
     this.router = router;
@@ -60,6 +62,7 @@ export class TestEditComponent implements OnInit {
     this.courseTestService = courseTestService;
     this.bsModalService = bsModalService;
     this.observableWrapper = new ObservableWrapper(this.bsModalRef, this.bsModalService);
+    this.confirmDialogManager = new ConfirmDialogManager(this.bsModalRef, this.bsModalService);
 
     courseTestService.getById(this.testId).subscribe(result => {
       this.testToUpdate = result;
@@ -78,8 +81,13 @@ export class TestEditComponent implements OnInit {
    * @param question question to delete
    */
   public deleteQuestion(question: TestQuestionVM): void {
-    this.testToUpdate.questions = this.testToUpdate.questions.filter(q => q !== question);
-    TestQuestionNumberSetter.setQuestionNumbers(this.testToUpdate.questions);
+    this.confirmDialogManager.displayDialog(
+      'Delete a question',
+      'Are you sure you want to delete this question?',
+      () => {
+        this.testToUpdate.questions = this.testToUpdate.questions.filter(q => q !== question);
+        TestQuestionNumberSetter.setQuestionNumbers(this.testToUpdate.questions);
+      });
   }
 
   /**
@@ -102,6 +110,18 @@ export class TestEditComponent implements OnInit {
 
     this.observableWrapper.subscribeOrShowError(
       this.courseTestService.updateTest(this.testId, updatedTest),
+      () => {
+        this.router.navigate(['/tests', this.testId]);
+      });
+  }
+
+  /**
+   * discard the changes made to this assignment
+   */
+  public discardChanges(): void {
+    this.confirmDialogManager.displayDialog(
+      'Discard changes',
+      'Are you sure you want to discard these changes?',
       () => {
         this.router.navigate(['/tests', this.testId]);
       });
