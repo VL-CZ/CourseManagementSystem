@@ -10,6 +10,7 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {ObservableWrapper} from '../../tools/observableWrapper';
 import {ConfirmDialogManager} from '../../tools/dialog-managers/confirmDialogManager';
 import {ConfirmButtonStyle} from '../confirm-dialog/confirm-dialog.component';
+import {PageNavigator} from '../../tools/pageNavigator';
 
 /**
  * component for submitting a test
@@ -38,7 +39,7 @@ export class TestSubmitComponent implements OnInit {
 
   public courseTestUtils: CourseTestTools = new CourseTestTools();
 
-  private router: Router;
+  private readonly pageNavigator: PageNavigator;
   private testSubmitService: TestSubmissionService;
   private bsModalRef: BsModalRef;
   private bsModalService: BsModalService;
@@ -49,7 +50,7 @@ export class TestSubmitComponent implements OnInit {
               bsModalService: BsModalService) {
     const testId = ActivatedRouteTools.getIdParam(route);
     this.testSubmitService = testSubmissionService;
-    this.router = router;
+    this.pageNavigator = new PageNavigator(router);
     this.bsModalService = bsModalService;
     this.confirmDialogManager = new ConfirmDialogManager(this.bsModalRef, this.bsModalService);
     this.observableWrapper = new ObservableWrapper(this.bsModalRef, this.bsModalService);
@@ -57,7 +58,7 @@ export class TestSubmitComponent implements OnInit {
     testSubmissionService.loadSubmission(testId).subscribe(submission => {
       this.testSubmission = submission;
       if (submission.isSubmitted) {
-        this.navigateToSubmissionDetail();
+        this.pageNavigator.navigateToSubmissionReview(this.testSubmission.testSubmissionId);
       }
     });
 
@@ -95,19 +96,11 @@ export class TestSubmitComponent implements OnInit {
             // submit the test
             this.testSubmitService.submit(this.testSubmission).subscribe(
               // navigate
-              () => this.navigateToSubmissionDetail()
+              () => this.pageNavigator.navigateToSubmissionReview(this.testSubmission.testSubmissionId)
             );
           });
       },
       ConfirmButtonStyle.Information
     );
-  }
-
-  /**
-   * navigate to submission detail page
-   * @private
-   */
-  private navigateToSubmissionDetail(): void {
-    this.router.navigate(['/submissions', this.testSubmission.testSubmissionId]);
   }
 }

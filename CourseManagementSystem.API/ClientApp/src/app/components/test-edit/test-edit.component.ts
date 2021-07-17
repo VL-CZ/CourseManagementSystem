@@ -11,6 +11,7 @@ import {CourseTestTools} from '../../tools/courseTestTools';
 import {ObservableWrapper} from '../../tools/observableWrapper';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {ConfirmDialogManager} from '../../tools/dialog-managers/confirmDialogManager';
+import {PageNavigator} from '../../tools/pageNavigator';
 
 /**
  * component for editing a test
@@ -49,7 +50,7 @@ export class TestEditComponent implements OnInit {
 
   public courseTestUtils: CourseTestTools = new CourseTestTools();
 
-  private router: Router;
+  private readonly pageNavigator: PageNavigator;
   private courseTestService: CourseTestService;
   private bsModalRef: BsModalRef;
   private bsModalService: BsModalService;
@@ -57,7 +58,7 @@ export class TestEditComponent implements OnInit {
   private confirmDialogManager: ConfirmDialogManager;
 
   constructor(activatedRoute: ActivatedRoute, router: Router, courseTestService: CourseTestService, bsModalService: BsModalService) {
-    this.router = router;
+    this.pageNavigator = new PageNavigator(router);
     this.testId = ActivatedRouteTools.getIdParam(activatedRoute);
     this.courseTestService = courseTestService;
     this.bsModalService = bsModalService;
@@ -111,7 +112,7 @@ export class TestEditComponent implements OnInit {
     this.observableWrapper.subscribeOrShowError(
       this.courseTestService.updateTest(this.testId, updatedTest),
       () => {
-        this.router.navigate(['/tests', this.testId]);
+        this.pageNavigator.navigateToAssignmentDetail(this.testId);
       });
   }
 
@@ -123,7 +124,7 @@ export class TestEditComponent implements OnInit {
       'Discard changes',
       'Are you sure you want to discard these changes?',
       () => {
-        this.router.navigate(['/tests', this.testId]);
+        this.pageNavigator.navigateToAssignmentDetail(this.testId);
       });
   }
 }

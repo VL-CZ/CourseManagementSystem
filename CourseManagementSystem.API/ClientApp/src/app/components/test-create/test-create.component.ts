@@ -9,6 +9,7 @@ import {TestQuestionNumberSetter} from '../../tools/testQuestionNumberSetter';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {DateTimeBinder} from '../../tools/datetime/dateTimeBinder';
 import {ObservableWrapper} from '../../tools/observableWrapper';
+import {PageNavigator} from '../../tools/pageNavigator';
 
 /**
  * component for creating a test
@@ -37,7 +38,7 @@ export class TestCreateComponent implements OnInit {
 
   public readonly courseId: string;
   private courseTestService: CourseTestService;
-  private router: Router;
+  private readonly pageNavigator: PageNavigator;
   private bsModalRef: BsModalRef;
   private modalService: BsModalService;
   private observableWrapper: ObservableWrapper;
@@ -45,7 +46,7 @@ export class TestCreateComponent implements OnInit {
   constructor(route: ActivatedRoute, courseTestService: CourseTestService, router: Router, bsModalService: BsModalService) {
     this.courseId = ActivatedRouteTools.getIdParam(route);
     this.courseTestService = courseTestService;
-    this.router = router;
+    this.pageNavigator = new PageNavigator(router);
     this.modalService = bsModalService;
 
     this.testToCreate = new AddCourseTestVM();
@@ -63,7 +64,7 @@ export class TestCreateComponent implements OnInit {
     this.observableWrapper.subscribeOrShowError(
       this.courseTestService.addToCourse(this.testToCreate, this.courseId),
       () => {
-        this.router.navigate(['/courses', this.courseId]);
+        this.pageNavigator.navigateToCourseDetail(this.courseId);
       });
   }
 

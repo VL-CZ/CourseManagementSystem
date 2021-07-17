@@ -8,6 +8,7 @@ import {CourseInfoVM} from '../../viewmodels/courseVM';
 import {CourseMemberService} from '../../services/course-member.service';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {ConfirmDialogManager} from '../../tools/dialog-managers/confirmDialogManager';
+import {PageNavigator} from '../../tools/pageNavigator';
 
 /**
  * component representing details of the course
@@ -48,14 +49,14 @@ export class CourseDetailComponent implements OnInit {
   private bsModalRef: BsModalRef;
   private bsModalService: BsModalService;
   private confirmDialogManager: ConfirmDialogManager;
-  private router: Router;
+  private readonly pageNavigator: PageNavigator;
 
   constructor(route: ActivatedRoute, router: Router, courseService: CourseService, roleAuthService: RoleAuthService,
               peopleService: PeopleService, courseMemberService: CourseMemberService, bsModalService: BsModalService) {
     this.courseId = ActivatedRouteTools.getIdParam(route);
     this.courseService = courseService;
     this.courseMemberService = courseMemberService;
-    this.router = router;
+    this.pageNavigator = new PageNavigator(router);
     this.bsModalService = bsModalService;
     this.confirmDialogManager = new ConfirmDialogManager(this.bsModalRef, this.bsModalService);
 
@@ -90,7 +91,7 @@ export class CourseDetailComponent implements OnInit {
       'Are you sure you want to leave this course?',
       () => {
         this.courseService.removeCurrentAdmin(this.courseId).subscribe(() => {
-          this.router.navigate(['/']);
+          this.pageNavigator.navigateHome();
         });
       });
   }
@@ -104,7 +105,7 @@ export class CourseDetailComponent implements OnInit {
       'Are you sure you want to leave this course?',
       () => {
         this.courseService.removeCurrentMember(this.courseId).subscribe(() => {
-          this.router.navigate(['/']);
+          this.pageNavigator.navigateHome();
         });
       });
   }
