@@ -4,6 +4,9 @@ import {CourseService} from '../../services/course.service';
 import {RoleAuthService} from '../../services/role-auth.service';
 import {WrapperVM} from '../../viewmodels/wrapperVM';
 import {CourseAdminService} from '../../services/course-admin.service';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {ObservableWrapper} from '../../utils/observableWrapper';
+import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
 
 /**
  * component representing list of course admins
@@ -30,10 +33,17 @@ export class AdminListComponent implements OnInit {
 
   private readonly courseService: CourseService;
   private readonly courseAdminService: CourseAdminService;
+  private bsModalRef: BsModalRef;
+  private bsModalService: BsModalService;
+  private confirmDialogManager: ConfirmDialogManager;
+  private observableWrapper: ObservableWrapper;
 
-  constructor(courseService: CourseService, courseAdminService: CourseAdminService) {
+  constructor(courseService: CourseService, courseAdminService: CourseAdminService, bsModalService: BsModalService) {
     this.courseService = courseService;
     this.courseAdminService = courseAdminService;
+    this.bsModalService = bsModalService;
+    this.observableWrapper = new ObservableWrapper(this.bsModalRef, this.bsModalService);
+    this.confirmDialogManager = new ConfirmDialogManager(this.bsModalRef, this.bsModalService);
   }
 
   ngOnInit() {
@@ -44,9 +54,11 @@ export class AdminListComponent implements OnInit {
    * add new admin
    */
   public addAdmin(): void {
-    this.courseService.addAdmin(this.courseId, this.adminIdToAdd).subscribe(() => {
-      this.reload();
-    });
+    this.observableWrapper.subscribeOrShowError(
+      this.courseService.addAdmin(this.courseId, this.adminIdToAdd),
+      () => {
+        this.reload();
+      });
   }
 
   /**
@@ -54,9 +66,14 @@ export class AdminListComponent implements OnInit {
    * @param adminId identifier of the admin to remove
    */
   public removeAdmin(adminId: string) {
-    this.courseAdminService.removeById(adminId).subscribe(() => {
-      this.reload();
-    });
+    this.confirmDialogManager.displayDialog(
+      'Remove an admin',
+      'Are you sure you want to remove this admin?',
+      () => {
+        this.courseAdminService.removeById(adminId).subscribe(() => {
+          this.reload();
+        });
+      });
   }
 
   /**
@@ -64,6 +81,7 @@ export class AdminListComponent implements OnInit {
    * @private
    */
   private reload(): void {
+    this.adminIdToAdd = new WrapperVM<string>();
     this.courseService.getAllAdmins(this.courseId).subscribe(result => {
       this.admins = result;
     });

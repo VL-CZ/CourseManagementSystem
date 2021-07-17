@@ -6,6 +6,8 @@ import {PeopleService} from '../../services/people.service';
 import {ActivatedRouteUtils} from '../../utils/activatedRouteUtils';
 import {CourseInfoVM} from '../../viewmodels/courseVM';
 import {CourseMemberService} from '../../services/course-member.service';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
 
 /**
  * component representing details of the course
@@ -22,9 +24,14 @@ export class CourseDetailComponent implements OnInit {
   public currentCourseMemberId: string;
 
   /**
-   * is the currently logged course member admin of the course?
+   * is the currently logged in user admin of the course?
    */
   public isCourseAdmin: boolean;
+
+  /**
+   * check if the currently logged in user is the only admin of this course
+   */
+  public isTheOnlyAdmin: boolean;
 
   /**
    * id of the course
@@ -38,14 +45,19 @@ export class CourseDetailComponent implements OnInit {
 
   private readonly courseService: CourseService;
   private readonly courseMemberService: CourseMemberService;
+  private bsModalRef: BsModalRef;
+  private bsModalService: BsModalService;
+  private confirmDialogManager: ConfirmDialogManager;
   private router: Router;
 
   constructor(route: ActivatedRoute, router: Router, courseService: CourseService, roleAuthService: RoleAuthService,
-              peopleService: PeopleService, courseMemberService: CourseMemberService) {
+              peopleService: PeopleService, courseMemberService: CourseMemberService, bsModalService: BsModalService) {
     this.courseId = ActivatedRouteUtils.getIdParam(route);
     this.courseService = courseService;
     this.courseMemberService = courseMemberService;
     this.router = router;
+    this.bsModalService = bsModalService;
+    this.confirmDialogManager = new ConfirmDialogManager(this.bsModalRef, this.bsModalService);
 
     courseService.getById(this.courseId).subscribe(course => {
       this.courseInfo = course;
@@ -54,7 +66,11 @@ export class CourseDetailComponent implements OnInit {
     roleAuthService.isCourseAdmin(this.courseId).subscribe(result => {
       this.isCourseAdmin = result.value;
 
-      if (!this.isCourseAdmin) {
+      if (this.isCourseAdmin) {
+        courseService.getAllAdmins(this.courseId).subscribe(admins => {
+          this.isTheOnlyAdmin = admins.length === 1;
+        });
+      } else {
         peopleService.getCourseMemberByCourse(this.courseId).subscribe(res => {
           this.currentCourseMemberId = res.value;
         });
@@ -69,17 +85,27 @@ export class CourseDetailComponent implements OnInit {
    * remove the current admin from the course
    */
   public removeCurrentAdmin(): void {
-    this.courseService.removeCurrentAdmin(this.courseId).subscribe(() => {
-      this.router.navigate(['/']);
-    });
+    this.confirmDialogManager.displayDialog(
+      'Leave this course',
+      'Are you sure you want to leave this course?',
+      () => {
+        this.courseService.removeCurrentAdmin(this.courseId).subscribe(() => {
+          this.router.navigate(['/']);
+        });
+      });
   }
 
   /**
    * remove the current course member from the course
    */
   public removeCurrentMember(): void {
-    this.courseService.removeCurrentMember(this.courseId).subscribe(() => {
-      this.router.navigate(['/']);
-    });
+    this.confirmDialogManager.displayDialog(
+      'Leave this course',
+      'Are you sure you want to leave this course?',
+      () => {
+        this.courseService.removeCurrentMember(this.courseId).subscribe(() => {
+          this.router.navigate(['/']);
+        });
+      });
   }
 }

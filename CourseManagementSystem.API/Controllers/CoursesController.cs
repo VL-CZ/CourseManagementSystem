@@ -24,16 +24,18 @@ namespace CourseManagementSystem.API.Controllers
         private readonly IPeopleService peopleService;
         private readonly ICourseMemberService courseMemberService;
         private readonly ICourseAdminService courseAdminService;
+        private readonly IEnrollmentRequestService enrollmentRequestService;
         private CourseTestFilter courseTestFilter;
 
         public CoursesController(IHttpContextAccessor httpContextAccessor, ICourseService courseService, IPeopleService peopleService,
-            ICourseMemberService courseMemberService, ICourseAdminService courseAdminService)
+            ICourseMemberService courseMemberService, ICourseAdminService courseAdminService, IEnrollmentRequestService enrollmentRequestService)
         {
             this.httpContextAccessor = httpContextAccessor;
             this.courseService = courseService;
             this.peopleService = peopleService;
             this.courseAdminService = courseAdminService;
             this.courseMemberService = courseMemberService;
+            this.enrollmentRequestService = enrollmentRequestService;
             courseTestFilter = new CourseTestFilter();
         }
 
@@ -106,7 +108,11 @@ namespace CourseManagementSystem.API.Controllers
 
             if (peopleService.IsAdminOfCourse(currentUserId, courseId) || peopleService.IsMemberOfCourse(currentUserId, courseId))
             {
-                throw new ArgumentException("Cannot enroll to the selected course. Ee are already admin/member of this course.");
+                throw new ArgumentException("Cannot enroll to the selected course. The user is already admin/member of this course.");
+            }
+            if (enrollmentRequestService.HasRequestedEnrollment(currentUserId, courseId))
+            {
+                throw new ArgumentException("The user has already requested enrollment to the given course");
             }
 
             var currentUser = peopleService.GetById(currentUserId);

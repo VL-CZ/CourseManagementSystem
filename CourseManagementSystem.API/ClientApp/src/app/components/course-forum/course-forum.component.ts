@@ -4,6 +4,9 @@ import {CourseService} from '../../services/course.service';
 import {ForumPostService} from '../../services/forum-post.service';
 import {RoleAuthService} from '../../services/role-auth.service';
 import {WrapperVM} from '../../viewmodels/wrapperVM';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {ObservableWrapper} from '../../utils/observableWrapper';
+import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
 
 @Component({
   selector: 'app-course-forum',
@@ -37,10 +40,18 @@ export class CourseForumComponent implements OnInit {
 
   private courseService: CourseService;
   private forumPostService: ForumPostService;
+  private bsModalRef: BsModalRef;
+  private bsModalService: BsModalService;
+  private observableWrapper: ObservableWrapper;
+  private confirmDialogManager: ConfirmDialogManager;
 
-  constructor(courseService: CourseService, forumPostService: ForumPostService, roleAuthService: RoleAuthService) {
+  constructor(courseService: CourseService, forumPostService: ForumPostService, roleAuthService: RoleAuthService,
+              bsModalService: BsModalService) {
     this.courseService = courseService;
     this.forumPostService = forumPostService;
+    this.bsModalService = bsModalService;
+    this.observableWrapper = new ObservableWrapper(this.bsModalRef, this.bsModalService);
+    this.confirmDialogManager = new ConfirmDialogManager(this.bsModalRef, this.bsModalService);
   }
 
   ngOnInit() {
@@ -52,19 +63,26 @@ export class CourseForumComponent implements OnInit {
    * @param post post to delete
    */
   public delete(post: ForumPostVM): void {
-    this.forumPostService.delete(post.id).subscribe(() => {
-      this.reloadPosts();
-    });
+    this.confirmDialogManager.displayDialog(
+      'Remove a forum post',
+      'Are you sure you want to Remove the selected post?',
+      () => {
+        this.forumPostService.delete(post.id).subscribe(() => {
+          this.reloadPosts();
+        });
+      });
   }
 
   /**
    * add a new post
    */
   public addPost(): void {
-    this.forumPostService.add(this.postToAdd, this.courseId).subscribe(() => {
-      this.reloadPosts();
-      this.postToAdd = new WrapperVM<string>();
-    });
+    this.observableWrapper.subscribeOrShowError(
+      this.forumPostService.add(this.postToAdd, this.courseId),
+      () => {
+        this.reloadPosts();
+        this.postToAdd = new WrapperVM<string>();
+      });
   }
 
   /**
