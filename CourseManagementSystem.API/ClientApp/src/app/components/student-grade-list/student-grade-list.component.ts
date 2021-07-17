@@ -7,6 +7,7 @@ import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component
 import {PercentStringFormatter} from '../../utils/percentStringFormatter';
 import {RouterUtils} from '../../utils/routerUtils';
 import {ActivatedRoute, Router} from '@angular/router';
+import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
 
 /**
  * component with list of student's grades
@@ -66,26 +67,24 @@ export class StudentGradeListComponent implements OnInit {
    * @param gradeId identifier of the grade
    */
   public removeGrade(gradeId: string): void {
-    // this.gradeService.delete(gradeId).subscribe();
-    // this.grades = this.grades.filter(grade => grade.id !== gradeId);
 
-    const initialState = {
-      title: 'Delete a grade',
-      text: 'Are you sure you want to delete this grade?',
-      onConfirm: () => {
+    const confirmDialogManager = new ConfirmDialogManager(this.bsModalRef, this.modalService);
+
+    confirmDialogManager.displayDialog(
+      'Delete a grade',
+      'Are you sure you want to delete this grade?',
+      () => {
         this.gradeService.delete(gradeId).subscribe(() => {
           RouterUtils.reloadPage(this.router, this.activatedRoute);
         });
-      }
-    };
-    this.bsModalRef = this.modalService.show(ConfirmDialogComponent, {initialState});
+      });
   }
 
   /**
    * reload data about grades
    * @private
    */
-  private reloadGrades() {
+  private reloadGrades(): void {
     this.courseMemberService.getGrades(this.courseMemberId).subscribe(grades => {
       this.grades = grades;
     });
