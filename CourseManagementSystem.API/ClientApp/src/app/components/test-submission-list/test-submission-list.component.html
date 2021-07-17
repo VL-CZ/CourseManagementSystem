@@ -9,10 +9,10 @@
       <th></th>
     </tr>
     <tr *ngFor="let testInfo of this.submissionsInfos">
-      <td>{{testInfo.studentEmail}}</td>
-      <td><b>{{percentStringFormatter.format(testInfo.percentualScore)}}</b></td>
-      <td>{{dateTimeFormatter.formatToLocal(testInfo.submittedDateTime)}}</td>
-      <td>{{testInfo.isReviewed ? 'YES' : 'NO'}}</td>
+      <td class="align-middle">{{testInfo.studentEmail}}</td>
+      <td class="align-middle"><b>{{percentStringFormatter.format(testInfo.percentualScore)}}</b></td>
+      <td class="align-middle">{{dateTimeFormatter.formatToLocal(testInfo.submittedDateTime)}}</td>
+      <td class="align-middle">{{testInfo.isReviewed ? 'YES' : 'NO'}}</td>
       <td><a class="btn btn-link" (click)="pageNavigator.navigateToSubmissionReview(testInfo.testSubmissionId)">Detail</a></td>
     </tr>
   </table>

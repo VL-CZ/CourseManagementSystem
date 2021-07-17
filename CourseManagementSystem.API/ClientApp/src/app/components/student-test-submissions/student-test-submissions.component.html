@@ -12,16 +12,16 @@
       <td>
         <a class="btn btn-link" (click)="pageNavigator.navigateToSubmissionReview(submission.testSubmissionId)">{{submission.testTopic}}</a>
       </td>
-      <td>
+      <td class="align-middle">
         <b>{{percentStringFormatter.format(submission.percentualScore)}}</b>
       </td>
-      <td>
+      <td class="align-middle">
         {{submission.testWeight}}
       </td>
-      <td>
+      <td class="align-middle">
         {{dateTimeFormatter.formatToLocal(submission.submittedDateTime)}}
       </td>
-      <td>
+      <td class="align-middle">
         {{submission.isReviewed ? 'YES' : 'NO'}}
       </td>
     </tr>

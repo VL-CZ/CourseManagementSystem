@@ -6,7 +6,7 @@
       <th></th>
     </tr>
     <tr *ngFor="let admin of admins">
-      <td>{{admin.name}}</td>
+      <td class="align-middle">{{admin.name}}</td>
       <td>
         <button class="btn btn-danger" (click)="removeAdmin(admin.id)">Remove</button>
       </td>

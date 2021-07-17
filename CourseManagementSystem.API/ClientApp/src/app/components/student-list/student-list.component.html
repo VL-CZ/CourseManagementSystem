@@ -7,7 +7,7 @@
       <th></th>
     </tr>
     <tr *ngFor="let person of students">
-      <td>{{person.name}}</td>
+      <td class="align-middle">{{person.name}}</td>
       <td><a class="btn btn-link" (click)="pageNavigator.navigateToStudentDetail(person.id)">Details</a></td>
       <td>
         <button class="btn btn-danger" (click)="removeMember(person)">Remove</button>

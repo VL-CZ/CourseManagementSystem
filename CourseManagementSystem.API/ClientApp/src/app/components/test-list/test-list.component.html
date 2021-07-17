@@ -10,7 +10,7 @@
         <td class="align-middle">
           <b>Deadline: {{dateTimeFormatter.formatToLocal(test.deadline)}}</b>
         </td>
-        <td>
+        <td class="align-middle">
           <b>{{courseTestUtils.isGradedToString(test.isGraded)}}</b>
         </td>
         <td>
@@ -30,10 +30,10 @@
           <a *ngIf="isCourseAdmin" class="btn btn-link" (click)="pageNavigator.navigateToAssignmentDetail(test.id)">{{test.topic}}</a>
           <a *ngIf="!isCourseAdmin" class="btn btn-link" (click)="pageNavigator.navigateToAssignmentSubmission(test.id)">{{test.topic}}</a>
         </td>
-        <td>
+        <td class="align-middle">
           <b>Deadline: {{dateTimeFormatter.formatToLocal(test.deadline)}}</b>
         </td>
-        <td>
+        <td class="align-middle">
           <b>{{courseTestUtils.isGradedToString(test.isGraded)}}</b>
         </td>
       </tr>
@@ -46,7 +46,7 @@
         <td>
           <a class="btn btn-link" (click)="pageNavigator.navigateToAssignmentDetail(test.id)">{{test.topic}}</a>
         </td>
-        <td>
+        <td class="align-middle">
           <b>{{courseTestUtils.isGradedToString(test.isGraded)}}</b>
         </td>
       </tr>
