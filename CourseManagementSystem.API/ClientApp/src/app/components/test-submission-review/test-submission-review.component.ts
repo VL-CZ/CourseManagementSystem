@@ -190,7 +190,7 @@ export class TestSubmissionReviewComponent implements OnInit {
     this.observableWrapper.subscribeOrShowError(
       this.testSubmissionService.updateSubmission(this.submission.testSubmissionId.toString(), this.evaluatedTestSubmission),
       () => {
-        this.pageNavigator.reloadCurrentPage(this.activatedRoute);
+        this.pageNavigator.reloadCurrentPage(this.activatedRoute, true);
       });
   }
 }
