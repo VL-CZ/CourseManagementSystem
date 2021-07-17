@@ -8,7 +8,6 @@ import {CourseInfoVM} from '../../viewmodels/courseVM';
 import {CourseMemberService} from '../../services/course-member.service';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
-import {CourseAdminService} from '../../services/course-admin.service';
 
 /**
  * component representing details of the course
