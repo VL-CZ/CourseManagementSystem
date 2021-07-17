@@ -9,10 +9,10 @@
       <th *ngIf="isAdmin"></th>
     </tr>
     <tr *ngFor="let grade of grades">
-      <td>{{grade.topic}}</td>
-      <td><b>{{percentStringFormatter.format(grade.percentualValue)}}</b></td>
-      <td>{{grade.weight}}</td>
-      <td>{{grade.comment}}</td>
+      <td class="align-middle">{{grade.topic}}</td>
+      <td class="align-middle"><b>{{percentStringFormatter.format(grade.percentualValue)}}</b></td>
+      <td class="align-middle">{{grade.weight}}</td>
+      <td class="align-middle">{{grade.comment}}</td>
       <td *ngIf="isAdmin">
         <button class="btn btn-danger" (click)="removeGrade(grade.id)">Remove</button>
       </td>

@@ -3,7 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 /**
  * class containing additional {@link ActivatedRoute} methods
  */
-export class ActivatedRouteUtils {
+export class ActivatedRouteTools {
   /**
    * get id parameter value from the route
    * @param route route

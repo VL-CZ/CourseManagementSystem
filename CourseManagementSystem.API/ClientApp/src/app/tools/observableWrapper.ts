@@ -1,5 +1,5 @@
 import {Observable} from 'rxjs';
-import {ErrorDialogManager} from './errorDialogManager';
+import {ErrorDialogManager} from './dialog-managers/errorDialogManager';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 
 /**

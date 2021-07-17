@@ -3,6 +3,6 @@
     <h6>Course</h6>
   </li>
   <li class="list-group-item">
-    <a routerLink="/courses/{{courseInfo.id}}">{{courseInfo.name}}</a>
+    <a class="btn btn-link" (click)="pageNavigator.navigateToCourseDetail(courseInfo.id)">{{courseInfo.name}}</a>
   </li>
 </ul>

@@ -2,11 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {EnrollmentRequestVM} from '../../viewmodels/enrollmentRequestVM';
 import {EnrollmentRequestService} from '../../services/enrollment-request.service';
 import {ActivatedRoute} from '@angular/router';
-import {ActivatedRouteUtils} from '../../utils/activatedRouteUtils';
+import {ActivatedRouteTools} from '../../tools/activatedRouteTools';
 import {CourseService} from '../../services/course.service';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
-import {InformationDialogManager} from '../../utils/informationDialogManager';
+import {ConfirmDialogManager} from '../../tools/dialog-managers/confirmDialogManager';
+import {InformationDialogManager} from '../../tools/dialog-managers/informationDialogManager';
 
 @Component({
   selector: 'app-enrollment-request-list',
@@ -36,7 +36,7 @@ export class EnrollmentRequestListComponent implements OnInit {
               bsModalService: BsModalService) {
     this.enrollmentRequestService = enrollmentRequestService;
     this.courseService = courseService;
-    this.courseId = ActivatedRouteUtils.getIdParam(route);
+    this.courseId = ActivatedRouteTools.getIdParam(route);
     this.bsModalService = bsModalService;
 
     this.confirmDialogManager = new ConfirmDialogManager(this.bsModalRef, this.bsModalService);

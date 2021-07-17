@@ -1,5 +1,5 @@
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {ConfirmButtonStyle, ConfirmDialogComponent} from '../components/confirm-dialog/confirm-dialog.component';
+import {ConfirmButtonStyle, ConfirmDialogComponent} from '../../components/confirm-dialog/confirm-dialog.component';
 
 export class ConfirmDialogManager {
   public static readonly irreversibleActionMessage = 'This action cannot be reverted!';

@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {SubmissionAnswerVM} from '../../viewmodels/testSubmissionAnswerVM';
 import {QuestionType} from '../../viewmodels/testQuestionVM';
-import {QuestionWithAnswerChoices} from '../../utils/questionWithAnswerChoices';
+import {QuestionWithAnswerChoices} from '../../tools/questionWithAnswerChoices';
 
 /**
  * component representing form with answer of the test to submit

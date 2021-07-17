@@ -1,6 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CourseMemberService} from '../../services/course-member.service';
 import {QuizSubmissionInfoVM} from '../../viewmodels/quizSubmissionInfoVM';
+import {Router} from '@angular/router';
+import {PageNavigator} from '../../tools/pageNavigator';
 
 @Component({
   selector: 'app-student-quiz-submissions',
@@ -17,10 +19,16 @@ export class StudentQuizSubmissionsComponent implements OnInit {
    */
   public quizSubmissions: QuizSubmissionInfoVM[] = [];
 
+  /**
+   * class for navigating between the pages
+   */
+  public readonly pageNavigator: PageNavigator;
+
   private courseMemberService: CourseMemberService;
 
-  constructor(courseMemberService: CourseMemberService) {
+  constructor(courseMemberService: CourseMemberService, router: Router) {
     this.courseMemberService = courseMemberService;
+    this.pageNavigator = new PageNavigator(router);
   }
 
   ngOnInit() {

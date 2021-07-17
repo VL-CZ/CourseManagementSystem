@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {QuestionType, TestQuestionVM} from '../../viewmodels/testQuestionVM';
-import {ArrayUtils} from '../../utils/arrayUtils';
-import {AnswerChoice, QuestionWithAnswerChoices} from '../../utils/questionWithAnswerChoices';
+import {ArrayTools} from '../../tools/arrayTools';
+import {AnswerChoice, QuestionWithAnswerChoices} from '../../tools/questionWithAnswerChoices';
 
 /**
  * component that represents creating/editing a question
@@ -61,7 +61,7 @@ export class TestQuestionEditComponent implements OnInit {
    * applied only if the question has choices of answers
    */
   public updateChoicesCount(): void {
-    ArrayUtils.resize(this.questionWithAnswerChoices.answerChoices, this.possibleAnswersCount,
+    ArrayTools.resize(this.questionWithAnswerChoices.answerChoices, this.possibleAnswersCount,
       new AnswerChoice('', ''));
     this.setAnswerChoicesLetters();
     this.serializePossibleAnswers();
