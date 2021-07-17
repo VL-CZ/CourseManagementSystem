@@ -4,6 +4,8 @@ import {EnrollmentRequestService} from '../../services/enrollment-request.servic
 import {ActivatedRoute} from '@angular/router';
 import {ActivatedRouteUtils} from '../../utils/activatedRouteUtils';
 import {CourseService} from '../../services/course.service';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
 
 @Component({
   selector: 'app-enrollment-request-list',
@@ -24,11 +26,18 @@ export class EnrollmentRequestListComponent implements OnInit {
 
   private enrollmentRequestService: EnrollmentRequestService;
   private courseService: CourseService;
+  private bsModalRef: BsModalRef;
+  private bsModalService: BsModalService;
+  private confirmDialogManager: ConfirmDialogManager;
 
-  constructor(route: ActivatedRoute, enrollmentRequestService: EnrollmentRequestService, courseService: CourseService) {
+  constructor(route: ActivatedRoute, enrollmentRequestService: EnrollmentRequestService, courseService: CourseService,
+              bsModalService: BsModalService) {
     this.enrollmentRequestService = enrollmentRequestService;
     this.courseService = courseService;
     this.courseId = ActivatedRouteUtils.getIdParam(route);
+    this.bsModalService = bsModalService;
+    this.confirmDialogManager = new ConfirmDialogManager(this.bsModalRef, this.bsModalService);
+
     this.reload();
   }
 
@@ -50,9 +59,14 @@ export class EnrollmentRequestListComponent implements OnInit {
    * @param request enrollment request to decline
    */
   public decline(request: EnrollmentRequestVM): void {
-    this.enrollmentRequestService.decline(request.id).subscribe(() => {
-      this.reload();
-    });
+    this.confirmDialogManager.displayDialog(
+      'Decline a request for enrollment',
+      'Are you sure you want to decline the selected enrollment request?',
+      () => {
+        this.enrollmentRequestService.decline(request.id).subscribe(() => {
+          this.reload();
+        });
+      });
   }
 
   /**

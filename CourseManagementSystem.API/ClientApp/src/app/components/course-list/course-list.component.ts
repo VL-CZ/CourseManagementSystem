@@ -6,6 +6,7 @@ import {AddCourseVM} from '../../viewmodels/courseVM';
 import {PeopleService} from '../../services/people.service';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {ObservableWrapper} from '../../utils/observableWrapper';
+import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
 
 /**
  * component representing list of courses
@@ -20,17 +21,17 @@ export class CourseListComponent implements OnInit {
   /**
    * course to add
    */
-  public newCourse: AddCourseVM;
+  public newCourse: AddCourseVM = new AddCourseVM();
 
   /**
    * list of courses where the current user is a member
    */
-  public memberCourses: CourseInfoVM[];
+  public memberCourses: CourseInfoVM[] = [];
 
   /**
    * list of courses managed by the currently logged user
    */
-  public managedCourses: CourseInfoVM[];
+  public managedCourses: CourseInfoVM[] = [];
 
   /**
    * identifier of the current user
@@ -42,16 +43,16 @@ export class CourseListComponent implements OnInit {
   private bsModalRef: BsModalRef;
   private bsModalService: BsModalService;
   private observableWrapper: ObservableWrapper;
+  private confirmDialogManager: ConfirmDialogManager;
 
   constructor(courseService: CourseService, peopleService: PeopleService, roleAuthService: RoleAuthService,
               bsModalService: BsModalService) {
-    this.newCourse = new AddCourseVM();
-    this.managedCourses = [];
-    this.memberCourses = [];
     this.courseService = courseService;
     this.peopleService = peopleService;
     this.bsModalService = bsModalService;
+
     this.observableWrapper = new ObservableWrapper(this.bsModalRef, this.bsModalService);
+    this.confirmDialogManager = new ConfirmDialogManager(this.bsModalRef, this.bsModalService);
 
     roleAuthService.getCurrentUserId().subscribe(id => {
       this.currentUserId = id.value;
@@ -68,9 +69,14 @@ export class CourseListComponent implements OnInit {
    * @param courseId identifier of the course to delete
    */
   public removeCourse(courseId: string): void {
-    this.courseService.delete(courseId).subscribe(() => {
-      this.reloadCourseInfo();
-    });
+    this.confirmDialogManager.displayDialog(
+      'Remove a course',
+      'Are you sure you want to remove the selected course?',
+      () => {
+        this.courseService.delete(courseId).subscribe(() => {
+          this.reloadCourseInfo();
+        });
+      });
   }
 
   /**

@@ -48,6 +48,7 @@ export class StudentGradeListComponent implements OnInit {
   private modalService: BsModalService;
   private router: Router;
   private activatedRoute: ActivatedRoute;
+  private confirmDialogManager: ConfirmDialogManager;
 
   constructor(gradeService: GradeService, courseMemberService: CourseMemberService, modalService: BsModalService,
               router: Router, activatedRoute: ActivatedRoute) {
@@ -56,6 +57,7 @@ export class StudentGradeListComponent implements OnInit {
     this.modalService = modalService;
     this.activatedRoute = activatedRoute;
     this.router = router;
+    this.confirmDialogManager = new ConfirmDialogManager(this.bsModalRef, this.modalService);
   }
 
   ngOnInit() {
@@ -67,10 +69,7 @@ export class StudentGradeListComponent implements OnInit {
    * @param gradeId identifier of the grade
    */
   public removeGrade(gradeId: string): void {
-
-    const confirmDialogManager = new ConfirmDialogManager(this.bsModalRef, this.modalService);
-
-    confirmDialogManager.displayDialog(
+    this.confirmDialogManager.displayDialog(
       'Delete a grade',
       'Are you sure you want to delete this grade?',
       () => {

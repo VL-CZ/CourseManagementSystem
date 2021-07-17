@@ -6,6 +6,7 @@ import {CourseService} from '../../services/course.service';
 import * as FileSaver from 'file-saver';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {ObservableWrapper} from '../../utils/observableWrapper';
+import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
 
 
 /**
@@ -46,11 +47,14 @@ export class FileListComponent implements OnInit {
   private bsModalRef: BsModalRef;
   private bsModalService: BsModalService;
   private observableWrapper: ObservableWrapper;
+  private confirmDialogManager: ConfirmDialogManager;
 
   constructor(roleAuthService: RoleAuthService, fileService: FileService, courseService: CourseService, bsModalService: BsModalService) {
-    this.fileService = fileService;
     this.courseService = courseService;
+    this.fileService = fileService;
     this.bsModalService = bsModalService;
+
+    this.confirmDialogManager = new ConfirmDialogManager(this.bsModalRef, this.bsModalService);
     this.observableWrapper = new ObservableWrapper(this.bsModalRef, this.bsModalService);
   }
 
@@ -85,9 +89,14 @@ export class FileListComponent implements OnInit {
    * @param fileId identifier of the file
    */
   public removeFile(fileId: string): void {
-    this.fileService.delete(fileId).subscribe(() => {
-      this.reloadFileData();
-    });
+    this.confirmDialogManager.displayDialog(
+      'Remove a file',
+      'Are you sure you want to remove the selected file?',
+      () => {
+        this.fileService.delete(fileId).subscribe(() => {
+          this.reloadFileData();
+        });
+      });
   }
 
   /**
