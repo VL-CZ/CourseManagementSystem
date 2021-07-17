@@ -5,7 +5,7 @@ import {CourseMemberService} from '../../services/course-member.service';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
 import {PercentStringFormatter} from '../../tools/percent-tools/percentStringFormatter';
-import {RouterTools} from '../../tools/routerTools';
+import {PageNavigator} from '../../tools/pageNavigator';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ConfirmDialogManager} from '../../tools/dialog-managers/confirmDialogManager';
 
@@ -46,7 +46,7 @@ export class StudentGradeListComponent implements OnInit {
   private courseMemberService: CourseMemberService;
   private bsModalRef: BsModalRef;
   private modalService: BsModalService;
-  private router: Router;
+  private pageNavigator: PageNavigator;
   private activatedRoute: ActivatedRoute;
   private confirmDialogManager: ConfirmDialogManager;
 
@@ -56,7 +56,7 @@ export class StudentGradeListComponent implements OnInit {
     this.courseMemberService = courseMemberService;
     this.modalService = modalService;
     this.activatedRoute = activatedRoute;
-    this.router = router;
+    this.pageNavigator = new PageNavigator(router);
     this.confirmDialogManager = new ConfirmDialogManager(this.bsModalRef, this.modalService);
   }
 
@@ -74,7 +74,7 @@ export class StudentGradeListComponent implements OnInit {
       'Are you sure you want to delete this grade?',
       () => {
         this.gradeService.delete(gradeId).subscribe(() => {
-          RouterTools.reloadPage(this.router, this.activatedRoute);
+          this.pageNavigator.reloadCurrentPage(this.activatedRoute);
         });
       });
   }

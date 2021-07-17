@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {PeopleService} from '../../services/people.service';
 import {CourseService} from '../../services/course.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {RouterTools} from '../../tools/routerTools';
+import {PageNavigator} from '../../tools/pageNavigator';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {ObservableWrapper} from '../../tools/observableWrapper';
 import {InformationDialogManager} from '../../tools/dialog-managers/informationDialogManager';

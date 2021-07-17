@@ -7,7 +7,7 @@ import {ArrayTools} from '../../tools/arrayTools';
 import {PercentCalculator} from '../../tools/percent-tools/percentCalculator';
 import {RoleAuthService} from '../../services/role-auth.service';
 import {EvaluatedAnswerVM, EvaluatedTestSubmissionVM} from '../../viewmodels/evaluatedTestSubmissionVM';
-import {RouterTools} from '../../tools/routerTools';
+import {PageNavigator} from '../../tools/pageNavigator';
 import {SubmissionAnswerWithCorrectAnswerVM} from '../../viewmodels/testSubmissionAnswerVM';
 import {DateTimeFormatter} from '../../tools/datetime/dateTimeFormatter';
 import {CourseTestTools} from '../../tools/courseTestTools';
@@ -57,7 +57,7 @@ export class TestSubmissionReviewComponent implements OnInit {
   public courseTestUtils: CourseTestTools = new CourseTestTools();
 
   private testSubmissionService: TestSubmissionService;
-  private readonly router: Router;
+  private readonly pageNavigator: PageNavigator;
   private readonly activatedRoute: ActivatedRoute;
   private bsModalRef: BsModalRef;
   private bsModalService: BsModalService;
@@ -67,7 +67,7 @@ export class TestSubmissionReviewComponent implements OnInit {
   constructor(activatedRoute: ActivatedRoute, testSubmissionService: TestSubmissionService,
               roleAuthService: RoleAuthService, router: Router, bsModalService: BsModalService) {
     this.testSubmissionService = testSubmissionService;
-    this.router = router;
+    this.pageNavigator = new PageNavigator(router);
     this.activatedRoute = activatedRoute;
     this.bsModalService = bsModalService;
     this.observableWrapper = new ObservableWrapper(this.bsModalRef, this.bsModalService);
@@ -190,7 +190,7 @@ export class TestSubmissionReviewComponent implements OnInit {
     this.observableWrapper.subscribeOrShowError(
       this.testSubmissionService.updateSubmission(this.submission.testSubmissionId.toString(), this.evaluatedTestSubmission),
       () => {
-        RouterTools.reloadPage(this.router, this.activatedRoute);
+        this.pageNavigator.reloadCurrentPage(this.activatedRoute);
       });
   }
 }
