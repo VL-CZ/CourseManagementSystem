@@ -3,6 +3,9 @@ import {CourseMemberOrAdminVM} from '../../viewmodels/courseMemberOrAdminVM';
 import {RoleAuthService} from '../../services/role-auth.service';
 import {CourseService} from '../../services/course.service';
 import {CourseMemberService} from '../../services/course-member.service';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
 
 /**
  * component representing list of students
@@ -27,10 +30,16 @@ export class StudentListComponent implements OnInit {
 
   private readonly courseService: CourseService;
   private readonly courseMemberService: CourseMemberService;
+  private bsModalRef: BsModalRef;
+  private bsModalService: BsModalService;
+  private confirmDialogManager: ConfirmDialogManager;
 
-  constructor(roleAuthService: RoleAuthService, courseService: CourseService, courseMemberService: CourseMemberService) {
+  constructor(roleAuthService: RoleAuthService, courseService: CourseService, courseMemberService: CourseMemberService,
+              bsModalService: BsModalService) {
     this.courseService = courseService;
     this.courseMemberService = courseMemberService;
+    this.bsModalService = bsModalService;
+    this.confirmDialogManager = new ConfirmDialogManager(this.bsModalRef, this.bsModalService);
   }
 
   ngOnInit() {
@@ -42,9 +51,14 @@ export class StudentListComponent implements OnInit {
    * @param courseMember course member to remove
    */
   public removeMember(courseMember: CourseMemberOrAdminVM) {
-    this.courseMemberService.removeById(courseMember.id).subscribe(() => {
-      this.reloadData();
-    });
+    this.confirmDialogManager.displayDialog(
+      'Remove a member',
+      'Are you sure you want to remove the selected member?',
+      () => {
+        this.courseMemberService.removeById(courseMember.id).subscribe(() => {
+          this.reloadData();
+        });
+      });
   }
 
   /**

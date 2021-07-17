@@ -17,7 +17,12 @@
 <div class="jumbotron">
   <h3>Leave this course</h3>
   <div *ngIf="isCourseAdmin">
-    <button class="btn btn-danger" (click)="removeCurrentAdmin()">Leave</button>
+    <div *ngIf="isTheOnlyAdmin">
+      You can't leave this course right now, because you are the only admin.
+    </div>
+    <div *ngIf="!isTheOnlyAdmin">
+      <button class="btn btn-danger" (click)="removeCurrentAdmin()">Leave</button>
+    </div>
   </div>
   <div *ngIf="!isCourseAdmin">
     <button class="btn btn-danger" (click)="removeCurrentMember()">Leave</button>

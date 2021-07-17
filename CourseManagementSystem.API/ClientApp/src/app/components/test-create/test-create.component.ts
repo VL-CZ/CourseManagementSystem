@@ -7,8 +7,8 @@ import {ArrayUtils} from '../../utils/arrayUtils';
 import {ActivatedRouteUtils} from '../../utils/activatedRouteUtils';
 import {TestQuestionNumberSetter} from '../../utils/testQuestionNumberSetter';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {ErrorModalManager} from '../../utils/errorModalManager';
 import {DateTimeBinder} from '../../utils/dateTimeBinder';
+import {ObservableWrapper} from '../../utils/observableWrapper';
 
 /**
  * component for creating a test
@@ -40,7 +40,7 @@ export class TestCreateComponent implements OnInit {
   private router: Router;
   private bsModalRef: BsModalRef;
   private modalService: BsModalService;
-  private errorModalManager: ErrorModalManager;
+  private observableWrapper: ObservableWrapper;
 
   constructor(route: ActivatedRoute, courseTestService: CourseTestService, router: Router, bsModalService: BsModalService) {
     this.courseId = ActivatedRouteUtils.getIdParam(route);
@@ -49,7 +49,7 @@ export class TestCreateComponent implements OnInit {
     this.modalService = bsModalService;
 
     this.testToCreate = new AddCourseTestVM();
-    this.errorModalManager = new ErrorModalManager(this.bsModalRef, this.modalService);
+    this.observableWrapper = new ObservableWrapper(this.bsModalRef, this.modalService);
   }
 
   ngOnInit() {
@@ -60,11 +60,11 @@ export class TestCreateComponent implements OnInit {
    */
   public createTest(): void {
     this.testToCreate.deadline = this.dateTimeBinder.toString();
-    this.courseTestService.addToCourse(this.testToCreate, this.courseId).subscribe(() => {
+    this.observableWrapper.subscribeOrShowError(
+      this.courseTestService.addToCourse(this.testToCreate, this.courseId),
+      () => {
         this.router.navigate(['/courses', this.courseId]);
-      },
-      err => this.errorModalManager.displayError(err)
-    );
+      });
   }
 
   /**

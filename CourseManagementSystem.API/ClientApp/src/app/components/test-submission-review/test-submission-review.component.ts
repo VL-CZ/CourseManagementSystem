@@ -8,9 +8,12 @@ import {PercentCalculator} from '../../utils/percentCalculator';
 import {RoleAuthService} from '../../services/role-auth.service';
 import {EvaluatedAnswerVM, EvaluatedTestSubmissionVM} from '../../viewmodels/evaluatedTestSubmissionVM';
 import {RouterUtils} from '../../utils/routerUtils';
-import {SubmissionAnswerVM, SubmissionAnswerWithCorrectAnswerVM} from '../../viewmodels/testSubmissionAnswerVM';
+import {SubmissionAnswerWithCorrectAnswerVM} from '../../viewmodels/testSubmissionAnswerVM';
 import {DateTimeFormatter} from '../../utils/dateTimeFormatter';
 import {CourseTestUtils} from '../../utils/courseTestUtils';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {ObservableWrapper} from '../../utils/observableWrapper';
+import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
 
 /**
  * component representing detail of the submitted test solution
@@ -56,12 +59,19 @@ export class TestSubmissionReviewComponent implements OnInit {
   private testSubmissionService: TestSubmissionService;
   private readonly router: Router;
   private readonly activatedRoute: ActivatedRoute;
+  private bsModalRef: BsModalRef;
+  private bsModalService: BsModalService;
+  private observableWrapper: ObservableWrapper;
+  private confirmDialogManager: ConfirmDialogManager;
 
   constructor(activatedRoute: ActivatedRoute, testSubmissionService: TestSubmissionService,
-              roleAuthService: RoleAuthService, router: Router) {
+              roleAuthService: RoleAuthService, router: Router, bsModalService: BsModalService) {
     this.testSubmissionService = testSubmissionService;
     this.router = router;
     this.activatedRoute = activatedRoute;
+    this.bsModalService = bsModalService;
+    this.observableWrapper = new ObservableWrapper(this.bsModalRef, this.bsModalService);
+    this.confirmDialogManager = new ConfirmDialogManager(this.bsModalRef, this.bsModalService);
     this.editing = false;
 
     const submissionId = ActivatedRouteUtils.getIdParam(activatedRoute);
@@ -134,15 +144,19 @@ export class TestSubmissionReviewComponent implements OnInit {
    * discard updates of the test submission
    */
   public discardUpdates(): void {
-    this.editing = false;
-    this.evaluatedTestSubmission = EvaluatedTestSubmissionVM.createFrom(this.submission);
+    this.confirmDialogManager.displayDialog(
+      'Discard updates',
+      'Are you sure you want to discard these updates?',
+      () => {
+        this.editing = false;
+        this.evaluatedTestSubmission = EvaluatedTestSubmissionVM.createFrom(this.submission);
+      });
   }
 
   /**
    * save updates of the test submission
    */
   public saveUpdates(): void {
-    this.editing = false;
     this.updateSubmission();
   }
 
@@ -173,8 +187,9 @@ export class TestSubmissionReviewComponent implements OnInit {
    * @private
    */
   private updateSubmission(): void {
-    this.testSubmissionService.updateSubmission(this.submission.testSubmissionId.toString(), this.evaluatedTestSubmission)
-      .subscribe(() => {
+    this.observableWrapper.subscribeOrShowError(
+      this.testSubmissionService.updateSubmission(this.submission.testSubmissionId.toString(), this.evaluatedTestSubmission),
+      () => {
         RouterUtils.reloadPage(this.router, this.activatedRoute);
       });
   }

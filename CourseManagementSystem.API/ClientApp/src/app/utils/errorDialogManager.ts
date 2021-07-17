@@ -3,9 +3,9 @@ import {ErrorsDictionaryVM} from '../viewmodels/apiErrorResponseVM';
 import {ErrorDialogComponent} from '../components/error-dialog/error-dialog.component';
 
 /**
- * class for displaying error modals
+ * This class is responsible displaying error dialogs
  */
-export class ErrorModalManager {
+export class ErrorDialogManager {
   public constructor(private bsModalRef: BsModalRef, private modalService: BsModalService) {
   }
 
