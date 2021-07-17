@@ -1,7 +1,4 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {TestSubmissionInfoVM} from '../../viewmodels/testSubmissionVM';
-import {PercentStringFormatter} from '../../utils/percentStringFormatter';
-import {DateTimeFormatter} from '../../utils/dateTimeFormatter';
 import {CourseMemberService} from '../../services/course-member.service';
 import {QuizSubmissionInfoVM} from '../../viewmodels/quizSubmissionInfoVM';
 
