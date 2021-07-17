@@ -3,6 +3,7 @@ using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Extensions;
 using CourseManagementSystem.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CourseManagementSystem.Services.Implementations
@@ -17,9 +18,7 @@ namespace CourseManagementSystem.Services.Implementations
         public void Approve(string requestId)
         {
             // select request and add new course member
-            var request = dbContext.EnrollmentRequests
-                        .Include(er => er.Course)
-                        .Include(er => er.Person)
+            var request = GetReqeustsWithPersonAndCourse()
                         .Single(er => er.Id.ToString() == requestId);
             dbContext.CourseMembers.Add(new CourseMember(request.Person, request.Course));
 
@@ -38,6 +37,13 @@ namespace CourseManagementSystem.Services.Implementations
             return dbContext.EnrollmentRequests.GetCourseIdOf(objectId);
         }
 
+        /// <inheritdoc/>
+        public bool HasRequestedEnrollment(string personId, string courseId)
+        {
+            var requests = GetReqeustsWithPersonAndCourse();
+            return requests.Any(req => req.Person.Id.ToString() == personId && req.Course.Id.ToString() == courseId);
+        }
+
         /// <summary>
         /// delete enrollment request by its id
         /// </summary>
@@ -46,6 +52,17 @@ namespace CourseManagementSystem.Services.Implementations
         {
             var enrollmentRequest = dbContext.EnrollmentRequests.FindById(requestId);
             dbContext.EnrollmentRequests.Remove(enrollmentRequest);
+        }
+
+        /// <summary>
+        /// get enrollment requests with person and course objects included
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerable<EnrollmentRequest> GetReqeustsWithPersonAndCourse()
+        {
+            return dbContext.EnrollmentRequests
+                        .Include(er => er.Course)
+                        .Include(er => er.Person);
         }
     }
 }
