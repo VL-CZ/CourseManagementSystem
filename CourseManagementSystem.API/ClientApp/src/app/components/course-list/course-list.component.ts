@@ -5,8 +5,8 @@ import {RoleAuthService} from '../../services/role-auth.service';
 import {AddCourseVM} from '../../viewmodels/courseVM';
 import {PeopleService} from '../../services/people.service';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {ObservableWrapper} from '../../utils/observableWrapper';
-import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
+import {ObservableWrapper} from '../../tools/observableWrapper';
+import {ConfirmDialogManager} from '../../tools/dialog-managers/confirmDialogManager';
 
 /**
  * component representing list of courses

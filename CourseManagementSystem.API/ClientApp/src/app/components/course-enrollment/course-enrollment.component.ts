@@ -2,10 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {PeopleService} from '../../services/people.service';
 import {CourseService} from '../../services/course.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {RouterUtils} from '../../utils/routerUtils';
+import {RouterTools} from '../../tools/routerTools';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {ObservableWrapper} from '../../utils/observableWrapper';
-import {InformationDialogManager} from '../../utils/informationDialogManager';
+import {ObservableWrapper} from '../../tools/observableWrapper';
+import {InformationDialogManager} from '../../tools/dialog-managers/informationDialogManager';
 
 /**
  * component with enrollment to course

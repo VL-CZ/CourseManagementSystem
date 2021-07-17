@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CourseMemberService} from '../../services/course-member.service';
-import {PercentStringFormatter} from '../../utils/percentStringFormatter';
+import {PercentStringFormatter} from '../../tools/percent-tools/percentStringFormatter';
 
 @Component({
   selector: 'app-student-average-score',

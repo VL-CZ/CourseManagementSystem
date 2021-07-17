@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 /**
  * class containing additional methods for router
  */
-export class RouterUtils {
+export class RouterTools {
   /**
    * reload current page
    * @param router router

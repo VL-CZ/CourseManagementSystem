@@ -1,7 +1,7 @@
 /**
  * class with additional methods for CourseTest related entities
  */
-export class CourseTestUtils {
+export class CourseTestTools {
   /**
    * get string 'GRADED' or 'NOT GRADED' based on {@link BaseCourseTestVM.isGraded} property
    * @param isGraded is the test graded or not?

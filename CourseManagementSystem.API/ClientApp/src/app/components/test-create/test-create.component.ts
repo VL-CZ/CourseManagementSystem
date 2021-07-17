@@ -3,12 +3,12 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {CourseTestService} from '../../services/course-test.service';
 import {AddCourseTestVM, CourseTestDetailsVM} from '../../viewmodels/courseTestVM';
 import {TestQuestionVM} from '../../viewmodels/testQuestionVM';
-import {ArrayUtils} from '../../utils/arrayUtils';
-import {ActivatedRouteUtils} from '../../utils/activatedRouteUtils';
-import {TestQuestionNumberSetter} from '../../utils/testQuestionNumberSetter';
+import {ArrayTools} from '../../tools/arrayTools';
+import {ActivatedRouteTools} from '../../tools/activatedRouteTools';
+import {TestQuestionNumberSetter} from '../../tools/testQuestionNumberSetter';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {DateTimeBinder} from '../../utils/dateTimeBinder';
-import {ObservableWrapper} from '../../utils/observableWrapper';
+import {DateTimeBinder} from '../../tools/datetime/dateTimeBinder';
+import {ObservableWrapper} from '../../tools/observableWrapper';
 
 /**
  * component for creating a test
@@ -43,7 +43,7 @@ export class TestCreateComponent implements OnInit {
   private observableWrapper: ObservableWrapper;
 
   constructor(route: ActivatedRoute, courseTestService: CourseTestService, router: Router, bsModalService: BsModalService) {
-    this.courseId = ActivatedRouteUtils.getIdParam(route);
+    this.courseId = ActivatedRouteTools.getIdParam(route);
     this.courseTestService = courseTestService;
     this.router = router;
     this.modalService = bsModalService;
@@ -74,7 +74,7 @@ export class TestCreateComponent implements OnInit {
   public updateQuestionCount(): void {
     const questions = this.testToCreate.questions;
     const instance = new TestQuestionVM();
-    ArrayUtils.resize<TestQuestionVM>(questions, this.questionCount, instance);
+    ArrayTools.resize<TestQuestionVM>(questions, this.questionCount, instance);
 
     TestQuestionNumberSetter.setQuestionNumbers(questions);
   }

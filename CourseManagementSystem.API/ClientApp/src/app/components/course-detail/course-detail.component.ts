@@ -3,11 +3,11 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {CourseService} from '../../services/course.service';
 import {RoleAuthService} from '../../services/role-auth.service';
 import {PeopleService} from '../../services/people.service';
-import {ActivatedRouteUtils} from '../../utils/activatedRouteUtils';
+import {ActivatedRouteTools} from '../../tools/activatedRouteTools';
 import {CourseInfoVM} from '../../viewmodels/courseVM';
 import {CourseMemberService} from '../../services/course-member.service';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
+import {ConfirmDialogManager} from '../../tools/dialog-managers/confirmDialogManager';
 
 /**
  * component representing details of the course
@@ -52,7 +52,7 @@ export class CourseDetailComponent implements OnInit {
 
   constructor(route: ActivatedRoute, router: Router, courseService: CourseService, roleAuthService: RoleAuthService,
               peopleService: PeopleService, courseMemberService: CourseMemberService, bsModalService: BsModalService) {
-    this.courseId = ActivatedRouteUtils.getIdParam(route);
+    this.courseId = ActivatedRouteTools.getIdParam(route);
     this.courseService = courseService;
     this.courseMemberService = courseMemberService;
     this.router = router;

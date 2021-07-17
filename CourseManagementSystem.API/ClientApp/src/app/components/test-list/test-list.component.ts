@@ -3,10 +3,10 @@ import {CourseTestDetailsVM, TestStatus} from '../../viewmodels/courseTestVM';
 import {CourseService} from '../../services/course.service';
 import {RoleAuthService} from '../../services/role-auth.service';
 import {CourseTestService} from '../../services/course-test.service';
-import {DateTimeFormatter} from '../../utils/dateTimeFormatter';
-import {CourseTestUtils} from '../../utils/courseTestUtils';
+import {DateTimeFormatter} from '../../tools/datetime/dateTimeFormatter';
+import {CourseTestTools} from '../../tools/courseTestTools';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
+import {ConfirmDialogManager} from '../../tools/dialog-managers/confirmDialogManager';
 import {ConfirmButtonStyle} from '../confirm-dialog/confirm-dialog.component';
 
 /**
@@ -51,7 +51,7 @@ export class TestListComponent implements OnInit, OnChanges {
    */
   public dateTimeFormatter: DateTimeFormatter = new DateTimeFormatter();
 
-  public courseTestUtils: CourseTestUtils = new CourseTestUtils();
+  public courseTestUtils: CourseTestTools = new CourseTestTools();
 
   private courseService: CourseService;
   private courseTestService: CourseTestService;

@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {TestSubmissionInfoVM} from '../../viewmodels/testSubmissionVM';
 import {CourseMemberService} from '../../services/course-member.service';
-import {PercentStringFormatter} from '../../utils/percentStringFormatter';
-import {DateTimeFormatter} from '../../utils/dateTimeFormatter';
+import {PercentStringFormatter} from '../../tools/percent-tools/percentStringFormatter';
+import {DateTimeFormatter} from '../../tools/datetime/dateTimeFormatter';
 
 /**
  * component representing student's test submissions

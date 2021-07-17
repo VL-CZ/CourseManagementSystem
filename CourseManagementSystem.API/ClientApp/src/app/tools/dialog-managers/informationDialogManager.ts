@@ -1,5 +1,5 @@
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {InformationDialogComponent} from '../components/information-dialog/information-dialog.component';
+import {InformationDialogComponent} from '../../components/information-dialog/information-dialog.component';
 
 /**
  * class used for managing information dialogs

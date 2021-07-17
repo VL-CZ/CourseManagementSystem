@@ -5,7 +5,7 @@ import {CourseService} from '../../services/course.service';
 import {CourseMemberService} from '../../services/course-member.service';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
+import {ConfirmDialogManager} from '../../tools/dialog-managers/confirmDialogManager';
 
 /**
  * component representing list of students

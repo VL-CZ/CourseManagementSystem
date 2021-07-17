@@ -3,12 +3,12 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {CourseTestService} from '../../services/course-test.service';
 import {SubmitTestVM} from '../../viewmodels/submitTestVM';
 import {TestSubmissionService} from '../../services/test-submission.service';
-import {ActivatedRouteUtils} from '../../utils/activatedRouteUtils';
-import {CourseTestUtils} from '../../utils/courseTestUtils';
-import {DateTimeFormatter} from '../../utils/dateTimeFormatter';
+import {ActivatedRouteTools} from '../../tools/activatedRouteTools';
+import {CourseTestTools} from '../../tools/courseTestTools';
+import {DateTimeFormatter} from '../../tools/datetime/dateTimeFormatter';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {ObservableWrapper} from '../../utils/observableWrapper';
-import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
+import {ObservableWrapper} from '../../tools/observableWrapper';
+import {ConfirmDialogManager} from '../../tools/dialog-managers/confirmDialogManager';
 import {ConfirmButtonStyle} from '../confirm-dialog/confirm-dialog.component';
 
 /**
@@ -36,7 +36,7 @@ export class TestSubmitComponent implements OnInit {
    */
   public dateTimeFormatter: DateTimeFormatter = new DateTimeFormatter();
 
-  public courseTestUtils: CourseTestUtils = new CourseTestUtils();
+  public courseTestUtils: CourseTestTools = new CourseTestTools();
 
   private router: Router;
   private testSubmitService: TestSubmissionService;
@@ -47,7 +47,7 @@ export class TestSubmitComponent implements OnInit {
 
   constructor(route: ActivatedRoute, courseTestService: CourseTestService, testSubmissionService: TestSubmissionService, router: Router,
               bsModalService: BsModalService) {
-    const testId = ActivatedRouteUtils.getIdParam(route);
+    const testId = ActivatedRouteTools.getIdParam(route);
     this.testSubmitService = testSubmissionService;
     this.router = router;
     this.bsModalService = bsModalService;

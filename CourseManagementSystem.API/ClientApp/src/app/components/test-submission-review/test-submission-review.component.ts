@@ -1,19 +1,19 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TestSubmissionService} from '../../services/test-submission.service';
-import {ActivatedRouteUtils} from '../../utils/activatedRouteUtils';
+import {ActivatedRouteTools} from '../../tools/activatedRouteTools';
 import {TestWithSubmissionVM} from '../../viewmodels/testSubmissionVM';
-import {ArrayUtils} from '../../utils/arrayUtils';
-import {PercentCalculator} from '../../utils/percentCalculator';
+import {ArrayTools} from '../../tools/arrayTools';
+import {PercentCalculator} from '../../tools/percent-tools/percentCalculator';
 import {RoleAuthService} from '../../services/role-auth.service';
 import {EvaluatedAnswerVM, EvaluatedTestSubmissionVM} from '../../viewmodels/evaluatedTestSubmissionVM';
-import {RouterUtils} from '../../utils/routerUtils';
+import {RouterTools} from '../../tools/routerTools';
 import {SubmissionAnswerWithCorrectAnswerVM} from '../../viewmodels/testSubmissionAnswerVM';
-import {DateTimeFormatter} from '../../utils/dateTimeFormatter';
-import {CourseTestUtils} from '../../utils/courseTestUtils';
+import {DateTimeFormatter} from '../../tools/datetime/dateTimeFormatter';
+import {CourseTestTools} from '../../tools/courseTestTools';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {ObservableWrapper} from '../../utils/observableWrapper';
-import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
+import {ObservableWrapper} from '../../tools/observableWrapper';
+import {ConfirmDialogManager} from '../../tools/dialog-managers/confirmDialogManager';
 
 /**
  * component representing detail of the submitted test solution
@@ -54,7 +54,7 @@ export class TestSubmissionReviewComponent implements OnInit {
    */
   public editing: boolean;
 
-  public courseTestUtils: CourseTestUtils = new CourseTestUtils();
+  public courseTestUtils: CourseTestTools = new CourseTestTools();
 
   private testSubmissionService: TestSubmissionService;
   private readonly router: Router;
@@ -74,7 +74,7 @@ export class TestSubmissionReviewComponent implements OnInit {
     this.confirmDialogManager = new ConfirmDialogManager(this.bsModalRef, this.bsModalService);
     this.editing = false;
 
-    const submissionId = ActivatedRouteUtils.getIdParam(activatedRoute);
+    const submissionId = ActivatedRouteTools.getIdParam(activatedRoute);
 
     testSubmissionService.getSubmissionById(submissionId).subscribe(submission => {
       this.submission = submission;
@@ -112,7 +112,7 @@ export class TestSubmissionReviewComponent implements OnInit {
    * @param testSubmission test solution
    */
   public getReceivedPoints(testSubmission: TestWithSubmissionVM): number {
-    return ArrayUtils.sum(testSubmission.answers.map(answer => answer.receivedPoints));
+    return ArrayTools.sum(testSubmission.answers.map(answer => answer.receivedPoints));
   }
 
   /**
@@ -120,7 +120,7 @@ export class TestSubmissionReviewComponent implements OnInit {
    * @param testSubmission test solution
    */
   public getMaximalPoints(testSubmission: TestWithSubmissionVM): number {
-    return ArrayUtils.sum(testSubmission.answers.map(answer => answer.maximalPoints));
+    return ArrayTools.sum(testSubmission.answers.map(answer => answer.maximalPoints));
   }
 
   /**
@@ -190,7 +190,7 @@ export class TestSubmissionReviewComponent implements OnInit {
     this.observableWrapper.subscribeOrShowError(
       this.testSubmissionService.updateSubmission(this.submission.testSubmissionId.toString(), this.evaluatedTestSubmission),
       () => {
-        RouterUtils.reloadPage(this.router, this.activatedRoute);
+        RouterTools.reloadPage(this.router, this.activatedRoute);
       });
   }
 }

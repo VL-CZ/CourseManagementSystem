@@ -2,9 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {CourseTestDetailsVM, TestStatus} from '../../viewmodels/courseTestVM';
 import {CourseTestService} from '../../services/course-test.service';
-import {ActivatedRouteUtils} from '../../utils/activatedRouteUtils';
-import {DateTimeFormatter} from '../../utils/dateTimeFormatter';
-import {CourseTestUtils} from '../../utils/courseTestUtils';
+import {ActivatedRouteTools} from '../../tools/activatedRouteTools';
+import {DateTimeFormatter} from '../../tools/datetime/dateTimeFormatter';
+import {CourseTestTools} from '../../tools/courseTestTools';
 
 /**
  * component representing detail of the test
@@ -35,10 +35,10 @@ export class TestDetailComponent implements OnInit {
    */
   public courseId: string;
 
-  public courseTestUtils: CourseTestUtils = new CourseTestUtils();
+  public courseTestUtils: CourseTestTools = new CourseTestTools();
 
   constructor(route: ActivatedRoute, courseTestService: CourseTestService) {
-    this.testId = ActivatedRouteUtils.getIdParam(route);
+    this.testId = ActivatedRouteTools.getIdParam(route);
 
     courseTestService.getCourseId(this.testId).subscribe(result => {
       this.courseId = result.value;

@@ -1,11 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {AddGradeVM} from '../../viewmodels/gradeVM';
-import {PercentCalculator} from '../../utils/percentCalculator';
+import {PercentCalculator} from '../../tools/percent-tools/percentCalculator';
 import {CourseMemberService} from '../../services/course-member.service';
-import {RouterUtils} from '../../utils/routerUtils';
+import {RouterTools} from '../../tools/routerTools';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {ObservableWrapper} from '../../utils/observableWrapper';
+import {ObservableWrapper} from '../../tools/observableWrapper';
 
 /**
  * component representing form for adding a new grade
@@ -57,7 +57,7 @@ export class AddGradeComponent implements OnInit {
     this.observableWrapper.subscribeOrShowError(
       this.courseMemberService.assignGrade(this.courseMemberId, this.gradeToAdd),
       () => {
-        RouterUtils.reloadPage(this.router, this.activatedRoute);
+        RouterTools.reloadPage(this.router, this.activatedRoute);
       });
   }
 }

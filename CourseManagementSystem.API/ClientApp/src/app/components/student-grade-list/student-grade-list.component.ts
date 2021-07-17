@@ -4,10 +4,10 @@ import {GradeDetailsVM} from '../../viewmodels/gradeVM';
 import {CourseMemberService} from '../../services/course-member.service';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
-import {PercentStringFormatter} from '../../utils/percentStringFormatter';
-import {RouterUtils} from '../../utils/routerUtils';
+import {PercentStringFormatter} from '../../tools/percent-tools/percentStringFormatter';
+import {RouterTools} from '../../tools/routerTools';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
+import {ConfirmDialogManager} from '../../tools/dialog-managers/confirmDialogManager';
 
 /**
  * component with list of student's grades
@@ -74,7 +74,7 @@ export class StudentGradeListComponent implements OnInit {
       'Are you sure you want to delete this grade?',
       () => {
         this.gradeService.delete(gradeId).subscribe(() => {
-          RouterUtils.reloadPage(this.router, this.activatedRoute);
+          RouterTools.reloadPage(this.router, this.activatedRoute);
         });
       });
   }

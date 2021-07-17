@@ -1,16 +1,16 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CourseTestService} from '../../services/course-test.service';
-import {ActivatedRouteUtils} from '../../utils/activatedRouteUtils';
+import {ActivatedRouteTools} from '../../tools/activatedRouteTools';
 import {AddCourseTestVM, CourseTestDetailsVM} from '../../viewmodels/courseTestVM';
 import {TestQuestionVM} from '../../viewmodels/testQuestionVM';
-import {TestQuestionNumberSetter} from '../../utils/testQuestionNumberSetter';
-import {DateTimeBinder} from '../../utils/dateTimeBinder';
-import {DateTimeFormatter} from '../../utils/dateTimeFormatter';
-import {CourseTestUtils} from '../../utils/courseTestUtils';
-import {ObservableWrapper} from '../../utils/observableWrapper';
+import {TestQuestionNumberSetter} from '../../tools/testQuestionNumberSetter';
+import {DateTimeBinder} from '../../tools/datetime/dateTimeBinder';
+import {DateTimeFormatter} from '../../tools/datetime/dateTimeFormatter';
+import {CourseTestTools} from '../../tools/courseTestTools';
+import {ObservableWrapper} from '../../tools/observableWrapper';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {ConfirmDialogManager} from '../../utils/confirmDialogManager';
+import {ConfirmDialogManager} from '../../tools/dialog-managers/confirmDialogManager';
 
 /**
  * component for editing a test
@@ -47,7 +47,7 @@ export class TestEditComponent implements OnInit {
    */
   public courseId: string;
 
-  public courseTestUtils: CourseTestUtils = new CourseTestUtils();
+  public courseTestUtils: CourseTestTools = new CourseTestTools();
 
   private router: Router;
   private courseTestService: CourseTestService;
@@ -58,7 +58,7 @@ export class TestEditComponent implements OnInit {
 
   constructor(activatedRoute: ActivatedRoute, router: Router, courseTestService: CourseTestService, bsModalService: BsModalService) {
     this.router = router;
-    this.testId = ActivatedRouteUtils.getIdParam(activatedRoute);
+    this.testId = ActivatedRouteTools.getIdParam(activatedRoute);
     this.courseTestService = courseTestService;
     this.bsModalService = bsModalService;
     this.observableWrapper = new ObservableWrapper(this.bsModalRef, this.bsModalService);
