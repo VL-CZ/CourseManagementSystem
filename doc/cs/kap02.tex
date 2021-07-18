@@ -1209,7 +1209,7 @@ Pomocí atributu [(ngModel)] nastavíme proměnnou pro data binding.
 
 Pokud tedy například změníme ve formuláři váhu známky, dojde automaticky ke změně hodnoty gradeToAdd.weight. Podobně, pokud dojde v kódu ke změně hodnoty proměnné gradeToAdd.weight, framework automaticky upraví hodnotu ve formuláři.
 
-Ke stylování elementů používáme framework Bootstrap. 
+Ke stylování elementů používáme framework Bootstrap, který nám také zajišťuje, že uživatelské rozhraní aplikace je responzivní.
 
 \newpage
 
@@ -1231,6 +1231,19 @@ V konfiguraci máme vždy uvedenou cestu, a komponentu, která se zobrazí.
 Vidíme tedy, že na výchozí stránce bude komponenta HomeComponent. 
 Druhý řádek nám říká, že při zadání URL "http://host/students/id", kde id je parametr, se zobrazí komponenta StudentDetailComponent. K parametru id se poté můžeme dostat v komponentě.
 Poslední řádek definuje, že na stránce "http://host/courses" se zobrazí CourseListComponent.
+
+K navigaci mezi stránkami nepoužíváme přímo vestavěný router, ale pomocnou třídu PageNavigator, která se nachází ve složce src/app/tools. Tato třída obsahuje referenci na Router a metody, které slouží k navigaci na jednotlivé stránky. Pro každou stránku máme tedy jednu navigační metodu.
+
+Na následujícím příkladu vidíme kód metody navigateToCourseDetail, která slouží k navigaci na stránku s detaily daného kurzu.
+\begin{lstlisting}
+/**
+* navigate to the page with course details
+* @param courseId identifier of the course
+*/
+public navigateToCourseDetail(courseId: string): void {
+	this.router.navigate(['/courses', courseId]).then(this.scrollToTop);
+}
+\end{lstlisting}
 
 \newpage
 

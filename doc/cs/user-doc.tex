@@ -1,0 +1,137 @@
+\section{Uživatelská dokumentace}
+
+V této kapitole se nachází uživatelská dokumentace aplikace.
+Popis všech funkcí + screenshoty?
+
+TODO: rozepsat mnohem více do detailu (krok po kroku + snímky obrazovky)
+
+(převzato ze specifikace ročníkového projektu)
+
+Na obrázku (screenshot) můžeme vidět uživatelské rozhraní aplikace.
+
+\subsection{Registrace nového uživatele}
+
+\begin{itemize}
+	\item Pro registraci nového uživatele nejprve klikneme na tlačítko Register v horním menu.
+	\item Uživatelé v aplikaci jsou identifikováni pomocí e-mailu. Do registračního formuláře zadáme tedy e-mail a heslo nového uživatele, a stiskneme tlačítko Register.
+	\item Zobrazí se stránka s potvrzením registrace. Vzhledem k našim potřebám aktuálně neprovádíme ověření e-mailu. Pokud bychom chtěli tuto funkcionalitu přidat, můžeme postupovat například podle návodu v dokumentaci. \cite{AspNetCoreDocs} Klikneme na odkaz s textem 'Click here to confirm your account', a tím je registrace dokončena. Pomocí odkazu pak můžeme přejít na stránku s přihlášením.
+\end{itemize}
+
+\subsection{Přihlášení uživatele}
+
+\begin{itemize}
+	\item Pro přihlášení uživatele nejprve stiskneme tlačítko Login v horním menu.
+	\item Zobrazí se přihlašovací formulář, do kterého vyplníme e-mail a heslo. (screenshot)
+	\item Po odeslání formuláře nás aplikace přihlásí a přesměruje na stránku se seznamem kurzů.
+	\item Pokud se následně chceme odhlásit, vybereme v menu volbu Logout.
+\end{itemize}
+
+\subsection{Zobrazení stránky se seznamem kurzů}
+
+\begin{itemize}
+	\item Po kliknutí na odkaz Courses v menu se zobrazí stránka, na které se nachází seznam kurzů. (screenshot)
+	\item Na této stránce se nachází několik sekcí. Sekce Member courses obsahuje všechny kurzy, jejichž jsme členy. Po kliknutí na odkaz s názvem kurzu se dostaneme na stránku s detaily kurzu.
+	\item Sekce Managed courses obsahuje všechny kurzy, které spravujeme (tzn. jsme administrátoři). Kliknutím na odkaz s názvem kurzu se opět dostaneme na stránku s detaily kurzu. Každý z těchto kurzů můžeme také smazat -- kliknutím na tlačíko "Delete" vedle názvu kurzu.
+	\item Dále se na této stránce nachází sekce, které slouží k přidání nového kurzu a zápisu do kurzu (více viz. dále). Úplně dole je pak sekce, ve které můžeme vidět náš uživatelský identifikátor.
+\end{itemize}
+
+\subsection{Vytvoření nového kurzu}
+
+\begin{itemize}
+	\item Na stránce se seznamem kurzů je sekce s názvem Add new course, která obsahuje formulář pro přidání nového kurzu.
+	\item Do políčka Name vyplníme jméno kurzu a klikneme na tlačítko Add.
+	\item Vytvoří se nový kurz, který má právě jednoho administrátora -- nás.
+\end{itemize}
+
+\subsection{Zápis do kurzu}
+
+\begin{itemize}
+	\item Nejprve přejdeme na stránku se seznamem kurzů a vybereme sekci Enroll to a course.
+	\item K přihlášení do kurzu je nejprve třeba znát jeho identifikátor, ten nám může například zaslat nějaký z administrátorů. Po získání identifikátoru jej vložíme do políčka s názvem 'Course ID' a formulář odešleme kliknutím na tlačítko Enroll.
+	\item Tímto vytvoříme žádost o přihlášení do daného kurzu. Členem kurzu se staneme až poté, co nám žádost schválí některý z administrátorů.
+\end{itemize}
+
+\subsection{Zobrazení detailu kurzu}
+
+\begin{itemize}
+	\item Po kliknutí na kurz v seznamu kurzů se dostaneme na stránku s detaily.
+	\item Úplně nahoře vidíme sekci s názvem kurzu (screenshot), ve které se zároveň nachází identifikátor tohoto kurzu, který se používá při zápisu do kurzu. Členové kurzu zde také vidí tlačítko s textem 'My Grades', pomocí kterého se dostanou na stránku s hodnocením studenta.
+	\item Pod touto sekcí se nachází seznam testů, rozdělený do tří kategorií:
+		\begin{itemize}
+			\item Not Published -- tyto testy zatím nebyly publikované, mohou si je zobrazit pouze administrátoři.
+			\item Active -- tyto testy jsou aktivní, aktuálně je můžeme odevzdávat.
+			\item After deadline -- testy, které již není možné odevzdat.
+		\end{itemize}
+		Pokud některá z kategorií neobsahuje žádný test, tak se na stránce vůbec nezobrazuje. Studenti kurzu vidí pouze kategorii 'Active', zatímco administrátorům se zobrazují všechny tři výše uvedené kategorie.
+		
+		U každého testu je uvedena informace, jestli je hodnocený (GRADED, příp. NOT GRADED) a případně i deadline.
+		Po kliknutí na název testu se student dostane buď na stránku s odevzdáním, anebo na stránku s vyhodnoceným řešením, pokud již test odevzdal. Administrátory kurzu aplikace přesměruje na stránku s detaily testu.
+		
+	\item Na stránce je dále sekce se sdílenými soubory, které si můžeme stáhnout. Správci kurzu zde vidí i formulář pro nahraní nového souboru.
+	\item Dále se zde nachází sekce se seznamem členů a administrátorů daného kurzu, které se zobrazují pouze administrátorům (více viz. dále).
+	\item Na stránce dále můžeme vidět fórum s příspěvky. U každého příspěvku je uvedený text a jeho autor. Správci kurzu zde vidí také tlačítko pro smazání příspěvku.
+	\item Pod fórem se nachází formulář, pomocí kterého lze přidávat nové příspěvky.
+	\item Úplně dole je pak tlačítko, které slouží k opuštění kurzu. Tato akce je nevratná, pokud tedy kurz opustíme, nemůžeme původní účet v aplikaci nijak obnovit. Můžeme ovšem zažádat o nové zapsání do kurzu.
+\end{itemize}
+
+\subsection{Zobrazení detailu studenta}
+
+\begin{itemize}
+	\item Na stránku s detaily studenta se můžeme dostat ze stránky s detaily kurzu. Studenti si stránku zobrazí pomocí tlačítka 'My Grades', administrátoři se sem dostanou pomocí kliknutí na studenta v sekci s členy kurzu.
+	\item Na obrázku (screenshot), vidíme, že na této stránce se nachází komponenty s hodnocením daného studenta. 
+	\item Nachází se zde tabulka s odevzdanými testy, po kliknutí na název testu se dostaneme na stránku s vyhodnoceným řešením. U každého testu pak vidíme získané skóre, váhu testu (tedy dopad na celkovou známku), datum a čas odevzdání. Poslední sloupec nám říká, jestli bylo odevzdané řešení již revidované
+	\item Pod seznamem odevzdaných testů se nachází komponenta s dalšími známkami. Tyto známky nepatří k žádnému testu. 
+	\item Na stránce se dále nachází sekce s celkovým skóre studenta, ve které můžeme vidět vážený průměr všech známek dané osoby.
+	\item Pod touto sekcí se nachází formulář pro přidávání známek, který se zobrazuje pouze administrátorům.
+	\item Ve spodní části stránky je komponenta s odevzdanými kvízy (tzn. nehodnocenými testy). Po kliknutí na název kvízu nás aplikace přesměruje na detail odevzdaného řešení.
+\end{itemize}
+
+\subsection{Odevzdání testu}
+
+\begin{itemize}
+	\item Nejprve přejdeme na stránku nějakého kurzu, jehož jsme členy.
+	\item V seznamu testů vybereme ten, který chceme odevzdat.
+	\item Pokud jsme tento test zatím neodevzdali, aplikace nás přesměruje na stránku s odevzdáním daného testu (screenshot). V případě, že jsme test již odevzdali, zobrazí se stránka s vyhodnoceným řešením.
+	\item V horní části vidíme název testu, deadline -- čas, do kterého je třeba test odevzdat a několik dalších informací. Test následně vyplníme, u některých otázek máme na výběr z možností odpovědí.
+	\item Stisknutím tlačítka Save answers dojde k uložení odpovědí. Můžeme tedy stránku opustit, příp. zavřít a při dalším načtení stránky se načtou i uložené odpovědi.
+	\item Odevzdání testu provádíme pomocí tlačítka Submit. Tato akce je nevratná, po odevzdání testu jej není možné nijak upravovat ani znovu odevzdat.
+	\item Po odevzdání testu nás aplikace přesměruje na stránku s vyhodnoceným testem.
+\end{itemize}
+
+\subsection{Zobrazení vyhodnoceného testu}
+
+\begin{itemize}
+	\item 
+\end{itemize}
+
+\subsection{Postranní menu s názvem kurzu}
+
+
+
+\subsection{Administrace členů kurzu}
+
+\subsection{Sdílení souboru v kurzu}
+
+\subsection{Potvrzení / zamítnutí žádosti o zápis do kurzu}
+
+\subsection{Vytvoření nového testu}
+
+\subsection{Editace testu}
+
+\subsection{Publikace testu}
+
+\subsection{Odstranění testu}
+
+\subsection{Oprava testu}
+
+\subsection{Vytvoření nové známky}
+
+Administrátoři kurzu budou moci vytvářet testy, které budou žáci vyplňovat. V případě otázek s nabídkou odpovědí systém správnost sám vyhodnotí, otázky s volnou odpovědí budou hodnoceny ručně. Každý uživatel pak v daném kurzu uvidí seznam známek a bude si moci opravený test zobrazit a prohlédnout. Aplikace bude rozlišovat mezi testy a kvízy (kvízy se nebudou hodnotit známkou).
+
+Uživatelé budou moci prostřednictvím aplikace odevzdávat úkoly, které jim budou poté ohodnoceny.
+
+Administrátoři kurzu budou moci editovat obsah kurzu (např. přidávat nové materiály, soubory, apod.) 
+
+U každého kurzu bude k dispozici fórum. 
+
+Uživatelé si budou moci vytvářet nové účty, správci je budou moci do daného kurzu zapsat.

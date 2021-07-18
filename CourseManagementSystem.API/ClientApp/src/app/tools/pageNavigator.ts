@@ -52,7 +52,7 @@ export class PageNavigator {
   }
 
   /**
-   * navigate to details of the course
+   * navigate to the page with course details
    * @param courseId identifier of the course
    */
   public navigateToCourseDetail(courseId: string): void {
