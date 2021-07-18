@@ -39,7 +39,7 @@ namespace CourseManagementSystem.Services.Implementations
                 .Where(cm => cm.User.Id == person.Id)
                 .Where(cm => cm.Course.Id == course.Id)
                 .Where(cm => !cm.IsArchived)
-                .SingleOrDefault();
+                .Single();
         }
 
         /// <inheritdoc/>

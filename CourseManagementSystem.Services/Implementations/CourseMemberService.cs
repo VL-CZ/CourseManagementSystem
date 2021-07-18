@@ -39,8 +39,8 @@ namespace CourseManagementSystem.Services.Implementations
             Person user = dbContext.Users
                 .Include(user => user.CourseMemberships)
                 .ThenInclude(cm => cm.Course)
-                .SingleOrDefault(user => user.Id == personId);
-            return user.CourseMemberships.SingleOrDefault(cm => cm.Course.Id.ToString() == courseId && !cm.IsArchived);
+                .Single(user => user.Id == personId);
+            return user.CourseMemberships.Single(cm => cm.Course.Id.ToString() == courseId && !cm.IsArchived);
         }
 
         /// <inheritdoc/>

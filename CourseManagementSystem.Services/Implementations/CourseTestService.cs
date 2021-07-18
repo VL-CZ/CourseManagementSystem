@@ -43,7 +43,7 @@ namespace CourseManagementSystem.Services.Implementations
         {
             return dbContext.CourseTests
                 .Include(test => test.Questions)
-                .SingleOrDefault(ct => ct.Id.ToString() == testId);
+                .Single(ct => ct.Id.ToString() == testId);
         }
 
         ///<inheritdoc/>
