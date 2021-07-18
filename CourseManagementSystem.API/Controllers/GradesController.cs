@@ -21,12 +21,12 @@ namespace CourseManagementSystem.API.Controllers
         /// <summary>
         /// remove grade with selected id
         /// </summary>
-        /// <param name="id">id of the grade</param>
-        [HttpDelete("delete/{id}")]
-        [AuthorizeCourseAdminOf(EntityType.Grade, "id")]
-        public void Delete(string id)
+        /// <param name="gradeId">id of the grade</param>
+        [HttpDelete("delete/{gradeId}")]
+        [AuthorizeCourseAdminOf(EntityType.Grade, "gradeId")]
+        public void Delete(string gradeId)
         {
-            gradeService.DeleteById(id);
+            gradeService.DeleteById(gradeId);
 
             gradeService.CommitChanges();
         }

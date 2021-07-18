@@ -31,27 +31,27 @@ namespace CourseManagementSystem.API.Controllers
         /// <summary>
         /// get course member by its id
         /// </summary>
-        /// <param name="id">identifier of the course member</param>
+        /// <param name="memberId">identifier of the course member</param>
         /// <returns></returns>
-        [HttpGet("{id}")]
-        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "id")]
-        public CourseMemberOrAdminVM Get(string id)
+        [HttpGet("{memberId}")]
+        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "memberId")]
+        public CourseMemberOrAdminVM Get(string memberId)
         {
-            CourseMember cm = courseMemberService.GetMemberWithUser(id);
+            CourseMember cm = courseMemberService.GetMemberWithUser(memberId);
             return new CourseMemberOrAdminVM(cm.User.Id, cm.User.UserName, cm.User.Email);
         }
 
         /// <summary>
         /// assign grade to the course member with selected id
         /// </summary>
-        /// <param name="id">identifier of the <see cref="CourseMember"/></param>
+        /// <param name="memberId">identifier of the <see cref="CourseMember"/></param>
         /// <param name="gradeVM">grade viewmodel to add</param>
         /// <returns>assigned grade</returns>
-        [HttpPost("{id}/assignGrade")]
-        [AuthorizeCourseAdminOf(EntityType.CourseMember, "id")]
-        public void AssignGrade(string id, AddGradeVM gradeVM)
+        [HttpPost("{memberId}/assignGrade")]
+        [AuthorizeCourseAdminOf(EntityType.CourseMember, "memberId")]
+        public void AssignGrade(string memberId, AddGradeVM gradeVM)
         {
-            CourseMember cm = courseMemberService.GetMemberWithUser(id);
+            CourseMember cm = courseMemberService.GetMemberWithUser(memberId);
             Grade grade = new Grade(gradeVM.PercentualValue, gradeVM.Comment, gradeVM.Topic, gradeVM.Weight, cm);
 
             gradeService.AssignGrade(grade);
@@ -62,26 +62,26 @@ namespace CourseManagementSystem.API.Controllers
         /// <summary>
         /// archive course member by its id
         /// </summary>
-        /// <param name="id">identifier of the course member</param>
+        /// <param name="memberId">identifier of the course member</param>
         /// <returns></returns>
-        [HttpDelete("{id}")]
-        [AuthorizeCourseAdminOf(EntityType.CourseMember, "id")]
-        public void Archive(string id)
+        [HttpDelete("{memberId}")]
+        [AuthorizeCourseAdminOf(EntityType.CourseMember, "memberId")]
+        public void Archive(string memberId)
         {
-            courseMemberService.ArchiveMemberById(id);
+            courseMemberService.ArchiveMemberById(memberId);
             courseMemberService.CommitChanges();
         }
 
         /// <summary>
         /// get all graded test submissions of this <see cref="CourseMember"/>
         /// </summary>
-        /// <param name="id">ID of the <see cref="CourseMember"/></param>
+        /// <param name="memberId">ID of the <see cref="CourseMember"/></param>
         /// <returns>all test submissions of the course member</returns>
-        [HttpGet("{id}/submissions")]
-        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "id")]
-        public IEnumerable<TestSubmissionInfoVM> GetTestSubmissions(string id)
+        [HttpGet("{memberId}/submissions")]
+        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "memberId")]
+        public IEnumerable<TestSubmissionInfoVM> GetTestSubmissions(string memberId)
         {
-            var userSubmissions = testSubmissionService.GetAllGraded(id);
+            var userSubmissions = testSubmissionService.GetAllGraded(memberId);
             return userSubmissions.Select(ts => new TestSubmissionInfoVM(ts.Id.ToString(), ts.Test.Topic, ts.Test.Weight,
                 TestScoreCalculator.CalculateScore(ts), ts.SubmittedDateTime, ts.IsReviewed));
         }
@@ -89,26 +89,26 @@ namespace CourseManagementSystem.API.Controllers
         /// <summary>
         /// get all quizzes (non-graded test submissions) of the <see cref="CourseMember"/>
         /// </summary>
-        /// <param name="id">ID of the <see cref="CourseMember"/></param>
+        /// <param name="memberId">ID of the <see cref="CourseMember"/></param>
         /// <returns>all test submissions of the course member</returns>
-        [HttpGet("{id}/quizSubmissions")]
-        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "id")]
-        public IEnumerable<QuizSubmissionInfoVM> GetQuizzes(string id)
+        [HttpGet("{memberId}/quizSubmissions")]
+        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "memberId")]
+        public IEnumerable<QuizSubmissionInfoVM> GetQuizzes(string memberId)
         {
-            var userSubmissions = testSubmissionService.GetAllQuizzes(id);
+            var userSubmissions = testSubmissionService.GetAllQuizzes(memberId);
             return userSubmissions.Select(quiz => new QuizSubmissionInfoVM(quiz.Id.ToString(), quiz.Test.Topic));
         }
 
         /// <summary>
         /// get all grades of this <see cref="CourseMember"/>
         /// </summary>
-        /// <param name="id">ID of the <see cref="CourseMember"/></param>
+        /// <param name="memberId">ID of the <see cref="CourseMember"/></param>
         /// <returns>all grades (excluding test submissions) of the course member</returns>
-        [HttpGet("{id}/grades")]
-        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "id")]
-        public IEnumerable<GradeDetailsVM> GetGrades(string id)
+        [HttpGet("{memberId}/grades")]
+        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "memberId")]
+        public IEnumerable<GradeDetailsVM> GetGrades(string memberId)
         {
-            var grades = courseMemberService.GetGradesOf(id);
+            var grades = courseMemberService.GetGradesOf(memberId);
             return grades.Select(grade =>
                 new GradeDetailsVM(grade.Id.ToString(), grade.PercentualValue, grade.Topic, grade.Comment, grade.Weight));
         }
@@ -116,15 +116,15 @@ namespace CourseManagementSystem.API.Controllers
         /// <summary>
         /// get average score of this <see cref="CourseMember"/>
         /// </summary>
-        /// <param name="id">ID of the <see cref="CourseMember"/></param>
+        /// <param name="memberId">ID of the <see cref="CourseMember"/></param>
         /// <returns>average score from test submissions and grades of this student (0=0%,1=100%)</returns>
-        [HttpGet("{id}/averageScore")]
-        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "id")]
-        public WrapperVM<double> GetAverageScore(string id)
+        [HttpGet("{memberId}/averageScore")]
+        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "memberId")]
+        public WrapperVM<double> GetAverageScore(string memberId)
         {
-            var mappedGrades = courseMemberService.GetGradesOf(id)
+            var mappedGrades = courseMemberService.GetGradesOf(memberId)
                 .Select(grade => new ScoreWithWeightDto(grade.Weight, grade.PercentualValue));
-            var mappedTestSubmissions = testSubmissionService.GetAllGraded(id)
+            var mappedTestSubmissions = testSubmissionService.GetAllGraded(memberId)
                 .Select(ts => new ScoreWithWeightDto(ts.Test.Weight, TestScoreCalculator.CalculateScore(ts)));
 
             var scoresWithWeights = new List<ScoreWithWeightDto>();
@@ -138,13 +138,13 @@ namespace CourseManagementSystem.API.Controllers
         /// <summary>
         /// get id of the course that this course member entity belongs to
         /// </summary>
-        /// <param name="id">identifier of the course member</param>
+        /// <param name="memberId">identifier of the course member</param>
         /// <returns></returns>
-        [HttpGet("{id}/courseId")]
-        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "id")]
-        public WrapperVM<string> GetCourseId(string id)
+        [HttpGet("{memberId}/courseId")]
+        [AuthorizeCourseAdminOrOwnerOf(EntityType.CourseMember, "memberId")]
+        public WrapperVM<string> GetCourseId(string memberId)
         {
-            string courseId = courseMemberService.GetCourseIdOf(id);
+            string courseId = courseMemberService.GetCourseIdOf(memberId);
             return new WrapperVM<string>(courseId);
         }
     }
