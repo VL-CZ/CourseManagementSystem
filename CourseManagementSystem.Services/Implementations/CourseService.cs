@@ -82,7 +82,7 @@ namespace CourseManagementSystem.Services.Implementations
             return dbContext.Courses
                 .Include(course => course.ForumPosts)
                 .ThenInclude(post => post.Author)
-                .SingleOrDefault(course => course.Id.ToString() == courseId)
+                .Single(course => course.Id.ToString() == courseId)
                 .ForumPosts;
         }
 

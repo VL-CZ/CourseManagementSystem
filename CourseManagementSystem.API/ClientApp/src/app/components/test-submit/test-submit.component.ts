@@ -11,6 +11,7 @@ import {ObservableWrapper} from '../../tools/observableWrapper';
 import {ConfirmDialogManager} from '../../tools/dialog-managers/confirmDialogManager';
 import {ConfirmButtonStyle} from '../confirm-dialog/confirm-dialog.component';
 import {PageNavigator} from '../../tools/pageNavigator';
+import {InformationDialogManager} from '../../tools/dialog-managers/informationDialogManager';
 
 /**
  * component for submitting a test
@@ -45,6 +46,7 @@ export class TestSubmitComponent implements OnInit {
   private bsModalService: BsModalService;
   private observableWrapper: ObservableWrapper;
   private confirmDialogManager: ConfirmDialogManager;
+  private informationDialogManager: InformationDialogManager;
 
   constructor(route: ActivatedRoute, courseTestService: CourseTestService, testSubmissionService: TestSubmissionService, router: Router,
               bsModalService: BsModalService) {
@@ -53,6 +55,7 @@ export class TestSubmitComponent implements OnInit {
     this.pageNavigator = new PageNavigator(router);
     this.bsModalService = bsModalService;
     this.confirmDialogManager = new ConfirmDialogManager(this.bsModalRef, this.bsModalService);
+    this.informationDialogManager = new InformationDialogManager(this.bsModalRef, this.bsModalService);
     this.observableWrapper = new ObservableWrapper(this.bsModalRef, this.bsModalService);
 
     testSubmissionService.loadSubmission(testId).subscribe(submission => {
@@ -77,8 +80,8 @@ export class TestSubmitComponent implements OnInit {
     this.observableWrapper.subscribeOrShowError(
       this.testSubmitService.saveAnswers(this.testSubmission.testSubmissionId, this.testSubmission.answers),
       () => {
-      }
-    );
+        this.informationDialogManager.displayDialog('Answers have been saved.');
+      });
   }
 
   /**

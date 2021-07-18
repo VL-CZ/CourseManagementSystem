@@ -47,7 +47,7 @@ namespace CourseManagementSystem.Services.Implementations
         /// <inheritdoc/>
         public TestSubmissionAnswer GetAnswerByQuestionNumber(TestSubmission testSubmission, int questionNumber)
         {
-            return testSubmission.Answers.SingleOrDefault(answer => answer.Question.Number == questionNumber);
+            return testSubmission.Answers.Single(answer => answer.Question.Number == questionNumber);
         }
 
         /// <inheritdoc/>
@@ -70,7 +70,7 @@ namespace CourseManagementSystem.Services.Implementations
                 .Include(ts => ts.Answers)
                 .ThenInclude(a => a.Question)
                 .Include(ts => ts.Test)
-                .SingleOrDefault(ts => ts.Id.ToString() == testSubmissionId);
+                .Single(ts => ts.Id.ToString() == testSubmissionId);
         }
 
         /// <inheritdoc/>
