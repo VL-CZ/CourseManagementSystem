@@ -115,10 +115,10 @@ Abstract.
 
 % 3 až 5 klíčových slov (doporučeno), každé uzavřeno ve složených závorkách
 \def\KlicovaSlova{%
-{klíčová} {slova}
+{výukový kurz} {.NET Core} {Angular}
 }
 \def\KlicovaSlovaEN{%
-{key} {words}
+{educational course} {.NET Core} {Angular}
 }
 
 %% Balíček hyperref, kterým jdou vyrábět klikací odkazy v PDF,
@@ -221,6 +221,7 @@ Abstract.
 	\item CSS -- Cascading Style Sheets
 	\item CI -- Continuous integration
 	\item SQL -- Structured Query Language
+	\item URL -- Uniform Resource Locator
 	
 \end{itemize}
 
@@ -239,7 +240,29 @@ Abstract.
 
 \section{Příručka k použití}
 
+Pro spuštění programu je třeba mít nainstalované tyto programy:
+\begin{itemize}
+	\item .NET Core SDK verze 3.1
+	\item Node.js verze 12 nebo 14
+	\item lokální instance Microsoft SQL Server databáze
+	\item CLI tools for Entity Framework Core
+\end{itemize}
 
+V kořenovém adresáři aplikace zadejte do příkazové řádky nejprve následující příkaz.
+
+\begin{lstlisting}
+dotnet ef database update --project CourseManagementSystem.Data --startup-project CourseManagementSystem.API
+\end{lstlisting}
+
+Dojde k vytvoření databáze na lokální instanci SQL Serveru.
+
+Pro spuštění aplikace zadejte tyto příkazy:
+\begin{lstlisting}
+cd CourseManagementSystem.API
+dotnet run
+\end{lstlisting}
+
+Tímto dojde ke spuštění aplikace. Ve výpisu příkazu \textit{dotnet run} na příkazové řádce bychom nyní měli vidět URL, na které se aplikace nachází (typicky je to URL \url{https://localhost:5001}). Otevřeme webový prohlížeč na této URL a následně se zobrazí domovská stránka aplikace.
 
 \include{user-doc}
 
