@@ -1,18 +1,48 @@
 \section{Uživatelská dokumentace}
 
-Administrátoři kurzu budou moci vytvářet testy, které budou žáci vyplňovat. V případě otázek s nabídkou odpovědí systém správnost sám vyhodnotí, otázky s volnou odpovědí budou hodnoceny ručně. Každý uživatel pak v daném kurzu uvidí seznam známek a bude si moci opravený test zobrazit a prohlédnout. Aplikace bude rozlišovat mezi testy a kvízy (kvízy se nebudou hodnotit známkou).
+Tato kapitola obsahuje uživatelskou dokumentaci aplikace.
 
-Uživatelé budou moci prostřednictvím aplikace odevzdávat úkoly, které jim budou poté ohodnoceny.
+Aplikace umožňuje vytváření a správu výukových kurzů, kterýkoliv uživatel si může vytvořit vlastní kurz.
+Kurz může představovat vysokoškolskou přednášku, cvičení, předmět na střední škole nebo také jazykový, příp. jiný zájmový kurz.
 
-Administrátoři kurzu budou moci editovat obsah kurzu (např. přidávat nové materiály, soubory, apod.) 
+V kurzu jsou dva typy uživatelů:
+\begin{itemize}
+	\item Studenti
+	\item Administrátoři (správci)
+\end{itemize}
 
-U každého kurzu bude k dispozici fórum. 
+Role se vztahuje pouze k danému kurzu, uživatel tedy může být v jednom kurzu administrátor, v jiném naopak pouze student. 
+Administrátoři mohou měnit obsah kurzu (přidávat, odebírat materiály, apod.) a vytvářet nové testy. 
+Testy dělíme na dva typy:
 
-Uživatelé si budou moci vytvářet nové účty, správci je budou moci do daného kurzu zapsat.
+\begin{itemize}
+	\item Hodnocené testy
+	\item Nehodnocené testy (kvízy)
+\end{itemize}
 
+Rozdíl je v tom, že kvízy se nepočítají do celkového hodnocení studenta.
 
+Studenti daného kurzu pak mohou testy vyplňovat a zobrazit si své známky i opravená řešení.
+Systém vyhodnocuje řešení testů automaticky, nicméně správci kurzu mohou následně body upravit ručně. 
 
-Na obrázku (screenshot) můžeme vidět uživatelské rozhraní aplikace.
+Testy se skládají z jednotlivých otázek, ty dělíme na tři typy podle druhu odpovědí.
+\begin{itemize}
+	\item textová odpověď
+	\item výběr z nabídky odpovědí -- právě jedna z nabízených odpovědí je správná
+	\item vícenásobný výběr z nabídky odpovědí -- více nabízených odpovědí může být správných
+\end{itemize}
+
+V prvních dvou typech otázek probíhá vyhodnocení jednoduše, pokud se odeslaná a správná odpověď shodují, systém udělí za tuto otázku plný počet bodů, v opačném případě neudělí žádné body.
+V případě vícenásobného výběru z odpovědí systém nejprve spočítá počet správných voleb (tzn. vybraných odpovědí, které jsou správné a nevybraných odpovědí, které jsou chybné).
+Dále spočítá procentuální poměr správných voleb a udělí procentuálně daný počet bodů za tuto otázku.
+Pro ilustraci uvedeme příklad s otázkou, která je hodnocena šesti body, a obsahuje tři možné odpovědi, z nichž dvě jsou správné. Student zaškrtne pouze jednu správnou odpověď (ostatní možnosti nevybere), za otázku tedy dostane $\frac{2}{3} * 6 = 4$ body.
+
+Dále mohou administrátoři přidělovat studentům i známky, které se nevážou k žádnému testu, což můžeme využít například k reprezentaci známek za aktivitu v hodině.
+Aplikace používá k hodnocení procenta, jednotlivé testy a známky mohou mít různou váhu. 
+
+Na obrázku (screenshot) vidíme uživatelské rozhraní aplikace.
+
+\vspace{\baselineskip}
 
 Následující podkapitoly obsahují jednotlivé uživatelské scénáře rozepsané v bodech a doplněné snímky obrazovky.
 
@@ -181,7 +211,7 @@ Následující akce mohou vykonávat pouze administrátoři příslušného kurz
 			\item výběr z nabídky odpovědí
 			\item vícenásobný výběr z nabídky odpovědí
 		\end{itemize}
-	\item Do příslušného políčka vyplníme text otázky. V případě, že se jedná o otázku s výběrem odpovědí, je potřeba vybrat počet možných odpovědí a potvrdit pomocí tlačítka Apply. Poté se zobrazí políčka pro jednotlivé možné odpovědi, označené písmenem. Do těchto políček vyplníme text možných odpovědí.
+	\item Do příslušného políčka vyplníme text otázky. V případě, že se jedná o otázku s výběrem odpovědí, je potřeba vybrat počet možných odpovědí a potvrdit pomocí tlačítka Apply. Poté se zobrazí políčka pro jednotlivé možné odpovědi, označené písmenem. Do těchto políček vyplníme text možných odpovědí. Maximální počet možných odpovědí je deset.
 	\item Vyplníme správnou odpověď otázky a počet bodů za tuto otázku. V případě, že se jedná o otázku s výběrem odpovědi, jako správnou odpověď zadáme jedno písmeno -- identifikátor možnosti, která je správná. 
 	
 	Pokud jde o otázku s vícenásobným výběrem odpovědí, do políčka pro správnou odpověď zadáme seznam písmen pravdivých možností, oddělených čárkou. Tedy například, pokud máme otázku se správnými odpověďmi A a C, do políčka pro správnou odpověď zadáme řetězec 'A,C'. Pokud je pravdivá pouze jedna odpověď, zadáme pouze jedno písmeno, naopak pokud není pravdivá žádná z odpovědí, necháme políčka pro správnou odpověď prázdné. Ilustrační příklad je na obrázku (screenshot).
