@@ -37,25 +37,25 @@ namespace CourseManagementSystem.API.Controllers
         /// <summary>
         /// download the file by its Id
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="fileId"></param>
         /// <returns></returns>
-        [HttpGet("{id}")]
-        [AuthorizeCourseAdminOrMemberOf(EntityType.CourseFile, "id")]
-        public IActionResult Download(string id)
+        [HttpGet("{fileId}")]
+        [AuthorizeCourseAdminOrMemberOf(EntityType.CourseFile, "fileId")]
+        public IActionResult Download(string fileId)
         {
-            CourseFile file = fileService.GetFileById(id);
+            CourseFile file = fileService.GetFileById(fileId);
             return File(file.Data, file.ContentType, file.Name);
         }
 
         /// <summary>
         /// delete the selected file
         /// </summary>
-        /// <param name="id"></param>
-        [HttpDelete("delete/{id}")]
-        [AuthorizeCourseAdminOf(EntityType.CourseFile, "id")]
-        public void Delete(string id)
+        /// <param name="fileId"></param>
+        [HttpDelete("delete/{fileId}")]
+        [AuthorizeCourseAdminOf(EntityType.CourseFile, "fileId")]
+        public void Delete(string fileId)
         {
-            fileService.DeleteFileById(id);
+            fileService.DeleteFileById(fileId);
 
             fileService.CommitChanges();
         }
