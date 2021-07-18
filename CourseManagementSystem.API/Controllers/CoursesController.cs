@@ -42,13 +42,13 @@ namespace CourseManagementSystem.API.Controllers
         /// <summary>
         /// get course info by its identifier
         /// </summary>
-        /// <param name="id">id of the course to return</param>
+        /// <param name="courseId">id of the course to return</param>
         /// <returns></returns>
-        [AuthorizeCourseAdminOrMemberOf(EntityType.Course, "id")]
-        [HttpGet("{id}")]
-        public CourseInfoVM GetById(string id)
+        [AuthorizeCourseAdminOrMemberOf(EntityType.Course, "courseId")]
+        [HttpGet("{courseId}")]
+        public CourseInfoVM GetById(string courseId)
         {
-            var selectedCourse = courseService.GetById(id);
+            var selectedCourse = courseService.GetById(courseId);
             return new CourseInfoVM(selectedCourse.Id.ToString(), selectedCourse.Name);
         }
 
@@ -70,12 +70,12 @@ namespace CourseManagementSystem.API.Controllers
         /// <summary>
         /// delete course by id
         /// </summary>
-        /// <param name="id"></param>
-        [HttpDelete("{id}")]
-        [AuthorizeCourseAdminOf(EntityType.Course, "id")]
-        public void Delete(string id)
+        /// <param name="courseId"></param>
+        [HttpDelete("{courseId}")]
+        [AuthorizeCourseAdminOf(EntityType.Course, "courseId")]
+        public void Delete(string courseId)
         {
-            courseService.ArchiveById(id);
+            courseService.ArchiveById(courseId);
             courseService.CommitChanges();
         }
 
@@ -125,97 +125,98 @@ namespace CourseManagementSystem.API.Controllers
         /// <summary>
         /// get all course members
         /// </summary>
-        /// <param name="id">Id of the course</param>
-        [HttpGet("{id}/members")]
-        [AuthorizeCourseAdminOf(EntityType.Course, "id")]
-        public IEnumerable<CourseMemberOrAdminVM> GetAllMembers(string id)
+        /// <param name="courseId">Id of the course</param>
+        [HttpGet("{courseId}/members")]
+        [AuthorizeCourseAdminOf(EntityType.Course, "courseId")]
+        public IEnumerable<CourseMemberOrAdminVM> GetAllMembers(string courseId)
         {
-            var people = courseService.GetMembersWithUsers(id);
+            var people = courseService.GetMembersWithUsers(courseId);
             return people.Select(cm => new CourseMemberOrAdminVM(cm.Id.ToString(), cm.User.UserName, cm.User.Email));
         }
 
         /// <summary>
         /// get all course admins
         /// </summary>
-        /// <param name="id">Id of the course</param>
-        [HttpGet("{id}/admins")]
-        [AuthorizeCourseAdminOf(EntityType.Course, "id")]
-        public IEnumerable<CourseMemberOrAdminVM> GetAllAdmins(string id)
+        /// <param name="courseId">Id of the course</param>
+        [HttpGet("{courseId}/admins")]
+        [AuthorizeCourseAdminOf(EntityType.Course, "courseId")]
+        public IEnumerable<CourseMemberOrAdminVM> GetAllAdmins(string courseId)
         {
-            var admins = courseService.GetAdminsWithUsers(id);
+            var admins = courseService.GetAdminsWithUsers(courseId);
             return admins.Select(admin => new CourseMemberOrAdminVM(admin.Id.ToString(), admin.User.UserName, admin.User.Email));
         }
 
         /// <summary>
         /// get all shared files in the course with given id
         /// </summary>
-        /// <param name="id">Id of the course</param>
+        /// <param name="courseId">Id of the course</param>
         /// <returns></returns>
-        [HttpGet("{id}/files")]
-        [AuthorizeCourseAdminOrMemberOf(EntityType.Course, "id")]
-        public IEnumerable<CourseFileVM> GetAllFiles(string id)
+        [HttpGet("{courseId}/files")]
+        [AuthorizeCourseAdminOrMemberOf(EntityType.Course, "courseId")]
+        public IEnumerable<CourseFileVM> GetAllFiles(string courseId)
         {
-            return courseService.GetFiles(id).Select(file => new CourseFileVM(file.Id.ToString(), file.Name));
+            return courseService.GetFiles(courseId).Select(file => new CourseFileVM(file.Id.ToString(), file.Name));
         }
 
         /// <summary>
         /// get all ACTIVE tests in the course with given id
         /// </summary>
-        /// <param name="id">Id of the course</param>
+        /// <param name="courseId">Id of the course</param>
         /// <returns></returns>
-        [HttpGet("{id}/activeTests")]
-        [AuthorizeCourseAdminOrMemberOf(EntityType.Course, "id")]
-        public IEnumerable<CourseTestDetailsVM> GetActiveTests(string id)
+        [HttpGet("{courseId}/activeTests")]
+        [AuthorizeCourseAdminOrMemberOf(EntityType.Course, "courseId")]
+        public IEnumerable<CourseTestDetailsVM> GetActiveTests(string courseId)
         {
-            return GetAndFilterTests(id, courseTestFilter.FilterActive);
+            return GetAndFilterTests(courseId, courseTestFilter.FilterActive);
         }
 
         /// <summary>
         /// get all tests in the given course that haven't been published yet
         /// </summary>
-        /// <param name="id">Id of the course</param>
+        /// <param name="courseId">Id of the course</param>
         /// <returns></returns>
-        [HttpGet("{id}/nonPublishedTests")]
-        [AuthorizeCourseAdminOf(EntityType.Course, "id")]
-        public IEnumerable<CourseTestDetailsVM> GetNonPublishedTests(string id)
+        [HttpGet("{courseId}/nonPublishedTests")]
+        [AuthorizeCourseAdminOf(EntityType.Course, "courseId")]
+        public IEnumerable<CourseTestDetailsVM> GetNonPublishedTests(string courseId)
         {
-            return GetAndFilterTests(id, courseTestFilter.FilterNonPublishedBeforeDeadline);
+            return GetAndFilterTests(courseId, courseTestFilter.FilterNonPublishedBeforeDeadline);
         }
 
         /// <summary>
         /// get all tests in the given course that are after deadline
         /// </summary>
-        /// <param name="id">Id of the course</param>
+        /// <param name="courseId">Id of the course</param>
         /// <returns></returns>
-        [HttpGet("{id}/testsAfterDeadline")]
-        [AuthorizeCourseAdminOf(EntityType.Course, "id")]
-        public IEnumerable<CourseTestDetailsVM> GetTestsAfterDeadline(string id)
+        [HttpGet("{courseId}/testsAfterDeadline")]
+        [AuthorizeCourseAdminOf(EntityType.Course, "courseId")]
+        public IEnumerable<CourseTestDetailsVM> GetTestsAfterDeadline(string courseId)
         {
-            return GetAndFilterTests(id, courseTestFilter.FilterAfterDeadline);
+            return GetAndFilterTests(courseId, courseTestFilter.FilterAfterDeadline);
         }
 
         /// <summary>
         /// get all posts in the course with given id
         /// </summary>
-        /// <param name="id">identifier of the course</param>
+        /// <param name="courseId">identifier of the course</param>
         /// <returns></returns>
-        [HttpGet("{id}/posts")]
-        [AuthorizeCourseAdminOrMemberOf(EntityType.Course, "id")]
-        public IEnumerable<ForumPostVM> GetAllPosts(string id)
+        [HttpGet("{courseId}/posts")]
+        [AuthorizeCourseAdminOrMemberOf(EntityType.Course, "courseId")]
+        public IEnumerable<ForumPostVM> GetAllPosts(string courseId)
         {
-            var posts = courseService.GetPostsWithAuthors(id);
+            var posts = courseService.GetPostsWithAuthors(courseId);
             return posts.Select(post => new ForumPostVM(post.Id.ToString(), post.Author.Email, post.Text));
         }
 
         /// <summary>
         /// get all requests for enrollments to this course
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="courseId"></param>
         /// <returns></returns>
-        [HttpGet("{id}/enrollmentRequests")]
-        public IEnumerable<EnrollmentRequestVM> GetEnrollmentRequests(string id)
+        [HttpGet("{courseId}/enrollmentRequests")]
+        [AuthorizeCourseAdminOf(EntityType.Course, "courseId")]
+        public IEnumerable<EnrollmentRequestVM> GetEnrollmentRequests(string courseId)
         {
-            var requests = courseService.GetEnrollmentRequestsWithPeople(id);
+            var requests = courseService.GetEnrollmentRequestsWithPeople(courseId);
             return requests.Select(req => new EnrollmentRequestVM(req.Id.ToString(), req.Person.UserName, req.Person.Email));
         }
 
