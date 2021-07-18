@@ -56,13 +56,13 @@
 
     <div class="jumbotron" *ngIf="isAdmin">
       <div *ngIf="editing">
-        <h4>Apply/Discard updates</h4>
-        <button type="button" class="btn btn-success mr-3" (click)="saveUpdates()">Apply</button>
+        <h4>Save/Discard updates</h4>
+        <button type="button" class="btn btn-warning mr-3" (click)="saveUpdates()">Save</button>
         <button type="button" class="btn btn-danger" (click)="discardUpdates()">Discard</button>
       </div>
       <div *ngIf="!editing">
         <h4>Review</h4>
-        <button type="button" class="btn btn-warning mr-3" (click)="startReview()">Update points</button>
+        <button type="button" class="btn btn-warning mr-3" (click)="startReview()">Update</button>
         <button type="button" class="btn btn-primary" *ngIf="!submission.isReviewed" (click)="markAsReviewed()">Mark as reviewed</button>
       </div>
     </div>
