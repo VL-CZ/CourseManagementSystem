@@ -37,14 +37,16 @@ Ve složce Models jsou třídy reprezentující databázové entity. Každá z e
 		Název entity & reprezentovaný objekt \\
 		\hline \hline
 		Course & kurz \\ \hline
+		CourseAdmin & vztah administrátor mezi entitami Course a Person \\ \hline		
 		CourseFile & nějaký soubor sdílený v kurzu \\ \hline
 		CourseMember & členství uživatele v daném kurzu. 
 		K této entitě se pak vážou všechny známky a odeslané testy. \\ \hline
-		CourseTest & test v kurzu \\ \hline
+		CourseTest & test v kurzu. Testy dělíme na hodnocené a nehodnocené (tzv. kvízy). \\ \hline
+		EnrollmentRequest & žádost o zapsání uživatele do daného kurzu \\ \hline
 		ForumPost & příspěvek ve fóru k danému kurzu \\ \hline
 		Grade & známku kterou student obdržel (kromě známek z testů) \\ \hline
 		Person & uživatele aplikace \\ \hline
-		TestQuestion & 1 otázku v testu \\ \hline
+		TestQuestion & jednu otázku v testu \\ \hline
 		TestSubmission & test s odpověďmi odeslaný uživatelem \\ \hline
 		TestSubmissionAnswer & odpověď k dané otázce v testu \\
 		\hline
@@ -71,7 +73,7 @@ public class Course : IGuidIdObject
 		Members = new List<CourseMember>();
 		Files = new List<CourseFile>();
 		Tests = new List<CourseTest>();
-		ForumPosts = new List<ForumPost>();
+		...
 	}
 	
 	public Course(string name, Person admin) : this()
@@ -382,6 +384,7 @@ public class CoursesController : ControllerBase
 	private readonly ICourseService courseService;
 	private readonly IPeopleService peopleService;
 	private CourseTestFilter courseTestFilter;
+	...
 	
 	public CoursesController(IHttpContextAccessor httpContextAccessor, ICourseService courseService, IPeopleService peopleService)
 	{
@@ -389,6 +392,7 @@ public class CoursesController : ControllerBase
 		this.courseService = courseService;
 		this.peopleService = peopleService;
 		courseTestFilter = new CourseTestFilter();
+		...
 	}
 	...
 \end{lstlisting}
@@ -396,21 +400,22 @@ public class CoursesController : ControllerBase
 Jednotlivé Controllery pak obsahují veřejné metody, jež odpovídají HTTP endpointům.
 
 Například následující metoda slouží k získaní všech členů daného kurzu.
+
 \begin{lstlisting}
 /// <summary>
 /// get all course members
 /// </summary>
-/// <param name="id">Id of the course</param>
-[HttpGet("{id}/members")]
-[AuthorizeCourseAdminOf(EntityType.Course, "id")]
-public IEnumerable<CourseMemberOrAdminVM> GetAllMembers(string id)
+/// <param name="courseId">Id of the course</param>
+[HttpGet("{courseId}/members")]
+[AuthorizeCourseAdminOf(EntityType.Course, "courseId")]
+public IEnumerable<CourseMemberOrAdminVM> GetAllMembers(string courseId)
 {
-	var people = courseService.GetMembersWithUsers(id);
+	var people = courseService.GetMembersWithUsers(courseId);
 	return people.Select(cm => new CourseMemberOrAdminVM(cm.Id.ToString(), cm.User.UserName, cm.User.Email));
 }
 \end{lstlisting}
 
-Vidíme, že je tedy označená atributem HttpGet, který zároveň obsahuje URL, přes kterou lze tuto metodu zavolat. V tomto případě je URL suffix "\{id\}/members". Položka Id označuje parametr, jenž má stejnou hodnotu jako proměnná id (parametr metody). Tento suffix se připojí za URL daného Controlleru, a tím získáme celou URL k zavolání této metody. V našem případě dostaneme
+Vidíme, že je tedy označená atributem HttpGet, který zároveň obsahuje URL, přes kterou lze tuto metodu zavolat. V tomto případě je URL suffix "\{courseId\}/members". Položka courseId označuje parametr, jenž má stejnou hodnotu jako proměnná courseId (parametr metody). Tento suffix se připojí za URL daného Controlleru, a tím získáme celou URL k zavolání této metody. V našem případě dostaneme
 \newline
 "http://host/api/courses/course-id/members", kde course-id je identifikátor příslušného kurzu a host označuje URL serveru, na kterém aplikace běží. Pokud máme aplikaci spuštěnou lokálně, pak by hodnota měla být localhost:5001. Při HTTP GET dotazu na tuto URL by tedy aplikace zavolala tuto metodu, a vrátila data ve formátu JSON.
 
@@ -459,13 +464,14 @@ public class SubmitTestVM
 	{
 	}
 	
-	public SubmitTestVM(string testId, string testTopic, bool isSubmitted, IEnumerable<SubmissionAnswerVM> answers, bool isTestGraded)
+	public SubmitTestVM(string testId, string testTopic, bool isSubmitted, IEnumerable<SubmissionAnswerVM> answers, bool isTestGraded, DateTime testDeadline)
 	{
 		TestSubmissionId = testId;
 		TestTopic = testTopic;
 		Answers = answers;
 		IsSubmitted = isSubmitted;
 		IsTestGraded = isTestGraded;
+		TestDeadline = testDeadline;
 	}
 	
 	/// <summary>
@@ -539,7 +545,7 @@ public class CourseTestDetailsVM : BaseCourseTestVM
 	public CourseTestDetailsVM() : base()
 	{ }
 	
-	public CourseTestDetailsVM(string id, string topic, int scoreWeight, ...)
+	public CourseTestDetailsVM(string id, string topic, int scoreWeight, TestStatus testStatus, ...)
 	: base(scoreWeight, topic, ...)
 	{
 		Id = id;
@@ -798,17 +804,17 @@ public class AuthorizeCourseAdminOrMemberOfAttribute : TypeFilterAttribute
 
 Vidíme, že tento atribut má konstruktor se dvěma parametry, které následně předá autorizačnímu filtru. 
 
-Atributy se poté používají následujícím způsobem (v příkladu je atribut použitý na metodě Controlleru, která slouží ke stažení souboru podle daného id).
+Atributy se poté používají následujícím způsobem (v příkladu je atribut použitý na metodě Controlleru, která slouží ke stažení souboru podle daného fileId).
 \begin{lstlisting}
-[HttpGet("{id}")]
-[AuthorizeCourseAdminOrMemberOf(EntityType.CourseFile, "id")]
-public IActionResult Download(string id)
+[HttpGet("{fileId}")]
+[AuthorizeCourseAdminOrMemberOf(EntityType.CourseFile, "fileId")]
+public IActionResult Download(string fileId)
 {
 	...
 }
 \end{lstlisting}
 
-Tímto způsobem tedy zaručíme, že k této metodě mají přístup pouze administrátoři a členové daného kurzu, ve kterém je tento soubor sdílen. Pomocí parametrů atributu popíšeme, že entita je soubor, a její identifikátor se nachází v proměnné s názvem id (což je parametr metody).
+Tímto způsobem tedy zaručíme, že k této metodě mají přístup pouze administrátoři a členové daného kurzu, ve kterém je tento soubor sdílen. Pomocí parametrů atributu popíšeme, že entita je soubor, a její identifikátor se nachází v proměnné s názvem fileId (což je parametr metody).
 
 \subsubsection*{Dependency Injection}
 
@@ -1076,18 +1082,29 @@ export class StudentListComponent implements OnInit {
 	public students: CourseMemberOrAdminVM[] = [];
 	
 	private readonly courseService: CourseService;
+	...
 	
-	constructor(courseService: CourseService) {
+	constructor(courseService: CourseService, ...) {
 		this.courseService = courseService;
+		...
 	}
 	
 	ngOnInit() {
+		this.reloadData();
+	}
+	
+	/**
+	* reload student list
+	* @private
+	*/
+	private reloadData(): void {
 		this.courseService.getAllMembers(this.courseId)
 		.subscribe(result => {
-				this.students = result;
+			this.students = result;
 		});
 	}
-}
+	
+	...
 \end{lstlisting}
 
 Na výše uvedeném příkladu vidíme, že backend komponenty je klasická Typescript třída označená anotací @Component. U anotace je zároveň uvedený selektor, což je jméno HTML elementu, který slouží k vykreslení komponenty, a umístění souboru se šablonou a CSS styly.
@@ -1099,23 +1116,38 @@ Veřejné položky (například pole students) jsou pak dostupné v HTML šablon
 Pro ilustraci uvedeme také šablonu komponenty:
 
 \lstset{style=html}
+
 \begin{lstlisting}
 <div class="jumbotron">
 	<h3>Students</h3>
 	<table class="table table-striped table-responsive">
 		<tr>
-			<th>Name</th>
-			<th>Email</th>
+			<th>Username</th>
+			<th></th>
 			<th></th>
 		</tr>
 		<tr *ngFor="let person of students">
-			<td>{{person.name}}</td>
-			<td>{{person.email}}</td>
+			<td class="align-middle">{{person.name}}</td>
 			<td>
-				<a class="nav-link" routerLink="/students/{{person.id}}">Details</a>
+				<a class="btn btn-link" (click)="pageNavigator.
+					navigateToStudentDetail(person.id)">
+					Details
+				</a>
+			</td>
+			<td>
+				<button class="btn btn-danger" 
+				(click)="removeMember(person)">Remove</button>
 			</td>
 		</tr>
 	</table>
+	<div class="my-2">
+		<div>
+			<button class="btn btn-info" (click)="pageNavigator.
+				navigateToCourseEnrollmentRequests(courseId)">
+				Enrollment requests
+			</button>
+		</div>
+	</div>
 </div>
 \end{lstlisting}
 
