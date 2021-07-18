@@ -1,13 +1,20 @@
 \section{Uživatelská dokumentace}
 
-V této kapitole se nachází uživatelská dokumentace aplikace.
-Popis všech funkcí + screenshoty?
+Administrátoři kurzu budou moci vytvářet testy, které budou žáci vyplňovat. V případě otázek s nabídkou odpovědí systém správnost sám vyhodnotí, otázky s volnou odpovědí budou hodnoceny ručně. Každý uživatel pak v daném kurzu uvidí seznam známek a bude si moci opravený test zobrazit a prohlédnout. Aplikace bude rozlišovat mezi testy a kvízy (kvízy se nebudou hodnotit známkou).
 
-TODO: rozepsat mnohem více do detailu (krok po kroku + snímky obrazovky)
+Uživatelé budou moci prostřednictvím aplikace odevzdávat úkoly, které jim budou poté ohodnoceny.
 
-(převzato ze specifikace ročníkového projektu)
+Administrátoři kurzu budou moci editovat obsah kurzu (např. přidávat nové materiály, soubory, apod.) 
+
+U každého kurzu bude k dispozici fórum. 
+
+Uživatelé si budou moci vytvářet nové účty, správci je budou moci do daného kurzu zapsat.
+
+
 
 Na obrázku (screenshot) můžeme vidět uživatelské rozhraní aplikace.
+
+Následující podkapitoly obsahují jednotlivé uživatelské scénáře rozepsané v bodech a doplněné snímky obrazovky.
 
 \subsection{Registrace nového uživatele}
 
@@ -59,7 +66,7 @@ Na obrázku (screenshot) můžeme vidět uživatelské rozhraní aplikace.
 	\item Pod touto sekcí se nachází seznam testů, rozdělený do tří kategorií:
 		\begin{itemize}
 			\item Not Published -- tyto testy zatím nebyly publikované, mohou si je zobrazit pouze administrátoři.
-			\item Active -- tyto testy jsou aktivní, aktuálně je můžeme odevzdávat.
+			\item Active -- tyto testy jsou aktivní, aktuálně je lze odevzdávat.
 			\item After deadline -- testy, které již není možné odevzdat.
 		\end{itemize}
 		Pokud některá z kategorií neobsahuje žádný test, tak se na stránce vůbec nezobrazuje. Studenti kurzu vidí pouze kategorii 'Active', zatímco administrátorům se zobrazují všechny tři výše uvedené kategorie.
@@ -68,7 +75,7 @@ Na obrázku (screenshot) můžeme vidět uživatelské rozhraní aplikace.
 		Po kliknutí na název testu se student dostane buď na stránku s odevzdáním, anebo na stránku s vyhodnoceným řešením, pokud již test odevzdal. Administrátory kurzu aplikace přesměruje na stránku s detaily testu.
 		
 	\item Na stránce je dále sekce se sdílenými soubory, které si můžeme stáhnout. Správci kurzu zde vidí i formulář pro nahraní nového souboru.
-	\item Dále se zde nachází sekce se seznamem členů a administrátorů daného kurzu, které se zobrazují pouze administrátorům (více viz. dále).
+	\item Dále se zde nachází komponenty se seznamy členů a administrátorů daného kurzu, které se zobrazují pouze administrátorům (více viz. dále).
 	\item Na stránce dále můžeme vidět fórum s příspěvky. U každého příspěvku je uvedený text a jeho autor. Správci kurzu zde vidí také tlačítko pro smazání příspěvku.
 	\item Pod fórem se nachází formulář, pomocí kterého lze přidávat nové příspěvky.
 	\item Úplně dole je pak tlačítko, které slouží k opuštění kurzu. Tato akce je nevratná, pokud tedy kurz opustíme, nemůžeme původní účet v aplikaci nijak obnovit. Můžeme ovšem zažádat o nové zapsání do kurzu.
@@ -77,11 +84,11 @@ Na obrázku (screenshot) můžeme vidět uživatelské rozhraní aplikace.
 \subsection{Zobrazení detailu studenta}
 
 \begin{itemize}
-	\item Na stránku s detaily studenta se můžeme dostat ze stránky s detaily kurzu. Studenti si stránku zobrazí pomocí tlačítka 'My Grades', administrátoři se sem dostanou pomocí kliknutí na studenta v sekci s členy kurzu.
+	\item Na stránku s detaily studenta se můžeme dostat ze stránky s detaily kurzu. Studenti si stránku mohou zobrazit pomocí tlačítka 'My Grades', administrátoři se sem dostanou pomocí kliknutí na detail studenta v sekci s členy kurzu.
 	\item Na obrázku (screenshot), vidíme, že na této stránce se nachází komponenty s hodnocením daného studenta. 
 	\item Nachází se zde tabulka s odevzdanými testy, po kliknutí na název testu se dostaneme na stránku s vyhodnoceným řešením. U každého testu pak vidíme získané skóre, váhu testu (tedy dopad na celkovou známku), datum a čas odevzdání. Poslední sloupec nám říká, jestli bylo odevzdané řešení již revidované
 	\item Pod seznamem odevzdaných testů se nachází komponenta s dalšími známkami. Tyto známky nepatří k žádnému testu. 
-	\item Na stránce se dále nachází sekce s celkovým skóre studenta, ve které můžeme vidět vážený průměr všech známek dané osoby.
+	\item Na stránce se dále nachází sekce s celkovým skóre studenta, ve které můžeme vidět vážený průměr všech jeho známek.
 	\item Pod touto sekcí se nachází formulář pro přidávání známek, který se zobrazuje pouze administrátorům.
 	\item Ve spodní části stránky je komponenta s odevzdanými kvízy (tzn. nehodnocenými testy). Po kliknutí na název kvízu nás aplikace přesměruje na detail odevzdaného řešení.
 \end{itemize}
@@ -95,43 +102,144 @@ Na obrázku (screenshot) můžeme vidět uživatelské rozhraní aplikace.
 	\item V horní části vidíme název testu, deadline -- čas, do kterého je třeba test odevzdat a několik dalších informací. Test následně vyplníme, u některých otázek máme na výběr z možností odpovědí.
 	\item Stisknutím tlačítka Save answers dojde k uložení odpovědí. Můžeme tedy stránku opustit, příp. zavřít a při dalším načtení stránky se načtou i uložené odpovědi.
 	\item Odevzdání testu provádíme pomocí tlačítka Submit. Tato akce je nevratná, po odevzdání testu jej není možné nijak upravovat ani znovu odevzdat.
-	\item Po odevzdání testu nás aplikace přesměruje na stránku s vyhodnoceným testem.
+	\item Po odevzdání testu jej systém vyhodnotí a aplikace nás přesměruje na stránku s vyhodnoceným řešením.
 \end{itemize}
 
 \subsection{Zobrazení vyhodnoceného testu}
 
 \begin{itemize}
-	\item 
+	\item (screenshot)
+	\item Ve vrchní části stránky je komponenta s informacemi o testu. Nachází se zde název testu, informace o tom, jestli je test hodnocený a přesný čas odeslání. Pokud byl test již revidován, nachází se zde i řetězec 'Reviewed'. 
+	\item Na stránce se dále nachází seznam otázek. U každé otázky se zobrazuje text, udělené body, odeslaná a správná odpověď, a případně i komentář opravujícího.
+	\item Pozadí otázky může mít různé barvy, podle toho, kolik bodů student z otázky získal.
+		\begin{itemize}
+			\item Zelená -- otázka je zodpovězena správně.
+			\item Červená -- otázka je zodpovězena špatně, student z této otázky tedy nezískal žádné body.
+			\item Oranžová -- otázka je zodpovězena částečně správně, student z této otázky tedy získal nějaké body, ale méně než plný počet.
+		\end{itemize}
+	\item Pod sekcí s otázkami se nachází komponenta, která slouží k revizi odeslaného řešení a je zobrazena pouze administrátorům.
+	\item V dolní části stánky je sekce s hodnocením, ve které jsou uvedené získané body a skóre v procentech.
 \end{itemize}
 
 \subsection{Postranní menu s názvem kurzu}
+ \begin{itemize}
+ 	\item Můžeme si všimnout, že na některých stránkách (například detail studenta, detail testu, apod.) se zobrazuje postranní menu s názvem kurzu. (screenshot)
+ 	\item Pomocí odkazu v tomto menu se můžeme kdykoliv vrátit zpět na stránku příslušného kurzu.
+ \end{itemize}
 
 
+Následující akce mohou vykonávat pouze administrátoři příslušného kurzu.
 
 \subsection{Administrace členů kurzu}
 
+ \begin{itemize}
+	\item Přejdeme na stránku daného kurzu.
+	\item Pod sekcí se soubory se nachází komponenty, které obsahují seznamy studentů a administrátorů tohoto kurzu. (screenshot)
+	\item Pomocí tlačítka Details můžeme přejít na stránku s detaily tohoto studenta, naopak tlačítko Remove slouží k odstranění osoby z kurzu.
+	\item Pod seznamem studentů se nachází tlačítko Enrollment Requests, které nám umožňuje zobrazit všechny žádostí o zapsání do tohoto kurzu.
+	\item Komponenta s administrátory vypadá podobně, tlačítko Remove slouží k odebrání daného administrátora.
+	\item Pod seznamem administrátorů se nachází formulář pro přidání nových administrátorů.
+\end{itemize}
+
+\subsection{Přidání nového administrátora do kurzu}
+
+\begin{itemize}
+	\item Přejdeme na stránku daného kurzu a najdeme sekci s administrátory.
+	\item Nejprve potřebujeme zjistit identifikátor daného uživatele, ten může uživatel získat například na stránce se seznamem kurzů a poté nám jej zaslat.
+	\item Vyplníme tento identifikátor do jediného políčka formuláře a potvrdíme stisknutím tlačítka Add.
+	\item Pokud je požadavek úspěšně dokončen, přidá aplikace tohoto uživatele mezi administrátory kurzu.
+\end{itemize}
+
 \subsection{Sdílení souboru v kurzu}
+\begin{itemize}
+	\item Přejdeme na stránku daného kurzu a najdeme sekci se soubory.
+	\item Ve formuláři pro přidání nového souboru klikneme na tlačítko s textem "Choose file".
+	\item Vybereme soubor, který chceme sdílet a formulář potvrdíme.
+	\item Soubor se následně zobrazí v seznamu sdílených souborů, který je dostupný všem členům kurzu.
+	\item Pokud bychom chtěli soubor následně smazat, klikneme na tlačítko Remove.
+\end{itemize}
 
 \subsection{Potvrzení / zamítnutí žádosti o zápis do kurzu}
+\begin{itemize}
+	\item Přejdeme na stránku daného kurzu, najdeme sekci se studenty a klikneme na tlačítko Enrollment requests.
+	\item Aplikace nás přesměruje na stránku, kde se nachází všechny žádosti o zapsání do tohoto kurzu (screenshot).
+	\item U každé žádosti je uveden e-mail osoby a tlačítka pro potvrzení resp. zamítnutí žádosti.
+	\item Pomocí těchto tlačítek můžeme žádost přijmout nebo zamítnout. Pokud žádost přijmeme, aplikace osobu automaticky přidá mezi studenty daného kurzu.
+\end{itemize}
 
 \subsection{Vytvoření nového testu}
 
+\begin{itemize}
+	\item Přejdeme na stránku daného kurzu, najdeme sekci se seznamem testů a klikneme na tlačítko Create new assignment.
+	\item Zobrazí se formulář sloužící k vytvoření testu. 
+	\item Do příslušných políček formuláře vyplníme téma, váhu, deadline a počet otázek testu. Je potřeba také zvolit, jestli se jedná o hodnocený test nebo o kvíz. V případě, že chceme vytvořit hodnocený test, zvolíme hodnotu Yes v otázce Is this assignment graded?.
+	\item Po stisknutí tlačítka Apply se zobrazí formuláře pro jednotlivé otázky, jak vidíme na obrázku (screenshot)
+	\item V případě, že následně chceme změnit počet otázek, změníme hodnotu políčka Question count a potvrdíme stiskem tlačítka Apply.
+	\item U každé otázky je nejprve potřeba vybrat typ odpovědí. Máme na výběr z těchto hodnot:
+		\begin{itemize}
+			\item textová odpověď
+			\item výběr z nabídky odpovědí
+			\item vícenásobný výběr z nabídky odpovědí
+		\end{itemize}
+	\item Do příslušného políčka vyplníme text otázky. V případě, že se jedná o otázku s výběrem odpovědí, je potřeba vybrat počet možných odpovědí a potvrdit pomocí tlačítka Apply. Poté se zobrazí políčka pro jednotlivé možné odpovědi, označené písmenem. Do těchto políček vyplníme text možných odpovědí.
+	\item Vyplníme správnou odpověď otázky a počet bodů za tuto otázku. V případě, že se jedná o otázku s výběrem odpovědi, jako správnou odpověď zadáme jedno písmeno -- identifikátor možnosti, která je správná. 
+	
+	Pokud jde o otázku s vícenásobným výběrem odpovědí, do políčka pro správnou odpověď zadáme seznam písmen pravdivých možností, oddělených čárkou. Tedy například, pokud máme otázku se správnými odpověďmi A a C, do políčka pro správnou odpověď zadáme řetězec 'A,C'. Pokud je pravdivá pouze jedna odpověď, zadáme pouze jedno písmeno, naopak pokud není pravdivá žádná z odpovědí, necháme políčka pro správnou odpověď prázdné. Ilustrační příklad je na obrázku (screenshot).
+	\item Vytvoření testu potvrdíme stisknutím tlačítka Create v dolní části stránky.
+	\item Aplikace nás poté přesměruje zpět na stránku příslušného kurzu.
+\end{itemize}
+
+\subsection{Zobrazení detailu testu}
+\begin{itemize}
+	\item Přejdeme na stránku daného kurzu, najdeme sekci s testy a klikneme na požadovaný test.
+	\item Pokud jsme administrátorem daného kurzu, aplikace nás přesměruje na stránku s detailem testu.
+	\item Jak můžeme vidět na obrázku (screenshot), stránka obsahuje informace o daném testu a seznam otázek.
+	\item V případě, že tento test ještě nebyl publikován, se zobrazí tlačítko, které umožňuje editaci.
+	\item Pokud je test již publikován, ve spodní části stránky se zobrazí sekce Submitted solutions, která obsahuje seznam odeslaných řešení tohoto testu.
+	\item Na obrázku (screenshot) vidíme, že u každého odeslaného řešení se zobrazuje e-mail studenta, který řešení odevzdal, skóre, čas odeslání a informace o tom, jestli bylo dané řešení již revidované. Kliknutím na tlačítko detail se dostaneme na stránku s vyhodnoceným řešením.
+\end{itemize}
+
 \subsection{Editace testu}
+\begin{itemize}
+	\item Přejdeme na stránku s detailem daného testu a klikneme na tlačítko s textem Edit. Testy, které již byly publikované, editovat nelze.
+	\item Zobrazí se formulář, sloužící k úpravě testu. Na obrázku (screenshot) vidíme, že vypadá téměř stejně jako formulář pro vytvoření testu.
+	\item V případě, že chceme upravit hodnotu deadline, klikneme na tlačítko Set new deadline a vyplníme příslušné hodnoty. Pomocí tlačítka Cancel aktualizaci hodnoty deadline zrušíme.
+	\item Upravíme požadované hodnoty, pro přidání nové otázky stiskneme tlačítko Add new question, jež se nachází ve spodní části stránky. Pokud chceme nějakou z otázek odebrat, klikneme na tlačítko Delete question.
+	\item Úplně dole se nachází tlačítka pro potvrzení, resp. zrušení změn. Pokud chceme změny potvrdit, stiskneme tlačítko Save, pro zahození změn stiskneme tlačítko Discard.
+	\item V obou případech nás aplikace přesměruje zpět na stránku s daným testem.
+\end{itemize}
 
 \subsection{Publikace testu}
+\begin{itemize}
+	\item Přejdeme na stránku daného kurzu do sekce s testy.
+	\item U vybraného testu klikneme na tlačítko Publish. Tato akce je nevratná, publikaci testu nelze vrátit.
+	\item Po dokončení požadavku se test přidá do skupiny aktivních testů a studenti mohou začít odevzdávat svá řešení.
+\end{itemize}
 
 \subsection{Odstranění testu}
+\begin{itemize}
+	\item Přejdeme na stránku daného kurzu a najdeme sekci s testy.
+	\item U vybraného testu klikneme na tlačítko Delete.
+	\item Tím dojde ke smazání daného testu.
+\end{itemize}
 
-\subsection{Oprava testu}
+\subsection{Manuální oprava testu}
+\begin{itemize}
+	\item Přejdeme na stránku s detailem testu, ve spodní části stránky nalezneme sekci s odeslanými řešeními. Pokud ještě žádný student řešení neodeslal, tato sekce se nezobrazí.
+	\item U vybraného řešení klikneme na tlačítko Detail, tím se dostaneme na stránku s vyhodnoceným řešením.
+	\item Ve spodní část stránky se nachází sekce Review.
+	\item V případě, že nechceme upravit body, ani přidat žádné komentáře, klikneme na tlačítko Mark as reviewed, tím označíme test jako revidovaný.
+	\item Pokud chceme upravit body, či přidat komentáře, stiskneme tlačítko Update. U každé otázky se zobrazí formuláře sloužící k úpravě bodů a přidání komentáře. (screenshot)
+	\item Vyplníme požadované změny (např. změníme počet získaných bodů u vybrané otázky).
+	\item Pod otázkami se nachází tlačítka pro potvrzení, resp. zrušení změn. Pokud chceme změny potvrdit, stiskneme tlačítko Save, pro zahození změn klikneme na tlačítko Discard.
+	\item Aplikace provede požadovanou akci a změny uloží, resp. zahodí.
+\end{itemize}
 
 \subsection{Vytvoření nové známky}
-
-Administrátoři kurzu budou moci vytvářet testy, které budou žáci vyplňovat. V případě otázek s nabídkou odpovědí systém správnost sám vyhodnotí, otázky s volnou odpovědí budou hodnoceny ručně. Každý uživatel pak v daném kurzu uvidí seznam známek a bude si moci opravený test zobrazit a prohlédnout. Aplikace bude rozlišovat mezi testy a kvízy (kvízy se nebudou hodnotit známkou).
-
-Uživatelé budou moci prostřednictvím aplikace odevzdávat úkoly, které jim budou poté ohodnoceny.
-
-Administrátoři kurzu budou moci editovat obsah kurzu (např. přidávat nové materiály, soubory, apod.) 
-
-U každého kurzu bude k dispozici fórum. 
-
-Uživatelé si budou moci vytvářet nové účty, správci je budou moci do daného kurzu zapsat.
+\begin{itemize}
+	\item Přejdeme na stránku s detailem studenta.
+	\item Pod komponentou s celkovým skóre se nachází formulář pro přidání nové známky. (screenshot)
+	\item Vyplníme téma, skóre, váhu a případně i komentář a následně formulář potvrdíme.
+	\item Dojde k vytvoření nové známky, která se přidá do tabulky známek.
+	\item Pokud chceme nějakou ze známek následně smazat, stiskneme příslušné tlačítko Remove.
+\end{itemize}
