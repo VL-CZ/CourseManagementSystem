@@ -44,6 +44,11 @@ export class TestEditComponent implements OnInit {
   public dateTimeFormatter = new DateTimeFormatter();
 
   /**
+   * check if we are editing the deadline of the test
+   */
+  public editingDeadline = false;
+
+  /**
    * id of the course that this test belongs to
    */
   public courseId: string;
@@ -103,7 +108,7 @@ export class TestEditComponent implements OnInit {
    * save changes to the test
    */
   public saveChanges(): void {
-    if (!this.dateTimeBinder.isEmpty()) {
+    if (!this.dateTimeBinder.isEmpty() && this.editingDeadline) {
       this.testToUpdate.deadline = this.dateTimeBinder.toString();
     }
     const updatedTest = AddCourseTestVM.getFrom(this.testToUpdate);
@@ -126,5 +131,19 @@ export class TestEditComponent implements OnInit {
       () => {
         this.pageNavigator.navigateToAssignmentDetail(this.testId);
       });
+  }
+
+  /**
+   * start editation of deadline property
+   */
+  public startEditingDeadline(): void {
+    this.editingDeadline = true;
+  }
+
+  /**
+   * cancel editation of deadline property
+   */
+  public cancelEditingDeadline(): void {
+    this.editingDeadline = false;
   }
 }

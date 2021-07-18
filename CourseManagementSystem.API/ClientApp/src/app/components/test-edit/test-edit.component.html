@@ -36,13 +36,20 @@
                name="testWeight">
       </div>
       <div class="form-group">
-        <div>Old deadline: {{dateTimeFormatter.formatToLocal(testToUpdate.deadline)}}</div>
-        <label for="testDeadlineDate">Set new deadline</label>
-        <input type="date" class="form-control" id="testDeadlineDate" [(ngModel)]="dateTimeBinder.date"
-               name="testDeadlineDate">
-        <input type="time" class="form-control" id="testDeadlineTime" [(ngModel)]="dateTimeBinder.time"
-               name="testDeadlineTime">
-
+        <div>
+          <span *ngIf="editingDeadline">Old </span>Deadline: {{dateTimeFormatter.formatToLocal(testToUpdate.deadline)}}
+        </div>
+        <div *ngIf="editingDeadline">
+          <label for="testDeadlineDate">New deadline</label>
+          <input type="date" class="form-control" id="testDeadlineDate" [(ngModel)]="dateTimeBinder.date"
+                 name="testDeadlineDate">
+          <input type="time" class="form-control" id="testDeadlineTime" [(ngModel)]="dateTimeBinder.time"
+                 name="testDeadlineTime">
+          <button class="btn btn-secondary my-2" (click)="cancelEditingDeadline()">Cancel</button>
+        </div>
+        <div *ngIf="!editingDeadline">
+          <button class="btn btn-info my-2" (click)="startEditingDeadline()">Set new deadline</button>
+        </div>
       </div>
     </div>
     <div class="jumbotron" *ngFor="let question of testToUpdate.questions">
