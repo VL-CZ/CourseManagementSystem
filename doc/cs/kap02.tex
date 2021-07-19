@@ -244,10 +244,6 @@ a nezavolali metodu \textit{dbContext.SaveChanges()}, data by se neuložila.
 		/// </summary>
 		protected readonly CMSDbContext dbContext;
 		
-		/// <summary>
-		/// construct a new database service
-		/// </summary>
-		/// <param name="dbContext">CMS database context</param>
 		protected DbService(CMSDbContext dbContext)
 		{
 			this.dbContext = dbContext;
@@ -453,7 +449,8 @@ V dalším příkladu (Kód \ref{ControllerMethod2}) máme metodu, která slouž
 	[HttpPost("create")]
 	public void Create(AddCourseVM courseVM)
 	{
-		string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
+		string currentUserId = httpContextAccessor
+			.HttpContext.GetCurrentUserId();
 		Person admin = peopleService.GetById(currentUserId);
 		Course createdCourse = new Course(courseVM.Name, admin);
 		
@@ -534,10 +531,7 @@ Ve ViewModelech poměrně často používáme dědičnost, podobně jako v tomto
 		/// </summary>
 		[PositiveIntValue]
 		public int Weight { get; set; }
-		
-		/// <summary>
-		/// topic of the test
-		/// </summary>
+
 		[RequiredWithDefaultErrorMessage]
 		public string Topic { get; set; }
 	
@@ -574,6 +568,9 @@ Ve ViewModelech poměrně často používáme dědičnost, podobně jako v tomto
 			Status = testStatus;
 		}
 		
+		/// <summary>
+		/// identifier of the CourseTest entity
+		/// </summary>
 		[RequiredWithDefaultErrorMessage]
 		public string Id { get; set; }
 		
@@ -603,14 +600,10 @@ Příklady atributů můžeme vidět v kódech \ref{ExampleAttribute1} a \ref{Ex
 	\begin{lstlisting}
 	/// <summary>
 	/// Validation attribute that marks this value as required
-	/// <br/>
-	/// if validation fails <see cref="defaultErrorMessage"/> is displayed
+	/// ...
 	/// </summary>
 	public class RequiredWithDefaultErrorMessageAttribute : RequiredAttribute
 	{
-		/// <summary>
-		/// default error message displayed ({0} is replaced by the field name that this attribute belongs to)
-		/// </summary>
 		public const string defaultErrorMessage = "The field {0} is required";
 		
 		public RequiredWithDefaultErrorMessageAttribute()
@@ -627,14 +620,10 @@ Příklady atributů můžeme vidět v kódech \ref{ExampleAttribute1} a \ref{Ex
 	\begin{lstlisting}
 	/// <summary>
 	/// Validation attribute that validates if the double value is non-negative (e.g. >=0)
-	/// <br/>
-	/// if validation fails <see cref="defaultErrorMessage"/> is displayed
+	/// ...
 	/// </summary>
 	public class NonNegativeDoubleValueAttribute : RangeAttribute
 	{
-		/// <summary>
-		/// default error message displayed ({0} is replaced by the field name that this attribute belongs to)
-		/// </summary>
 		public const string defaultErrorMessage = "The field {0} must be non-negative";
 		
 		public NonNegativeDoubleValueAttribute() : base(0, double.MaxValue)
@@ -677,11 +666,11 @@ Toto je nakonfigurováno v metodě \textit{Configure()}, jenž se nachází ve t
 		/// <summary>
 		/// handle runtime error
 		/// </summary>
-		/// <returns></returns>
 		[Route("errorHandler")]
 		public IActionResult HandleError()
 		{
-			var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
+			var context = HttpContext.Features
+				.Get<IExceptionHandlerFeature>();
 			var exception = context.Error; // thrown exception
 			
 			var errorDescription = new Dictionary<string, string[]>
@@ -721,11 +710,13 @@ Abstraktní třída \textit{CourseBasedAuthorizeFilter} slouží jako rodičovsk
 		/// <inheritdoc/>
 		public void OnAuthorization(AuthorizationFilterContext context)
 		{
-			if (context.HttpContext.User.Identity.IsAuthenticated)
+			if (context.HttpContext.User.Identity
+				.IsAuthenticated)
 			{
 				string currentUserId = context.HttpContext.GetCurrentUserId();
-				string objectId = context.HttpContext.Request
-					.RouteValues[entityIdFieldName].ToString();
+				string objectId = context.HttpContext
+					.Request.RouteValues[entityIdFieldName]
+					.ToString();
 				
 				var service = courseReferenceServiceFactory
 					.GetByEntityType(entityType);
@@ -769,7 +760,9 @@ Dále ještě potřebujeme v aplikaci mechanismus, který nám podle enumu \text
 		
 		private readonly IReadOnlyDictionary<EntityType, ICourseReferenceService> dataServices;
 		
-		public CourseReferenceServiceFactory(ICourseAdminService courseAdminService, ICourseMemberService courseMemberService, ...)
+		public CourseReferenceServiceFactory(
+			ICourseAdminService courseAdminService, 
+			ICourseMemberService courseMemberService, ...)
 		{
 			dataServices = new Dictionary<EntityType, ICourseReferenceService>
 			{
@@ -813,7 +806,10 @@ Na ukázce kódu \ref{AuthFilter} se nachází třída \textit{CourseAdminOrMemb
 		/// <inheritdoc/>
 		protected override bool IsAuthorized(string currentUserId, string courseId, EntityType entityType, string objectId)
 		{
-			return peopleService.IsAdminOfCourse(currentUserId, courseId) || peopleService.IsMemberOfCourse(currentUserId, courseId);
+			return peopleService.IsAdminOfCourse(
+				currentUserId, courseId) || 
+			peopleService.IsMemberOfCourse(
+				currentUserId, courseId);
 		}
 		...
 	}
@@ -828,7 +824,12 @@ Ke každému autorizačnímu filtru se pak vztahuje atribut (Kód \ref{AuthAttri
 	\begin{lstlisting}
 	public class AuthorizeCourseAdminOrMemberOfAttribute : TypeFilterAttribute
 	{
-		public AuthorizeCourseAdminOrMemberOfAttribute(EntityType entityType, string entityIdFieldName) : base(typeof(CourseAdminOrMemberAuthorizeFilter))
+		public AuthorizeCourseAdminOrMemberOfAttribute(
+			EntityType entityType, string 
+			entityIdFieldName) : 
+			base(typeof(
+				CourseAdminOrMemberAuthorizeFilter
+			))
 		{
 			Arguments = new object[] { entityType, entityIdFieldName };
 		}
@@ -1143,23 +1144,32 @@ Pro ilustraci uvedeme také šablonu komponenty (Kód \ref{ComponentTemplate}).
 				<th></th>
 			</tr>
 			<tr *ngFor="let person of students">
-				<td class="align-middle">{{person.name}}</td>
+				<td class="align-middle">
+					{{person.name}}
+				</td>
 				<td>
-					<a class="btn btn-link" (click)="pageNavigator.
-						navigateToStudentDetail(person.id)">
+					<a class="btn btn-link" (click)=
+						"pageNavigator.
+						navigateToStudentDetail(
+							person.id
+						)">
 						Details
 					</a>
 				</td>
 				<td>
 					<button class="btn btn-danger" 
-					(click)="removeMember(person)">Remove</button>
+					(click)="removeMember(person)">
+						Remove
+					</button>
 				</td>
 			</tr>
 		</table>
 		<div class="my-2">
 			<div>
 				<button class="btn btn-info" (click)="pageNavigator.
-					navigateToCourseEnrollmentRequests(courseId)">
+					navigateToCourseEnrollmentRequests(
+						courseId
+					)">
 					Enrollment requests
 				</button>
 			</div>
@@ -1235,7 +1245,7 @@ Obousměrný data binding používáme typicky ve formulářích, podobně jako 
 \begin{lstlisting}
 export class AddGradeComponent implements OnInit {
 	/**
-	* grade that we will add to the student
+	* grade that will be added to the student
 	*/
 	public gradeToAdd: AddGradeVM;
 	...
