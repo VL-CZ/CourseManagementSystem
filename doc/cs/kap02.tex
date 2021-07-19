@@ -14,7 +14,7 @@ Na obrázku \ref{fig:Architecture} vidíme architekturu aplikace, šipky znázor
 \section{Serverová část}
 
 Serverová část aplikace je naprogramovaná v jazyce C\# s použitím 
-frameworku ASP .NET Core. Je rozdělena do těchto projektů:
+frame\-worku ASP .NET Core. Je rozdělena do těchto projektů:
 
 \begin{itemize}
 	\item Data
@@ -63,7 +63,7 @@ Ve složce \textit{Models} jsou třídy reprezentující databázové entity. Ka
 
 \newpage
 
-Pro ilustraci uvedeme kód třídy \textit{Course}:
+Pro ilustraci uvedeme kód třídy \textit{Course} (Kód \ref{CourseClass}).
 
 \begin{program}
 	\begin{lstlisting}
@@ -98,7 +98,8 @@ Pro ilustraci uvedeme kód třídy \textit{Course}:
 		
 		...
 	\end{lstlisting}
-	\caption{Ukázka třídy Course}
+	\caption{Ukázka třídy \textit{Course}}
+	\label{CourseClass}
 \end{program}
 
 Vidíme, že každá entita obsahuje veřejné vlastnosti (public properties) s gettery a settery. Tyto vlastnosti budou v databázové tabulce reprezentovány jako sloupce. Některé z nich (jako např. \textit{Id}) obsahují ještě doplňující atributy, ty slouží k upřesnění informací o dané vlastnosti. Například atribut \textit{[Key]} určuje, že tato vlastnost bude v databázi primární klíč, atribut \textit{[Required]} určuje, že daný sloupec bude v tabulce u všech záznamů povinný (tedy hodnoty budou \textit{NOT NULL}).
@@ -345,7 +346,7 @@ public static string GetCourseIdOf<T>(this DbSet<T> dbSet, string objectId) wher
 
 Vidíme, že toto je jeden z příkladů použití rozhraní \textit{ICourseReferenceObject}, které se nachází v projektu Data.
 
-V projektu též máme rozhraní \textit{ICourseReferenceService}, to implementují všechny služby, jejichž entity logicky patří k nějakému kurzu. Rozhraní obsahuje jedinou metodu \textit{GetCourseIdOf(string objectId)}, která získá ID kurzu, ke kterému daná entita patří. V implementaci této metodu pak typicky používáme extension metodu \textit{GetCourseIdOf} pro třídu \textit{DbSet<T>}. Například ve třídě \textit{CourseTestService} vypadá implementace takto:
+V projektu též máme rozhraní \textit{ICourseReferenceService}, to implementují vše\-chny služby, jejichž entity logicky patří k nějakému kurzu. Rozhraní obsahuje jedinou metodu \textit{GetCourseIdOf(string objectId)}, která získá ID kurzu, ke kterému daná entita patří. V implementaci této metodu pak typicky používáme extension metodu \textit{GetCourseIdOf} pro třídu \textit{DbSet<T>}. Například ve třídě \textit{CourseTestService} vypadá implementace takto:
 
 \begin{lstlisting}
 public string GetCourseIdOf(string objectId)
@@ -618,7 +619,7 @@ public class NonNegativeDoubleValueAttribute : RangeAttribute
 \end{lstlisting}
 
 \begin{itemize}
-\item \textit{NonNegativeDoubleValueAttribute} -- Tento atribut validuje, že vlastnost typu \textit{double}, ke které patří, je nezáporné číslo. V případě, že tomu tak není, nastavíme výchozí chybovou hlášku \textit{The field \{0\} must be non-negative}, kde \{0\} je název vlastnosti, ke které atribut patří.
+\item \textit{NonNegativeDoubleValueAttribute} -- Tento atribut validuje, že vlastnost ty\-pu \textit{double}, ke které patří, je nezáporné číslo. V případě, že tomu tak není, nastavíme výchozí chybovou hlášku \textit{The field \{0\} must be non-negative}, kde \{0\} je název vlastnosti, ke které atribut patří.
 
 \item \textit{RequiredWithDefaultErrorMessageAttribute} -- Tento atribut dědí z atributu \textit{RequiredAttribute}. Pokud má příslušná vlastnost hodnotu \textit{null}, nebo se jedná o řetězec, který je prázdný, nebo složený pouze z bílých znaků, tak validace selže. Atribut \textit{RequiredWithDefaultErrorMessage} pak slouží jen k přidání výchozí chybové hlášky \textit{The field \{0\} is required}, v případě, že validace selže.
 
@@ -773,7 +774,7 @@ V aplikaci používáme tyto autorizační filtry (všechny dědí ze třídy \t
 \begin{itemize}
 	\item \textit{CourseAdminAuthorizeFilter} -- ověřuje, jestli je aktuální uživatel administrátor kurzu, ke kterému patří daná entita. Používáme v akcích, které může provádět pouze administrátor daného kurzu (jako např. vytváření nových testů).
 	\item \textit{CourseAdminOrMemberAuthorizeFilter} -- ověřuje, zda je aktuální uživatel administrátor nebo člen kurzu, ke kterému patří daná entita. Tento filtr používáme např. v metodě pro získání všech souborů v daném kurzu.
-	\item \textit{CourseAdminOrOwnerAuthorizeFilter} -- podobně jako první filtr slouží k ověření toho, jestli je aktuální uživatel administrátor kurzu, k němuž patří daná entita. Zároveň ale akci povolíme provést, pokud je uživatel vlastníkem dané entity. To znamená, že příslušná entita (např. odevzdaný test - entita \textit{TestSubmission}) se váže k danému uživateli. Toto ověření používáme například v metodě pro získání opraveného testu.
+	\item \textit{CourseAdminOrOwnerAuthorizeFilter} -- podobně jako první filtr slouží k ověření toho, jestli je aktuální uživatel administrátor kurzu, k němuž patří daná entita. Zároveň ale akci povolíme provést, pokud je uživatel vlastníkem dané entity. To znamená, že příslušná entita (např. odevzdaný test -- entita \textit{TestSubmission}) se váže k danému uživateli. Toto ověření používáme například v metodě pro získání opraveného testu.
 \end{itemize}
 
 Například třída \textit{CourseAdminOrMemberAuthorizeFilter} vypadá takto:
