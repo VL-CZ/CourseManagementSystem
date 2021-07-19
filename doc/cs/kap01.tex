@@ -26,7 +26,7 @@ V aplikaci používáme framework ASP .NET Core verze 3.1 v projektu API. Tento 
 Entity Framework Core je ORM framework. Objektově relační mapování je technika, která nám umožňuje objektově pracovat s daty v relační databázi. Framework reprezentuje databázové tabulky pomocí kolekcí, jednotlivé objekty v kolekci pak představují řádky v dané tabulce. Při práci s databází pak vůbec nepoužíváme jazyk SQL, pouze pracujeme s objekty a kolekcemi.
 \cite{EfCoreDocs}
 
-Tento framework využíváme v projektu Data, ve kterém se nachází objekty reprezentující databázové entity, a v projektu Services, který obsahuje služby pro komunikaci s databází.
+Tento framework využíváme v projektu Data, ve kterém se nachází objekty reprezentující databázové entity, a v projektu \textit{Services}, který obsahuje služby pro komunikaci s databází.
 
 \subsection{xUnit.net}
 xUnit.net je framework, který slouží k testování aplikací na platformě .NET. Nejčastěji se používá k unit a integračním testům. 
@@ -45,7 +45,7 @@ Téměř celá klientská část aplikace (kromě HTML šablon a CSS stylů) je 
 
 \subsection{Angular}
 Angular je frontend framework pro tvorbu single-page webových aplikací. Framework používá jazyk TypeScript a jeho architektura je založená na komponentách.
-Komponenty jsou jednotky kódu, ze kterých se skládá UI aplikace. Každá komponenta obsahuje TypeScript třídu označenou dekorátorem @Component(), HTML šablonu, a případně i soubor s CSS styly. 
+Komponenty jsou jednotky kódu, ze kterých se skládá UI aplikace. Každá komponenta obsahuje TypeScript třídu označenou dekorátorem \textit{@Component()}, HTML šablonu, a případně i soubor s CSS styly. 
 Součástí frameworku je i vestavěný HTTP klient pro snadnější komunikaci pomocí HTTP, router sloužící k navigaci mezi stránkami a velké množství dalších knihoven. Angular nám umožňuje používat obousměrný data binding.
 \cite{AngularDocs}
 
@@ -65,25 +65,25 @@ Microsoft SQL Server je multiplatformní relační databázový systém. Ke komu
 Microsoft SQL Server používáme jako databázi pro data v naší aplikaci. Jazyk T-SQL vůbec nepoužíváme, jelikož s daty pracujeme pomocí ORM frameworku Entity Framework Core.
 
 \section{Git}
-Git je distribuovaný systém správy verzí, který se velmi často používá při vývoji softwaru. Podporuje tzv. větvení, což znamená, že se můžeme odloučit od hlavní linie vývoje a pokračovat ve vývoji v nové větvi, aniž bychom do původní větve zasahovali. Pomocí příkazu merge pak můžeme změny promítnout zpět do hlavní větve.
+Git je distribuovaný systém správy verzí, který se velmi často používá při vývoji softwaru. Podporuje tzv. větvení, což znamená, že se můžeme odloučit od hlavní linie vývoje a pokračovat ve vývoji v nové větvi, aniž bychom do původní větve zasahovali. Pomocí příkazu \textit{merge} pak můžeme změny promítnout zpět do hlavní větve.
 \cite{GitDocs}
 
-Při vývoji aplikace používáme několik větví: master, develop a feature větve.
+Při vývoji aplikace používáme několik větví: \textit{master}, \textit{develop} a \textit{feature} větve.
 \begin{itemize}
-	\item Feature větve používáme při programování nové funkcionality. Typicky máme pro každou funkcionalitu samostatnou větev, jež se ve většině případů jmenuje feature/popis-funkcionality.
-	\item Develop je větev, do které se provádí merge z feature větví. Při vývoji nové funkcionality tedy nejprve vytvoříme novou větev a po dokončení vývoje provedeme merge do větve develop.
-	\item Master větev obsahuje verzi aplikace, která je plně funkční a lze spustit. V případě, že dokončíme nějakou ucelenou část aplikace a ověříme, že funguje správně, můžeme provést merge z větve develop do master.
+	\item \textit{Feature} větve používáme při programování nové funkcionality. Typicky máme pro každou funkcionalitu samostatnou větev, jež se ve většině případů jmenuje \textit{feature/popis-funkcionality}.
+	\item \textit{Develop} je větev, do které se provádí \textit{merge} z \textit{feature} větví. Při vývoji nové funkcionality tedy nejprve vytvoříme novou větev a po dokončení vývoje provedeme \textit{merge} do větve \textit{develop}.
+	\item \textit{Master} větev obsahuje verzi aplikace, která je plně funkční a lze spustit. V případě, že dokončíme nějakou ucelenou část aplikace a ověříme, že funguje správně, můžeme provést \textit{merge} z větve \textit{develop} do \textit{master}.
 \end{itemize}
-Díky tomuto rozdělení větví můžeme pohodlně pracovat na více částech aplikace zároveň, a máme stále aspoň jednu verzi aplikace, která je plně funkční (ve větvi master).
+Díky tomuto rozdělení větví můžeme pohodlně pracovat na více částech aplikace zároveň, a máme stále aspoň jednu verzi aplikace, která je plně funkční (ve větvi \textit{master}).
 
 Aplikace je uložená ve veřejném GitHub repozitáři na této URL: \url{https://github.com/VL-CZ/CourseManagementSystem}.
 
 \section{GitHub Actions}
 Technologie GitHub Actions slouží k automatizaci úloh během životního cyklu vývoje softwaru. Používají tzv. CI Workflows, což je automatizovaná procedura, která je typicky spuštěna nějakou akcí (např. přidáním nového commitu).
-Ke konfiguraci Workflows se používají soubory ve formátu YAML, které se nachází ve složce .github/workflows.
+Ke konfiguraci Workflows se používají soubory ve formátu YAML, které se nachází ve složce \textit{.github/workflows}.
 \cite{GitHubActionsDocs}
 
-V této aplikaci používáme dva Workflows, které se spustí po každém commitu ve větvích master a develop.
+V této aplikaci používáme dva Workflows, které se spustí po každém commitu ve větvích \textit{master} a \textit{develop}.
 \begin{itemize}
 	\item .NET Workflow - provede build serverové části aplikace a spustí všechny testy
 	\item Angular Workflow - provede build klientské části aplikace
