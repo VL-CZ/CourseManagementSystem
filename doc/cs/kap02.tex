@@ -2,7 +2,7 @@
 
 \begin{figure}
 	\centering
-	\includegraphics[height=0.8\textheight]{architecture.PNG}
+	\includegraphics[height=0.5\textheight]{architecture.PNG}
 	\caption{Architektura aplikace}
 	\label{fig:Architecture}
 \end{figure}
@@ -65,38 +65,41 @@ Ve složce Models jsou třídy reprezentující databázové entity. Každá z e
 
 Pro ilustraci uvedeme kód třídy Course:
 
-\begin{lstlisting}
-public class Course : IGuidIdObject
-{
-	public Course()
+\begin{program}
+	\begin{lstlisting}
+	public class Course : IGuidIdObject
 	{
-		Members = new List<CourseMember>();
-		Files = new List<CourseFile>();
-		Tests = new List<CourseTest>();
+		public Course()
+		{
+			Members = new List<CourseMember>();
+			Files = new List<CourseFile>();
+			Tests = new List<CourseTest>();
+			...
+		}
+		
+		public Course(string name, Person admin) : this()
+		{
+			Name = name;
+			Admin = admin;
+		}
+		
+		/// <summary>
+		/// identifier of the couse
+		/// </summary>
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		[Key]
+		public Guid Id { get; set; }
+		
+		/// <summary>
+		/// name of the course
+		/// </summary>
+		[Required]
+		public string Name { get; set; }
+		
 		...
-	}
-	
-	public Course(string name, Person admin) : this()
-	{
-		Name = name;
-		Admin = admin;
-	}
-	
-	/// <summary>
-	/// identifier of the couse
-	/// </summary>
-	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-	[Key]
-	public Guid Id { get; set; }
-	
-	/// <summary>
-	/// name of the course
-	/// </summary>
-	[Required]
-	public string Name { get; set; }
-	
-	...
-\end{lstlisting}
+	\end{lstlisting}
+	\caption{Ukázka třídy Course}
+\end{program}
 
 Vidíme, že každá entita obsahuje veřejné vlastnosti (public properties) s gettery a settery. Tyto vlastnosti budou v databázové tabulce reprezentovány jako sloupce. Některé z nich (jako např. Id) obsahují ještě doplňující atributy, ty slouží k upřesnění informací o dané vlastnosti. Například atribut [Key] určuje, že tato vlastnost bude v databázi primární klíč, atribut [Required] určuje, že daný sloupec bude v tabulce u všech záznamů povinný (tedy hodnoty budou NOT NULL).
 Dále musí každá entita obsahovat konstruktor bez parametrů.
@@ -158,7 +161,7 @@ public DbSet<Course> Courses { get; set; }
 
 Jediná výjimka je entita Person, která dědí ze třídy IdentityUser, a jejíž DbSet je nakonfigurovaný ve frameworku. 
 
-V programu pak dále používáme ke komunikaci s databází pouze třídu CMSDbContext a objekty typu DbSet. Třída DbSet<TEntity> implementuje rozhraní IQueryable<TEntity>, takže na ni lze použít LINQ. Takže pokud bychom chtěli například vybrat všechny kurzy, jejiž jméno začíná na písmeno C, pak stačí použít následující LINQ dotaz
+V programu pak dále používáme ke komunikaci s databází pouze třídu CMSDbContext a objekty typu DbSet. Třída DbSet<TEntity> implementuje rozhraní IQueryable<TEntity>, takže na ni lze použít LINQ. Pokud bychom chtěli například vybrat všechny kurzy, jejiž jméno začíná na písmeno C, pak stačí použít následující LINQ dotaz
 \begin{lstlisting}
 dbContext.Courses.Where(course => course.Name.StartsWith("C"))
 \end{lstlisting}
@@ -211,8 +214,6 @@ dotnet ef database update
 Tímto tedy dojde k změnám v databázi (v našem příkladu se vytvoří sloupec ScoreWeight v tabulce CourseTests).
 
 V obou příkazech je potřeba specifikovat cílový a startup projekt. Cílový projekt je ten, který obsahuje databázový kontext a entity naší aplikace (v tomto případě projekt Data). Naopak startup projekt je projekt, který je spouštěný frameworkem, což je potřeba pro získání konfiguračních informací o projektu, jako je například connection string do naší databáze.
-
-\newpage
 
 \subsection{Services}
 V tomto projektu se nachází pomocné služby pro komunikaci s databází. 
@@ -366,8 +367,6 @@ dbContext.CourseTests
 \end{lstlisting}
 Pokud bychom volání metody Include() vynechali, tak by se data otázek nenačetla.
 
-\newpage
-
 \subsection{API}
 V této části se nachází popis projektu API, které slouží pro komunikaci klientské části se serverovou.
 
@@ -498,6 +497,7 @@ Tento ViewModel reprezentuje data odevzdávaného testu. Vidíme, že ViewModely
 Také si můžeme všimnout, že u některé vlastnosti ještě obsahují doplňující atributy (např. atribut [RequiredWithDefaultErrorMessage] u vlastnosti TestTopic). Tyto atributy slouží primárně k validaci dat.
 
 Ve ViewModelech poměrně často používáme dědičnost, podobně jako v tomto příkladu.
+
 \begin{lstlisting}
 /// <summary>
 /// base viewmodel for course tests
@@ -867,13 +867,10 @@ Ve výchozím nastavení tedy používáme databázi se jménem "CMS" na lokáln
 
 Ve složkách Pages a Areas/Identity se nachází stránky, které slouží k přihlášení a registraci uživatele. Tato část kódu je vygenerovaná frameworkem.
 
-\newpage
 
 \subsection{Ostatní}
 
 V projektu TestEvaluation se nachází třídy, které slouží ke spočítání bodů odevzdaných řešení. Projekt TestEvaluation.Tests pak obsahuje testy těchto tříd.
-
-\newpage
 
 \section{Klientská část}
 \lstset{style=typescript}
@@ -1007,7 +1004,6 @@ Vidíme, že tělo metod je typicky velmi krátké, ve většině případů se 
 Služby fungují asynchronně, tedy nevrací přímo dané objekty, ale generický typ Observable<T>. Zavoláním metody subscribe na tomto typu se pak počká na vrácení dat, a klient s nimi může pak dále pracovat.
 Volání metody subscribe v našem programu typicky probíhá až v komponentách.
 
-\newpage
 
 \subsection{ViewModels}
 \label{clientVM}
@@ -1040,8 +1036,6 @@ export class SubmitTestVM {
 \end{lstlisting}
 
 Pro HTTP GET požadavky frontend služby typicky vrací objekty typu ViewModel, se kterými dále pracujeme v komponentách. Stejně tak například při HTTP POST dotazu je do těla požadavku vložena instance nějakého ViewModelu.
-
-\newpage
 
 \subsection{Komponenty}
 
@@ -1243,8 +1237,6 @@ Pokud tedy například změníme ve formuláři váhu známky, dojde automaticky
 
 Ke stylování elementů používáme framework Bootstrap, který nám také zajišťuje, že uživatelské rozhraní aplikace je responzivní.
 
-\newpage
-
 \subsection{Routing}
 
 Frontend část aplikace mimo jiné provádí také routing. Samotný router je součástí frameworku Angular, nicméně potřebujeme nějak nakonfigurovat, jaká komponenta se zobrazí při dotazu na danou URL.
@@ -1277,7 +1269,6 @@ public navigateToCourseDetail(courseId: string): void {
 }
 \end{lstlisting}
 
-\newpage
 
 \section{Další vybrané problémy}
 
