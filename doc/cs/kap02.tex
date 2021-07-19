@@ -87,7 +87,8 @@ Pro ilustraci uvedeme kód třídy \textit{Course} (Kód \ref{CourseClass}).
 		/// <summary>
 		/// identifier of the couse
 		/// </summary>
-		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		[DatabaseGenerated(DatabaseGeneratedOption
+			.Identity)]
 		[Key]
 		public Guid Id { get; set; }
 		
