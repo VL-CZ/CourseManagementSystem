@@ -28,7 +28,7 @@ frame\-worku ASP .NET Core. Je rozdělena do těchto projektů:
 
 Tento projekt se stará primárně o komunikaci s databází, pro tento účel jsme použili ORM framework Entity Framework Core. 
 
-Ve složce \textit{Models} jsou třídy reprezentující databázové entity. Každá z entit pak v databázi představuje jednu tabulku. V aplikaci jsme použili tyto entity:
+Ve složce \textit{Models} jsou třídy reprezentující databázové entity. Každá z entit pak v databázi představuje jednu tabulku. V aplikaci jsme použili tyto entity, vztahy mezi nimi můžeme vidět na obrázku \ref{fig:DbModel}.
 
 \begin{table}[ht]
 	\centering
@@ -59,6 +59,7 @@ Ve složce \textit{Models} jsou třídy reprezentující databázové entity. Ka
 	\centering
 	\includegraphics[width=\textwidth]{db_model.PNG}
 	\caption{Databázový model aplikace}
+	\label{fig:DbModel}
 \end{figure}
 
 \newpage
@@ -183,28 +184,32 @@ dotnet ef migrations add
 Tímto se vytvoří soubor popisující změny v migraci, ale databáze zatím zůstala beze změny. Tento soubor obsahuje třídu, jenž dědí ze třídy \textit{Migration} a obsahuje metody \textit{Up} a \textit{Down}. V metodě \textit{Up} je popis změn, které se provedou při aplikaci této migrace, naopak v metodě \textit{Down} je popis změn, které se provedou v případě odstranění migrace.
 
 Jako příklad si můžeme představit migraci, která obsahuje přidání vlastnosti \textit{ScoreWeight} k entitě \textit{CourseTest} (tato vlastnost popisuje váhu testu).
-Vygenerovaný kód migrace vypadá takto:
+Vygenerovaný kód migrace pak můžeme vidět v ukázce kódu \ref{MigrationExample}.
 
-\begin{lstlisting}
-public partial class TestWeight_added : Migration
-{
-	protected override void Up(MigrationBuilder migrationBuilder)
+\begin{program}
+	\begin{lstlisting}
+	public partial class TestWeight_added : Migration
 	{
-		migrationBuilder.AddColumn<int>(
-		name: "ScoreWeight",
-		table: "CourseTests",
-		nullable: false,
-		defaultValue: 0);
+		protected override void Up(MigrationBuilder migrationBuilder)
+		{
+			migrationBuilder.AddColumn<int>(
+			name: "ScoreWeight",
+			table: "CourseTests",
+			nullable: false,
+			defaultValue: 0);
+		}
+		
+		protected override void Down(MigrationBuilder migrationBuilder)
+		{
+			migrationBuilder.DropColumn(
+			name: "ScoreWeight",
+			table: "CourseTests");
+		}
 	}
-	
-	protected override void Down(MigrationBuilder migrationBuilder)
-	{
-		migrationBuilder.DropColumn(
-		name: "ScoreWeight",
-		table: "CourseTests");
-	}
-}
-\end{lstlisting}
+	\end{lstlisting}
+	\caption{Příklad migrace}
+	\label{MigrationExample}
+\end{program}
 
 Pro promítnutí změn do databáze následně použijeme příkaz:
 
@@ -219,7 +224,7 @@ V obou příkazech je potřeba specifikovat cílový a startup projekt. Cílový
 \subsection{Services}
 V tomto projektu se nachází pomocné služby pro komunikaci s databází. 
 
-Jako základ pro všechny služby slouží abstraktní třída \textit{DbService}, která obsahuje referenci na databázový kontext aplikace a jedinou metodu \textit{CommitChanges()}. Ta slouží k uložení změn provedených v databázovém kontextu do databáze. 
+Jako základ pro všechny služby slouží abstraktní třída \textit{DbService} (Kód \ref{DbService}), která obsahuje referenci na databázový kontext aplikace a jedinou metodu \textit{CommitChanges()}. Ta slouží k uložení změn provedených v databázovém kontextu do databáze. 
 
 To je potřeba, protože k uložení změn do databáze dojde až tehdy, když na databázovém kontextu zavoláme metodu \textit{SaveChanges()}. Pokud bychom tedy například do databázového kontextu něco uložili (např. takto: 
 \begin{lstlisting}
@@ -227,93 +232,105 @@ dbContext.Grades.Add(new Grade())
 \end{lstlisting})
 a nezavolali metodu \textit{dbContext.SaveChanges()}, data by se neuložila.
 
-\begin{lstlisting}
-/// <summary>
-/// class representing base database service
-/// </summary>
-public abstract class DbService : IDbService
-{
+\begin{program}
+	\begin{lstlisting}
 	/// <summary>
-	/// context of the CMS database
+	/// class representing base database service
 	/// </summary>
-	protected readonly CMSDbContext dbContext;
-	
-	/// <summary>
-	/// construct a new database service
-	/// </summary>
-	/// <param name="dbContext">CMS database context</param>
-	protected DbService(CMSDbContext dbContext)
+	public abstract class DbService : IDbService
 	{
-		this.dbContext = dbContext;
+		/// <summary>
+		/// context of the CMS database
+		/// </summary>
+		protected readonly CMSDbContext dbContext;
+		
+		/// <summary>
+		/// construct a new database service
+		/// </summary>
+		/// <param name="dbContext">CMS database context</param>
+		protected DbService(CMSDbContext dbContext)
+		{
+			this.dbContext = dbContext;
+		}
+		
+		/// <inheritdoc/>
+		public void CommitChanges()
+		{
+			dbContext.SaveChanges();
+		}
 	}
-	
-	/// <inheritdoc/>
-	public void CommitChanges()
-	{
-		dbContext.SaveChanges();
-	}
-}
-\end{lstlisting}
+	\end{lstlisting}
+	\caption{Třída \textit{DbService}}
+	\label{DbService}
+\end{program}
 
 Tato třída implementuje rozhraní \textit{IDbService}, které obsahuje pouze metodu \textit{CommitChanges()}.
 
 Dále jsou ve složce \textit{Interfaces} rozhraní pro další služby, ty jsou rozdělené podle entit (typicky máme pro jednu entitu jednu službu). Všechny tyto rozhraní také implementují rozhraní \textit{IDbService}. 
 
-Například rozhraní \textit{ICourseService} (slouží pro práci s kurzy) vypadá takto:
-\begin{lstlisting}
-public interface ICourseService : IDbService
-{
-	/// <summary>
-	/// get course by its id
-	/// </summary>
-	/// <param name="courseId">identifier of the course</param>
-	/// <returns></returns>
-	Course GetById(string courseId);
-	
-	/// <summary>
-	/// archive course by its id
-	/// </summary>
-	/// <param name="courseId">id of the course to delete</param>
-	void ArchiveById(string courseId);
-	
-	/// <summary>
-	/// add the course into the database
-	/// </summary>
-	/// <param name="course">course to add</param>
-	void AddCourse(Course course);
-	...
-\end{lstlisting}
+Rozhraní \textit{ICourseService} (slouží pro práci s kurzy) můžeme vidět v kódu \ref{ICourseService}.
+\begin{program}
+	\begin{lstlisting}
+	public interface ICourseService : IDbService
+	{
+		/// <summary>
+		/// get course by its id
+		/// </summary>
+		/// <param name="courseId">identifier of the course</param>
+		/// <returns></returns>
+		Course GetById(string courseId);
+		
+		/// <summary>
+		/// archive course by its id
+		/// </summary>
+		/// <param name="courseId">id of the course to delete</param>
+		void ArchiveById(string courseId);
+		
+		/// <summary>
+		/// add the course into the database
+		/// </summary>
+		/// <param name="course">course to add</param>
+		void AddCourse(Course course);
+		...
+	\end{lstlisting}
+	\caption{Rozhraní \textit{ICourseService}}
+	\label{ICourseService}
+\end{program}
 
 Ve složce \textit{Implementations} jsou potom implementace těchto rozhraní. Můžeme vidět, že všechny implementace dědí ze třídy \textit{DbService}, a zároveň také tranzitivně implementují \textit{IDbService}.
 
-Například třída \textit{CourseService}, která implementuje rozhraní \textit{ICourseService} vypadá takto:
+Třídu \textit{CourseService}, která implementuje rozhraní \textit{ICourseService} můžeme vidět na ukázce kódu \ref{CourseService}.
 
-\begin{lstlisting}
-public class CourseService : DbService, ICourseService
-{
-	public CourseService(CMSDbContext dbContext) : base(dbContext)
-	{ }
-	
-	/// <inheritdoc/>
-	public void ArchiveById(string courseId)
+\begin{program}
+	\begin{lstlisting}
+	public class CourseService : DbService, ICourseService
 	{
-		Course c = GetById(courseId);
-		c.IsArchived = true;
-	}
-	
-	/// <inheritdoc/>
-	public Course GetById(string courseId)
-	{
-		return dbContext.Courses.FindById(courseId);
-	}
-	
-	/// <inheritdoc/>
-	public void AddCourse(Course course)
-	{
-		dbContext.Courses.Add(course);
-	}
-	...
-\end{lstlisting}
+		public CourseService(CMSDbContext dbContext) : base(dbContext)
+		{ }
+		
+		/// <inheritdoc/>
+		public void ArchiveById(string courseId)
+		{
+			Course c = GetById(courseId);
+			c.IsArchived = true;
+		}
+		
+		/// <inheritdoc/>
+		public Course GetById(string courseId)
+		{
+			return dbContext.Courses.FindById(courseId);
+		}
+		
+		/// <inheritdoc/>
+		public void AddCourse(Course course)
+		{
+			dbContext.Courses.Add(course);
+		}
+		...
+	\end{lstlisting}
+	\caption{Třída \textit{CourseService}}
+	\label{CourseService}
+\end{program}
 
 Vidíme, že služby typicky pracují s databázovým kontextem a s daty (vyhledávání, mazání, apod.).
 Dále si můžeme všimnout, že v žádné metodě se neukládají změny do databáze (tzn. volání metody \textit{CommitChanges()}). To je z toho důvodu, že ve vyšších vrstvách aplikace (např. API) v jedné metodě často voláme několik služeb, příp. několik metod z jedné služby. 
@@ -329,13 +346,6 @@ Ve složce \textit{Extensions} jsou pak pomocné metody pro práci s některými
 
 Ve třídě \textit{DbSetExtensions} se nachází extension metody pro třídu \textit{DbSet<T>}. Vybereme si například metodu \textit{GetCourseIdOf}, ta slouží k získání ID kurzu, ke kterému daný objekt, jenž má referenci na entitu \textit{Course}, patří.
 \begin{lstlisting}
-/// <summary>
-/// get id of <see cref="Data.Models.Course"/> that the object belongs to
-/// </summary>
-/// <typeparam name="T">type of items</typeparam>
-/// <param name="dbSet">database set</param>
-/// <param name="objectId">identifier of the object we look for in <paramref name="dbSet"/></param>
-/// <returns></returns>
 public static string GetCourseIdOf<T>(this DbSet<T> dbSet, string objectId) where T : class, ICourseReferenceObject, IGuidIdObject
 {
 	return dbSet.Include(item => item.Course)
@@ -372,48 +382,56 @@ Pokud bychom volání metody Include() vynechali, tak by se data otázek nenače
 V této části se nachází popis projektu API, které slouží pro komunikaci klientské části se serverovou.
 
 \subsubsection*{Controllers}
-Controllery slouží primárně ke zpracování HTTP požadavků. Vidíme, že Controller je klasická C\# třída, jež dědí ze třídy \textit{ControllerBase}. Ve většině případů obsahuje reference na služby (jako privátní položky).
+Controllery slouží primárně ke zpracování HTTP požadavků. Vidíme, že Controller je klasická C\# třída, jež dědí ze třídy \textit{ControllerBase}. Ve většině případů obsahuje reference na služby (jako privátní položky). Kód \ref{CoursesController} ukazuje příklad Controlleru, který slouží k práci s kurzy.
 
-\begin{lstlisting}
-[Route("api/[controller]")]
-[ApiController]
-[Authorize]
-public class CoursesController : ControllerBase
-{
-	private readonly IHttpContextAccessor httpContextAccessor;
-	private readonly ICourseService courseService;
-	private readonly IPeopleService peopleService;
-	private CourseTestFilter courseTestFilter;
-	...
-	
-	public CoursesController(IHttpContextAccessor httpContextAccessor, ICourseService courseService, IPeopleService peopleService)
+\begin{program}
+	\begin{lstlisting}
+	[Route("api/[controller]")]
+	[ApiController]
+	[Authorize]
+	public class CoursesController : ControllerBase
 	{
-		this.httpContextAccessor = httpContextAccessor;
-		this.courseService = courseService;
-		this.peopleService = peopleService;
-		courseTestFilter = new CourseTestFilter();
+		private readonly IHttpContextAccessor httpContextAccessor;
+		private readonly ICourseService courseService;
+		private readonly IPeopleService peopleService;
+		private CourseTestFilter courseTestFilter;
 		...
-	}
-	...
-\end{lstlisting}
+		
+		public CoursesController(IHttpContextAccessor httpContextAccessor, ICourseService courseService, IPeopleService peopleService)
+		{
+			this.httpContextAccessor = httpContextAccessor;
+			this.courseService = courseService;
+			this.peopleService = peopleService;
+			courseTestFilter = new CourseTestFilter();
+			...
+		}
+		...
+	\end{lstlisting}
+	\caption{Ukázka třídy \textit{CoursesController}}
+	\label{CoursesController}
+\end{program}
 
 Jednotlivé Controllery pak obsahují veřejné metody, jež odpovídají HTTP endpointům.
 
-Například následující metoda slouží k získaní všech členů daného kurzu.
+Ukázka kódu \ref{ControllerMethod1} obsahuje metodu, která slouží k získaní všech členů daného kurzu.
 
-\begin{lstlisting}
-/// <summary>
-/// get all course members
-/// </summary>
-/// <param name="courseId">Id of the course</param>
-[HttpGet("{courseId}/members")]
-[AuthorizeCourseAdminOf(EntityType.Course, "courseId")]
-public IEnumerable<CourseMemberOrAdminVM> GetAllMembers(string courseId)
-{
-	var people = courseService.GetMembersWithUsers(courseId);
-	return people.Select(cm => new CourseMemberOrAdminVM(cm.Id.ToString(), cm.User.UserName, cm.User.Email));
-}
-\end{lstlisting}
+\begin{program}
+	\begin{lstlisting}
+	/// <summary>
+	/// get all course members
+	/// </summary>
+	/// <param name="courseId">Id of the course</param>
+	[HttpGet("{courseId}/members")]
+	[AuthorizeCourseAdminOf(EntityType.Course, "courseId")]
+	public IEnumerable<CourseMemberOrAdminVM> GetAllMembers(string courseId)
+	{
+		var people = courseService.GetMembersWithUsers(courseId);
+		return people.Select(cm => new CourseMemberOrAdminVM(cm.Id.ToString(), cm.User.UserName, cm.User.Email));
+	}
+	\end{lstlisting}
+	\caption{Ukázka metody Controlleru}
+	\label{ControllerMethod1}
+\end{program}
 
 Vidíme, že je tedy označená atributem \textit{HttpGet}, který zároveň obsahuje URL, přes kterou lze tuto metodu zavolat. V tomto případě je URL suffix \textit{\{courseId\}/members}. Položka \textit{courseId} označuje parametr, jenž má stejnou hodnotu jako proměnná \textit{courseId} (parametr metody). Tento suffix se připojí za URL daného Controlleru, a tím získáme celou URL k zavolání této metody. V našem případě dostaneme
 \newline
@@ -425,23 +443,29 @@ V těle metody pak zavoláme konkrétní službu, která typicky pracuje s datab
 
 \vspace{\baselineskip}
 
-V dalším příkladu máme metodu, která slouží k vytvoření nového kurzu.
-\begin{lstlisting}
-/// <summary>
-/// create new course
-/// </summary>
-[HttpPost("create")]
-public void Create(AddCourseVM courseVM)
-{
-	string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
-	Person admin = peopleService.GetById(currentUserId);
-	Course createdCourse = new Course(courseVM.Name, admin);
-	
-	courseService.AddCourse(createdCourse);
-	
-	courseService.CommitChanges();
-}
-\end{lstlisting}
+V dalším příkladu (Kód \ref{ControllerMethod2}) máme metodu, která slouží k vytvoření nového kurzu.
+
+\begin{program}
+	\begin{lstlisting}
+	/// <summary>
+	/// create new course
+	/// </summary>
+	[HttpPost("create")]
+	public void Create(AddCourseVM courseVM)
+	{
+		string currentUserId = httpContextAccessor.HttpContext.GetCurrentUserId();
+		Person admin = peopleService.GetById(currentUserId);
+		Course createdCourse = new Course(courseVM.Name, admin);
+		
+		courseService.AddCourse(createdCourse);
+		
+		courseService.CommitChanges();
+	}
+	\end{lstlisting}
+	\caption{Ukázka metody Controlleru}
+	\label{ControllerMethod2}
+\end{program}
+
 Tato metoda je označena atributem \textit{HttpPost}, který opět obsahuje URL suffix. Pokud bychom tedy chtěli zavolat tuto metodu, pak je potřeba provést HTTP POST požadavek na URL
 \newline
 \textit{http://host/api/courses/create}, který v těle obsahuje JSON objekt typu \textit{AddCourseVM}. Framework pak provede deserializaci objektu, a objekt (instanci třídy \textit{AddCourseVM}) předá jako parametr do této metody.
@@ -453,118 +477,112 @@ V těle metody následně vytvoříme nový objekt kurzu, a pomocí příslušn�
 
 ViewModels reprezentují objekty pro komunikaci mezi Frontend a Backend částí (konkrétně mezi Frontend službami a API). Tedy např. při GET dotazu vrací příslušný Controller objekt (příp. objekty) typu ViewModel a framework automaticky provede serializaci do formátu JSON. Stejně tak při POST dotazu posílá klient v těle požadavku objekt typu ViewModel.
 
-Příklad:
-\begin{lstlisting}
-/// <summary>
-/// viewmodel for submitting a test
-/// </summary>
-public class SubmitTestVM
-{
-	public SubmitTestVM()
-	{
-	}
-	
-	public SubmitTestVM(string testId, string testTopic, bool isSubmitted, IEnumerable<SubmissionAnswerVM> answers, bool isTestGraded, DateTime testDeadline)
-	{
-		TestSubmissionId = testId;
-		TestTopic = testTopic;
-		Answers = answers;
-		IsSubmitted = isSubmitted;
-		IsTestGraded = isTestGraded;
-		TestDeadline = testDeadline;
-	}
-	
+Příklad ViewModelu vidíme v kódu \ref{SubmitTestVM}.
+
+\begin{program}
+	\begin{lstlisting}
 	/// <summary>
-	/// id of the test submission
+	/// viewmodel for submitting a test
 	/// </summary>
-	[RequiredWithDefaultErrorMessage]
-	public string TestSubmissionId { get; set; }
-	
-	/// <summary>
-	/// topic of the test
-	/// </summary>
-	[RequiredWithDefaultErrorMessage]
-	public string TestTopic { get; set; }
-	
-	/// <summary>
-	/// check if the test has already been submitted
-	/// </summary>
-	public bool IsSubmitted { get; set; }
-	...
-\end{lstlisting}
+	public class SubmitTestVM
+	{	
+		public SubmitTestVM(string testSubmissionId, string testTopic, bool isSubmitted, ...)
+		{
+			TestSubmissionId = testSubmissionId;
+			TestTopic = testTopic;
+			IsSubmitted = isSubmitted;
+			...
+		}
+		
+		[RequiredWithDefaultErrorMessage]
+		public string TestSubmissionId { get; set; }
+		
+		[RequiredWithDefaultErrorMessage]
+		public string TestTopic { get; set; }
+		
+		public bool IsSubmitted { get; set; }
+		...
+	\end{lstlisting}
+	\caption{Ukázka třídy \textit{SubmitTestVM}}
+	\label{SubmitTestVM}
+\end{program}
 
 Tento ViewModel reprezentuje data odevzdávaného testu. Vidíme, že ViewModely jsou typicky veřejné třídy s veřejnými vlastnostmi. Dále vidíme, že ViewModel má veřejný bezparametrový konstuktor, ten je volán při deserializaci dat.
 
 Také si můžeme všimnout, že u některé vlastnosti ještě obsahují doplňující atributy (např. atribut \textit{[RequiredWithDefaultErrorMessage]} u vlastnosti \textit{TestTopic}). Tyto atributy slouží primárně k validaci dat.
 
-Ve ViewModelech poměrně často používáme dědičnost, podobně jako v tomto příkladu.
+Ve ViewModelech poměrně často používáme dědičnost, podobně jako v tomto příkladu (Kód \ref{BaseCourseTestVM} a \ref{CourseTestChildVMs}).
 
-\begin{lstlisting}
-/// <summary>
-/// base viewmodel for course tests
-/// </summary>
-public abstract class BaseCourseTestVM
-{
-	protected BaseCourseTestVM()
+\begin{program}
+	\begin{lstlisting}
+	/// <summary>
+	/// base viewmodel for course tests
+	/// </summary>
+	public abstract class BaseCourseTestVM
 	{
-	}
+		protected BaseCourseTestVM()
+		{
+		}
+		
+		protected BaseCourseTestVM(int weight, string topic, ...)
+		{
+			...
+		}
+		
+		/// <summary>
+		/// weight of the score from the test (e.g. test of weight 2 has twice bigger impact on overall score than test of weight 1)
+		/// </summary>
+		[PositiveIntValue]
+		public int Weight { get; set; }
+		
+		/// <summary>
+		/// topic of the test
+		/// </summary>
+		[RequiredWithDefaultErrorMessage]
+		public string Topic { get; set; }
 	
-	protected BaseCourseTestVM(int weight, string topic, ...)
-	{
 		...
 	}
-	
+	\end{lstlisting}
+	\caption{Třída \textit{BaseCourseTestVM}}
+	\label{BaseCourseTestVM}
+\end{program}
+
+\begin{program}
+	\begin{lstlisting}
 	/// <summary>
-	/// weight of the score from the test (e.g. test of weight 2 has twice bigger impact on overall score than test of weight 1)
+	/// viewmodel for adding a course test
 	/// </summary>
-	[PositiveIntValue]
-	public int Weight { get; set; }
-	
-	/// <summary>
-	/// topic of the test
-	/// </summary>
-	[RequiredWithDefaultErrorMessage]
-	public string Topic { get; set; }
-
-	...
-}
-
-/// <summary>
-/// viewmodel for adding a course test
-/// </summary>
-public class AddCourseTestVM : BaseCourseTestVM
-{
-	public AddCourseTestVM() : base()
-	{ }
-}
-
-/// <summary>
-/// viewmodel representing a test in a course
-/// </summary>
-public class CourseTestDetailsVM : BaseCourseTestVM
-{
-	public CourseTestDetailsVM() : base()
-	{ }
-	
-	public CourseTestDetailsVM(string id, string topic, int scoreWeight, TestStatus testStatus, ...)
-	: base(scoreWeight, topic, ...)
+	public class AddCourseTestVM : BaseCourseTestVM
 	{
-		Id = id;
-		Status = testStatus;
+		public AddCourseTestVM() : base()
+		{ }
 	}
 	
 	/// <summary>
-	/// id of the test
+	/// viewmodel representing a test in a course
 	/// </summary>
-	[RequiredWithDefaultErrorMessage]
-	public string Id { get; set; }
-	
-	/// <summary>
-	/// status of the test
-	/// </summary>
-	public TestStatus Status { get; set; }
-}
-\end{lstlisting}
+	public class CourseTestDetailsVM : BaseCourseTestVM
+	{
+		public CourseTestDetailsVM() : base()
+		{ }
+		
+		public CourseTestDetailsVM(string id, string topic, int scoreWeight, TestStatus testStatus, ...)
+		: base(scoreWeight, topic, ...)
+		{
+			Id = id;
+			Status = testStatus;
+		}
+		
+		[RequiredWithDefaultErrorMessage]
+		public string Id { get; set; }
+		
+		public TestStatus Status { get; set; }
+	}
+	\end{lstlisting}
+	\caption{Třídy \textit{AddCourseTestVM} a \textit{CourseTestDetailsVM}}
+	\label{CourseTestChildVMs}
+\end{program}
 Chceme vytvořit alespoň dva ViewModely, jejichž struktura je velmi podobná a liší se jen přítomností několika málo doplňujících vlastností. Řešením je vytvořit Base třídu, která obsahuje všechny společné vlastnosti. Pro konkrétní ViewModely poté můžeme vytvořit třídy, které dědí z této rodičovské třídy, a obsahují již pouze doplňující vlastnosti.
 
 Ve výše uvedeném příkladu máme tedy třídu \textit{BaseCourseTestVM}, a od ní dědí třídy \textit{AddCourseTestVM} a \textit{CourseTestDetailsVM}. Tyto ViewModely slouží k přidání nového testu, resp. získání informací o daném testu.
@@ -579,44 +597,55 @@ Bylo by samozřejmě možné oba ViewModely sloučit do jedné třídy se všemi
 V programu používáme několik vlastních atributů, určených k validaci dat, ty se nachází ve složce \textit{Validation/Attributes}.
 Atribut je klasická C\# třída, která dědí ze třídy \textit{System.Attribute}. Její název obvykle končí suffixem \textit{Attribute}.
 
-Příklady:
-\begin{lstlisting}
-/// <summary>
-/// Validation attribute that marks this value as required
-/// <br/>
-/// if validation fails <see cref="defaultErrorMessage"/> is displayed
-/// </summary>
-public class RequiredWithDefaultErrorMessageAttribute : RequiredAttribute
-{
-	/// <summary>
-	/// default error message displayed ({0} is replaced by the field name that this attribute belongs to)
-	/// </summary>
-	public const string defaultErrorMessage = "The field {0} is required";
-	
-	public RequiredWithDefaultErrorMessageAttribute()
-	{
-		ErrorMessage = defaultErrorMessage;
-	}
-}
+Příklady atributů můžeme vidět v kódech \ref{ExampleAttribute1} a \ref{ExampleAttribute2}.
 
-/// <summary>
-/// Validation attribute that validates if the double value is non-negative (e.g. >=0)
-/// <br/>
-/// if validation fails <see cref="defaultErrorMessage"/> is displayed
-/// </summary>
-public class NonNegativeDoubleValueAttribute : RangeAttribute
-{
+\begin{program}
+	\begin{lstlisting}
 	/// <summary>
-	/// default error message displayed ({0} is replaced by the field name that this attribute belongs to)
+	/// Validation attribute that marks this value as required
+	/// <br/>
+	/// if validation fails <see cref="defaultErrorMessage"/> is displayed
 	/// </summary>
-	public const string defaultErrorMessage = "The field {0} must be non-negative";
-	
-	public NonNegativeDoubleValueAttribute() : base(0, double.MaxValue)
+	public class RequiredWithDefaultErrorMessageAttribute : RequiredAttribute
 	{
-		ErrorMessage = defaultErrorMessage;
+		/// <summary>
+		/// default error message displayed ({0} is replaced by the field name that this attribute belongs to)
+		/// </summary>
+		public const string defaultErrorMessage = "The field {0} is required";
+		
+		public RequiredWithDefaultErrorMessageAttribute()
+		{
+			ErrorMessage = defaultErrorMessage;
+		}
 	}
-}
-\end{lstlisting}
+	\end{lstlisting}
+	\caption{Příklad atributu}
+	\label{ExampleAttribute1}
+\end{program}
+
+\begin{program}
+	\begin{lstlisting}
+	/// <summary>
+	/// Validation attribute that validates if the double value is non-negative (e.g. >=0)
+	/// <br/>
+	/// if validation fails <see cref="defaultErrorMessage"/> is displayed
+	/// </summary>
+	public class NonNegativeDoubleValueAttribute : RangeAttribute
+	{
+		/// <summary>
+		/// default error message displayed ({0} is replaced by the field name that this attribute belongs to)
+		/// </summary>
+		public const string defaultErrorMessage = "The field {0} must be non-negative";
+		
+		public NonNegativeDoubleValueAttribute() : base(0, double.MaxValue)
+		{
+			ErrorMessage = defaultErrorMessage;
+		}
+	}
+	\end{lstlisting}
+	\caption{Příklad atributu}
+	\label{ExampleAttribute2}
+\end{program}
 
 \begin{itemize}
 \item \textit{NonNegativeDoubleValueAttribute} -- Tento atribut validuje, že vlastnost ty\-pu \textit{double}, ke které patří, je nezáporné číslo. V případě, že tomu tak není, nastavíme výchozí chybovou hlášku \textit{The field \{0\} must be non-negative}, kde \{0\} je název vlastnosti, ke které atribut patří.
@@ -632,37 +661,43 @@ Dále jsou v aplikaci ještě použité atributy \textit{NonNegativeIntValueAttr
 
 V případě, že nastane chyba při deserializaci dat (např. klient pošle v těle POST dotazu nevalidní data), tak framework vyhodí výjimku a vrátí objekt, který popisuje chybu. \cite{AspNetCoreDocs}
 
-Pokud nastane chyba při obsluze dotazu (např. klient se pomocí GET dotazu pokusí získat informace o nějaké již smazané entitě), pak v programu vyhodíme výjimku. Všechny výjimky jsou pak zachyceny třídou \textit{ErrorHandlerController}, která funguje jako obecný Error handler.
+Pokud nastane chyba při obsluze dotazu (např. klient se pomocí GET dotazu pokusí získat informace o nějaké již smazané entitě), pak v programu vyhodíme výjimku. Všechny výjimky jsou pak zachyceny třídou \textit{ErrorHandlerController} (Kód \ref{ErrorHandlerController}), která funguje jako obecný Error handler.
 Toto je nakonfigurováno v metodě \textit{Configure()}, jenž se nachází ve třídě \textit{Startup}.
-\begin{lstlisting}
-/// <summary>
-/// controller for error handling
-/// </summary>
-[ApiExplorerSettings(IgnoreApi = true)]
-public class ErrorHandlerController : ControllerBase
-{
-	private const string generalErrorText = "An error occurred while processing the request.";
-	
+
+\begin{program}
+	\begin{lstlisting}
 	/// <summary>
-	/// handle runtime error
+	/// controller for error handling
 	/// </summary>
-	/// <returns></returns>
-	[Route("errorHandler")]
-	public IActionResult HandleError()
+	[ApiExplorerSettings(IgnoreApi = true)]
+	public class ErrorHandlerController : ControllerBase
 	{
-		var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
-		var exception = context.Error; // thrown exception
+		private const string generalErrorText = "An error occurred while processing the request.";
 		
-		var errorDescription = new Dictionary<string, string[]>
+		/// <summary>
+		/// handle runtime error
+		/// </summary>
+		/// <returns></returns>
+		[Route("errorHandler")]
+		public IActionResult HandleError()
 		{
-			{ "Request failed", new string[] { generalErrorText } }
-		};
-		
-		var errorsVM = new ErrorsDictionaryVM(errorDescription);
-		return BadRequest(errorsVM);
+			var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
+			var exception = context.Error; // thrown exception
+			
+			var errorDescription = new Dictionary<string, string[]>
+			{
+				{ "Request failed", new string[] { generalErrorText } }
+			};
+			
+			var errorsVM = new ErrorsDictionaryVM(errorDescription);
+			return BadRequest(errorsVM);
+		}
 	}
-}
-\end{lstlisting}
+	\end{lstlisting}
+	\caption{Třída \textit{ErrorHandlerController}}
+	\label{ErrorHandlerController}
+\end{program}
+
 Metoda \textit{HandleError} tedy nastaví kód odpovědi na \textit{400 Bad Request}, a vrátí objekt typu \textit{ErrorsDictionaryVM}.
 Ten v tomto případě obsahuje obecnou hlášku \textit{An error occurred while processing the request}.
 
@@ -673,60 +708,48 @@ V programu máme také server-side autorizaci. Ta slouží k ověření toho, je
 K tomuto účelu používáme autorizační atributy, které se nachází ve složce \textit{Auth/Attributes}. 
 Abstraktní třída \textit{CourseBasedAuthorizeFilter} slouží jako rodičovská třída pro všechny filtry, založené na autorizaci pomocí kurzů.
 
-\begin{lstlisting}
-/// <summary>
-/// filter for authorization based on <see cref="Data.Models.Course"/> related entity
-/// </summary>
-public abstract class CourseBasedAuthorizeFilter : IAuthorizationFilter
-{
-	/// <summary>
-	/// type of the course related entity
-	/// </summary>
-	private readonly EntityType entityType;
-	
-	/// <summary>
-	/// name of the field in HTTP route that contains the id of the entity
-	/// </summary>
-	private readonly string entityIdFieldName;
-	
-	/// <summary>
-	/// factory for <see cref="Services.Interfaces.ICourseReferenceService"/> services
-	/// </summary>
-	private readonly ICourseReferenceServiceFactory courseReferenceServiceFactory;
-
-	/// <inheritdoc/>
-	public void OnAuthorization(AuthorizationFilterContext context)
+\begin{program}
+	\begin{lstlisting}
+	public abstract class CourseBasedAuthorizeFilter : IAuthorizationFilter
 	{
-		if (context.HttpContext.User.Identity.IsAuthenticated)
+		private readonly EntityType entityType;
+		
+		private readonly string entityIdFieldName;
+		
+		private readonly ICourseReferenceServiceFactory courseReferenceServiceFactory;
+	
+		/// <inheritdoc/>
+		public void OnAuthorization(AuthorizationFilterContext context)
 		{
-			string currentUserId = context.HttpContext.GetCurrentUserId();
-			string objectId = context.HttpContext.Request
-				.RouteValues[entityIdFieldName].ToString();
-			
-			var service = courseReferenceServiceFactory
-				.GetByEntityType(entityType);
-			string courseId = service.GetCourseIdOf(objectId);
-			
-			if (IsAuthorized(currentUserId, courseId, entityType, objectId))
+			if (context.HttpContext.User.Identity.IsAuthenticated)
 			{
-				// authorization passed -> proceed to controller
-				return;
-			}			
+				string currentUserId = context.HttpContext.GetCurrentUserId();
+				string objectId = context.HttpContext.Request
+					.RouteValues[entityIdFieldName].ToString();
+				
+				var service = courseReferenceServiceFactory
+					.GetByEntityType(entityType);
+				string courseId = service.GetCourseIdOf(objectId);
+				
+				if (IsAuthorized(currentUserId, courseId, entityType, objectId))
+				{
+					// authorization passed -> proceed to controller
+					return;
+				}			
+			}
+			context.Result = new UnauthorizedResult();
 		}
-		context.Result = new UnauthorizedResult();
+		
+		protected abstract bool IsAuthorized(string currentUserId, string courseId, EntityType entityType, string entityId);
+		
+		...
 	}
-	
-	/// <summary>
-	/// check if the user is authorized to access the course related entity
-	/// </summary>
-	/// ...
-	protected abstract bool IsAuthorized(string currentUserId, string courseId, EntityType entityType, string entityId);
-	
-	...
-}
-\end{lstlisting}
+	\end{lstlisting}
+	\caption{Ukázka třídy \textit{CourseBasedAuthorizeFilter}}
+	\label{CourseBasedAuthorizeFilter}
+\end{program}
 
-Vidíme, že tato třída obsahuje typ entity (proměnná \textit{entityType}), pomocí které provádíme autorizaci. Dále také název proměnné v URL, která obsahuje identifikátor této entity. 
+V kódu \ref{CourseBasedAuthorizeFilter} vidíme, že tato třída obsahuje typ entity (proměnná \textit{entityType}), pomocí které provádíme autorizaci. Dále také název proměnné v URL, která obsahuje identifikátor této entity. 
 
 Metoda \textit{OnAuthorization} se automaticky zavolá při autorizaci. V této metodě nejprve zkontrolujeme, že uživatel je přihlášený, poté získáme jeho ID (přes \textit{HttpContext}) a ID dané entity. Poté získáme identifikátor kurzu, ke kterému daná entita logicky patří. Zde využíváme toho, že všechny služby implementují rozhraní \textit{ICourseReferenceService}. 
 Dále zjistíme, jestli má uživatel dostatečná práva. K tomuto účelu slouží abstraktní metoda \textit{IsAuthorized}. 
@@ -736,35 +759,37 @@ Společné kroky autorizace nicméně implementujeme v této (rodičovské) tř�
 
 Pokud zjistíme, že uživatel nemá dostatečná práva, pak pouze vrátíme \textit{UnauthorizedResult}, a požadovaná akce se neprovede.
 
-Dále ještě potřebujeme v aplikaci mechanismus, který nám podle enumu \textit{EntityType} vrátí příslušnou službu. K tomuto účelu používáme třídu \textit{CourseReferenceServiceFactory}.
-\begin{lstlisting}
-/// <summary>
-/// factory for <see cref="ICourseReferenceService"/>
-/// </summary>
-public class CourseReferenceServiceFactory : ICourseReferenceServiceFactory
-{
-	...
-	
-	private readonly IReadOnlyDictionary<EntityType, ICourseReferenceService> dataServices;
-	
-	public CourseReferenceServiceFactory(ICourseAdminService courseAdminService, ICourseMemberService courseMemberService, ...)
+Dále ještě potřebujeme v aplikaci mechanismus, který nám podle enumu \textit{EntityType} vrátí příslušnou službu. K tomuto účelu používáme třídu \textit{CourseReferenceServiceFactory}, kterou můžeme vidět na ukázce kódu \ref{CourseReferenceServiceFactory}.
+
+\begin{program}
+	\begin{lstlisting}
+	public class CourseReferenceServiceFactory : ICourseReferenceServiceFactory
 	{
-		dataServices = new Dictionary<EntityType, ICourseReferenceService>
+		...
+		
+		private readonly IReadOnlyDictionary<EntityType, ICourseReferenceService> dataServices;
+		
+		public CourseReferenceServiceFactory(ICourseAdminService courseAdminService, ICourseMemberService courseMemberService, ...)
 		{
-			[EntityType.CourseMember] = courseMemberService,
-			[EntityType.CourseAdmin] = courseAdminService,
-			[EntityType.CourseTest] = courseTestService,
-			...
-		};
+			dataServices = new Dictionary<EntityType, ICourseReferenceService>
+			{
+				[EntityType.CourseMember] = courseMemberService,
+				[EntityType.CourseAdmin] = courseAdminService,
+				[EntityType.CourseTest] = courseTestService,
+				...
+			};
+		}
+		
+		/// <inheritdoc/>
+		public ICourseReferenceService GetByEntityType(EntityType entityType)
+		{
+			return dataServices[entityType];
+		}
 	}
-	
-	/// <inheritdoc/>
-	public ICourseReferenceService GetByEntityType(EntityType entityType)
-	{
-		return dataServices[entityType];
-	}
-}
-\end{lstlisting}
+	\end{lstlisting}
+	\caption{Třída \textit{CourseReferenceServiceFactory}}
+	\label{CourseReferenceServiceFactory}
+\end{program}
 
 Tato třída obsahuje slovník \textit{dataServices}, ve kterém je pod daným klíčem typu \textit{EntityType} uložená příslušná služba.
 V metodě \textit{GetByEntityType} pak jen vrátíme položku ze slovníku.
@@ -777,31 +802,41 @@ V aplikaci používáme tyto autorizační filtry (všechny dědí ze třídy \t
 	\item \textit{CourseAdminOrOwnerAuthorizeFilter} -- podobně jako první filtr slouží k ověření toho, jestli je aktuální uživatel administrátor kurzu, k němuž patří daná entita. Zároveň ale akci povolíme provést, pokud je uživatel vlastníkem dané entity. To znamená, že příslušná entita (např. odevzdaný test -- entita \textit{TestSubmission}) se váže k danému uživateli. Toto ověření používáme například v metodě pro získání opraveného testu.
 \end{itemize}
 
-Například třída \textit{CourseAdminOrMemberAuthorizeFilter} vypadá takto:
-\begin{lstlisting}
-public class CourseAdminOrMemberAuthorizeFilter : CourseBasedAuthorizeFilter
-{
-	private readonly IPeopleService peopleService;
-	
-	/// <inheritdoc/>
-	protected override bool IsAuthorized(string currentUserId, string courseId, EntityType entityType, string objectId)
-	{
-		return peopleService.IsAdminOfCourse(currentUserId, courseId) || peopleService.IsMemberOfCourse(currentUserId, courseId);
-	}
-	...
-}
-\end{lstlisting}
+Na ukázce kódu \ref{AuthFilter} se nachází třída \textit{CourseAdminOrMemberAuthorizeFilter}.
 
-Ke každému autorizačnímu filtru se pak vztahuje atribut.
-\begin{lstlisting}
-public class AuthorizeCourseAdminOrMemberOfAttribute : TypeFilterAttribute
-{
-	public AuthorizeCourseAdminOrMemberOfAttribute(EntityType entityType, string entityIdFieldName) : base(typeof(CourseAdminOrMemberAuthorizeFilter))
+\begin{program}
+	\begin{lstlisting}
+	public class CourseAdminOrMemberAuthorizeFilter : CourseBasedAuthorizeFilter
 	{
-		Arguments = new object[] { entityType, entityIdFieldName };
+		private readonly IPeopleService peopleService;
+		
+		/// <inheritdoc/>
+		protected override bool IsAuthorized(string currentUserId, string courseId, EntityType entityType, string objectId)
+		{
+			return peopleService.IsAdminOfCourse(currentUserId, courseId) || peopleService.IsMemberOfCourse(currentUserId, courseId);
+		}
+		...
 	}
-}
-\end{lstlisting}
+	\end{lstlisting}
+	\caption{Ukázka autorizačního filtru}
+	\label{AuthFilter}
+\end{program}
+
+Ke každému autorizačnímu filtru se pak vztahuje atribut (Kód \ref{AuthAttribute}).
+
+\begin{program}
+	\begin{lstlisting}
+	public class AuthorizeCourseAdminOrMemberOfAttribute : TypeFilterAttribute
+	{
+		public AuthorizeCourseAdminOrMemberOfAttribute(EntityType entityType, string entityIdFieldName) : base(typeof(CourseAdminOrMemberAuthorizeFilter))
+		{
+			Arguments = new object[] { entityType, entityIdFieldName };
+		}
+	}
+	\end{lstlisting}
+	\caption{Ukázka autorizačního atributu}
+	\label{AuthAttribute}
+\end{program}
 
 Vidíme, že tento atribut má konstruktor se dvěma parametry, které následně předá autorizačnímu filtru. 
 
@@ -884,81 +919,52 @@ Ve složce \textit{src/api-authorization} se nachází modul pro přihlášení 
 
 Služby slouží ke komunikaci frontend části s API. Jedna služba typicky odpovídá jednomu Controlleru a jednotlivé metody služby pak slouží k volání metod API. 
 
-Všechny služby dědí z abstraktní třídy \textit{ApiService}. 
+Všechny služby dědí z abstraktní třídy \textit{ApiService} (Kód \ref{ApiService}). 
 
-\begin{lstlisting}
-/**
-* base class for all API services
-*/
-export abstract class ApiService {
-
-	/**
-	* HTTP client
-	* @protected
-	*/
-	protected readonly http: HttpClient;
+\begin{program}
+	\begin{lstlisting}
+	export abstract class ApiService {
 	
-	/**
-	* url of the controller to fetch data (ends with /)
-	* @protected
-	*/
-	protected readonly controllerUrl: string;
-	
-	/**
-	* describes how many times to repeat unsuccessful API request
-	* @private
-	*/
-	private readonly retryCount: number = 1;
-	
-	/**
-	* create new ApiService
-	* @param http http client
-	* @param baseUrl base url of the app
-	* @param controllerName name of controller that the service fetches data from
-	* @protected
-	*/
-	protected constructor(http: HttpClient, baseUrl: string, controllerName: string) {
-		this.controllerUrl = baseUrl + `api/${controllerName}/`;
-		this.http = http;
+		protected readonly http: HttpClient;
+		
+		protected readonly controllerUrl: string;
+		
+		private readonly retryCount: number = 1;
+		
+		protected constructor(http: HttpClient, baseUrl: string, controllerName: string) {
+			this.controllerUrl = baseUrl + `api/${controllerName}/`;
+			this.http = http;
+		}
+		
+		private handleError(response: HttpErrorResponse) {
+			const errorObject: ApiErrorResponseVM = response;
+			return throwError(errorObject.error);
+		}
+		
+		/**
+		* process HTTP response
+		*
+		* if it succeeds, return it, otherwise retry {@link retryCount}-times, then throw an error
+		* @param response observable of the response
+		* @private
+		*/
+		private processResponse<T>(response: Observable<T>): Observable<T> {
+			return response.pipe(
+				retry(this.retryCount),
+				catchError(this.handleError)
+			);
+		}
+		
+		protected httpGet<T>(actionUrl: string): Observable<T> {
+			return this.processResponse(
+				this.http.get<T>(this.controllerUrl + actionUrl));
+		}
+		...
 	}
-	
-	/**
-	* handle failed HTTP response
-	* @param response HTTP error response object
-	* @private
-	*/
-	private handleError(response: HttpErrorResponse) {
-		const errorObject: ApiErrorResponseVM = response;
-		return throwError(errorObject.error);
-	}
-	
-	/**
-	* process HTTP response
-	*
-	* if it succeeds, return it, otherwise retry {@link retryCount}-times, then throw an error
-	* @param response observable of the response
-	* @private
-	*/
-	private processResponse<T>(response: Observable<T>): Observable<T> {
-		return response.pipe(
-			retry(this.retryCount),
-			catchError(this.handleError)
-		);
-	}
-	
-	/**
-	* execute HTTP GET request to the given URL
-	* @param actionUrl URL of the action (will be added to {@link controllerUrl})
-	* @protected
-	* @returns An Observable of the HTTPResponse, with a response body in the requested type
-	*/
-	protected httpGet<T>(actionUrl: string): Observable<T> {
-		return this.processResponse(
-			this.http.get<T>(this.controllerUrl + actionUrl));
-	}
-	...
-}
-\end{lstlisting}
+	\end{lstlisting}
+	\caption{Třída \textit{ApiService}}
+	\label{ApiService}
+\end{program}
 
 Vidíme, že třída obsahuje URL daného Controlleru, a také pomocné metody pro komunikaci s API. Metoda \textit{processResponse} slouží ke zpracování odpovědi, v případě neúspěchu se pokusí dotaz opakovat. Pokud dotaz opět skončí neúspěchem, pak zavolá metodu pro obsluhu chyb (\textit{handleError}).
 
@@ -966,36 +972,40 @@ Metodu \textit{processResponse} pak využíváme například v metodě \textit{h
 
 Konkrétní služby dědí ze třídy \textit{ApiService}, a obsahují metody, které typicky slouží k jednomu dotazu na API.
 
-\begin{lstlisting}
-export class CourseTestService extends ApiService {
-	private static controllerName = 'courseTests';
-	
-	constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-		super(http, baseUrl, CourseTestService.controllerName);
+\begin{program}
+	\begin{lstlisting}
+	export class CourseTestService extends ApiService {
+		private static controllerName = 'courseTests';
+		
+		constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
+			super(http, baseUrl, CourseTestService.controllerName);
+		}
+		
+		/**
+		* get test by Id
+		* @param testId
+		*/
+		public getById(testId: string): Observable<CourseTestDetailsVM> {
+			return this.httpGet<CourseTestDetailsVM>(testId);
+		}
+		
+		/**
+		* add new test to the given course
+		* @param testToAdd test to add
+		* @param courseId Id of the course
+		*/
+		public addToCourse(testToAdd: AddCourseTestVM, courseId: string): Observable<{}> {
+			return this.httpPost(courseId, testToAdd);
+		}
+		
+		...
 	}
-	
-	/**
-	* get test by Id
-	* @param testId
-	*/
-	public getById(testId: string): Observable<CourseTestDetailsVM> {
-		return this.httpGet<CourseTestDetailsVM>(testId);
-	}
-	
-	/**
-	* add new test to the given course
-	* @param testToAdd test to add
-	* @param courseId Id of the course
-	*/
-	public addToCourse(testToAdd: AddCourseTestVM, courseId: string): Observable<{}> {
-		return this.httpPost(courseId, testToAdd);
-	}
-	
-	...
-}
-\end{lstlisting}
+	\end{lstlisting}
+	\caption{Služba \textit{CourseTestService}}
+	\label{CourseTestService}
+\end{program}
 
-Na příkladu vidíme, že služba obsahuje pevně dané URL Controlleru, který volá; a dále několik metod, které volají metody tohoto API Controlleru.
+Na ukázce kódu \ref{CourseTestService} vidíme, že služba obsahuje pevně dané URL Controlleru, který volá; a dále několik metod, které volají metody tohoto API Controlleru.
 Například metoda \textit{getById} slouží k získání testu podle jeho identifikátoru. V těle pouze provedeme HTTP GET dotaz, pomocí generického parametru specifikujeme, že vrácený objekt má být typu \textit{CourseTestDetailsVM}. 
 Obdobně je to u metodu \textit{addToCourse}, která se používá k přidání nového testu do kurzu. Oproti předchozí metodě obsahuje ještě jeden parametr -- \textit{testToAdd}, který reprezentuje test, jenž bude vytvořen. Tento objekt pak vloží do těla HTTP požadavku, a odešle. 
 Můžeme si všimnout, že v tomto případě voláme metodu \textit{httpPost} bez generického parametru. To je z toho důvodu, že odpověď je prázdná (tzn. neobsahuje žádný ViewModel).
@@ -1011,30 +1021,35 @@ Volání metody \textit{subscribe} v našem programu typicky probíhá až v kom
 
 V klientské části se také nacházejí ViewModely, které slouží ke komunikaci s API. Tyto objekty přesně odpovídají ViewModelům ze serverové části (tzn. obsahují stejné položky).
 
-Na příkladu vidíme ViewModel, který reprezentuje odeslaný test (vidíme, že odpovídá ViewModelu ze serverové části -- viz. sekce \ref{serverVM})
-\begin{lstlisting}
-/**
-* viewmodel for submitting a test
-*/
-export class SubmitTestVM {
+V kódu \ref{ClientVMExample} vidíme ViewModel, který reprezentuje odeslaný test (vidíme, že odpovídá ViewModelu ze serverové části -- viz. sekce \ref{serverVM})
+
+\begin{program}
+	\begin{lstlisting}
 	/**
-	* id of the test submission
+	* viewmodel for submitting a test
 	*/
-	public testSubmissionId: string;
-	
-	/**
-	* topic of the test
-	*/
-	public testTopic: string;
-	
-	/**
-	* check if the test has already been submitted
-	*/
-	public isSubmitted: boolean;
-	
-	...
-}
-\end{lstlisting}
+	export class SubmitTestVM {
+		/**
+		* id of the test submission
+		*/
+		public testSubmissionId: string;
+		
+		/**
+		* topic of the test
+		*/
+		public testTopic: string;
+		
+		/**
+		* check if the test has already been submitted
+		*/
+		public isSubmitted: boolean;
+		
+		...
+	}
+	\end{lstlisting}
+	\caption{Příklad ViewModelu}
+	\label{ClientVMExample}
+\end{program}
 
 Pro HTTP GET požadavky frontend služby typicky vrací objekty typu ViewModel, se kterými dále pracujeme v komponentách. Stejně tak například při HTTP POST dotazu je do těla požadavku vložena instance nějakého ViewModelu.
 
@@ -1060,91 +1075,100 @@ Na obrázku \ref{fig:Components} vidíme část UI s využitím několika kompon
 Šablona komponenty je typicky napsaná v HTML, zatímco backend je naprogramován v jazyce Typescript. 
 
 \lstset{style=typescript}
-\begin{lstlisting}
-@Component({
-	selector: 'app-student-list',
-	templateUrl: './student-list.component.html',
-	styleUrls: ['./student-list.component.css']
-})
-export class StudentListComponent implements OnInit {
 
-	@Input()
-	private courseId: string;
+\begin{program}
+	\begin{lstlisting}
+	@Component({
+		selector: 'app-student-list',
+		templateUrl: './student-list.component.html',
+		styleUrls: ['./student-list.component.css']
+	})
+	export class StudentListComponent implements OnInit {
 	
-	/**
-	* list of students
-	*/
-	public students: CourseMemberOrAdminVM[] = [];
-	
-	private readonly courseService: CourseService;
-	...
-	
-	constructor(courseService: CourseService, ...) {
-		this.courseService = courseService;
+		@Input()
+		private courseId: string;
+		
+		/**
+		* list of students
+		*/
+		public students: CourseMemberOrAdminVM[] = [];
+		
+		private readonly courseService: CourseService;
 		...
-	}
-	
-	ngOnInit() {
-		this.reloadData();
-	}
-	
-	/**
-	* reload student list
-	* @private
-	*/
-	private reloadData(): void {
-		this.courseService.getAllMembers(this.courseId)
-		.subscribe(result => {
-			this.students = result;
-		});
-	}
-	
-	...
-\end{lstlisting}
+		
+		constructor(courseService: CourseService, ...) {
+			this.courseService = courseService;
+			...
+		}
+		
+		ngOnInit() {
+			this.reloadData();
+		}
+		
+		/**
+		* reload student list
+		* @private
+		*/
+		private reloadData(): void {
+			this.courseService.getAllMembers(this.courseId)
+			.subscribe(result => {
+				this.students = result;
+			});
+		}
+		
+		...
+	\end{lstlisting}
+	\caption{Ukázka backendu komponenty}
+	\label{ComponentBackend}
+\end{program}
 
-Na výše uvedeném příkladu vidíme, že backend komponenty je klasická Typescript třída označená anotací \textit{@Component}. U anotace je zároveň uvedený selektor, což je jméno HTML elementu, který slouží k vykreslení komponenty, a umístění souboru se šablonou a CSS styly.
+Na příkladu (Kód \ref{ComponentBackend}) vidíme, že backend komponenty je klasická Typescript třída označená anotací \textit{@Component}. U anotace je zároveň uvedený selektor, což je jméno HTML elementu, který slouží k vykreslení komponenty, a umístění souboru se šablonou a CSS styly.
 
 Komponenty typicky používají služby k získání dat z API, podobně jako v příkladu. Můžeme si všimnout, že právě zde probíhá volání metody \textit{subscribe}, pomocí které v tomto případě data uložíme do proměnné \textit{students}.
 
 Veřejné položky (například pole \textit{students}) jsou pak dostupné v HTML šabloně. Některé položky (například \textit{courseId}) jsou označené anotací \textit{@Input()}, která označuje parametry šablony.
 
-Pro ilustraci uvedeme také šablonu komponenty:
+Pro ilustraci uvedeme také šablonu komponenty (Kód \ref{ComponentTemplate}).
 
 \lstset{style=html}
 
-\begin{lstlisting}
-<div class="jumbotron">
-	<h3>Students</h3>
-	<table class="table table-striped table-responsive">
-		<tr>
-			<th>Username</th>
-			<th></th>
-			<th></th>
-		</tr>
-		<tr *ngFor="let person of students">
-			<td class="align-middle">{{person.name}}</td>
-			<td>
-				<a class="btn btn-link" (click)="pageNavigator.
-					navigateToStudentDetail(person.id)">
-					Details
-				</a>
-			</td>
-			<td>
-				<button class="btn btn-danger" 
-				(click)="removeMember(person)">Remove</button>
-			</td>
-		</tr>
-	</table>
-	<div class="my-2">
-		<div>
-			<button class="btn btn-info" (click)="pageNavigator.
-				navigateToCourseEnrollmentRequests(courseId)">
-				Enrollment requests
-			</button>
+\begin{program}
+	\begin{lstlisting}
+	<div class="jumbotron">
+		<h3>Students</h3>
+		<table class="table table-striped table-responsive">
+			<tr>
+				<th>Username</th>
+				<th></th>
+				<th></th>
+			</tr>
+			<tr *ngFor="let person of students">
+				<td class="align-middle">{{person.name}}</td>
+				<td>
+					<a class="btn btn-link" (click)="pageNavigator.
+						navigateToStudentDetail(person.id)">
+						Details
+					</a>
+				</td>
+				<td>
+					<button class="btn btn-danger" 
+					(click)="removeMember(person)">Remove</button>
+				</td>
+			</tr>
+		</table>
+		<div class="my-2">
+			<div>
+				<button class="btn btn-info" (click)="pageNavigator.
+					navigateToCourseEnrollmentRequests(courseId)">
+					Enrollment requests
+				</button>
+			</div>
 		</div>
 	</div>
-</div>
-\end{lstlisting}
+	\end{lstlisting}
+	\caption{Ukázka šablony komponenty}
+	\label{ComponentTemplate}
+\end{program}
 
 Toto je šablona, která přísluší komponentě \textit{StudentListComponent}, jenž slouží k zobrazení členů kurzu. Vidíme, že se jedná o klasické HTML, do kterého můžeme vkládat proměnné z backend části komponenty.
 Mezi složené závorky vložíme proměnnou, jež chceme vypsat, a framework Angular se sám postará o dosazení příslušné hodnoty.
@@ -1165,22 +1189,27 @@ V šablonách komponent můžeme také vykreslovat jiné šablony.
 
 Na tomto příkladu vidíme kus kódu ze šablony komponenty \textit{CourseDetailsComponent}, která slouží k zobrazení informací o daném kurzu. Šablona tedy na daném místě vykreslí příslušné šablony (v tomto případě komponenty se seznamy testů, souborů a studentů).
 
-Při volání šablon můžeme také uvést parametry (například parametr \textit{courseId} v šabloně dané selektorem \textit{app-test-list}). Tato hodnota se pak uloží do příslušné položky, která je označená anotací \textit{@Input()}, v dané komponentě. To znamená, že komponenta se selektorem \textit{app-test-list} má položku \textit{courseId}, která je označená anotací \textit{@Input()}. Pro lepší představu ještě uvedeme kód třídy s komponentou:
+Při volání šablon můžeme také uvést parametry (například parametr \textit{courseId} v šabloně dané selektorem \textit{app-test-list}). Tato hodnota se pak uloží do příslušné položky, která je označená anotací \textit{@Input()}, v dané komponentě. To znamená, že komponenta se selektorem \textit{app-test-list} má položku \textit{courseId}, která je označená anotací \textit{@Input()}. Pro lepší představu ještě uvedeme kód \ref{ComponentWithParam}, na kterém se nachází třída s komponentou.
 
 \lstset{style=typescript}
-\begin{lstlisting}
-@Component({
-	selector: 'app-test-list',
-	templateUrl: './test-list.component.html',
-	styleUrls: ['./test-list.component.css']
-})
-export class TestListComponent implements OnInit, OnChanges {
 
-	@Input()
-	public courseId: string;
-	...
-}
-\end{lstlisting}
+\begin{program}
+	\begin{lstlisting}
+	@Component({
+		selector: 'app-test-list',
+		templateUrl: './test-list.component.html',
+		styleUrls: ['./test-list.component.css']
+	})
+	export class TestListComponent implements OnInit, OnChanges {
+	
+		@Input()
+		public courseId: string;
+		...
+	}
+	\end{lstlisting}
+	\caption{Ukázka komponenty s parametrem}
+	\label{ComponentWithParam}
+\end{program}
 
 \vspace{\baselineskip}
 
@@ -1216,23 +1245,27 @@ export class AddGradeComponent implements OnInit {
 Toto je komponenta, která slouží k přidávání známek. 
 
 \lstset{style=html}
-\begin{lstlisting}
-...
-<div class="form-group col-md-2">
-	<label for="addGradeForm_Value">Score in %</label>
-	<input type="number" min="0" class="form-control" name="value" id="addGradeForm_Value" required
-	[(ngModel)]="gradeToAdd.percentualValue">
-</div>
-<div class="form-group col-md-2">
-	<label for="addGradeForm_Weight">Weight</label>
-	<input type="number" min="0" class="form-control" name="weight" id="addGradeForm_Weight" required
-	[(ngModel)]="gradeToAdd.weight">
-</div>
-...
-\end{lstlisting}
+\begin{program}
+	\begin{lstlisting}
+	...
+	<div class="form-group col-md-2">
+		<label for="addGradeForm_Value">Score in %</label>
+		<input type="number" min="0" class="form-control" name="value" id="addGradeForm_Value" required
+		[(ngModel)]="gradeToAdd.percentualValue">
+	</div>
+	<div class="form-group col-md-2">
+		<label for="addGradeForm_Weight">Weight</label>
+		<input type="number" min="0" class="form-control" name="weight" id="addGradeForm_Weight" required
+		[(ngModel)]="gradeToAdd.weight">
+	</div>
+	...
+	\end{lstlisting}
+	\caption{Ukázka šablony, která používá obousměrný data binding}
+	\label{TemplateTwoWayBinding}
+\end{program}
 
 V šabloně pak máme (mimo jiné) políčka formuláře pro procentuální hodnotu a váhu známky.
-Pomocí atributu \textit{[(ngModel)]} nastavíme proměnnou pro data binding. 
+Pomocí atributu \textit{[(ngModel)]} nastavíme proměnnou pro data binding (Kód \ref{TemplateTwoWayBinding}). 
 
 Pokud tedy například změníme ve formuláři váhu známky, dojde automaticky ke změně hodnoty \textit{gradeToAdd.weight}. Podobně, pokud dojde v kódu ke změně hodnoty proměnné \textit{gradeToAdd.weight}, framework automaticky upraví hodnotu ve formuláři.
 
@@ -1279,50 +1312,61 @@ Můžeme si všimnout, že v kódu používáme různé objekty pro ViewModely a
 Na následujícím příkladu můžeme vidět největší rozdíly mezi těmito objekty.
 
 \lstset{style=sharpc}
-\begin{lstlisting}
-public class TestSubmissionAnswer : IGuidIdObject
-{	
-	/// <summary>
-	/// question which is answered
-	/// </summary>
-	[Required]
-	public TestQuestion Question { get; set; }
-	
-	/// <summary>
-	/// submitted text of the answer
-	/// </summary>
-	public string Text { get; set; }
-	
-	/// <summary>
-	/// points obtained for the answer
-	/// </summary>
-	public int Points { get; set; }
-	...
-}
 
-public class SubmissionAnswerVM
-{	
-	/// <summary>
-	/// number of question that this answer belongs to
-	/// </summary>
-	[PositiveIntValue]
-	public int QuestionNumber { get; set; }
-	
-	/// <summary>
-	/// text of the question
-	/// </summary>
-	[RequiredWithDefaultErrorMessage]
-	public string QuestionText { get; set; }
-	
-	/// <summary>
-	/// answer submitted by the student
-	/// </summary>
-	public string AnswerText { get; set; }
-	...
-}
-\end{lstlisting}
+\begin{program}
+	\begin{lstlisting}
+	public class TestSubmissionAnswer : IGuidIdObject
+	{	
+		/// <summary>
+		/// question which is answered
+		/// </summary>
+		[Required]
+		public TestQuestion Question { get; set; }
+		
+		/// <summary>
+		/// submitted text of the answer
+		/// </summary>
+		public string Text { get; set; }
+		
+		/// <summary>
+		/// points obtained for the answer
+		/// </summary>
+		public int Points { get; set; }
+		...
+	}
+	\end{lstlisting}
+	\caption{Databázová entita \textit{TestSubmissionAnswer}}
+	\label{DbEntityTestSubmissionAnswer}
+\end{program}
 
-Příklad obsahuje databázovou entitu \textit{TestSubmissionAnswer} a ViewModel \textit{SubmissionAnswerVM}, oba typy reprezentují odpověď studenta na danou otázku.
+\begin{program}
+	\begin{lstlisting}
+	public class SubmissionAnswerVM
+	{	
+		/// <summary>
+		/// number of question that this answer belongs to
+		/// </summary>
+		[PositiveIntValue]
+		public int QuestionNumber { get; set; }
+		
+		/// <summary>
+		/// text of the question
+		/// </summary>
+		[RequiredWithDefaultErrorMessage]
+		public string QuestionText { get; set; }
+		
+		/// <summary>
+		/// answer submitted by the student
+		/// </summary>
+		public string AnswerText { get; set; }
+		...
+	}
+	\end{lstlisting}
+	\caption{ViewModel \textit{SubmissionAnswerVM}}
+	\label{ViewmodelTestSubmissionAnswer}
+\end{program}
+
+Na ukázkách kódu \ref{DbEntityTestSubmissionAnswer} a \ref{ViewmodelTestSubmissionAnswer} vidíme databázovou entitu \textit{TestSubmissionAnswer} a ViewModel \textit{SubmissionAnswerVM}, oba typy reprezentují odpověď studenta na danou otázku.
 Vidíme, že v tomto případě ViewModel obsahuje vlastnosti převzaté z více databázových entit, což je velmi častá situace. Vlastnosti \textit{QuestionNumber} a \textit{QuestionText} jsou převzaté z entity \textit{TestQuestion}, naopak vlastnost \textit{AnswerText} je z entity \textit{TestSubmissionAnswer}.
 
 Některé jiné ViewModely naopak obsahují jen vybrané vlastnosti příslušných databázových entit, ostatní data jsou v daném kontextu zbytečná.
