@@ -15,13 +15,19 @@ namespace CourseManagementSystem.Data.Models
             Answers = new List<TestSubmissionAnswer>();
         }
 
+        /// <summary>
+        /// create new test submission
+        /// </summary>
+        /// <param name="test">test that this submission belongs to</param>
+        /// <param name="student">student that this submission belongs to</param>
+        /// <param name="submittedAnswers">colleciton of submitted answers</param>
         public TestSubmission(CourseTest test, CourseMember student, ICollection<TestSubmissionAnswer> submittedAnswers)
         {
             Test = test;
             Student = student;
             Answers = submittedAnswers;
-            SubmittedDateTime = DateTime.Now;
             IsReviewed = false;
+            IsSubmitted = false;
         }
 
         /// <summary>
@@ -52,6 +58,11 @@ namespace CourseManagementSystem.Data.Models
         /// has this test already been reviewed?
         /// </summary>
         public bool IsReviewed { get; set; }
+
+        /// <summary>
+        /// has this test been submitted?
+        /// </summary>
+        public bool IsSubmitted { get; set; }
 
         /// <summary>
         /// submitted answers

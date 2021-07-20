@@ -14,6 +14,9 @@ namespace CourseManagementSystem.API.Validation.Attributes
         /// </summary>
         public const string defaultErrorMessage = "The field {0} must be non-negative";
 
+        /// <summary>
+        /// create new instance of attribute that validates if the double value is non-negative (e.g. >=0)
+        /// </summary>
         public NonNegativeDoubleValueAttribute() : base(0, double.MaxValue)
         {
             ErrorMessage = defaultErrorMessage;

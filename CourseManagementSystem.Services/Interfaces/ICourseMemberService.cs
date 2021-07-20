@@ -29,10 +29,10 @@ namespace CourseManagementSystem.Services.Interfaces
         bool BelongsTo(string courseMemberId, string personId);
 
         /// <summary>
-        /// remove CourseMember with selected ID
+        /// archive CourseMember with selected ID
         /// </summary>
-        /// <param name="id">identifier of the <see cref="CourseMember"/> instance</param>
-        void RemoveMemberById(string id);
+        /// <param name="id">identifier of the <see cref="CourseMember"/> instance to archive</param>
+        void ArchiveMemberById(string id);
 
         /// <summary>
         /// get all grades of the given CourseMember

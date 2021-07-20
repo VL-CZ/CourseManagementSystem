@@ -4,9 +4,11 @@ using CourseManagementSystem.API.Extensions;
 using CourseManagementSystem.API.ViewModels;
 using CourseManagementSystem.Data.Models;
 using CourseManagementSystem.Services.Interfaces;
+using CourseManagementSystem.TestEvaluation;
 using CourseManagementSystem.TestEvaluation.Calculators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,11 +21,13 @@ namespace CourseManagementSystem.API.Controllers
     {
         private readonly ICourseTestService courseTestService;
         private readonly ITestSubmissionService testSubmissionService;
+        private QuestionValidator questionValidator;
 
         public CourseTestsController(ICourseTestService courseTestService, ITestSubmissionService testSubmissionService)
         {
             this.courseTestService = courseTestService;
             this.testSubmissionService = testSubmissionService;
+            questionValidator = new QuestionValidator();
         }
 
         /// <summary>
@@ -36,8 +40,10 @@ namespace CourseManagementSystem.API.Controllers
         public void Add(AddCourseTestVM testToAdd, string courseId)
         {
             var mappedQuestions = testToAdd.Questions.ToModels();
-            var test = new CourseTest(testToAdd.Topic, mappedQuestions.ToList(), testToAdd.Weight, testToAdd.Deadline);
-            
+            ThrowIfInvalidQuestion(mappedQuestions);
+
+            var test = new CourseTest(testToAdd.Topic, mappedQuestions.ToList(), testToAdd.Weight, testToAdd.Deadline, testToAdd.IsGraded);
+
             courseTestService.AddToCourse(test, courseId);
 
             courseTestService.CommitChanges();
@@ -65,7 +71,7 @@ namespace CourseManagementSystem.API.Controllers
         public CourseTestDetailsVM Get(string testId)
         {
             var test = courseTestService.GetWithQuestions(testId);
-            return new CourseTestDetailsVM(testId, test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status, test.Deadline);
+            return new CourseTestDetailsVM(testId, test.Topic, test.Weight, test.Questions.ToViewModels(), test.Status, test.Deadline, test.IsGraded);
         }
 
         /// <summary>
@@ -77,10 +83,10 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOf(EntityType.CourseTest, "testId")]
         public void Update(string testId, AddCourseTestVM updatedTest)
         {
-            var test = courseTestService.GetWithQuestions(testId);
             var updatedQuestions = updatedTest.Questions.ToModels();
-            
-            courseTestService.Update(test, updatedTest.Weight, updatedTest.Topic, updatedTest.Deadline, updatedQuestions.ToList());
+            ThrowIfInvalidQuestion(updatedQuestions);
+
+            courseTestService.Update(testId, updatedTest.Weight, updatedTest.Topic, updatedTest.Deadline, updatedQuestions.ToList(), updatedTest.IsGraded);
 
             courseTestService.CommitChanges();
         }
@@ -111,6 +117,37 @@ namespace CourseManagementSystem.API.Controllers
             courseTestService.Publish(test);
 
             courseTestService.CommitChanges();
+        }
+
+        /// <summary>
+        /// get course id of the given test
+        /// </summary>
+        /// <param name="testId">id of the given test</param>
+        /// <returns></returns>
+        [HttpGet("{testId}/courseId")]
+        [AuthorizeCourseAdminOrMemberOf(EntityType.CourseTest, "testId")]
+        public WrapperVM<string> GetCourseId(string testId)
+        {
+            string courseId = courseTestService.GetCourseIdOf(testId);
+            return new WrapperVM<string>(courseId);
+        }
+
+        /// <summary>
+        /// check that all questions have valid values in <see cref="TestQuestion.CorrectAnswer"/> property
+        /// <br/>
+        /// if not, throw <see cref="ArgumentException"/>
+        /// </summary>
+        /// <param name="questions">questions to check</param>
+        private void ThrowIfInvalidQuestion(IEnumerable<TestQuestion> questions)
+        {
+            if (questions.All(q => questionValidator.HasValidCorrectAnswer(q)))
+            {
+                return;
+            }
+            else
+            {
+                throw new ArgumentException("One of the questions has invalid value in property CorrectAnswer");
+            }
         }
     }
 }

@@ -12,7 +12,7 @@ abstract class BaseTestSubmissionVM {
   /**
    * datetime when this test was submitted
    */
-  public submittedDateTime: Date;
+  public submittedDateTime: string;
 
   /**
    * has this test submission already been reviewed?
@@ -63,12 +63,17 @@ export class TestWithSubmissionVM extends BaseTestSubmissionVM {
   /**
    * identifier of the test
    */
-  public testId: number;
+  public testId: string;
 
   /**
    * topic of the test
    */
   public testTopic: string;
+
+  /**
+   * is this test graded?
+   */
+  public isTestGraded: boolean;
 
   /**
    * answers in the submission

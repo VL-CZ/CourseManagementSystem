@@ -1,0 +1,19 @@
+<div class="jumbotron">
+  <h3>Submitted solutions</h3>
+  <table class="table table-responsive">
+    <tr>
+      <th>User</th>
+      <th>Score</th>
+      <th>Submitted at</th>
+      <th>Reviewed?</th>
+      <th></th>
+    </tr>
+    <tr *ngFor="let testInfo of this.submissionsInfos">
+      <td class="align-middle">{{testInfo.studentEmail}}</td>
+      <td class="align-middle"><b>{{percentStringFormatter.format(testInfo.percentualScore)}}</b></td>
+      <td class="align-middle">{{dateTimeFormatter.formatToLocal(testInfo.submittedDateTime)}}</td>
+      <td class="align-middle">{{testInfo.isReviewed ? 'YES' : 'NO'}}</td>
+      <td><a class="btn btn-link" (click)="pageNavigator.navigateToSubmissionReview(testInfo.testSubmissionId)">Detail</a></td>
+    </tr>
+  </table>
+</div>

@@ -1,0 +1,45 @@
+<div class="jumbotron">
+  <h3>Member Courses</h3>
+  <table class="table table-striped table-responsive">
+    <tr *ngFor="let course of memberCourses">
+      <td>
+        <a class="btn btn-link" (click)="pageNavigator.navigateToCourseDetail(course.id)">{{course.name}}</a>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div class="jumbotron">
+  <h3>Managed Courses</h3>
+  <table class="table table-striped table-responsive">
+    <tr *ngFor="let course of managedCourses">
+      <td>
+        <a class="btn btn-link" (click)="pageNavigator.navigateToCourseDetail(course.id)">{{course.name}}</a>
+      </td>
+      <td>
+        <button class="btn btn-danger" (click)="removeCourse(course.id)">Remove</button>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div class="jumbotron">
+  <h3>Add new course</h3>
+  <form>
+    <div class="form-group">
+      <label for="addCourseForm_Name">Name</label>
+      <input type="text" class="form-control" name="name" id="addCourseForm_Name" placeholder="Name" required
+             [(ngModel)]="newCourse.name">
+    </div>
+    <button type="submit" class="btn btn-primary" (click)="addCourse()">Add</button>
+  </form>
+</div>
+
+<app-course-enrollment></app-course-enrollment>
+
+<div class="jumbotron">
+  <h4>My person Id</h4>
+  <div>
+    {{currentUserId}}
+  </div>
+</div>

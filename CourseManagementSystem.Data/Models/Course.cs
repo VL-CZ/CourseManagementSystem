@@ -5,6 +5,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CourseManagementSystem.Data.Models
 {
+    /// <summary>
+    /// entity representing a course
+    /// </summary>
     public class Course : IGuidIdObject
     {
         public Course()
@@ -13,12 +16,19 @@ namespace CourseManagementSystem.Data.Models
             Files = new List<CourseFile>();
             Tests = new List<CourseTest>();
             ForumPosts = new List<ForumPost>();
+            Admins = new List<CourseAdmin>();
+            EnrollmentRequests = new List<EnrollmentRequest>();
         }
 
+        /// <summary>
+        /// create new instance of course entity
+        /// </summary>
+        /// <param name="name">name of the course</param>
+        /// <param name="admin">administrator of the course</param>
         public Course(string name, Person admin) : this()
         {
             Name = name;
-            Admin = admin;
+            Admins = new List<CourseAdmin>() { new CourseAdmin(admin, this) };
             IsArchived = false;
         }
 
@@ -43,8 +53,7 @@ namespace CourseManagementSystem.Data.Models
         /// <summary>
         /// admin of the course
         /// </summary>
-        [Required]
-        public Person Admin { get; set; }
+        public ICollection<CourseAdmin> Admins { get; set; }
 
         /// <summary>
         /// members of the course (except admin)
@@ -65,5 +74,10 @@ namespace CourseManagementSystem.Data.Models
         /// posts in the forum of this course
         /// </summary>
         public ICollection<ForumPost> ForumPosts { get; set; }
+
+        /// <summary>
+        /// enrollment requests to this course
+        /// </summary>
+        public ICollection<EnrollmentRequest> EnrollmentRequests { get; set; }
     }
 }

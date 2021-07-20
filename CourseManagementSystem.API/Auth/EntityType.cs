@@ -6,6 +6,11 @@
     public enum EntityType
     {
         /// <summary>
+        /// <see cref="Data.Models.CourseAdmin"/> entity type
+        /// </summary>
+        CourseAdmin,
+
+        /// <summary>
         /// <see cref="Data.Models.CourseMember"/> entity type
         /// </summary>
         CourseMember,
@@ -38,6 +43,11 @@
         /// <summary>
         /// <see cref="Data.Models.TestSubmission"/> entity type
         /// </summary>
-        TestSubmission
+        TestSubmission,
+
+        /// <summary>
+        /// <see cref="Data.Models.EnrollmentRequest"/> entity type
+        /// </summary>
+        EnrollmentRequest
     }
 }

@@ -5,14 +5,29 @@ import {SubmissionAnswerVM} from './testSubmissionAnswerVM';
  */
 export class SubmitTestVM {
   /**
-   * id of the test
+   * id of the test submission
    */
-  public testId: string;
+  public testSubmissionId: string;
 
   /**
    * topic of the test
    */
   public testTopic: string;
+
+  /**
+   * is this test graded?
+   */
+  public isTestGraded: boolean;
+
+  /**
+   * check if the test has already been submitted
+   */
+  public isSubmitted: boolean;
+
+  /**
+   * deadline of the test
+   */
+  public testDeadline: string;
 
   /**
    * answers to the test

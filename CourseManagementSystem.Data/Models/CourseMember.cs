@@ -5,6 +5,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CourseManagementSystem.Data.Models
 {
+    /// <summary>
+    /// entity representing membership of a student in a course
+    /// </summary>
     public class CourseMember : IGuidIdObject, ICourseReferenceObject
     {
         public CourseMember()
@@ -13,10 +16,16 @@ namespace CourseManagementSystem.Data.Models
             TestSubmissions = new List<TestSubmission>();
         }
 
+        /// <summary>
+        /// create new entity representing membership of a student in a course
+        /// </summary>
+        /// <param name="user">given user</param>
+        /// <param name="course">course where to enroll</param>
         public CourseMember(Person user, Course course) : this()
         {
             User = user;
             Course = course;
+            IsArchived = false;
         }
 
         /// <summary>
@@ -37,6 +46,11 @@ namespace CourseManagementSystem.Data.Models
         /// </summary>
         [Required]
         public Course Course { get; set; }
+
+        /// <summary>
+        /// check if this course member has been archived
+        /// </summary>
+        public bool IsArchived { get; set; }
 
         /// <summary>
         /// list of grades

@@ -11,11 +11,19 @@ namespace CourseManagementSystem.API.ViewModels
         {
         }
 
-        public SubmissionAnswerVM(int questionNumber, string questionText, string answerText)
+        /// <summary>
+        /// create new viewmodel representing the submission answers submitted by students
+        /// </summary>
+        /// <param name="questionNumber">number of the question</param>
+        /// <param name="questionText">text of the question</param>
+        /// <param name="answerText">text of the answer</param>
+        /// <param name="questionType">type of the question</param>
+        public SubmissionAnswerVM(int questionNumber, string questionText, string answerText, Data.QuestionType questionType)
         {
             QuestionNumber = questionNumber;
             QuestionText = questionText;
             AnswerText = answerText;
+            QuestionType = questionType;
         }
 
         /// <summary>
@@ -34,6 +42,11 @@ namespace CourseManagementSystem.API.ViewModels
         /// answer submitted by the student
         /// </summary>
         public string AnswerText { get; set; }
+
+        /// <summary>
+        /// type of the question
+        /// </summary>
+        public Data.QuestionType QuestionType { get; set; }
     }
 
     /// <summary>
@@ -41,8 +54,23 @@ namespace CourseManagementSystem.API.ViewModels
     /// </summary>
     public class SubmissionAnswerWithCorrectAnswerVM : SubmissionAnswerVM
     {
-        public SubmissionAnswerWithCorrectAnswerVM(int questionNumber, string questionText, string answerText, string correctAnswer, int receivedPoints, int maximalPoints, string comment)
-            : base(questionNumber, questionText, answerText)
+        public SubmissionAnswerWithCorrectAnswerVM() : base()
+        { }
+
+        /// <summary>
+        /// create new viewmodel representing the submission answer and the correct answer
+        /// </summary>
+        /// <param name="questionNumber">number of the question</param>
+        /// <param name="questionText">text of the question</param>
+        /// <param name="answerText">text of the answer</param>
+        /// <param name="questionType">type of the question</param>
+        /// <param name="comment">comment to the answer</param>
+        /// <param name="correctAnswer">text of correct answer</param>
+        /// <param name="maximalPoints">max points for the question</param>
+        /// <param name="receivedPoints">recieved points for the question</param>
+        public SubmissionAnswerWithCorrectAnswerVM(int questionNumber, string questionText, string answerText,
+            string correctAnswer, int receivedPoints, int maximalPoints, string comment, Data.QuestionType questionType)
+            : base(questionNumber, questionText, answerText, questionType)
         {
             CorrectAnswer = correctAnswer;
             ReceivedPoints = receivedPoints;
@@ -53,7 +81,6 @@ namespace CourseManagementSystem.API.ViewModels
         /// <summary>
         /// text of the correct answer
         /// </summary>
-        [RequiredWithDefaultErrorMessage]
         public string CorrectAnswer { get; set; }
 
         /// <summary>

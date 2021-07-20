@@ -3,7 +3,7 @@ using CourseManagementSystem.TestEvaluation.DTOs;
 using System.Collections.Generic;
 using Xunit;
 
-namespace CourseManagementSystem.UnitTests
+namespace CourseManagementSystem.TestEvaluation.Tests
 {
     /// <summary>
     /// tests for <see cref="AverageScoreCalculator"/> class

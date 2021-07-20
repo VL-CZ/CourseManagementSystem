@@ -15,13 +15,6 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public void EnrollTo(Person person, Course course)
-        {
-            var cm = new CourseMember(person, course);
-            dbContext.CourseMembers.Add(cm);
-        }
-
-        /// <inheritdoc/>
         public IEnumerable<Course> GetActiveManagedCourses(string personId)
         {
             return GetManagedCourses(personId).FilterActive();
@@ -45,7 +38,8 @@ namespace CourseManagementSystem.Services.Implementations
             return dbContext.CourseMembers.Include(cm => cm.Course).Include(cm => cm.User)
                 .Where(cm => cm.User.Id == person.Id)
                 .Where(cm => cm.Course.Id == course.Id)
-                .SingleOrDefault();
+                .Where(cm => !cm.IsArchived)
+                .Single();
         }
 
         /// <inheritdoc/>
@@ -67,9 +61,11 @@ namespace CourseManagementSystem.Services.Implementations
         /// <returns></returns>
         private IEnumerable<Course> GetManagedCourses(string personId)
         {
-            return dbContext.Courses
-                .Include(course => course.Admin)
-                .Where(course => course.Admin.Id == personId);
+            return dbContext.CourseAdmins
+                .Include(admin => admin.User)
+                .Include(admin => admin.Course)
+                .Where(admin => admin.User.Id == personId)
+                .Select(admin => admin.Course);
         }
 
         /// <summary>
@@ -83,6 +79,7 @@ namespace CourseManagementSystem.Services.Implementations
                 .Include(cm => cm.Course)
                 .Include(cm => cm.User)
                 .Where(cm => cm.User.Id == personId)
+                .Where(cm => !cm.IsArchived)
                 .Select(cm => cm.Course);
         }
     }

@@ -51,7 +51,8 @@ namespace CourseManagementSystem.API
                 configuration.RootPath = "ClientApp/dist";
             });
 
-            // add dependendies to IoC container
+            // add dependencies to IoC container
+            services.AddTransient<ICourseAdminService, CourseAdminService>();
             services.AddTransient<ICourseMemberService, CourseMemberService>();
             services.AddTransient<IFileService, FileService>();
             services.AddTransient<ICourseTestService, CourseTestService>();
@@ -60,6 +61,7 @@ namespace CourseManagementSystem.API
             services.AddTransient<ICourseService, CourseService>();
             services.AddTransient<IPeopleService, PeopleService>();
             services.AddTransient<IGradeService, GradeService>();
+            services.AddTransient<IEnrollmentRequestService, EnrollmentRequestService>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

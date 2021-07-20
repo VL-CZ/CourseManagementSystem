@@ -14,6 +14,9 @@ namespace CourseManagementSystem.API.Validation.Attributes
         /// </summary>
         public const string defaultErrorMessage = "The field {0} is required";
 
+        /// <summary>
+        /// create new instance of validation attribute that marks this value as required
+        /// </summary>
         public RequiredWithDefaultErrorMessageAttribute()
         {
             ErrorMessage = defaultErrorMessage;

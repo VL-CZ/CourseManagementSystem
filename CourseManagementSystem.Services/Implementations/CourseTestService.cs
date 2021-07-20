@@ -27,11 +27,12 @@ namespace CourseManagementSystem.Services.Implementations
         {
             var testToRemove = GetWithQuestions(testId);
 
-            // remove all questions
-            foreach (var question in testToRemove.Questions)
+            if (IsPublished(testToRemove))
             {
-                dbContext.TestQuestions.Remove(question);
+                throw new ApplicationException("Cannot remove already published test");
             }
+
+            RemoveAllQuestions(testToRemove);
 
             // remove the test
             dbContext.CourseTests.Remove(testToRemove);
@@ -42,7 +43,7 @@ namespace CourseManagementSystem.Services.Implementations
         {
             return dbContext.CourseTests
                 .Include(test => test.Questions)
-                .SingleOrDefault(ct => ct.Id.ToString() == testId);
+                .Single(ct => ct.Id.ToString() == testId);
         }
 
         ///<inheritdoc/>
@@ -58,20 +59,44 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
-        public void Update(CourseTest test, int updatedWeight, string updatedTopic, DateTime updatedDeadline, ICollection<TestQuestion> updatedQuestions)
+        public void Update(string testId, int updatedWeight, string updatedTopic, DateTime updatedDeadline, ICollection<TestQuestion> updatedQuestions, bool updatedIsGraded)
         {
+            var test = GetWithQuestions(testId);
+
+            if (IsPublished(test))
+            {
+                throw new ApplicationException("Cannot update already published test");
+            }
+
             test.Weight = updatedWeight;
             test.Topic = updatedTopic;
             test.Deadline = updatedDeadline;
-            test.Questions.Clear();
+            test.IsGraded = updatedIsGraded;
+
+            RemoveAllQuestions(test);
             test.Questions = updatedQuestions;
         }
 
-        /// <inheritdoc/>
-        public TestQuestion GetQuestionByNumber(CourseTest test, int questionNumber)
+        /// <summary>
+        /// check if the test is published
+        /// </summary>
+        /// <param name="test">test to check</param>
+        /// <returns></returns>
+        private bool IsPublished(CourseTest test)
         {
-            return test.Questions
-                .SingleOrDefault(question => question.Number == questionNumber);
+            return test.Status == TestStatus.Published;
+        }
+
+        /// <summary>
+        /// remove all questions of the test
+        /// </summary>
+        /// <param name="test"></param>
+        private void RemoveAllQuestions(CourseTest test)
+        {
+            foreach (var question in test.Questions)
+            {
+                dbContext.TestQuestions.Remove(question);
+            }
         }
     }
 }

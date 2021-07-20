@@ -12,6 +12,11 @@ namespace CourseManagementSystem.Data.Models
         public TestSubmissionAnswer()
         { }
 
+        /// <summary>
+        /// create new entity representing an answer of the submission
+        /// </summary>
+        /// <param name="question">question that the answer belongs to</param>
+        /// <param name="answerText">text of the answer</param>
         public TestSubmissionAnswer(TestQuestion question, string answerText) : this()
         {
             Question = question;

@@ -1,0 +1,29 @@
+<div class="jumbotron">
+  <h3>Graded assignments</h3>
+  <table class="table table-striped table-responsive">
+    <tr>
+      <th>Topic</th>
+      <th>Score</th>
+      <th>Weight</th>
+      <th>Submitted at</th>
+      <th>Reviewed</th>
+    </tr>
+    <tr *ngFor="let submission of testSubmissions">
+      <td>
+        <a class="btn btn-link" (click)="pageNavigator.navigateToSubmissionReview(submission.testSubmissionId)">{{submission.testTopic}}</a>
+      </td>
+      <td class="align-middle">
+        <b>{{percentStringFormatter.format(submission.percentualScore)}}</b>
+      </td>
+      <td class="align-middle">
+        {{submission.testWeight}}
+      </td>
+      <td class="align-middle">
+        {{dateTimeFormatter.formatToLocal(submission.submittedDateTime)}}
+      </td>
+      <td class="align-middle">
+        {{submission.isReviewed ? 'YES' : 'NO'}}
+      </td>
+    </tr>
+  </table>
+</div>

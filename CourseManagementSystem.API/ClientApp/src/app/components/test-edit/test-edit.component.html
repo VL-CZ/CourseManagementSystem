@@ -1,0 +1,74 @@
+<div class="row">
+  <div class="col-md-2 order-md-2">
+    <app-course-menu [courseId]="courseId"></app-course-menu>
+  </div>
+  <div class="col-md-10 order-md-1">
+    <div class="jumbotron">
+      <h2>Edit the assignment</h2>
+    </div>
+    <div class="jumbotron">
+      <div class="form-group">
+        <label for="testTopic">Topic</label>
+        <input type="text" min="0" class="form-control" id="testTopic" [(ngModel)]="testToUpdate.topic"
+               name="testTopic">
+      </div>
+      <div class="form-group">
+        <div>Is this assignment graded?</div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="testIsGraded" id="testIsGradedTrue"
+                 [(ngModel)]="testToUpdate.isGraded" [value]="true">
+          <label class="form-check-label" for="testIsGradedTrue">
+            Yes
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="testIsGraded" id="testIsGradedFalse"
+                 [(ngModel)]="testToUpdate.isGraded" [value]="false">
+          <label class="form-check-label" for="testIsGradedFalse">
+            No
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="testWeight">Test weight</label>
+        <input type="number" min="0" class="form-control" id="testWeight" [(ngModel)]="testToUpdate.weight"
+               name="testWeight">
+      </div>
+      <div class="form-group">
+        <div>
+          <span *ngIf="editingDeadline">Old </span>Deadline: {{dateTimeFormatter.formatToLocal(testToUpdate.deadline)}}
+        </div>
+        <div *ngIf="editingDeadline">
+          <label for="testDeadlineDate">New deadline</label>
+          <input type="date" class="form-control" id="testDeadlineDate" [(ngModel)]="dateTimeBinder.date"
+                 name="testDeadlineDate">
+          <input type="time" class="form-control" id="testDeadlineTime" [(ngModel)]="dateTimeBinder.time"
+                 name="testDeadlineTime">
+          <button class="btn btn-secondary my-2" (click)="cancelEditingDeadline()">Cancel</button>
+        </div>
+        <div *ngIf="!editingDeadline">
+          <button class="btn btn-info my-2" (click)="startEditingDeadline()">Set new deadline</button>
+        </div>
+      </div>
+    </div>
+    <div class="jumbotron" *ngFor="let question of testToUpdate.questions">
+      <app-test-question-edit [question]="question"></app-test-question-edit>
+      <div class="my-3">
+        <button class="btn btn-danger" (click)="deleteQuestion(question)">
+          Delete question
+        </button>
+      </div>
+    </div>
+    <div class="my-3">
+      <button type="button" class="btn btn-primary" (click)="addQuestion()">Add new question</button>
+    </div>
+    <div class="jumbotron">
+      <h4>Save/Discard updates</h4>
+      <div class="my-3">
+        <button type="button" class="btn btn-warning mr-3" (click)="saveChanges()">Save</button>
+        <button type="button" class="btn btn-danger" (click)="discardChanges()">Discard</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+<div class="jumbotron">
+  <h2>{{courseInfo.name}}</h2>
+  <div>
+    <b>Course Id:</b> {{courseId}}
+  </div>
+  <div *ngIf="!isCourseAdmin" class="my-3">
+    <button class="btn btn-success" (click)="pageNavigator.navigateToStudentDetail(currentCourseMemberId)">My Grades</button>
+  </div>
+</div>
+
+<app-test-list [courseId]="courseId" [isCourseAdmin]="isCourseAdmin"></app-test-list>
+<app-file-list [courseId]="courseId" [isCourseAdmin]="isCourseAdmin"></app-file-list>
+<app-student-list *ngIf="isCourseAdmin" [courseId]="courseId"></app-student-list>
+<app-admin-list *ngIf="isCourseAdmin" [courseId]="courseId"></app-admin-list>
+<app-course-forum [courseId]="courseId" [isCourseAdmin]="isCourseAdmin"></app-course-forum>
+
+<div class="jumbotron">
+  <h3>Leave this course</h3>
+  <div *ngIf="isCourseAdmin">
+    <div *ngIf="isTheOnlyAdmin">
+      You can't leave this course right now, because you are the only admin.
+    </div>
+    <div *ngIf="!isTheOnlyAdmin">
+      <button class="btn btn-danger" (click)="removeCurrentAdmin()">Leave</button>
+    </div>
+  </div>
+  <div *ngIf="!isCourseAdmin">
+    <button class="btn btn-danger" (click)="removeCurrentMember()">Leave</button>
+  </div>
+</div>

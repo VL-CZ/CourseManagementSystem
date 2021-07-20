@@ -9,8 +9,22 @@ namespace CourseManagementSystem.Data.Models
     public class Person : IdentityUser
     {
         /// <summary>
-        /// grades of this student
+        /// create new user of the app
         /// </summary>
-        public ICollection<CourseMember> CourseMemberships { get; set; } = new List<CourseMember>();
+        public Person() : base()
+        {
+            CourseMemberships = new List<CourseMember>();
+            AdminMemberships = new List<CourseAdmin>();
+        }
+
+        /// <summary>
+        /// course memberships of the user
+        /// </summary>
+        public ICollection<CourseMember> CourseMemberships { get; set; }
+
+        /// <summary>
+        /// admin memberships the user
+        /// </summary>
+        public ICollection<CourseAdmin> AdminMemberships { get; set; }
     }
 }

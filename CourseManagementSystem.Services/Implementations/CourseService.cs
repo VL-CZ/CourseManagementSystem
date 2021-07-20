@@ -21,6 +21,32 @@ namespace CourseManagementSystem.Services.Implementations
         }
 
         /// <inheritdoc/>
+        public void AddAdmin(Person admin, string courseId)
+        {
+            var course = GetById(courseId);
+            var courseAdmin = new CourseAdmin(admin, course);
+            dbContext.CourseAdmins.Add(courseAdmin);
+        }
+
+        /// <inheritdoc/>
+        public void RequestEnrollment(Person person, string courseId)
+        {
+            var course = GetById(courseId);
+            var newEnrollmentRequest = new EnrollmentRequest(course, person);
+            dbContext.EnrollmentRequests.Add(newEnrollmentRequest);
+        }
+
+        /// <inheritdoc/>
+        public ICollection<CourseAdmin> GetAdminsWithUsers(string courseId)
+        {
+            return dbContext.Courses
+                .Include(course => course.Admins)
+                .ThenInclude(member => member.User)
+                .Single(course => course.Id.ToString() == courseId)
+                .Admins;
+        }
+
+        /// <inheritdoc/>
         public Course GetById(string courseId)
         {
             return dbContext.Courses.FindById(courseId);
@@ -56,7 +82,7 @@ namespace CourseManagementSystem.Services.Implementations
             return dbContext.Courses
                 .Include(course => course.ForumPosts)
                 .ThenInclude(post => post.Author)
-                .SingleOrDefault(course => course.Id.ToString() == courseId)
+                .Single(course => course.Id.ToString() == courseId)
                 .ForumPosts;
         }
 
@@ -67,7 +93,18 @@ namespace CourseManagementSystem.Services.Implementations
                 .Include(course => course.Members)
                 .ThenInclude(member => member.User)
                 .Single(course => course.Id.ToString() == courseId)
-                .Members;
+                .Members.Where(cm => !cm.IsArchived)
+                .ToList();
+        }
+
+        /// <inheritdoc/>
+        public ICollection<EnrollmentRequest> GetEnrollmentRequestsWithPeople(string courseId)
+        {
+            return dbContext.Courses
+                .Include(course => course.EnrollmentRequests)
+                .ThenInclude(er => er.Person)
+                .Single(course => course.Id.ToString() == courseId)
+                .EnrollmentRequests;
         }
     }
 }

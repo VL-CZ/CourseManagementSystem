@@ -14,12 +14,21 @@ namespace CourseManagementSystem.API.ViewModels
         {
         }
 
-        protected BaseCourseTestVM(int weight, string topic, DateTime deadline, IEnumerable<TestQuestionVM> questions)
+        /// <summary>
+        /// create new instance of base viewmodel for course tests
+        /// </summary>
+        /// <param name="weight">weight of the test</param>
+        /// <param name="topic">topic of the test</param>
+        /// <param name="deadline">deadline of the test</param>
+        /// <param name="questions">questions contained in the test</param>
+        /// <param name="isGraded">is this test graded?</param>
+        protected BaseCourseTestVM(int weight, string topic, DateTime deadline, IEnumerable<TestQuestionVM> questions, bool isGraded)
         {
             Weight = weight;
             Topic = topic;
             Deadline = deadline;
             Questions = questions;
+            IsGraded = isGraded;
         }
 
         /// <summary>
@@ -39,6 +48,13 @@ namespace CourseManagementSystem.API.ViewModels
         /// deadline of the test
         /// </summary>
         public DateTime Deadline { get; set; }
+
+        /// <summary>
+        /// is this test graded?
+        /// <br/>
+        /// if not -> it's a quiz
+        /// </summary>
+        public bool IsGraded { get; set; }
 
         /// <summary>
         /// questions in this test
@@ -64,8 +80,18 @@ namespace CourseManagementSystem.API.ViewModels
         public CourseTestDetailsVM() : base()
         { }
 
-        public CourseTestDetailsVM(string id, string topic, int scoreWeight, IEnumerable<TestQuestionVM> questions, TestStatus testStatus, DateTime deadline)
-            : base(scoreWeight, topic, deadline, questions)
+        /// <summary>
+        /// create new instance of base viewmodel for course tests details
+        /// </summary>
+        /// <param name="topic">topic of the test</param>
+        /// <param name="deadline">deadline of the test</param>
+        /// <param name="questions">questions contained in the test</param>
+        /// <param name="isGraded">is this test graded?</param>
+        /// <param name="id">id of the course test</param>
+        /// <param name="scoreWeight">weight of the test</param>
+        /// <param name="testStatus"></param>
+        public CourseTestDetailsVM(string id, string topic, int scoreWeight, IEnumerable<TestQuestionVM> questions, TestStatus testStatus, DateTime deadline, bool isGraded)
+            : base(scoreWeight, topic, deadline, questions, isGraded)
         {
             Id = id;
             Status = testStatus;
@@ -78,7 +104,7 @@ namespace CourseManagementSystem.API.ViewModels
         public string Id { get; set; }
 
         /// <summary>
-        /// status of the test see
+        /// status of the test
         /// </summary>
         public TestStatus Status { get; set; }
     }

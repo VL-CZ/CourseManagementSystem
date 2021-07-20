@@ -1,0 +1,26 @@
+<div class="jumbotron">
+  <h2>Forum</h2>
+  <ul>
+    <li *ngFor="let post of posts" class="list-group-item">
+      <div>
+        <b>Author: {{post.author}}</b>
+      </div>
+      <p class="formattedText">{{post.text}}</p>
+      <div *ngIf="isCourseAdmin" class="my-3">
+        <button type="button" class="btn btn-danger" (click)="delete(post)">Delete</button>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<div class="jumbotron">
+  <h3>Add a post</h3>
+  <form>
+    <div class="form-group">
+      <label for="newPostText">Text</label>
+      <textarea class="form-control" name="topic" id="newPostText" placeholder="Text" required
+                [(ngModel)]="postToAdd.value"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary" (click)="addPost()">Add</button>
+  </form>
+</div>

@@ -25,10 +25,6 @@ namespace CourseManagementSystem.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("AdminId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<bool>("IsArchived")
                         .HasColumnType("bit");
 
@@ -38,9 +34,29 @@ namespace CourseManagementSystem.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AdminId");
-
                     b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("CourseManagementSystem.Data.Models.CourseAdmin", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CourseAdmins");
                 });
 
             modelBuilder.Entity("CourseManagementSystem.Data.Models.CourseFile", b =>
@@ -80,6 +96,9 @@ namespace CourseManagementSystem.Data.Migrations
                     b.Property<Guid>("CourseId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("bit");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -105,6 +124,9 @@ namespace CourseManagementSystem.Data.Migrations
                     b.Property<DateTime>("Deadline")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsGraded")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -120,6 +142,28 @@ namespace CourseManagementSystem.Data.Migrations
                     b.HasIndex("CourseId");
 
                     b.ToTable("CourseTests");
+                });
+
+            modelBuilder.Entity("CourseManagementSystem.Data.Models.EnrollmentRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PersonId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("PersonId");
+
+                    b.ToTable("EnrollmentRequests");
                 });
 
             modelBuilder.Entity("CourseManagementSystem.Data.Models.ForumPost", b =>
@@ -265,6 +309,9 @@ namespace CourseManagementSystem.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CourseTestId");
@@ -279,6 +326,9 @@ namespace CourseManagementSystem.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsReviewed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSubmitted")
                         .HasColumnType("bit");
 
                     b.Property<Guid>("StudentId")
@@ -546,11 +596,17 @@ namespace CourseManagementSystem.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("CourseManagementSystem.Data.Models.Course", b =>
+            modelBuilder.Entity("CourseManagementSystem.Data.Models.CourseAdmin", b =>
                 {
-                    b.HasOne("CourseManagementSystem.Data.Models.Person", "Admin")
-                        .WithMany()
-                        .HasForeignKey("AdminId")
+                    b.HasOne("CourseManagementSystem.Data.Models.Course", "Course")
+                        .WithMany("Admins")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CourseManagementSystem.Data.Models.Person", "User")
+                        .WithMany("AdminMemberships")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
@@ -584,6 +640,21 @@ namespace CourseManagementSystem.Data.Migrations
                     b.HasOne("CourseManagementSystem.Data.Models.Course", "Course")
                         .WithMany("Tests")
                         .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CourseManagementSystem.Data.Models.EnrollmentRequest", b =>
+                {
+                    b.HasOne("CourseManagementSystem.Data.Models.Course", "Course")
+                        .WithMany("EnrollmentRequests")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CourseManagementSystem.Data.Models.Person", "Person")
+                        .WithMany()
+                        .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

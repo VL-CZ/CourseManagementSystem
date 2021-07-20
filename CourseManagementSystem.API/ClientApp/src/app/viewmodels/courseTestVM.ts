@@ -17,7 +17,12 @@ abstract class BaseCourseTestVM {
   /**
    * deadline of the test
    */
-  public deadline: Date;
+  public deadline: string;
+
+  /**
+   * is this test graded?
+   */
+  public isGraded: boolean;
 
   /**
    * questions contained in this test
@@ -41,6 +46,7 @@ export class AddCourseTestVM extends BaseCourseTestVM {
     testToAdd.deadline = courseTest.deadline;
     testToAdd.questions = courseTest.questions;
     testToAdd.topic = courseTest.topic;
+    testToAdd.isGraded = courseTest.isGraded;
 
     return testToAdd;
   }

@@ -25,6 +25,12 @@ namespace CourseManagementSystem.API.Auth.Attributes
         /// </summary>
         private readonly ICourseReferenceServiceFactory courseReferenceServiceFactory;
 
+        /// <summary>
+        /// create new instance of filter based on course authorization
+        /// </summary>
+        /// <param name="entityType">type of the entity</param>
+        /// <param name="entityIdFieldName">name of the field with entity id within HTTP route</param>
+        /// <param name="courseReferenceServiceFactory"></param>
         public CourseBasedAuthorizeFilter(EntityType entityType, string entityIdFieldName,
             ICourseReferenceServiceFactory courseReferenceServiceFactory)
         {

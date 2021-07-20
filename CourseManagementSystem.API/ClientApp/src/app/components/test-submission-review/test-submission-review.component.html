@@ -1,0 +1,76 @@
+<div class="row">
+  <div class="col-md-2 order-md-2">
+    <app-course-menu [courseId]="courseId"></app-course-menu>
+  </div>
+  <div class="col-md-10 order-md-1">
+    <div class="jumbotron">
+      <h2>{{submission.testTopic}}</h2>
+      <b>{{courseTestUtils.isGradedToString(submission.isTestGraded)}}</b>
+      <div>
+        Submitted at: {{dateTimeFormatter.formatToLocal(submission.submittedDateTime)}}
+      </div>
+      <div *ngIf="submission.isReviewed">
+        <b>Reviewed</b>
+      </div>
+    </div>
+
+    <div *ngFor="let answer of submission.answers" class="jumbotron"
+         [ngClass]="getAnswerClassName(answer)">
+      <h3>Question {{answer.questionNumber}}</h3>
+      <app-test-question-text [questionText]="answer.questionText"
+                              [questionType]="answer.questionType"></app-test-question-text>
+      <h6>Submitted answer</h6>
+      <p class="formattedText">
+        {{answer.answerText}}
+      </p>
+      <h6>Correct answer</h6>
+      <p class="formattedText">
+        {{answer.correctAnswer}}
+      </p>
+      <div *ngIf="hasComment(answer)">
+        <h6>Comment</h6>
+        <p class="formattedText">
+          {{answer.comment}}
+        </p>
+      </div>
+      <div><b>Points: {{answer.receivedPoints}}/{{answer.maximalPoints}}</b></div>
+
+      <br>
+
+      <div *ngIf="isAdmin && editing">
+        <h4>Update</h4>
+        <div class="form-group">
+          <label for="updatedPoints{{answer.questionNumber}}">Points:</label>
+          <input type="number" class="form-control" id="updatedPoints{{answer.questionNumber}}"
+                 [(ngModel)]="getCorrespondingEvaluatedAnswer(answer).updatedPoints"
+                 name="updatedPoints{{answer.questionNumber}}" min="0">
+        </div>
+        <div class="form-group">
+          <label for="comment{{answer.questionNumber}}">Comment:</label>
+          <textarea class="form-control" id="comment{{answer.questionNumber}}"
+                    [(ngModel)]="getCorrespondingEvaluatedAnswer(answer).updatedComment"
+                    name="comment{{answer.questionNumber}}"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="jumbotron" *ngIf="isAdmin">
+      <div *ngIf="editing">
+        <h4>Save/Discard updates</h4>
+        <button type="button" class="btn btn-warning mr-3" (click)="saveUpdates()">Save</button>
+        <button type="button" class="btn btn-danger" (click)="discardUpdates()">Discard</button>
+      </div>
+      <div *ngIf="!editing">
+        <h4>Review</h4>
+        <button type="button" class="btn btn-warning mr-3" (click)="startReview()">Update</button>
+        <button type="button" class="btn btn-primary" *ngIf="!submission.isReviewed" (click)="markAsReviewed()">Mark as reviewed</button>
+      </div>
+    </div>
+    <br>
+
+    <div class="jumbotron">
+      <h2>Total score: {{getPercentualScore(submission)}}</h2>
+      <h3>Points: {{getReceivedPoints(submission)}}/{{getMaximalPoints(submission)}}</h3>
+    </div>
+  </div>
+</div>

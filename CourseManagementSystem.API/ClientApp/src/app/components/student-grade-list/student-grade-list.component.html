@@ -1,0 +1,21 @@
+<div class="jumbotron">
+  <h3>Other grades</h3>
+  <table class="table table-striped table-responsive">
+    <tr>
+      <th>Topic</th>
+      <th>Score</th>
+      <th>Weight</th>
+      <th>Comment</th>
+      <th *ngIf="isAdmin"></th>
+    </tr>
+    <tr *ngFor="let grade of grades">
+      <td class="align-middle">{{grade.topic}}</td>
+      <td class="align-middle"><b>{{percentStringFormatter.format(grade.percentualValue)}}</b></td>
+      <td class="align-middle">{{grade.weight}}</td>
+      <td class="align-middle">{{grade.comment}}</td>
+      <td *ngIf="isAdmin">
+        <button class="btn btn-danger" (click)="removeGrade(grade.id)">Remove</button>
+      </td>
+    </tr>
+  </table>
+</div>

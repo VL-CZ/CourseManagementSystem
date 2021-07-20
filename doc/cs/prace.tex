@@ -58,6 +58,13 @@
 \usepackage{xcolor}         % barevná sazba
 \usepackage{listings}		% code higlighting
 
+\usepackage{float}
+\usepackage{url}
+
+\floatstyle{ruled}
+\newfloat{program}{thp}{lop}
+\floatname{program}{Kód}
+
 \graphicspath{ {../img/} }
 
 \definecolor{bluekeywords}{rgb}{0.13,0.13,1}
@@ -68,57 +75,57 @@
 %%% Údaje o práci
 
 % Název práce v jazyce práce (přesně podle zadání)
-\def\NazevPrace{Název práce}
+\def\NazevPrace{Aplikace pro správu výukových kurzů}
 
 % Název práce v angličtině
-\def\NazevPraceEN{Name of thesis}
+\def\NazevPraceEN{Application for Educational Courses Management}
 
 % Jméno autora
-\def\AutorPrace{Jméno Příjmení}
+\def\AutorPrace{Vojtěch Lengál}
 
 % Rok odevzdání
-\def\RokOdevzdani{ROK}
+\def\RokOdevzdani{2021}
 
 % Název katedry nebo ústavu, kde byla práce oficiálně zadána
 % (dle Organizační struktury MFF UK, případně plný název pracoviště mimo MFF)
-\def\Katedra{Název katedry nebo ústavu}
-\def\KatedraEN{Name of the department}
+\def\Katedra{Katedra distribuovaných a spolehlivých systémů}
+\def\KatedraEN{Department of Distributed and Dependable Systems}
 
 % Jedná se o katedru (department) nebo o ústav (institute)?
 \def\TypPracoviste{Katedra}
 \def\TypPracovisteEN{Department}
 
 % Vedoucí práce: Jméno a příjmení s~tituly
-\def\Vedouci{Vedoucí práce}
+\def\Vedouci{doc. RNDr. Jan Kofroň, Ph.D.}
 
 % Pracoviště vedoucího (opět dle Organizační struktury MFF)
-\def\KatedraVedouciho{katedra}
-\def\KatedraVedoucihoEN{department}
+\def\KatedraVedouciho{Katedra distribuovaných a spolehlivých systémů}
+\def\KatedraVedoucihoEN{Department of Distributed and Dependable Systems}
 
 % Studijní program a obor
-\def\StudijniProgram{studijní program}
-\def\StudijniObor{studijní obor}
+\def\StudijniProgram{Informatika}
+\def\StudijniObor{Softwarové a datové inženýrství}
 
 % Nepovinné poděkování (vedoucímu práce, konzultantovi, tomu, kdo
 % zapůjčil software, literaturu apod.)
 \def\Podekovani{%
-Poděkování.
+Tímto bych chtěl poděkovat vedoucímu práce doc. RNDr. Janu Kofroňovi, Ph.D. za jeho rady a připomínky.
 }
 
 % Abstrakt (doporučený rozsah cca 80-200 slov; nejedná se o zadání práce)
 \def\Abstrakt{%
-Abstrakt.
+Cílem práce je vytvořit webovou aplikaci pro správu různých typů výukových kurzů, jako například vysokoškolské přednášky a cvičení, předměty na základní či střední škole nebo také libovolný zájmový kurz. Program bude poskytovat rozhraní jak pro správce – učitele, tak pro uživatele – studenty. Bude umožňovat vytváření a správu kurzů. Správci kurzu budou moci měnit jeho obsah (přidávat, odebírat materiály, apod.) a zakládat nové úkoly a testy, které budou uživatelé následně vyplňovat. Otázky s nabídkou odpovědí bude systém vyhodnocovat automaticky, zbytek bude správce kurzu hodnotit ručně. Uživatel si pak bude moci v daném kurzu prohlédnout všechny známky, a také opravené testy a úkoly.
 }
 \def\AbstraktEN{%
-Abstract.
+The aim of this thesis is to create a web application for the management of various types of educational courses, such as university lectures, labs, high school subjects or language courses. The app will provide an interface for both administrators - teachers and users - students. It will allow the creation and management of courses. Course administrators will be able to change its content (add, remove materials, etc.) and create new assignments that will be later submitted by the students. The system will evaluate the questions with choice of answers automatically, the rest will be evaluated manually by the course administrator. Users will be able to view all their grades as well as the reviewed assignments.
 }
 
 % 3 až 5 klíčových slov (doporučeno), každé uzavřeno ve složených závorkách
 \def\KlicovaSlova{%
-{klíčová} {slova}
+{výukový kurz} {.NET Core} {Angular}
 }
 \def\KlicovaSlovaEN{%
-{key} {words}
+{educational course} {.NET Core} {Angular}
 }
 
 %% Balíček hyperref, kterým jdou vyrábět klikací odkazy v PDF,
@@ -143,6 +150,44 @@ Abstract.
 	basicstyle=\small\ttfamily,
 	tabsize=4
 }
+
+\lstdefinelanguage{Typescript}{
+	keywords={break, case, catch, continue, debugger, default, delete, do, else, finally, for, function, if, in, instanceof, new, return, switch, this, throw, try, typeof, var, void, while, with, private, protected, public, abstract, let, const, readonly, constructor, class, export, boolean, string, number, throw, implements, import, this, super, static},
+	identifierstyle=\color{black},
+	comment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	morestring=[b]',
+	morestring=[b]",
+	morestring=[b]`
+}
+
+\lstdefinestyle{typescript}{language=Typescript,
+	showspaces=false,
+	showtabs=false,
+	breaklines=true,
+	showstringspaces=false,
+	breakatwhitespace=true,
+	escapeinside={(*@}{@*)},
+	commentstyle=\color{greencomments},
+	keywordstyle=\color{bluekeywords}\bfseries,
+	stringstyle=\color{redstrings},
+	basicstyle=\small\ttfamily,
+	tabsize=4
+}
+
+\lstdefinestyle{html}{language=HTML,
+	showspaces=false,
+	showtabs=false,
+	breaklines=true,
+	showstringspaces=false,
+	breakatwhitespace=true,
+	commentstyle=\color{greencomments},
+	keywordstyle=\color{bluekeywords}\bfseries,
+	stringstyle=\color{redstrings},
+	basicstyle=\small\ttfamily,
+	tabsize=4
+}
+
 \lstset{style=sharpc}
 
 %% Titulní strana a různé povinné informační strany
@@ -157,8 +202,6 @@ Abstract.
 \include{uvod}
 \include{kap01}
 \include{kap02}
-\include{kap03}
-\include{kap04}
 
 \include{zaver}
 
@@ -169,13 +212,27 @@ Abstract.
 %%% (pokud jich je malé množství, obvykle není třeba seznam uvádět)
 \listoffigures
 
-%%% Tabulky v bakalářské práci (opět nemusí být nutné uvádět)
-%%% U matematických prací může být lepší přemístit seznam tabulek na začátek práce.
-\listoftables
-
 %%% Použité zkratky v bakalářské práci (opět nemusí být nutné uvádět)
 %%% U matematických prací může být lepší přemístit seznam zkratek na začátek práce.
 \chapwithtoc{Seznam použitých zkratek}
+
+\begin{itemize}
+	\item HTTP -- Hypertext Transfer Protocol
+	\item API -- Application Programming Interface
+	\item CIL -- Common Intermediate Language
+	\item ORM -- Objektově relační mapování
+	\item IoC -- Inversion of control
+	\item CLR -- Common Language Runtime
+	\item OOP -- Objektově orientované programování
+	\item HTML -- HyperText Markup Language 
+	\item CSS -- Cascading Style Sheets
+	\item CI -- Continuous integration
+	\item SQL -- Structured Query Language
+	\item URL -- Uniform Resource Locator
+	\item LINQ -- Language Integrated Query
+	\item UI -- Uživatelské rozhraní
+	
+\end{itemize}
 
 %%% Přílohy k bakalářské práci, existují-li. Každá příloha musí být alespoň jednou
 %%% odkazována z vlastního textu práce. Přílohy se číslují.
@@ -189,32 +246,8 @@ Abstract.
 %%% opatření rektora č. 72/2017.
 \appendix
 \chapter{Přílohy}
-
-\section{Uživatelská dokumentace}
-Popis všech funkcí + screenshoty?
-
-TODO: rozepsat mnohem více do detailu (krok po kroku + snímky obrazovky)
-
-(převzato ze specifikace ročníkového projektu)
-
-\subsection{Vytvoření a administrace kurzu}
-Uživatelé budou moci vytvářet nové kurzy, administrátoři daného kurzu budou moci přidávat a odebírat členy. Každý uživatel uvidí v aplikaci seznam kurzů, kam je přihlášen.
-
-\subsection{Vytváření a vyplňování testů}
-Administrátoři kurzu budou moci vytvářet testy, které budou žáci vyplňovat. V případě otázek s nabídkou odpovědí systém správnost sám vyhodnotí, otázky s volnou odpovědí budou hodnoceny ručně. Každý uživatel pak v daném kurzu uvidí seznam známek a bude si moci opravený test zobrazit a prohlédnout. Aplikace bude rozlišovat mezi testy a kvízy (kvízy se nebudou hodnotit známkou).
-
-\subsection{Odevzdávání a hodnocení úkolů}
-Uživatelé budou moci prostřednictvím aplikace odevzdávat úkoly, které jim budou poté ohodnoceny.
-
-\subsection{Správa obsahu kurzu}
-Administrátoři kurzu budou moci editovat obsah kurzu (např. přidávat nové materiály, soubory, apod.) 
-
-\subsection{Fórum k danému kurzu}
-U každého kurzu bude k dispozici fórum. 
-
-\subsection{Vytváření a správa účtů}
-Uživatelé si budou moci vytvářet nové účty, správci je budou moci do daného kurzu zapsat.
-
+\include{manual}
+\include{user-doc}
 
 \openright
 \end{document}

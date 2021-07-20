@@ -39,15 +39,15 @@ namespace CourseManagementSystem.Services.Implementations
             Person user = dbContext.Users
                 .Include(user => user.CourseMemberships)
                 .ThenInclude(cm => cm.Course)
-                .SingleOrDefault(user => user.Id == personId);
-            return user.CourseMemberships.SingleOrDefault(cm => cm.Course.Id.ToString() == courseId);
+                .Single(user => user.Id == personId);
+            return user.CourseMemberships.Single(cm => cm.Course.Id.ToString() == courseId && !cm.IsArchived);
         }
 
         /// <inheritdoc/>
-        public void RemoveMemberById(string id)
+        public void ArchiveMemberById(string id)
         {
             CourseMember cm = GetMemberWithUser(id);
-            dbContext.CourseMembers.Remove(cm);
+            cm.IsArchived = true;
         }
 
         /// <inheritdoc/>

@@ -1,0 +1,60 @@
+<div class="jumbotron">
+  <h3>Assignments</h3>
+  <div *ngIf="isCourseAdmin && nonPublishedTests.length > 0">
+    <h6>Not published</h6>
+    <table class="table table-striped table-responsive">
+      <tr *ngFor="let test of this.nonPublishedTests">
+        <td>
+          <a class="btn btn-link" (click)="pageNavigator.navigateToAssignmentDetail(test.id)">{{test.topic}}</a>
+        </td>
+        <td class="align-middle">
+          <b>Deadline: {{dateTimeFormatter.formatToLocal(test.deadline)}}</b>
+        </td>
+        <td class="align-middle">
+          <b>{{courseTestUtils.isGradedToString(test.isGraded)}}</b>
+        </td>
+        <td>
+          <button class="btn btn-info" (click)="publishTest(test)">Publish</button>
+        </td>
+        <td>
+          <button class="btn btn-danger" (click)="deleteTest(test)">Remove</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div *ngIf="activeTests.length > 0">
+    <h6>Active</h6>
+    <table class="table table-striped table-responsive">
+      <tr *ngFor="let test of this.activeTests">
+        <td>
+          <a *ngIf="isCourseAdmin" class="btn btn-link" (click)="pageNavigator.navigateToAssignmentDetail(test.id)">{{test.topic}}</a>
+          <a *ngIf="!isCourseAdmin" class="btn btn-link" (click)="pageNavigator.navigateToAssignmentSubmission(test.id)">{{test.topic}}</a>
+        </td>
+        <td class="align-middle">
+          <b>Deadline: {{dateTimeFormatter.formatToLocal(test.deadline)}}</b>
+        </td>
+        <td class="align-middle">
+          <b>{{courseTestUtils.isGradedToString(test.isGraded)}}</b>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div *ngIf="isCourseAdmin && testsAfterDeadline.length > 0">
+    <h6>After deadline</h6>
+    <table class="table table-striped table-responsive">
+      <tr *ngFor="let test of this.testsAfterDeadline">
+        <td>
+          <a class="btn btn-link" (click)="pageNavigator.navigateToAssignmentDetail(test.id)">{{test.topic}}</a>
+        </td>
+        <td class="align-middle">
+          <b>{{courseTestUtils.isGradedToString(test.isGraded)}}</b>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="my-3">
+    <button *ngIf="isCourseAdmin" class="btn btn-success" (click)="pageNavigator.navigateToAssignmentCreation(this.courseId)">
+      Create new assignment
+    </button>
+  </div>
+</div>

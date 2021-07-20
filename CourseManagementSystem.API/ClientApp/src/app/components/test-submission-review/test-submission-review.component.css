@@ -1,0 +1,11 @@
+.correctAnswer{
+  background-color: #E7FFE7;
+}
+
+.wrongAnswer{
+  background-color: #FFCCCB;
+}
+
+.partiallyCorrectAnswer{
+  background-color: #FFE6CC;
+}
