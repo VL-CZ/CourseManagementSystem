@@ -235,9 +235,6 @@ a nezavolali metodu \textit{dbContext.SaveChanges()}, data by se neuložila.
 
 \begin{program}
 	\begin{lstlisting}
-	/// <summary>
-	/// class representing base database service
-	/// </summary>
 	public abstract class DbService : IDbService
 	{
 		/// <summary>
@@ -273,20 +270,16 @@ Rozhraní \textit{ICourseService} (slouží pro práci s kurzy) můžeme vidět 
 		/// <summary>
 		/// get course by its id
 		/// </summary>
-		/// <param name="courseId">identifier of the course</param>
-		/// <returns></returns>
 		Course GetById(string courseId);
 		
 		/// <summary>
 		/// archive course by its id
 		/// </summary>
-		/// <param name="courseId">id of the course to delete</param>
 		void ArchiveById(string courseId);
 		
 		/// <summary>
 		/// add the course into the database
 		/// </summary>
-		/// <param name="course">course to add</param>
 		void AddCourse(Course course);
 		...
 	\end{lstlisting}
