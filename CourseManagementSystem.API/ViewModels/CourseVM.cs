@@ -11,6 +11,10 @@ namespace CourseManagementSystem.API.ViewModels
         {
         }
 
+        /// <summary>
+        /// create new instance of base viewmodel for courses
+        /// </summary>
+        /// <param name="name">name of the course</param>
         protected BaseCourseVM(string name)
         {
             Name = name;
@@ -31,6 +35,11 @@ namespace CourseManagementSystem.API.ViewModels
         public CourseInfoVM() : base()
         { }
 
+        /// <summary>
+        /// create new viewmodel representing info about a course
+        /// </summary>
+        /// <param name="id">id of the course</param>
+        /// <param name="name">name of the course</param>
         public CourseInfoVM(string id, string name) : base(name)
         {
             Id = id;

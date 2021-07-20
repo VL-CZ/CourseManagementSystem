@@ -11,6 +11,10 @@ namespace CourseManagementSystem.API.ViewModels
         public WrapperVM()
         { }
 
+        /// <summary>
+        /// create new viewmodel for wrapping non-structured types
+        /// </summary>
+        /// <param name="value">value of the non-structure type</param>
         public WrapperVM(T value)
         {
             Value = value;

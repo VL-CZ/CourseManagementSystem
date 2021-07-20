@@ -44,6 +44,15 @@ namespace CourseManagementSystem.API.ViewModels
         public TestSubmissionInfoVM() : base()
         { }
 
+        /// <summary>
+        /// create new viewmodel representing basic info about a test submission
+        /// </summary>
+        /// <param name="testSubmissionId">id of the test submission</param>
+        /// <param name="testTopic">topic of the test</param>
+        /// <param name="testWeight">weight of the test</param>
+        /// <param name="percentualScore">percentual score of the submission</param>
+        /// <param name="submittedDateTime">exact date and time when was this submission submitted</param>
+        /// <param name="isReviewed">is this submission marked as reviewed?</param>
         public TestSubmissionInfoVM(string testSubmissionId, string testTopic, int testWeight, double percentualScore, DateTime submittedDateTime, bool isReviewed)
             : base(testSubmissionId, submittedDateTime, isReviewed)
         {
@@ -79,6 +88,14 @@ namespace CourseManagementSystem.API.ViewModels
         public TestSubmissionWithUserInfoVM() : base()
         { }
 
+        /// <summary>
+        /// create new viewmodel representing info about test submission and course member
+        /// </summary>
+        /// <param name="studentEmail">email of the student</param>
+        /// <param name="testSubmissionId">id of the test submission</param>
+        /// <param name="percentualScore">score of the submission</param>
+        /// <param name="submittedDateTime">exact date and time when was this submission submitted</param>
+        /// <param name="isReviewed">is this submission marked as reviewed?</param>
         public TestSubmissionWithUserInfoVM(string studentEmail, string testSubmissionId, double percentualScore, DateTime submittedDateTime, bool isReviewed)
             : base(testSubmissionId, submittedDateTime, isReviewed)
         {
@@ -107,6 +124,16 @@ namespace CourseManagementSystem.API.ViewModels
         public TestWithSubmissionVM() : base()
         { }
 
+        /// <summary>
+        /// create new viewmodel representing test with the submission
+        /// </summary>
+        /// <param name="testId">id of the test</param>
+        /// <param name="testTopic">topic of the test</param>
+        /// <param name="testSubmissionId">id of the test submission</param>
+        /// <param name="answers">submitted answers</param>
+        /// <param name="submittedDateTime">exact date and time of the submission</param>
+        /// <param name="isReviewed">is this submission marked as reviewed?</param>
+        /// <param name="isTestGraded">is this test graded?</param>
         public TestWithSubmissionVM(string testId, string testTopic, string testSubmissionId, IEnumerable<SubmissionAnswerWithCorrectAnswerVM> answers,
             DateTime submittedDateTime, bool isReviewed, bool isTestGraded) : base(testSubmissionId, submittedDateTime, isReviewed)
         {

@@ -63,6 +63,14 @@ namespace CourseManagementSystem.API.ViewModels
         {
         }
 
+        /// <summary>
+        /// create new viewmodel representing details of a grade
+        /// </summary>
+        /// <param name="id">id of the grade</param>
+        /// <param name="percentualValue">value of the grade in double format 0 -> 0%, 1 -> 100%</param>
+        /// <param name="topic">topic of the grade</param>
+        /// <param name="comment">comment provided to the grade</param>
+        /// <param name="weight">weight of the grade</param>
         public GradeDetailsVM(string id, double percentualValue, string topic, string comment, int weight) : base(percentualValue, topic, comment, weight)
         {
             Id = id;

@@ -11,6 +11,13 @@ namespace CourseManagementSystem.API.Auth.Attributes
     {
         private readonly IPeopleService peopleService;
 
+        /// <summary>
+        /// create new filter authorizing admin or member of a course
+        /// </summary>
+        /// <param name="entityType">type of the course-related entity</param>
+        /// <param name="entityIdFieldName">name of the field with entity id within HTTP route</param>
+        /// <param name="peopleService"></param>
+        /// <param name="courseReferenceServiceFactory"></param>
         public CourseAdminOrMemberAuthorizeFilter(EntityType entityType, string entityIdFieldName,
             [FromServices] IPeopleService peopleService, [FromServices] ICourseReferenceServiceFactory courseReferenceServiceFactory)
             : base(entityType, entityIdFieldName, courseReferenceServiceFactory)

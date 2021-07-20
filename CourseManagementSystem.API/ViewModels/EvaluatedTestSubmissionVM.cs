@@ -13,6 +13,11 @@ namespace CourseManagementSystem.API.ViewModels
             EvaluatedAnswers = new List<EvaluatedAnswerVM>();
         }
 
+        /// <summary>
+        /// create new viewmodel representing evaluated test submission
+        /// </summary>
+        /// <param name="testSubmissionId">identifier of the test submission</param>
+        /// <param name="evaluatedAnswers">collection of evaluated answers</param>
         public EvaluatedTestSubmissionVM(string testSubmissionId, ICollection<EvaluatedAnswerVM> evaluatedAnswers)
         {
             TestSubmissionId = testSubmissionId;
@@ -40,6 +45,12 @@ namespace CourseManagementSystem.API.ViewModels
         public EvaluatedAnswerVM()
         { }
 
+        /// <summary>
+        /// create new instance of viewmodel representing a single evaluated answer of the solution
+        /// </summary>
+        /// <param name="questionNumber">number of the question</param>
+        /// <param name="updatedPoints">updated number of points</param>
+        /// <param name="updatedComment">updated comment to the question</param>
         public EvaluatedAnswerVM(int questionNumber, int updatedPoints, string updatedComment)
         {
             QuestionNumber = questionNumber;
