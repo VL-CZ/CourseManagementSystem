@@ -59,6 +59,7 @@
 \usepackage{listings}		% code higlighting
 
 \usepackage{float}
+\usepackage{url}
 
 \floatstyle{ruled}
 \newfloat{program}{thp}{lop}
@@ -244,36 +245,7 @@ The aim of this thesis is to create a web application for the management of vari
 %%% opatření rektora č. 72/2017.
 \appendix
 \chapter{Přílohy}
-
-\section{Příručka k použití}
-
-Pro spuštění programu je třeba mít nainstalované tyto programy:
-\begin{itemize}
-	\item .NET Core SDK verze 3.1
-	\item Node.js verze 12 nebo 14
-	\item lokální instance Microsoft SQL Server databáze
-	\item nástroj CLI tools for Entity Framework Core
-\end{itemize}
-
-V kořenovém adresáři aplikace zadejte do příkazové řádky nejprve následující příkaz.
-
-\begin{lstlisting}
-dotnet ef database update --project CourseManagementSystem.Data --startup-project CourseManagementSystem.API
-\end{lstlisting}
-
-Dojde k vytvoření databáze na lokální instanci SQL Serveru.
-
-Pro spuštění aplikace zadejte tyto příkazy:
-\begin{lstlisting}
-dotnet build
-cd CourseManagementSystem.API
-dotnet run
-\end{lstlisting}
-
-Tímto dojde ke spuštění aplikace. Ve výpisu příkazu \textit{dotnet run} na příkazové řádce bychom nyní měli vidět URL, na které se aplikace nachází (typicky je to URL \url{https://localhost:5001}). Otevřeme webový prohlížeč na této URL a následně se zobrazí domovská stránka aplikace.
-
-\subsection{Generování testovacích dat}
-
+\include{manual}
 \include{user-doc}
 
 \openright
