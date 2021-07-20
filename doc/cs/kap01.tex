@@ -4,8 +4,18 @@
 
 V této kapitole se nachází popis technologií, použitých při vývoji aplikace.
 
-Program je ve formě single-page webové aplikace, hlavně z důvodu přenositelnosti. Další výhodou webových aplikací je jednoduchosti použití, uživatel nemusí program stahovat ani instalovat, stačí pouze mít webový prohlížeč.
-Ve webových aplikacích dává logicky smysl oddělit serverovou část od klientské.
+Program je ve formě single-page webové aplikace, což je v dnešní době velmi rozšířený typ webových aplikací.
+
+Každá webová aplikace je typicky rozdělená na dvě části: serverovou a klientskou část. Serverová část aplikace běží na serveru a často má na starosti komunikaci s databází a vnitřní logiku aplikace. Klientská část běží naopak v prohlížeči uživatele a často bývá naprogramovaná v jazyce JavaScript. 
+
+Klasické webové aplikace mají typicky velkou většinu kódu v serverové části. Při dotazu na danou URL server požadavek zpracuje, a vrátí uživateli vygenerované HTML.
+
+Single-page aplikace přesouvají část kódu do klientské části a dotazy na server, který typicky funguje jako API, probíhají ve většině případů asynchronně na pozadí.
+Server vrací data ve formátu JSON, jež jsou následně zpracovány klientem. Oproti klasickým webovým aplikacím tedy není potřeba při dotazu na data stránku znovu načítat.
+Single-page aplikace nám umožňují oddělení serverové a klientské části, každá část může být napsána v jiném programovacím jazyce.
+
+Velkou výhodou webových aplikací je jejich přenositelnost, jelikož klientská část typicky může běžet v libovolném prohlížeči.
+Další výhodou je jednoduchosti použití, uživatel nemusí program stahovat ani instalovat, stačí pouze mít webový prohlížeč.
 
 V následujících podkapitolách se nachází popis použitých technologií a uvedení případných alternativ.
 
@@ -41,11 +51,14 @@ V aplikaci tento používáme xUnit.net v projektu TestEvaluation.Tests, který 
 
 \subsection{Alternativy}
 
-K vývoji serverové části aplikace můžeme použít velké množství jiných technologií, například jazyk Java v kombinaci s frameworkem Spring, PHP nebo Python s knihovnou Flask. 
+K vývoji serverové části aplikace můžeme použít velké množství jiných technologií, jelikož většina populárních programovacích jazyků nabízí nějakou knihovnu, příp. framework pro tvorbu webových aplikací.  Jako příklad můžeme uvést jazyk Java v kombinaci s frameworkem Spring, PHP nebo Python s knihovnou Flask. 
 
 Jazyk C\# s použitím frameworku ASP .NET Core jsem zvolil hlavně z toho důvodu, že se jedná o moderní staticky typovaný jazyk, který považuji za nejlepší volbu z výše uvedených. S vývojem v tomto jazyce mám také nejvíce zkušeností. 
 
-Pro práci s databází existuje v jazyce C\# velké množství knihoven a frameworků. Kromě již zmíněného frameworku Entity Framework Core můžeme uvést také knihovnu ADO.NET, micro ORM Dapper a framework NHibernate. Entity Framework Core je v současnosti pravděpodobně nejpoužívanější z těchto technologií, a umožňuje nám pracovat s databází velmi pohodlně, z tohoto důvodu jsem jej tedy v aplikaci použil. 
+Pro práci s databází existuje v jazyce C\# velké množství knihoven a frameworků. Kromě již zmíněného frameworku Entity Framework Core můžeme uvést také knihovnu ADO.NET, micro ORM Dapper a framework NHibernate. 
+Tyto technologie se můžou lišit podle míry abstrakce nad databází, např. při použití frameworku Dapper se dotazujeme pomocí klasického SQL, naopak Entity Framework Core nám umožňuje s tabulkami pracovat stejně jako s kolekcemi.
+
+Entity Framework Core je v současnosti pravděpodobně nejpoužívanější z těchto technologií, a umožňuje nám pracovat s databází velmi pohodlně, z tohoto důvodu jsem jej tedy v aplikaci použil. 
 
 \section{Klientská část}
 
@@ -75,8 +88,12 @@ Bootstrap hojně používáme ke stylování HTML elementů v šablonách Angula
 K vývoji klientské části aplikace se nejčastěji používá jazyk JavaScript, případně jeho nadstavba TypeScript. Mezi nejpoužívanější frameworky patří v současnosti Angular, React a Vue.js. 
 Poměrně novou možností je technologie WebAssembly, zde můžeme uvést například framework Blazor, jež nám umožňuje programovat klientskou část aplikace v jazyce C\#.
 
+Tyto technologie velmi zjednodušují tvorbu moderních a přívětivých uživatelských rozhraní. 
+Ve většině případů tyto frameworky skládají uživatelské rozhraní ze znovupoužitelných částí, kterým říkáme komponenty.
+
 Framework Angular považuji za nejlepší volbu z těchto technologií. Jedná se o moderní a prověřenou technologii, jež používá jazyk TypeScript. TypeScript je oproti JavaScriptu statický typovaný, což je dle mého názoru velká výhoda. 
-Další výhodou frameworku je velké množství knihoven, které můžeme v aplikaci jednoduše použít (např. vestavěný HTTP klient či Router). 
+
+Další výhodou frameworku je velké množství knihoven, které můžeme v aplikaci jednoduše použít, jako příklad můžeme uvéest vestavěného HTTP klienta či Router. 
 S vývojem aplikací ve frameworku Angular mám již také zkušenosti, což je další z důvodů, které vedly k volbě tohoto frameworku.
 
 \section{Microsoft SQL Server}
