@@ -11,6 +11,12 @@ namespace CourseManagementSystem.Data.Models
     {
         public ForumPost() { }
 
+        /// <summary>
+        /// create new post in a forum
+        /// </summary>
+        /// <param name="text">text of the post</param>
+        /// <param name="author">author of the post</param>
+        /// <param name="course">course where the post belongs to</param>
         public ForumPost(string text, Person author, Course course)
         {
             Text = text;

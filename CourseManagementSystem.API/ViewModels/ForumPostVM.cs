@@ -10,6 +10,12 @@ namespace CourseManagementSystem.API.ViewModels
         public ForumPostVM()
         { }
 
+        /// <summary>
+        /// create new viewmodel for forum post
+        /// </summary>
+        /// <param name="id">id of the post</param>
+        /// <param name="author">name of the author of the post</param>
+        /// <param name="text">text of the post</param>
         public ForumPostVM(string id, string author, string text)
         {
             Id = id;

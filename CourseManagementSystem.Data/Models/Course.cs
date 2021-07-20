@@ -5,6 +5,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CourseManagementSystem.Data.Models
 {
+    /// <summary>
+    /// entity representing a course
+    /// </summary>
     public class Course : IGuidIdObject
     {
         public Course()
@@ -17,6 +20,11 @@ namespace CourseManagementSystem.Data.Models
             EnrollmentRequests = new List<EnrollmentRequest>();
         }
 
+        /// <summary>
+        /// create new instance of course entity
+        /// </summary>
+        /// <param name="name">name of the course</param>
+        /// <param name="admin">administrator of the course</param>
         public Course(string name, Person admin) : this()
         {
             Name = name;

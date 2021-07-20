@@ -12,6 +12,12 @@ namespace CourseManagementSystem.API.ViewModels
         {
         }
 
+        /// <summary>
+        /// create new instance of viewmodel representing member or admin of a course
+        /// </summary>
+        /// <param name="id">id of the person</param>
+        /// <param name="name">name of the person</param>
+        /// <param name="email">email of the person</param>
         public CourseMemberOrAdminVM(string id, string name, string email)
         {
             Id = id;

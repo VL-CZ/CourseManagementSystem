@@ -10,6 +10,11 @@ namespace CourseManagementSystem.API.ViewModels
         public QuizSubmissionInfoVM()
         { }
 
+        /// <summary>
+        /// create new viewmodel representing quiz submission
+        /// </summary>
+        /// <param name="testSubmissionId">id of the test submission</param>
+        /// <param name="testTopic">topic of the quiz</param>
         public QuizSubmissionInfoVM(string testSubmissionId, string testTopic)
         {
             TestSubmissionId = testSubmissionId;

@@ -4,11 +4,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CourseManagementSystem.Data.Models
 {
+    /// <summary>
+    /// entity representing shared file in a course
+    /// </summary>
     public class CourseFile : IGuidIdObject, ICourseReferenceObject
     {
         public CourseFile()
         { }
 
+        /// <summary>
+        /// create new entity representing shared file
+        /// </summary>
+        /// <param name="data">file data</param>
+        /// <param name="name">name of the file</param>
+        /// <param name="contentType">content type of the file</param>
+        /// <param name="course">course where the file is shared</param>
         public CourseFile(byte[] data, string name, string contentType, Course course)
         {
             Data = data;

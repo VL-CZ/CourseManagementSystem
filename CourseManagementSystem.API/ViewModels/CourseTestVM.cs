@@ -14,6 +14,14 @@ namespace CourseManagementSystem.API.ViewModels
         {
         }
 
+        /// <summary>
+        /// create new instance of base viewmodel for course tests
+        /// </summary>
+        /// <param name="weight">weight of the test</param>
+        /// <param name="topic">topic of the test</param>
+        /// <param name="deadline">deadline of the test</param>
+        /// <param name="questions">questions contained in the test</param>
+        /// <param name="isGraded">is this test graded?</param>
         protected BaseCourseTestVM(int weight, string topic, DateTime deadline, IEnumerable<TestQuestionVM> questions, bool isGraded)
         {
             Weight = weight;
@@ -72,6 +80,16 @@ namespace CourseManagementSystem.API.ViewModels
         public CourseTestDetailsVM() : base()
         { }
 
+        /// <summary>
+        /// create new instance of base viewmodel for course tests details
+        /// </summary>
+        /// <param name="topic">topic of the test</param>
+        /// <param name="deadline">deadline of the test</param>
+        /// <param name="questions">questions contained in the test</param>
+        /// <param name="isGraded">is this test graded?</param>
+        /// <param name="id">id of the course test</param>
+        /// <param name="scoreWeight">weight of the test</param>
+        /// <param name="testStatus"></param>
         public CourseTestDetailsVM(string id, string topic, int scoreWeight, IEnumerable<TestQuestionVM> questions, TestStatus testStatus, DateTime deadline, bool isGraded)
             : base(scoreWeight, topic, deadline, questions, isGraded)
         {

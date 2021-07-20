@@ -11,6 +11,11 @@ namespace CourseManagementSystem.API.ViewModels
         {
         }
 
+        /// <summary>
+        /// create new instance of this viewmodel
+        /// </summary>
+        /// <param name="id">identifier of the file</param>
+        /// <param name="name">name of the file</param>
         public CourseFileVM(string id, string name)
         {
             Id = id;

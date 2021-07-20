@@ -4,12 +4,23 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CourseManagementSystem.Data.Models
 {
+    /// <summary>
+    /// class representing grades (except for grades from tests)
+    /// </summary>
     public class Grade : IGuidIdObject, ICourseMemberReferenceObject
     {
         public Grade()
         {
         }
 
+        /// <summary>
+        /// create new grade
+        /// </summary>
+        /// <param name="percentualValue">value of the grade in double format 0 -> 0%, 1-> 100%</param>
+        /// <param name="comment">comment to the grade</param>
+        /// <param name="topic">topic of the grade</param>
+        /// <param name="weight">weight of the grade</param>
+        /// <param name="student">student that this grade belongs to</param>
         public Grade(double percentualValue, string comment, string topic, int weight, CourseMember student)
         {
             PercentualValue = percentualValue;

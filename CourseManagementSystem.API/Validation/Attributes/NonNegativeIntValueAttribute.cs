@@ -14,6 +14,9 @@ namespace CourseManagementSystem.API.Validation.Attributes
         /// </summary>
         public const string defaultErrorMessage = "The field {0} must be non-negative";
 
+        /// <summary>
+        /// create new instance of attribute that validates if the integer value is non-negative (e.g. >=0)
+        /// </summary>
         public NonNegativeIntValueAttribute() : base(0, int.MaxValue)
         {
             ErrorMessage = defaultErrorMessage;

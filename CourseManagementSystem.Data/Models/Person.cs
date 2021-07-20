@@ -8,6 +8,9 @@ namespace CourseManagementSystem.Data.Models
     /// </summary>
     public class Person : IdentityUser
     {
+        /// <summary>
+        /// create new user of the app
+        /// </summary>
         public Person() : base()
         {
             CourseMemberships = new List<CourseMember>();

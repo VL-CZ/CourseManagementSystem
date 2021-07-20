@@ -19,6 +19,10 @@ namespace CourseManagementSystem.API.ViewModels
             Errors = new Dictionary<string, string[]>();
         }
 
+        /// <summary>
+        /// create new error viewmodel
+        /// </summary>
+        /// <param name="errors">collection of errors</param>
         public ErrorsDictionaryVM(Dictionary<string, string[]> errors)
         {
             Errors = errors;

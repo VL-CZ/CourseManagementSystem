@@ -13,6 +13,15 @@ namespace CourseManagementSystem.API.ViewModels
         {
         }
 
+        /// <summary>
+        /// create new viewmodel for submitting a test
+        /// </summary>
+        /// <param name="testId">id of the test</param>
+        /// <param name="testTopic">topic of the test</param>
+        /// <param name="isSubmitted">is this submission marked as submitted?</param>
+        /// <param name="answers">submitted answers</param>
+        /// <param name="isTestGraded">is this test graded?</param>
+        /// <param name="testDeadline">deadline of the test</param>
         public SubmitTestVM(string testId, string testTopic, bool isSubmitted, IEnumerable<SubmissionAnswerVM> answers, bool isTestGraded, DateTime testDeadline)
         {
             TestSubmissionId = testId;
