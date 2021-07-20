@@ -15,6 +15,12 @@ namespace CourseManagementSystem.Data.Models
             Answers = new List<TestSubmissionAnswer>();
         }
 
+        /// <summary>
+        /// create new test submission
+        /// </summary>
+        /// <param name="test">test that this submission belongs to</param>
+        /// <param name="student">student that this submission belongs to</param>
+        /// <param name="submittedAnswers">colleciton of submitted answers</param>
         public TestSubmission(CourseTest test, CourseMember student, ICollection<TestSubmissionAnswer> submittedAnswers)
         {
             Test = test;

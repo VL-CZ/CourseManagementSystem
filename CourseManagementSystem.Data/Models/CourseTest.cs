@@ -5,6 +5,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CourseManagementSystem.Data.Models
 {
+    /// <summary>
+    /// entity representing assignment in a course
+    /// </summary>
     public class CourseTest : IGuidIdObject, ICourseReferenceObject
     {
         public CourseTest()
@@ -14,6 +17,14 @@ namespace CourseManagementSystem.Data.Models
             Status = TestStatus.New;
         }
 
+        /// <summary>
+        /// create new entity representing assignment in a course
+        /// </summary>
+        /// <param name="topic">topic of the test</param>
+        /// <param name="questions">collection of question</param>
+        /// <param name="weight">weight of the test</param>
+        /// <param name="deadline">deadline of the test</param>
+        /// <param name="isGraded">is this test graded?</param>
         public CourseTest(string topic, ICollection<TestQuestion> questions, int weight, DateTime deadline, bool isGraded) : this()
         {
             Topic = topic;

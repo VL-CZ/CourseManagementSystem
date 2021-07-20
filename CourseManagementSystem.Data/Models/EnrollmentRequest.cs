@@ -13,6 +13,11 @@ namespace CourseManagementSystem.Data.Models
         {
         }
 
+        /// <summary>
+        /// create new class representing request for enrollment to a course
+        /// </summary>
+        /// <param name="course">course where the request is sent to</param>
+        /// <param name="person">person that sent the request</param>
         public EnrollmentRequest(Course course, Person person)
         {
             Course = course;

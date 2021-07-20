@@ -4,10 +4,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CourseManagementSystem.Data.Models
 {
+    /// <summary>
+    /// entity representing a question in the test
+    /// </summary>
     public class TestQuestion : IGuidIdObject
     {
         public TestQuestion() { }
 
+        /// <summary>
+        /// create new question
+        /// </summary>
+        /// <param name="number">number of the question</param>
+        /// <param name="text">text of the qeustion</param>
+        /// <param name="correctAnswer">correct answer to the question</param>
+        /// <param name="points">max. points for the question</param>
+        /// <param name="questionType">type of the answers to the question</param>
         public TestQuestion(int number, string text, string correctAnswer, int points, QuestionType questionType) : this()
         {
             Number = number;

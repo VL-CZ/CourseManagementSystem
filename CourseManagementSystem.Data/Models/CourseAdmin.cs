@@ -12,6 +12,11 @@ namespace CourseManagementSystem.Data.Models
         public CourseAdmin()
         { }
 
+        /// <summary>
+        /// create new admin membership entity
+        /// </summary>
+        /// <param name="user">admin of the <paramref name="course"/></param>
+        /// <param name="course">course that <paramref name="user"/> will manages</param>
         public CourseAdmin(Person user, Course course) : this()
         {
             User = user;
