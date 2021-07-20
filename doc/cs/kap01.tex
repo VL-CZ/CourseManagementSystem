@@ -1,8 +1,13 @@
 %%% Fiktivní kapitola s ukázkami sazby
 
-\chapter{Použité technologie}
+\chapter{Popis a analýza použitých technologií}
 
 V této kapitole se nachází popis technologií, použitých při vývoji aplikace.
+
+Program je ve formě single-page webové aplikace, hlavně z důvodu přenositelnosti. Další výhodou webových aplikací je jednoduchosti použití, uživatel nemusí program stahovat ani instalovat, stačí pouze mít webový prohlížeč.
+Ve webových aplikacích dává logicky smysl oddělit serverovou část od klientské.
+
+V následujících podkapitolách se nachází popis použitých technologií a uvedení případných alternativ.
 
 \section{Serverová část}
 
@@ -34,6 +39,14 @@ xUnit.net je framework, který slouží k testování aplikací na platformě .N
 
 V aplikaci tento používáme xUnit.net v projektu TestEvaluation.Tests, který obsahuje unit testy tříd z projektu TestEvaluation.
 
+\subsection{Alternativy}
+
+K vývoji serverové části aplikace můžeme použít velké množství jiných technologií, například jazyk Java v kombinaci s frameworkem Spring, PHP nebo Python s knihovnou Flask. 
+
+Jazyk C\# s použitím frameworku ASP .NET Core jsem zvolil hlavně z toho důvodu, že se jedná o moderní staticky typovaný jazyk, který považuji za nejlepší volbu z výše uvedených. S vývojem v tomto jazyce mám také nejvíce zkušeností. 
+
+Pro práci s databází existuje v jazyce C\# velké množství knihoven a frameworků. Kromě již zmíněného frameworku Entity Framework Core můžeme uvést také knihovnu ADO.NET, micro ORM Dapper a framework NHibernate. Entity Framework Core je v současnosti pravděpodobně nejpoužívanější z těchto technologií, a umožňuje nám pracovat s databází velmi pohodlně, z tohoto důvodu jsem jej tedy v aplikaci použil. 
+
 \section{Klientská část}
 
 \subsection{Jazyk TypeScript}
@@ -57,6 +70,14 @@ Umožňuje jednoduše vytvářet responzivní layout a obsahuje velké množstv�
 \cite{BootstrapDocs}
 
 Bootstrap hojně používáme ke stylování HTML elementů v šablonách Angular komponent.
+
+\subsection{Alternativy}
+K vývoji klientské části aplikace se nejčastěji používá jazyk JavaScript, případně jeho nadstavba TypeScript. Mezi nejpoužívanější frameworky patří v současnosti Angular, React a Vue.js. 
+Poměrně novou možností je technologie WebAssembly, zde můžeme uvést například framework Blazor, jež nám umožňuje programovat klientskou část aplikace v jazyce C\#.
+
+Framework Angular považuji za nejlepší volbu z těchto technologií. Jedná se o moderní a prověřenou technologii, jež používá jazyk TypeScript. TypeScript je oproti JavaScriptu statický typovaný, což je dle mého názoru velká výhoda. 
+Další výhodou frameworku je velké množství knihoven, které můžeme v aplikaci jednoduše použít (např. vestavěný HTTP klient či Router). 
+S vývojem aplikací ve frameworku Angular mám již také zkušenosti, což je další z důvodů, které vedly k volbě tohoto frameworku.
 
 \section{Microsoft SQL Server}
 Microsoft SQL Server je multiplatformní relační databázový systém. Ke komunikaci s databází využívá jazyk T-SQL, což je rozšíření klasického SQL. K administraci Microsoft SQL Serveru a práci s databázemi můžeme použít například aplikaci SQL Server Management Studio.
