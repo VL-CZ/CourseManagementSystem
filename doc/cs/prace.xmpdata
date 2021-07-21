@@ -1,7 +1,7 @@
 % Metadata k uložení do PDF, podrobnější popis viz dokumentace balíčku pdfx.
 
-\Author{Jméno Příjmení}
-\Title{Název práce}
-\Keywords{klíčová slova\sep další taková\sep ještě jiná}
-\Subject{Abstrakt práce}
+\Author{Vojtěch Lengál}
+\Title{Aplikace pro správu výukových kurzů}
+\Keywords{výukový kurz\sep .NET Core\sep Angular}
+\Subject{Cílem práce je vytvořit webovou aplikaci pro správu různých typů výukových kurzů, jako například vysokoškolské přednášky a cvičení, předměty na základní či střední škole nebo také libovolný zájmový kurz. Program bude poskytovat rozhraní jak pro správce – učitele, tak pro uživatele – studenty. Bude umožňovat vytváření a správu kurzů. Správci kurzu budou moci měnit jeho obsah (přidávat, odebírat materiály, apod.) a zakládat nové úkoly a testy, které budou uživatelé následně vyplňovat. Otázky s nabídkou odpovědí bude systém vyhodnocovat automaticky, zbytek bude správce kurzu hodnotit ručně. Uživatel si pak bude moci v daném kurzu prohlédnout všechny známky, a také opravené testy a úkoly.}
 \Publisher{Univerzita Karlova}
