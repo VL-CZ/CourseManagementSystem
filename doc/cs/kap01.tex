@@ -15,7 +15,7 @@ Server vrací data ve formátu JSON, jež jsou následně zpracovány klientem. 
 Single-page aplikace nám umožňují oddělení serverové a klientské části, každá část může být napsána v jiném programovacím jazyce.
 
 Velkou výhodou webových aplikací je jejich přenositelnost, jelikož klientská část typicky může běžet v libovolném prohlížeči.
-Další výhodou je jednoduchosti použití, uživatel nemusí program stahovat ani instalovat, stačí pouze mít webový prohlížeč.
+Další výhodou je jednoduchost použití, uživatel nemusí program stahovat ani instalovat, stačí pouze mít webový prohlížeč.
 
 V následujících podkapitolách se nachází popis použitých technologií a uvedení případných alternativ.
 
@@ -25,7 +25,7 @@ V následujících podkapitolách se nachází popis použitých technologií a 
 C\# je objektově orientovaný, staticky typovaný programovací jazyk, vyvinutý firmou Microsoft.
 C\# podporuje koncepty zapouzdření, dědičnosti a polymorfismu. Programy v jazyce C\# běží na platformě .NET. 
 Při kompilaci C\# programu je zdrojový kód nejprve zkompilován do mezikódu zvaného CIL. 
-Po spuštění programu pak modul CLR, který je součástí platformy .NET, provede JIT (just-in-time) kompilaci IL kódu do strojových instrukcí počítače.
+Po spuštění programu pak modul CLR, který je součástí platformy .NET, provede JIT (just-in-time) kompilaci CIL kódu do strojových instrukcí počítače.
 Jazyk C\# lze využít k tvorbě konzolových aplikací, webových aplikací a stránek, formulářových aplikací ve Windows, softwaru pro mobilní zařízení, apod. 
 \cite{CSharpDocs}
 
@@ -41,7 +41,7 @@ V aplikaci používáme framework ASP .NET Core verze 3.1 v projektu API. Tento 
 Entity Framework Core je ORM framework. Objektově relační mapování je technika, která nám umožňuje objektově pracovat s daty v relační databázi. Framework reprezentuje databázové tabulky pomocí kolekcí, jednotlivé objekty v kolekci pak představují řádky v dané tabulce. Při práci s databází pak vůbec nepoužíváme jazyk SQL, pouze pracujeme s objekty a kolekcemi.
 \cite{EfCoreDocs}
 
-Tento framework využíváme v projektu Data, ve kterém se nachází objekty reprezentující databázové entity, a v projektu \textit{Services}, který obsahuje služby pro komunikaci s databází.
+Tento framework využíváme v projektu Data, ve kterém se nachází objekty reprezentující databázové entity, a v projektu Services, který obsahuje služby pro komunikaci s databází.
 
 \subsection{xUnit.net}
 xUnit.net je framework, který slouží k testování aplikací na platformě .NET. Nejčastěji se používá k unit a integračním testům. 

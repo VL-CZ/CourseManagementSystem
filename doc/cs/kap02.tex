@@ -44,8 +44,8 @@ Ve složce \textit{Models} jsou třídy reprezentující databázové entity. Ka
 		CourseTest & test v kurzu. Testy dělíme na hodnocené a nehodnocené (tzv. kvízy). \\ \hline
 		EnrollmentRequest & žádost o zapsání uživatele do daného kurzu \\ \hline
 		ForumPost & příspěvek ve fóru k danému kurzu \\ \hline
-		Grade & známku kterou student obdržel (kromě známek z testů) \\ \hline
-		Person & uživatele aplikace \\ \hline
+		Grade & známka, kterou student obdržel (kromě známek z testů) \\ \hline
+		Person & uživatel aplikace \\ \hline
 		TestQuestion & jednu otázku v testu \\ \hline
 		TestSubmission & test s odpověďmi odeslaný uživatelem \\ \hline
 		TestSubmissionAnswer & odpověď k dané otázce v testu \\
@@ -147,7 +147,7 @@ public interface IGuidIdObject
 \end{lstlisting}
 
 
-Typ \textit{Guid} jsme zvolili hlavně z toho důvodu, že vestavěné tabulky frameworku (např. \textit{Identity}) mají také řetězcové identifikátory. Navíc se pak zjednoduší práce ve frontend části (není potřeba parsovat \textit{string} na \textit{int} např. v klientské části při práci s URL). Tyto identifikátory generuje databáze, takže je zajištěno, že jsou unikátní.
+Typ \textit{Guid} jsme zvolili hlavně z toho důvodu, že vestavěné tabulky frameworku (např. \textit{AspNetUsers}) mají také řetězcové identifikátory. Navíc se pak zjednoduší práce ve frontend části (není potřeba parsovat \textit{string} na \textit{int} např. v klientské části při práci s URL). Tyto identifikátory generuje databáze, takže je zajištěno, že jsou unikátní.
 Další možnost by byla použít jako identifikátor číslo (např. typ \textit{int}), ale vzhledem k výše uvedeným argumentům je typ \textit{Guid} v tomto případě lepší možnost.
 
 Dále se v projektu nacházejí také rozhraní \textit{ICourseReferenceObject} a \textit{ICourseMemberReferenceObject}, která slouží k tomu, abychom mohli dále v aplikaci jednotně pracovat s objekty, které mají referenci na entitu \textit{Course}, resp. \textit{CourseMember}. Tato rozhraní implementují pouze nějaké entity.
@@ -357,7 +357,7 @@ public string GetCourseIdOf(string objectId)
 
 Podobně je v projektu i rozhraní \textit{ICourseMemberReferenceService}, které používají služby, jejichž entity mají referenci na třídu \textit{CourseMember}.
 
-Použitím služeb jsme odstranili duplikátní kód (např. hledání kurzu podle ID se používá na několika místech ve vyšších vrstvách), a extrahovali některé složitější dotazy do samostatných metod. To je výhodné hlavně z toho důvodu, že je pak můžeme nezávisle otestovat. Další výhoda je, že vyšší vrstvy jsou odstíněny od použití ORM (a databázového kontextu), pouze volají tyto služby.
+Použitím služeb jsme odstranili duplikátní kód (např. hledání kurzu podle ID se používá na několika místech ve vyšších vrstvách), a extrahovali některé složitější dotazy do samostatných metod. Další výhoda je, že vyšší vrstvy jsou odstíněny od použití ORM (a databázového kontextu), pouze volají tyto služby.
 
 Dále si můžeme všimnout, že ve službách používáme při komunikaci s databázovým kontextem tzv. Eager loading (pomocí metod \textit{Include()}). To znamená, že data databázových entit které daná entita referencuje, se při výchozím chování nenačtou (pokud nepoužijeme metodu \textit{Include}), tzn. budou mít hodnotu \textit{NULL}.
 
@@ -836,6 +836,9 @@ Ke každému autorizačnímu filtru se pak vztahuje atribut (Kód \ref{AuthAttri
 Vidíme, že tento atribut má konstruktor se dvěma parametry, které následně předá autorizačnímu filtru. 
 
 Atributy se poté používají následujícím způsobem (v příkladu je atribut použitý na metodě Controlleru, která slouží ke stažení souboru podle daného \textit{fileId}).
+
+\newpage
+
 \begin{lstlisting}
 [HttpGet("{fileId}")]
 [AuthorizeCourseAdminOrMemberOf(EntityType.CourseFile, "fileId")]
@@ -845,7 +848,7 @@ public IActionResult Download(string fileId)
 }
 \end{lstlisting}
 
-Tímto způsobem tedy zaručíme, že k této metodě mají přístup pouze administrátoři a členové daného kurzu, ve kterém je tento soubor sdílen. Pomocí parametrů atributu popíšeme, že entita je soubor, a její identifikátor se nachází v proměnné s názvem \textit{fileId} (což je parametr metody).
+Na výše uvedeném příkladu vidíme způsob, kterým zaručíme, že k této metodě mají přístup pouze administrátoři a členové daného kurzu, ve kterém je tento soubor sdílen. Pomocí parametrů atributu popíšeme, že entita je soubor, a její identifikátor se nachází v proměnné s názvem \textit{fileId} (což je parametr metody).
 
 \subsubsection*{Dependency Injection}
 
@@ -901,7 +904,7 @@ Ve složkách \textit{Pages} a \textit{Areas/Identity} se nachází stránky, kt
 
 \subsection{Ostatní}
 
-V projektu TestEvaluation se nachází třídy, které slouží ke spočítání bodů odevzdaných řešení. Projekt TestEvaluation.Tests pak obsahuje testy těchto tříd.
+V projektu TestEvaluation se nachází třídy, které slouží k vyhodnocení odevzdaných řešení (např.spočítání bodů, spočítání celkového skóre z testu, apod.). Projekt TestEvaluation.Tests pak obsahuje testy těchto tříd.
 
 \section{Klientská část}
 \lstset{style=typescript}
@@ -1002,7 +1005,7 @@ Konkrétní služby dědí ze třídy \textit{ApiService}, a obsahují metody, k
 
 Na ukázce kódu \ref{CourseTestService} vidíme, že služba obsahuje pevně dané URL Controlleru, který volá; a dále několik metod, které volají metody tohoto API Controlleru.
 Například metoda \textit{getById} slouží k získání testu podle jeho identifikátoru. V těle pouze provedeme HTTP GET dotaz, pomocí generického parametru specifikujeme, že vrácený objekt má být typu \textit{CourseTestDetailsVM}. 
-Obdobně je to u metodu \textit{addToCourse}, která se používá k přidání nového testu do kurzu. Oproti předchozí metodě obsahuje ještě jeden parametr -- \textit{testToAdd}, který reprezentuje test, jenž bude vytvořen. Tento objekt pak vloží do těla HTTP požadavku, a odešle. 
+Obdobně je to u metody \textit{addToCourse}, která se používá k přidání nového testu do kurzu. Oproti předchozí metodě obsahuje ještě jeden parametr -- \textit{testToAdd}, který reprezentuje test, jenž bude vytvořen. Tento objekt pak vloží do těla HTTP požadavku, a odešle. 
 Můžeme si všimnout, že v tomto případě voláme metodu \textit{httpPost} bez generického parametru. To je z toho důvodu, že odpověď je prázdná (tzn. neobsahuje žádný ViewModel).
 
 Vidíme, že tělo metod je typicky velmi krátké, ve většině případů se jedná pouze o HTTP dotaz na danou adresu.
@@ -1231,7 +1234,7 @@ V tomto příkladu používáme proměnnou \textit{isCourseAdmin}, a pomocí atr
 
 V komponentách také poměrně často využíváme obousměrný data binding, který je součástí frameworku Angular. Jedná se o techniku, která umožňuje synchronizaci dat mezi HTML a Typescript objekty.
 
-Pokud tedy změníme data v HTML (například pole formuláře), framework se postará o změnu dat příslušné proměnné v backendu komponenty. Naopak, pokud dojde ke změně hodnoty dané proměnné, pak se framework postará o změnu HTML (například upraví text v poli formuláře).
+Pokud tedy změníme data v HTML (například pole formuláře), framework se postará o změnu dat příslušné proměnné v backendu komponenty. Naopak, pokud dojde ke změně hodnoty dané proměnné, pak se framework postará o změnu HTML (například upraví text v poli formuláře). \cite{AngularDocs}
 
 Obousměrný data binding používáme typicky ve formulářích, podobně jako v následujícím příkladu.
 
