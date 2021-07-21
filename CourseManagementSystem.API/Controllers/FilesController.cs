@@ -5,6 +5,7 @@ using CourseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace CourseManagementSystem.API.Controllers
 {
@@ -14,6 +15,12 @@ namespace CourseManagementSystem.API.Controllers
     public class FilesController : ControllerBase
     {
         private readonly IFileService fileService;
+        private const long megabyteBytes = 1048576;
+
+        /// <summary>
+        /// limit size of the uploaded files
+        /// </summary>
+        private const long fileSizeLimit = 10 * megabyteBytes;
 
         public FilesController(IFileService fileService)
         {
@@ -29,6 +36,10 @@ namespace CourseManagementSystem.API.Controllers
         [AuthorizeCourseAdminOf(EntityType.Course, "courseId")]
         public void Upload(IFormFile file, string courseId)
         {
+            if (file.Length > fileSizeLimit)
+            {
+                throw new ArgumentException("File is too large.");
+            }
             fileService.SaveTo(courseId, file);
 
             fileService.CommitChanges();
