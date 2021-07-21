@@ -11,18 +11,35 @@ Pro spuštění programu je třeba mít nainstalované tyto programy:
 V kořenovém adresáři aplikace zadáme do příkazové řádky nejprve následující příkaz.
 
 \begin{lstlisting}
+dotnet build
+\end{lstlisting}
+
+Provede se build projektu. První spuštění tohoto příkazu může trvat relativně dlouho, řádově až desítky minut.
+To je způsobené tím, že dochází ke stažení všech knihoven, které jsou potřeba pro vývoj ve frameworku Angular.
+
+Následně zadáme do příkazové řádky tento příkaz:
+
+\begin{lstlisting}
 dotnet ef database update --project CourseManagementSystem.Data --startup-project CourseManagementSystem.API
 \end{lstlisting}
 
 Dojde k vytvoření databáze na lokální instanci SQL Serveru.
 Pro spuštění aplikace zadáme tyto příkazy:
 \begin{lstlisting}
-dotnet build
 cd CourseManagementSystem.API
 dotnet run
 \end{lstlisting}
 
 Tímto dojde ke spuštění aplikace. Ve výpisu příkazu \textit{dotnet run} na příkazové řádce bychom nyní měli vidět URL, na které se aplikace nachází (typicky je to URL \url{https://localhost:5001}). Otevřeme webový prohlížeč na této URL a následně se zobrazí domovská stránka aplikace.
+
+Aplikace používá lokální webový certifikát, který je součástí frameworku ASP .NET Core. 
+Pokud nemáme tento certifikát mezi ověřenými, prohlížeč nám typicky zobrazí hlášku s nevalidním certifikátem.
+Řešením je certifikát přidat mezi ověřené anebo pokračovat bez ověření (např. v prohlížeči Google Chrome pomocí volby \textit{Proceed to domain (unsafe)}).
+
+Pomocí nástroje dotnet dev-certs můžeme lokální certifikát přidat mezi ověřené zadáním tohoto příkazu:
+\begin{lstlisting}
+dotnet dev-certs https --trust
+\end{lstlisting}
 
 \subsection{Generování testovacích dat}
 
